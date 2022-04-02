@@ -12,6 +12,10 @@ query {
     deployBlock
     deployTimestamp
     deployer
+    percentRaised
+    saleStatus
+    totalRaised
+    unitsAvailable
   }
 }
 `);
@@ -34,6 +38,10 @@ query {
           <div class="text-gray-400 flex flex-col">
             <span>Deployer: {sale.deployer}</span>
             <span>Deployed: {Date(sale.deployTimestamp).toLocaleString()}</span>
+            <span>Sales Status: {sale.saleStatus}</span>
+            <span>Total Raised: {sale.totalRaised}</span>
+            <span>Percent Raised: {sale.percentRaised}</span>
+            <span>Available Units: {sale.unitsAvailable}</span>
           </div>
         </div>
         <div class="flex flex-row gap-x-2">
@@ -45,3 +53,4 @@ query {
     {/each}
   </div>
 {/if}
+
