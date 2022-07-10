@@ -13,10 +13,11 @@
   import { DatePicker, CalendarStyle } from "@beyonk/svelte-datepicker";
   import SaleSmallSimulationChart from "./SaleSmallSimulationChart.svelte";
   import HumanReadable from "../../components/FriendlySource/HumanReadable.svelte";
+  import ButtonTooltip from "src/components/ButtonToolTip.svelte";
+  import ButtonToolTip from "src/components/ButtonToolTip.svelte";
 
   let fields: any = {};
   let deployPromise;
-  let sale, token;
   let reserveErc20;
   let saleParams: SaleParams;
 
@@ -29,8 +30,6 @@
   let minimumRaise = 1000;
   let startPrice = 10;
   let endPrice = 20;
-  let startTimestamp;
-  let endTimestamp;
   let name = "Raise token";
   let symbol = "rTKN";
   let initialSupply = 1000;
@@ -150,7 +149,6 @@
     tierCapMulActMode: tierCapMulActCheck,
     creatorControlMode: creatorControlCheck,
     afterMinimumRaiseMode: afterMinimumRaiseCheck,
-
 
     recipient,
     reserve,
@@ -1172,7 +1170,12 @@
 
       <FormPanel>
         {#if !deployPromise}
-          <Button shrink on:click={handleClick}>Deploy Sale</Button>
+          <Button disabled={!raiseRange} shrink on:click={handleClick}
+            >Deploy Sale
+          </Button>
+          {#if !raiseRange}
+            <div class="text-red-400">Select Sale's Start & End Date/Time</div>
+          {/if}
         {:else}
           <ContractDeploy {deployPromise} type="Sale" />
         {/if}
