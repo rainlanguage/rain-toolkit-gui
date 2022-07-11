@@ -51,8 +51,7 @@ export const networks = [{
     },
     blockExplorerUrls: ['https://polygonscan.com/']
   },
-  blockExplorer: 'https://polygonscan.com/',
-  graphUrl: 'https://api.thegraph.com/subgraphs/name/beehive-innovation/rain-protocol-v2-polygon'
+  blockExplorer: 'https://polygonscan.com/'
 },
 {
   label: "Mumbai",
@@ -67,8 +66,7 @@ export const networks = [{
     },
     blockExplorerUrls: ['https://mumbai.polygonscan.com/']
   },
-  blockExplorer: 'https://mumbai.polygonscan.com/',
-  graphUrl: 'https://api.thegraph.com/subgraphs/name/beehive-innovation/rain-protocol-mumbai-e590ce'
+  blockExplorer: 'https://mumbai.polygonscan.com/'
 },
 {
   label: "Avalanche Testnet",
@@ -82,21 +80,53 @@ export const networks = [{
       decimals: 18
     },
     blockExplorerUrls: ['https://testnet.snowtrace.io/']
-  }
+  },
+  blockExplorer: 'https://testnet.snowtrace.io/'
 },
 {
-  label: "Smart Chain - Testnet",
+  label: "BSC - Testnet",
   config: {
     chainId: "0x61",
-    chainName: 'Binance Smart Chain - Testnet',
+    chainName: 'BSC - Testnet',
     rpcUrls: ['https://data-seed-prebsc-1-s1.binance.org:8545'],
     nativeCurrency: {
-      name: 'Binance Smart Chain',
+      name: 'Binance Coin',
       symbol: 'BNB',
       decimals: 18
     },
     blockExplorerUrls: ['https://testnet.bscscan.com']
-  }
+  },
+  blockExplorer: 'https://testnet.bscscan.com'
+},
+{
+  label: "BSC - Mainnet",
+  config: {
+    chainId: "0x38",
+    chainName: 'BSC',
+    rpcUrls: ['https://bsc-dataseed.binance.org/'],
+    nativeCurrency: {
+      name: 'Binance Coin',
+      symbol: 'BNB',
+      decimals: 18
+    },
+    blockExplorerUrls: ['https://bscscan.com/']
+  },
+  blockExplorer: 'https://bscscan.com/'
+},
+{
+  label: "Fantom - Mainnet",
+  config: {
+    chainId: "0xfa",
+    chainName: 'Fantom - Mainnet',
+    rpcUrls: ['https://rpcapi.fantom.network'],
+    nativeCurrency: {
+      name: 'Fantom',
+      symbol: 'FTM',
+      decimals: 18
+    },
+    blockExplorerUrls: ['https://ftmscan.com']
+  },
+  blockExplorer: 'https://ftmscan.com'
 },
 {
   label: "Fantom - Testnet",
@@ -105,12 +135,103 @@ export const networks = [{
     chainName: 'Fantom - Testnet',
     rpcUrls: ['https://rpc.testnet.fantom.network'],
     nativeCurrency: {
-      name: 'Fantom - Testnet',
+      name: 'Fantom',
       symbol: 'FTM',
       decimals: 18
     },
     blockExplorerUrls: ['https://testnet.ftmscan.com']
-  }
+  },
+  blockExplorer: 'https://testnet.ftmscan.com'
+},
+{
+  label: "Arbitrum - Mainnet",
+  config: {
+    chainId: "0xa4b1",
+    chainName: 'Arbitrum - Mainnet',
+    rpcUrls: ['https://arb1.arbitrum.io/rpc'],
+    nativeCurrency: {
+      name: 'Arbitrum',
+      symbol: 'ETH',
+      decimals: 18
+    },
+    blockExplorerUrls: ['https://arbiscan.io/']
+  },
+  blockExplorer: 'https://arbiscan.io/'
+},
+{
+  label: "Arbitrum Rinkeby- Testnet",
+  config: {
+    chainId: "0x66eeb",
+    chainName: 'Arbitrum Rinkeby - Testnet',
+    rpcUrls: ['https://rinkeby.arbitrum.io/rpc'],
+    nativeCurrency: {
+      name: 'Arbitrum',
+      symbol: 'ETH',
+      decimals: 18
+    },
+    blockExplorerUrls: ['https://testnet.arbiscan.io/']
+  },
+  blockExplorer: 'https://testnet.arbiscan.io/'
+},
+{
+  label: "Celo - Mainnet",
+  config: {
+    chainId: "0xa4ec",
+    chainName: 'Celo - Mainnet',
+    rpcUrls: ['https://rpc.ankr.com/celo'],
+    nativeCurrency: {
+      name: 'Celo',
+      symbol: 'CELO',
+      decimals: 18
+    },
+    blockExplorerUrls: ['https://celoscan.io/']
+  },
+  blockExplorer: 'https://celoscan.io/'
+},
+{
+  label: "Celo Alfajores - Testnet",
+  config: {
+    chainId: "0xaef3",
+    chainName: 'Celo Alfajores - Testnet',
+    rpcUrls: ['https://alfajores-forno.celo-testnet.org'],
+    nativeCurrency: {
+      name: 'Celo',
+      symbol: 'CELO',
+      decimals: 18
+    },
+    blockExplorerUrls: ['https://alfajores.celoscan.io/']
+  },
+  blockExplorer: 'https://alfajores.celoscan.io/'
+},
+{
+  label: "Aurora - Mainnet",
+  config: {
+    chainId: "0x4e454152",
+    chainName: 'Aurora - Mainnet',
+    rpcUrls: ['https://mainnet.aurora.dev'],
+    nativeCurrency: {
+      name: 'Aurora',
+      symbol: 'ETH',
+      decimals: 18
+    },
+    blockExplorerUrls: ['https://aurorascan.dev/']
+  },
+  blockExplorer: 'https://aurorascan.dev/'
+},
+{
+  label: "Aurora - Testnet",
+  config: {
+    chainId: "0x4e454153",
+    chainName: 'Aurora - Testnet',
+    rpcUrls: ['https://testnet.aurora.dev/'],
+    nativeCurrency: {
+      name: 'Aurora',
+      symbol: 'ETH',
+      decimals: 18
+    },
+    blockExplorerUrls: ['https://testnet.aurorascan.dev/']
+  },
+  blockExplorer: 'https://testnet.aurorascan.dev/'
 },
 {
   label: "Ethereum",
@@ -124,35 +245,8 @@ export const networks = [{
       decimals: 18
     },
     blockExplorerUrls: ['https://etherscan.io/']
-  }
-},
-{
-  label: "Ropsten",
-  config: {
-    chainId: "0x3",
-    chainName: 'Ropsten',
-    rpcUrls: ['https://ropsten.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161'],
-    nativeCurrency: {
-      name: 'Ropsten',
-      symbol: 'ETH',
-      decimals: 18
-    },
-    blockExplorerUrls: ['https://ropsten.etherscan.io/']
-  }
-},
-{
-  label: "Rinkeby",
-  config: {
-    chainId: "0x4",
-    chainName: 'Rinkeby',
-    rpcUrls: ['https://ropsten.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161'],
-    nativeCurrency: {
-      name: 'Rinkeby',
-      symbol: 'ETH',
-      decimals: 18
-    },
-    blockExplorerUrls: ['https://rinkeby.etherscan.io']
-  }
+  },
+  blockExplorer: 'https://etherscan.io/'
 },
 {
   label: "Goerli",
@@ -166,21 +260,8 @@ export const networks = [{
       decimals: 18
     },
     blockExplorerUrls: ['https://goerli.etherscan.io']
-  }
+  },
+  blockExplorer: 'https://goerli.etherscan.io'
 },
-{
-  label: " Kovan",
-  config: {
-    chainId: "0x2a",
-    chainName: ' Kovan',
-    rpcUrls: ['https://kovan.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161'],
-    nativeCurrency: {
-      name: ' Kovan',
-      symbol: 'ETH',
-      decimals: 18
-    },
-    blockExplorerUrls: ['https://kovan.etherscan.io']
-  }
-}
 ]
 
