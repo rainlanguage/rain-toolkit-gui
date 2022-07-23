@@ -1,11 +1,16 @@
 <script lang="ts">
-  import { formatUnits, Logger, parseUnits } from "ethers/lib/utils";
+  import { formatUnits, parseUnits } from "ethers/lib/utils";
   import Button from "../../components/Button.svelte";
   import Steps from "../../components/steps/Steps.svelte";
   import Ring from "../../components/Ring.svelte";
   import { BigNumber, ethers } from "ethers";
   import Input from "src/components/Input.svelte";
   import { selectedNetwork } from "src/stores";
+  import SimpleTransactionModal from "src/components/SimpleTransactionModal.svelte";
+  import { writable } from "svelte/store";
+  import Modal, { bind } from "svelte-simple-modal/src/Modal.svelte";
+
+  const modal2 = writable(null);
 
   enum TxStatus {
     None,
@@ -45,6 +50,7 @@
     txReceipt,
     errorMsg,
     calcPricePromise;
+  let buyConfig;
 
   const calculatePrice = async (amount) => {
     priceConfirmed = PriceConfirmed.Pending;
@@ -62,15 +68,7 @@
 
     priceConfirmed = PriceConfirmed.Confirmed;
 
-    return {
-      subtotal,
-      fee,
-      total,
-    };
-  };
-
-  const buy = async () => {
-    const buyConfig = {
+    buyConfig = {
       feeRecipient: await $signer.getAddress(), // should be set to platform fee recipient
       fee: fee,
       minimumUnits: units,
@@ -78,32 +76,27 @@
       maximumPrice: ethers.constants.MaxUint256,
     };
 
-    let tx;
-    txStatus = TxStatus.AwaitingSignature;
+    return {
+      subtotal,
+      fee,
+      total,
+    };
+  };
 
-    try {
-      tx = await sale.buy(buyConfig);
-      txStatus = TxStatus.AwaitingConfirmation;
+  const showBuyModal = () =>
+    modal2.set(
+      bind(SimpleTransactionModal, {
+        method: sale.buy,
+        args: [buyConfig],
+        confirmationMsg: "Amount Deposited",
+        returnValue,
+      })
+    );
 
-      txReceipt = await tx.wait();
-    } catch (error) {
-      if (error.code === Logger.errors.TRANSACTION_REPLACED) {
-        if (error.cancelled) {
-          errorMsg = "Transaction Cancelled";
-          txStatus = TxStatus.Error;
-          return;
-        } else {
-          txReceipt = await error.replacement.wait();
-        }
-      } else {
-        errorMsg = error.data?.message || error?.message;
-        txStatus = TxStatus.Error;
-        return;
-      }
-    }
-
+  const returnValue = (method, receipt) => {
     txStatus = TxStatus.None;
     activeStep = BuySteps.Complete;
+    txReceipt = receipt;
   };
 </script>
 
@@ -164,7 +157,17 @@
           {/await}
         </div>
       {/if}
-      <Button disabled={!priceConfirmed} on:click={buy}>Buy</Button>
+      <Modal
+        show={$modal2}
+        styleContent={{ color: "rgba(249, 250, 251, 1)" }}
+        styleWindow={{
+          backgroundColor: "rgba(17, 24, 39, 1) !important",
+          width: "fit-content",
+        }}
+        closeButton={false}
+      >
+        <Button disabled={!priceConfirmed} on:click={showBuyModal}>Buy</Button>
+      </Modal>
     {/if}
 
     {#if activeStep == BuySteps.Complete}

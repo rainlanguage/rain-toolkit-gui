@@ -1,12 +1,18 @@
 <script lang="ts">
   import { signer } from "svelte-ethers-store";
-  import { formatUnits, Logger } from "ethers/lib/utils";
+  import { formatUnits } from "ethers/lib/utils";
   import Button from "../../components/Button.svelte";
   import Steps from "../../components/steps/Steps.svelte";
   import Ring from "../../components/Ring.svelte";
   import { BigNumber } from "ethers";
   import { selectedNetwork } from "src/stores";
   import { ERC20 } from "rain-sdk";
+  import { writable } from "svelte/store";
+  import Modal, { bind } from "svelte-simple-modal/src/Modal.svelte";
+  import SimpleTransactionModal from "src/components/SimpleTransactionModal.svelte";
+
+  const modal2 = writable(null);
+  const modal3 = writable(null);
 
   enum TxStatus {
     None,
@@ -31,78 +37,49 @@
     txStatus = TxStatus.None,
     txReceipt;
 
+  let rTKN;
+
+  rTKN = new ERC20(token.id, $signer);
+
   const receipt = transaction.receipt;
 
-  const approve = async () => {
-    const rTKN = new ERC20(token.id, $signer);
+  const showApproveModal = () =>
+    modal2.set(
+      bind(SimpleTransactionModal, {
+        method: rTKN.approve,
+        args: [saleContract.address, BigNumber.from(receipt.units)],
+        confirmationMsg: "Amount Approved",
+        func: "approve",
+        returnValue,
+      })
+    );
 
-    let tx;
-    txStatus = TxStatus.AwaitingSignature;
+  const showRefundModal = () =>
+    modal3.set(
+      bind(SimpleTransactionModal, {
+        method: saleContract.refund,
+        args: [
+          {
+            id: BigNumber.from(receipt.receiptId),
+            feeRecipient: receipt.feeRecipient,
+            fee: BigNumber.from(receipt.fee),
+            units: BigNumber.from(receipt.units),
+            price: BigNumber.from(receipt.price),
+          },
+        ],
+        confirmationMsg: "Amount Refunded",
+        returnValue,
+      })
+    );
 
-    try {
-      tx = await rTKN.approve(
-        saleContract.address,
-        BigNumber.from(receipt.units)
-      );
-      txStatus = TxStatus.AwaitingConfirmation;
-
-      txReceipt = await tx.wait();
-    } catch (error) {
-      if (error.code === Logger.errors.TRANSACTION_REPLACED) {
-        if (error.cancelled) {
-          errorMsg = "Transaction Cancelled";
-          txStatus = TxStatus.Error;
-          return;
-        } else {
-          txReceipt = await error.replacement.wait();
-        }
-      } else {
-        errorMsg = error.data?.message || error?.message;
-        txStatus = TxStatus.Error;
-        return;
-      }
-    }
-
+  const returnValue = (method, receipt) => {
     txStatus = TxStatus.None;
-    activeStep = RefundSteps.Confirm;
-
-    return txReceipt;
-  };
-
-  const refund = async () => {
-    let tx;
-    txStatus = TxStatus.AwaitingSignature;
-    try {
-      tx = await saleContract.refund({
-        id: BigNumber.from(receipt.receiptId),
-        feeRecipient: receipt.feeRecipient,
-        fee: BigNumber.from(receipt.fee),
-        units: BigNumber.from(receipt.units),
-        price: BigNumber.from(receipt.price),
-      });
-
-      txStatus = TxStatus.AwaitingConfirmation;
-      txReceipt = await tx.wait();
-    } catch (error) {
-      if (error.code === Logger.errors.TRANSACTION_REPLACED) {
-        if (error.cancelled) {
-          errorMsg = "Transaction Cancelled";
-          txStatus = TxStatus.Error;
-          return;
-        } else {
-          txReceipt = await error.replacement.wait();
-        }
-      } else {
-        errorMsg = error.data?.message || error?.message;
-        txStatus = TxStatus.Error;
-        return;
-      }
+    if (method == true) {
+      activeStep = RefundSteps.Confirm;
+    } else {
+      activeStep = RefundSteps.Complete;
+      txReceipt = receipt;
     }
-
-    txStatus = TxStatus.None;
-    activeStep = RefundSteps.Complete;
-
-    return txReceipt;
   };
 </script>
 
@@ -131,7 +108,17 @@
 
     {#if activeStep == RefundSteps.Approve}
       <span>Approve the sale contract to spend your {token.symbol}.</span>
-      <Button on:click={approve}>Approve</Button>
+      <Modal
+        show={$modal2}
+        styleContent={{ color: "rgba(249, 250, 251, 1)" }}
+        styleWindow={{
+          backgroundColor: "rgba(17, 24, 39, 1) !important",
+          width: "fit-content",
+        }}
+        closeButton={false}
+      >
+        <Button on:click={showApproveModal}>Approve</Button>
+      </Modal>
     {/if}
 
     {#if activeStep == RefundSteps.Confirm}
@@ -140,7 +127,17 @@
         >You will not be able to make another purchase or refund for {sale.cooldownDuration}
         blocks.</span
       >
-      <Button on:click={refund}>Confirm</Button>
+      <Modal
+        show={$modal3}
+        styleContent={{ color: "rgba(249, 250, 251, 1)" }}
+        styleWindow={{
+          backgroundColor: "rgba(17, 24, 39, 1) !important",
+          width: "fit-content",
+        }}
+        closeButton={false}
+      >
+        <Button on:click={showRefundModal}>Confirm</Button>
+      </Modal>
     {/if}
 
     {#if activeStep == RefundSteps.Complete}

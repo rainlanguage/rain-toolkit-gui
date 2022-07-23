@@ -9,6 +9,7 @@
   import EscrowWithdrawModal from "./EscrowWithdrawModal.svelte";
   import { onMount } from "svelte/internal";
   import { client } from "src/stores";
+  import { logger } from "ethers";
 
   const { open } = getContext("simple-modal");
   export let salesContract, saleData, token;
@@ -171,7 +172,7 @@
           </td>
           <td class="py-2 text-right">
             {#if signerBalance && decimals}
-              {#if formatUnits(signerBalance, decimals) !== "0.0" && data.deposit.totalRemaining !== "0" && data.withdrawerAddress === $signerAddress.toLowerCase()}
+              {#if formatUnits(signerBalance, decimals) !== "0.0" && formatUnits(data.claimable, decimals) !== "0.0" && data.withdrawerAddress === $signerAddress.toLowerCase()}
                 <span
                   class="underline cursor-pointer text-gray-400 mr-4"
                   on:click={() => {

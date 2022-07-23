@@ -5,7 +5,12 @@
   import { ethers } from "ethers";
   import { getContext } from "svelte";
   import { selectedNetwork } from "src/stores";
-  import { Logger } from "ethers/lib/utils";
+
+  import SimpleTransactionModal from "src/components/SimpleTransactionModal.svelte";
+  import { writable } from "svelte/store";
+  import Modal, { bind } from "svelte-simple-modal/src/Modal.svelte";
+
+  const modal2 = writable(null);
 
   const { close } = getContext("simple-modal");
 
@@ -28,33 +33,23 @@
     txReceipt,
     errorMsg;
 
-  const approve = async () => {
-    let tx;
-    txStatus = TxStatus.AwaitingSignature;
+  const showApproveModal = () =>
+    modal2.set(
+      bind(SimpleTransactionModal, {
+        method: reserve.approve,
+        args: [saleData.id, ethers.constants.MaxUint256],
+        confirmationMsg: "Amount Approved",
+        func: "approve",
+        returnValue,
+      })
+    );
 
-    try {
-      tx = await reserve.approve(saleData.id, ethers.constants.MaxUint256);
-
-      txStatus = TxStatus.AwaitingConfirmation;
-      txReceipt = await tx.wait();
-    } catch (error) {
-      if (error.code === Logger.errors.TRANSACTION_REPLACED) {
-        if (error.cancelled) {
-          errorMsg = "Transaction Cancelled";
-          txStatus = TxStatus.Error;
-          return;
-        } else {
-          txReceipt = await error.replacement.wait();
-        }
-      } else {
-        errorMsg = error.data?.message || error?.message;
-        txStatus = TxStatus.Error;
-        return;
-      }
-    }
-
-    activeStep = ApproveSteps.Complete;
+  const returnValue = (method, receipt) => {
     txStatus = TxStatus.None;
+    if (method == true) {
+      activeStep = ApproveSteps.Complete;
+      txReceipt = receipt;
+    }
   };
 </script>
 
@@ -73,7 +68,17 @@
       <span
         >Approve the sale contract to spend your {saleData.reserve.symbol}</span
       >
-      <Button on:click={approve}>Approve</Button>
+      <Modal
+        show={$modal2}
+        styleContent={{ color: "rgba(249, 250, 251, 1)" }}
+        styleWindow={{
+          backgroundColor: "rgba(17, 24, 39, 1) !important",
+          width: "fit-content",
+        }}
+        closeButton={false}
+      >
+        <Button on:click={showApproveModal}>Approve</Button>
+      </Modal>
     {/if}
 
     {#if activeStep == ApproveSteps.Complete}
