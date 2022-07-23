@@ -55,6 +55,7 @@
   const handleChange = async () => {
     tierCheck = currentTier > tierValue.value;
   };
+
   const approve = async () => {
     let tx;
     txStatus = TxStatus.AwaitingSignature;
@@ -134,7 +135,8 @@
       {#if activeStep == TransferTierSetSteps.Approve}
         {#if currentTier == 0}
           <div class="pt-2 text-gray-400">
-            Join this TransferTier by locking up required amount of tokens for desired tier status
+            Join this TransferTier by locking up required amount of tokens for
+            desired tier status
           </div>
         {:else if currentTier == 1}
           <div class="pt-2 text-gray-400">
@@ -142,10 +144,11 @@
           </div>
         {:else}
           <div class="pt-2 text-gray-400">
-           Upgrade or downgrade your tier status by locking up the required token amount
+            Upgrade or downgrade your tier status by locking up the required
+            token amount
           </div>
           <div class="pt-2 text-gray-400">
-            or exit this TransferTier by clicking the "Exit Tiers" button 
+            or exit this TransferTier by clicking the "Exit Tiers" button
           </div>
         {/if}
       {/if}
@@ -179,7 +182,9 @@
             placeholder="Enter an Ethereum address"
             bind:value={senderAddress}
           >
-            <span slot="label">Enter the address to upgrade the tier status for: </span>
+            <span slot="label"
+              >Enter the address to upgrade the tier status for:
+            </span>
           </Input>
         </div>
 

@@ -5,11 +5,11 @@
   import FormPanel from "../../components/FormPanel.svelte";
   import { queryStore } from "@urql/svelte";
   import { client } from "src/stores";
-
+  import { Token } from "graphql";
 
   $: balanceTiers = queryStore({
-      client: $client,
-      query: `query {
+    client: $client,
+    query: `query {
         erc721BalanceTiers {
           id
           address
@@ -23,10 +23,8 @@
           }
           tierValues
         }
-      }`
-    }
-  );
-
+      }`,
+  });
 </script>
 
 {#if $balanceTiers.fetching}
