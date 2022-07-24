@@ -31,7 +31,6 @@
   // import ListTransferTier from "./routes/erc20-transfer-tier/ListTransferTier.svelte";
   import DeployERC20 from "./routes/mint-erc20/DeployERC20.svelte";
   import MintFromExistingERC20 from "./routes/mint-erc20/MintFromExistingERC20.svelte";
-  import OrderBook from "./routes/orderbook/OrderBook.svelte";
 
   let routes = {};
 
@@ -69,8 +68,6 @@
 
     "/erc20/deploy": DeployERC20,
     "/erc20/mint/*": MintFromExistingERC20,
-
-    "/orderbook/manage": OrderBook,
 
     "/address-library": AddressLibrary,
 

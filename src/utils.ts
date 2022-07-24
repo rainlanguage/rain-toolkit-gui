@@ -193,13 +193,13 @@ export const getERC20 = async (erc20Address, signer, signerAddress) => {
   }
 };
 
-export const validateFields = (fields: any[]) => {
+export const validateFields = async (fields: any[]) => {
   let fieldValues: any = {};
-  const validations = Object.keys(fields).map((key) => {
-    const validationResult = fields[key].validate();
+  const validations = await Promise.all(Object.keys(fields).map(async (key) => {
+    const validationResult = await fields[key].validate();
     fieldValues[key] = validationResult.value;
     return validationResult;
-  });
+  }));
   return {
     validationResult: validations.every((validation) => validation.ok),
     fieldValues,

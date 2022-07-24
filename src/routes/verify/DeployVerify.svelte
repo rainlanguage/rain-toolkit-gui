@@ -44,16 +44,27 @@
     verifyChild;
 
   const deployVerify = async () => {
-    const { validationResult, fieldValues } = validateFields(verifyFields);
-
-    const newVerify = await Verify.deploy($signer, {admin: fieldValues.adminAddress});
+    const { validationResult, fieldValues } = await validateFields(
+      verifyFields
+    );
+    console.log(fieldValues);
+    console.log({
+      admin: fieldValues.adminAddress,
+      callback: ethers.constants.AddressZero,
+    });
+    const newVerify = await Verify.deploy($signer, {
+      admin: fieldValues.adminAddress,
+      callback: ethers.constants.AddressZero,
+    });
     verifyChild = newVerify.address;
 
     return newVerify;
   };
 
   const deployVerifyTier = async () => {
-    const { validationResult, fieldValues } = validateFields(verifyTierFields);
+    const { validationResult, fieldValues } = await validateFields(
+      verifyTierFields
+    );
 
     const newVerifyTier = await VerifyTier.deploy(
       $signer,

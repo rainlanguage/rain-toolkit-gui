@@ -22,7 +22,6 @@
       const splitLine = line.split("\t");
       return { account: splitLine[0], data: encoder.encode(splitLine[1]) };
     });
-
     open(SimpleTransactionModal, {
       method: verifyContract.approve,
       args: [evidences],
