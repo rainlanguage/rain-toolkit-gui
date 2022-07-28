@@ -159,7 +159,7 @@ export enum selectLteMode {
 }
 
 export const getERC20 = async (erc20Address, signer, signerAddress) => {
-  let erc20AddressError,
+  let errorMsg,
     erc20Contract,
     erc20name,
     erc20symbol,
@@ -168,7 +168,7 @@ export const getERC20 = async (erc20Address, signer, signerAddress) => {
     erc20totalSupply;
 
   if (ethers.utils.isAddress(erc20Address)) {
-    erc20AddressError = null;
+    errorMsg = null;
     erc20Contract = new ERC20(erc20Address, signer);
     try {
       erc20name = await erc20Contract.name();
@@ -182,14 +182,14 @@ export const getERC20 = async (erc20Address, signer, signerAddress) => {
         erc20symbol,
         erc20balance,
         erc20decimals,
-        erc20AddressError,
+        errorMsg,
         erc20totalSupply,
       };
     } catch (error) {
-      erc20AddressError = "not a valid ERC20 token address";
+      return errorMsg = "not a valid ERC20 token address";
     }
   } else {
-    erc20AddressError = "not a valid address";
+    return errorMsg = "not a valid address";
   }
 };
 
@@ -251,19 +251,19 @@ export const copyToClipboard = async (text) => {
   await navigator.clipboard.writeText(text)
 }
 
-export const isTier = async(tierAddress, signer, signerAddress) => {
+export const isTier = async (tierAddress, signer, signerAddress) => {
   let errorMsg = null;
   if (ethers.utils.isAddress(tierAddress)) {
-    try{
-        const iTier = new ITier(tierAddress, signer)
-        await iTier.report(signerAddress);
-      }
-      catch(err){
-        errorMsg = "Not a valid Tier Contract Address";
-      }
+    try {
+      const iTier = new ITier(tierAddress, signer)
+      await iTier.report(signerAddress);
     }
-    else {
-      errorMsg = "Not a valid Address";
+    catch (err) {
+      errorMsg = "Not a valid Tier Contract Address";
     }
-    return {errorMsg};
   }
+  else {
+    errorMsg = "Not a valid Address";
+  }
+  return { errorMsg };
+}
