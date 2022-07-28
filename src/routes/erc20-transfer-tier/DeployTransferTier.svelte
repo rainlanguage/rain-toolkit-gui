@@ -55,12 +55,12 @@
         : ethers.constants.MaxInt256
     );
 
-    let newBalanceTier = await ERC20TransferTier.deploy($signer, {
+    let newTransferTier = await ERC20TransferTier.deploy($signer, {
       erc20: erc20Contract.address,
       tierValues: parsedTiers,
     });
 
-    return newBalanceTier;
+    return newTransferTier;
   };
 
   const handleClick = () => {
