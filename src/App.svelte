@@ -61,9 +61,9 @@
     "/erc721balancetier/report/*": ERC721BalanceTierReport,
     "/erc721balancetier/list": ListERC721BalanceTier,
 
-    // "/combinetier/deploy": DeployCombineTier,
-    // "/combinetier/report/*": CombineTierReport,
-    // "/combinetier/list": ListCombineTier,
+    "/combinetier/deploy": DeployCombineTier,
+    "/combinetier/report/*": CombineTierReport,
+    "/combinetier/list": ListCombineTier,
 
     // "/stake/deploy": DeployStake,
     // "/stake/report/*": StakeReport,
