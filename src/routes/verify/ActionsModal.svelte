@@ -19,8 +19,8 @@
 
   const encoder = new TextEncoder();
 
-  const handleClick = () => {
-    const { validationResult, fieldValues } = validateFields(fields);
+  const handleClick = async () => {
+    const { validationResult, fieldValues } = await validateFields(fields);
     if (validationResult) {
       if (fieldValues.evidence) {
         data = encoder.encode(fieldValues.evidence);
