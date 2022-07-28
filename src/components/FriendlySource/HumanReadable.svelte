@@ -1,9 +1,9 @@
 <script lang="ts">
-  import {
-    calculatePriceConfig,
-    getSaleDuration,
-    getBuyWalletCap,
-  } from "../../routes/sale/sale";
+  // import {
+  //   calculatePriceConfig,
+  //   getSaleDuration,
+  //   getBuyWalletCap,
+  // } from "../../routes/sale/sale";
   import {
     HumanFriendlySource,
     CombineTierGenerator,
@@ -108,39 +108,39 @@
         err = true;
       }
     }
-    if (contractType.toLowerCase() === "sale") {
-      try {
-        saleDurationConfig = HumanFriendlySource.prettify(
-          HumanFriendlySource.get(
-            getSaleDuration(FriendlySource.saleParam, signer)
-          )
-        );
-      } catch (error) {
-        console.log(error);
-        saleDurationConfig = error;
-      }
+    // if (contractType.toLowerCase() === "sale") {
+    //   try {
+    //     saleDurationConfig = HumanFriendlySource.prettify(
+    //       HumanFriendlySource.get(
+    //         getSaleDuration(FriendlySource.saleParam, signer)
+    //       )
+    //     );
+    //   } catch (error) {
+    //     console.log(error);
+    //     saleDurationConfig = error;
+    //   }
 
-      try {
-        buyCapConfig = HumanFriendlySource.prettify(
-          HumanFriendlySource.get(getBuyWalletCap(FriendlySource.saleParam))
-        );
-      } catch (error) {
-        buyCapConfig = error;
-      }
+    //   try {
+    //     buyCapConfig = HumanFriendlySource.prettify(
+    //       HumanFriendlySource.get(getBuyWalletCap(FriendlySource.saleParam))
+    //     );
+    //   } catch (error) {
+    //     buyCapConfig = error;
+    //   }
 
-      try {
-        priceConfig =
-          FriendlySource.startTimestamp && FriendlySource.endTimestamp
-            ? HumanFriendlySource.prettify(
-                HumanFriendlySource.get(
-                  calculatePriceConfig(FriendlySource.saleParam)
-                )
-              )
-            : "Select Sale's Start & End Date/Time To Show Price Script";
-      } catch (error) {
-        priceConfig = error;
-      }
-    }
+    //   try {
+    //     priceConfig =
+    //       FriendlySource.startTimestamp && FriendlySource.endTimestamp
+    //         ? HumanFriendlySource.prettify(
+    //             HumanFriendlySource.get(
+    //               calculatePriceConfig(FriendlySource.saleParam)
+    //             )
+    //           )
+    //         : "Select Sale's Start & End Date/Time To Show Price Script";
+    //   } catch (error) {
+    //     priceConfig = error;
+    //   }
+    // }
   }
 </script>
 
