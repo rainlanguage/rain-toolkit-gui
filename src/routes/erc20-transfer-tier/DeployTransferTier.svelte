@@ -44,7 +44,11 @@
 
   const deployTransferTier = async () => {
     const parsedTiers = tiers.map((value) =>
-      ethers.utils.parseUnits(value.toString(), erc20decimals)
+      value === 0
+        ? "0"
+        : value
+        ? ethers.utils.parseUnits(value.toString(), erc20decimals)
+        : ethers.constants.MaxInt256
     );
 
     let newBalanceTier = await ERC20TransferTier.deploy($signer, {
