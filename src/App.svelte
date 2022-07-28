@@ -1,36 +1,53 @@
 <script lang="ts" type="module">
-  import ListERC721BalanceTier from "./routes/erc721-balance-tier/ListERC721BalanceTier.svelte";
-  // import ListGatedNFTs from "./routes/gated-nft/ListGatedNFTs.svelte";
-  import ERC721BalanceTierReport from "./routes/erc721-balance-tier/ERC721BalanceTierReport.svelte";
-  import { signer } from "svelte-ethers-store";
-  import Router from "svelte-spa-router";
-  import DeployBalanceTier from "./routes/erc20-balance-tier/DeployBalanceTier.svelte";
-  import BalanceTierReport from "./routes/erc20-balance-tier/BalanceTierReport.svelte";
   import Home from "./routes/Home.svelte";
-  // import DeployGatedNFT from "./routes/gated-nft/DeployGatedNFT.svelte";
-  // import MintNft from "./routes/gated-nft/MintNFT.svelte";
   import Header from "./layout/Header.svelte";
   import Sidebar from "./layout/Sidebar.svelte";
+  import Footer from "./layout/Footer.svelte";
+
+  import { signer } from "svelte-ethers-store";
+  import Router from "svelte-spa-router";
+  import Modal from "svelte-simple-modal";
+
+  //ERC721BalanceTier
+  import Deploy721BalanceTier from "./routes/erc721-balance-tier/Deploy721BalanceTier.svelte";
+  import ListERC721BalanceTier from "./routes/erc721-balance-tier/ListERC721BalanceTier.svelte";
+  import ERC721BalanceTierReport from "./routes/erc721-balance-tier/ERC721BalanceTierReport.svelte";
+
+  //ERC20BalanceTier
+  import DeployBalanceTier from "./routes/erc20-balance-tier/DeployBalanceTier.svelte";
+  import BalanceTierReport from "./routes/erc20-balance-tier/BalanceTierReport.svelte";
   import ListBalanceTier from "./routes/erc20-balance-tier/ListBalanceTier.svelte";
+
+  // //Combine Tier
   // import DeployCombineTier from "./routes/combine-tier/DeployCombineTier.svelte";
   // import CombineTierReport from "./routes/combine-tier/CombineTierReport.svelte";
-  import Deploy721BalanceTier from "./routes/erc721-balance-tier/Deploy721BalanceTier.svelte";
+  // import ListCombineTier from "./routes/combine-tier/ListCombineTier.svelte";
+
+  // //Sale
   // import DeploySale from "./routes/sale/DeploySale.svelte";
   // import PurchaseSale from "./routes/sale/PurchaseSale.svelte";
+  // import ListSale from "./routes/sale/ListSale.svelte";
+
+  // //Emissions
   // import DeployEmissions from "./routes/emissions-erc20/DeployEmissions.svelte";
   // import ClaimEmissions from "./routes/emissions-erc20/ClaimEmissions.svelte";
-  import Modal from "svelte-simple-modal";
+
+  //Verify
   import DeployVerify from "./routes/verify/DeployVerify.svelte";
   import AdministerVerify from "./routes/verify/AdministerVerify.svelte";
+
+  //AddressLibrary
   import AddressLibrary from "./routes/address-library/AddressLibrary.svelte";
-  // import ListCombineTier from "./routes/combine-tier/ListCombineTier.svelte";
-  // import ListSale from "./routes/sale/ListSale.svelte";
-  import Footer from "./layout/Footer.svelte";
-  // import DeployTransferTier from "./routes/erc20-transfer-tier/DeployTransferTier.svelte";
-  // import TransferTierReport from "./routes/erc20-transfer-tier/TransferTierReport.svelte";
-  // import ListTransferTier from "./routes/erc20-transfer-tier/ListTransferTier.svelte";
+
+  // //Stake
+  // import DeployStake from "./routes/stake/DeployStake.svelte";
+  // import StakeReport from "./routes/stake/StakeReport.svelte";
+  // import ListStake from "./routes/stake/ListStake.svelte";
+
+  //Mint ERC20
   import DeployERC20 from "./routes/mint-erc20/DeployERC20.svelte";
   import MintFromExistingERC20 from "./routes/mint-erc20/MintFromExistingERC20.svelte";
+  // import ListErc20s from "./routes/mint-erc20/ListERC20s.svelte";
 
   let routes = {};
 
@@ -48,13 +65,9 @@
     // "/combinetier/report/*": CombineTierReport,
     // "/combinetier/list": ListCombineTier,
 
-    // "/erc20transfertier/deploy": DeployTransferTier,
-    // "/erc20transfertier/report/*": TransferTierReport,
-    // "/erc20transfertier/list": ListTransferTier,
-
-    // "/gatednft/deploy/*": DeployGatedNFT,
-    // "/gatednft/list": ListGatedNFTs,
-    // "/gatednft/mint/*": MintNft,
+    // "/stake/deploy": DeployStake,
+    // "/stake/report/*": StakeReport,
+    // "/stake/list": ListStake,
 
     // "/sale/deploy": DeploySale,
     // "/sale/purchase/*": PurchaseSale,
@@ -68,6 +81,7 @@
 
     "/erc20/deploy": DeployERC20,
     "/erc20/mint/*": MintFromExistingERC20,
+    // "/erc20/list": ListErc20s,
 
     "/address-library": AddressLibrary,
 
