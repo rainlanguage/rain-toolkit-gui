@@ -33,7 +33,7 @@
 
   const report = async () => {
     if (ethers.utils.isAddress(addressToReport)) {
-      const report = await combineTierContract.report(addressToReport);
+      const report = await combineTierContract.report(addressToReport, []);
       parsedReport = tierReport(report.toHexString());
     } else {
       errorMsg = "Not a valid Ethereum address";
