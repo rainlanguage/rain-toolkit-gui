@@ -1,13 +1,13 @@
-<script lang="ts">
-  import Select from "src/components/Select.svelte";
-  import Steps from "../../components/steps/Steps.svelte";
-  import { selectedNetwork } from "src/stores";
+<!-- <script lang="ts">
+  import Select from "$components/Select.svelte";
+  import Steps from "$components/steps/Steps.svelte";
+  import { selectedNetwork } from "$src/stores";
   import { signerAddress } from "svelte-ethers-store";
   import { ethers } from "ethers";
-  import Input from "../../components/Input.svelte";
-  import Button from "../../components/Button.svelte";
-  import Ring from "../../components/Ring.svelte";
-  import Switch from "src/components/Switch.svelte";
+  import Input from "$components/Input.svelte";
+  import Button from "$components/Button.svelte";
+  import Ring from "$components/Ring.svelte";
+  import Switch from "$components/Switch.svelte";
   import { ERC20TransferTier, ERC20 } from "rain-sdk";
   import { getContext } from "svelte";
   import { Logger } from "ethers/lib/utils";
@@ -250,7 +250,7 @@
         <Button shrink on:click={exitTier}>UnSet the Tier</Button>
       </div>
     </div> -->
-  </div>
+<!--  </div>
 {/if}
 
 {#if txStatus == TxStatus.AwaitingSignature}
@@ -270,4 +270,4 @@
     <span class="text-lg">Something went wrong.</span>
     <span class="text-lg text-red-400">{errorMsg}</span>
   </div>
-{/if}
+{/if} -->

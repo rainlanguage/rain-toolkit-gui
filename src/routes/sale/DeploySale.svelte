@@ -1,18 +1,18 @@
 <script lang="ts">
-  import ContractDeploy from "../../components/ContractDeploy.svelte";
+  import ContractDeploy from "$components/ContractDeploy.svelte";
   import { ethers } from "ethers";
   import { formatUnits } from "ethers/lib/utils";
   import { signer, signerAddress } from "svelte-ethers-store";
-  import Select from "../../components/Select.svelte";
-  import Button from "../../components/Button.svelte";
-  import FormPanel from "../../components/FormPanel.svelte";
-  import Input from "../../components/Input.svelte";
-  import Switch from "src/components/Switch.svelte";
+  import Select from "$components/Select.svelte";
+  import Button from "$components/Button.svelte";
+  import FormPanel from "$components/FormPanel.svelte";
+  import Input from "$components/Input.svelte";
+  import Switch from "$components/Switch.svelte";
   import { getERC20, validateFields } from "../../utils";
   import { saleDeploy, SaleParams, selectSale } from "./sale";
   import { DatePicker, CalendarStyle } from "@beyonk/svelte-datepicker";
   import SaleSmallSimulationChart from "./SaleSmallSimulationChart.svelte";
-  import HumanReadable from "../../components/FriendlySource/HumanReadable.svelte";
+  import HumanReadable from "$components/FriendlySource/HumanReadable.svelte";
 
   let fields: any = {};
   let deployPromise;
@@ -150,7 +150,6 @@
     tierCapMulActMode: tierCapMulActCheck,
     creatorControlMode: creatorControlCheck,
     afterMinimumRaiseMode: afterMinimumRaiseCheck,
-
 
     recipient,
     reserve,

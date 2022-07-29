@@ -1,9 +1,9 @@
 <script lang="ts">
-  import Button from "src/components/Button.svelte";
-  import Input from "src/components/Input.svelte";
-  import SimpleTransactionModal from "src/components/SimpleTransactionModal.svelte";
-  import { validateFields } from "src/utils";
-  import { defaultValidator } from "src/validation";
+  import Button from "$components/Button.svelte";
+  import Input from "$components/Input.svelte";
+  import SimpleTransactionModal from "$components/SimpleTransactionModal.svelte";
+  import { validateFields } from "$src/utils";
+  import { defaultValidator } from "$src/validation";
   import { getContext } from "svelte";
 
   const { open } = getContext("simple-modal");
@@ -19,8 +19,8 @@
 
   const encoder = new TextEncoder();
 
-  const handleClick = () => {
-    const { validationResult, fieldValues } = validateFields(fields);
+  const handleClick = async () => {
+    const { validationResult, fieldValues } = await validateFields(fields);
     if (validationResult) {
       if (fieldValues.evidence) {
         data = encoder.encode(fieldValues.evidence);

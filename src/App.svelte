@@ -39,10 +39,10 @@
   //AddressLibrary
   import AddressLibrary from "./routes/address-library/AddressLibrary.svelte";
 
-  // //Stake
-  // import DeployStake from "./routes/stake/DeployStake.svelte";
-  // import StakeReport from "./routes/stake/StakeReport.svelte";
-  // import ListStake from "./routes/stake/ListStake.svelte";
+  //Stake
+  import DeployStake from "./routes/stake/DeployStake.svelte";
+  import StakeReport from "./routes/stake/StakeReport.svelte";
+  import ListStake from "./routes/stake/ListStake.svelte";
 
   //Mint ERC20
   import DeployERC20 from "./routes/mint-erc20/DeployERC20.svelte";
@@ -65,9 +65,9 @@
     // "/combinetier/report/*": CombineTierReport,
     // "/combinetier/list": ListCombineTier,
 
-    // "/stake/deploy": DeployStake,
-    // "/stake/report/*": StakeReport,
-    // "/stake/list": ListStake,
+    "/stake/deploy": DeployStake,
+    "/stake/report/*": StakeReport,
+    "/stake/list": ListStake,
 
     // "/sale/deploy": DeploySale,
     // "/sale/purchase/*": PurchaseSale,

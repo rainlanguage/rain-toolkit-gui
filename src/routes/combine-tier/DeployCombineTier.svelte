@@ -1,14 +1,14 @@
 <script lang="ts" type="module">
   import { signer, signerAddress } from "svelte-ethers-store";
-  import Button from "../../components/Button.svelte";
-  import FormPanel from "../../components/FormPanel.svelte";
-  import Input from "../../components/Input.svelte";
+  import Button from "$components/Button.svelte";
+  import FormPanel from "$components/FormPanel.svelte";
+  import Input from "$components/Input.svelte";
   import { addressValidate } from "../../validation";
-  import Select from "../../components/Select.svelte";
-  import ContractDeploy from "src/components/ContractDeploy.svelte";
+  import Select from "$components/Select.svelte";
+  import ContractDeploy from "$components/ContractDeploy.svelte";
   import { CombineTier, CombineTierGenerator } from "rain-sdk";
   import { selectLteLogic, selectLteMode } from "../../utils";
-  import HumanReadable from "../../components/FriendlySource/HumanReadable.svelte";
+  import HumanReadable from "$components/FriendlySource/HumanReadable.svelte";
 
   let tierContractOne: string = "0x6ba1fadb694e806c316337143241dd6cfebd5033",
     tierContractTwo: string = "0xb2b600aeae9bc1efd68ae209e621b7546393ef28",

@@ -1,12 +1,13 @@
 <script lang="ts">
-  import DisplayAddress from "./../../components/DisplayAddress.svelte";
-  import { BigNumberish, Contract, ethers, Signer } from "ethers";
+  import DisplayAddress from "$components/DisplayAddress.svelte";
+  import { ethers } from "ethers";
+  import type { BigNumberish, Contract, Signer } from "ethers";
   import { formatUnits } from "ethers/lib/utils";
-  import { Writable } from "svelte/store";
+  import type { Writable } from "svelte/store";
   import FlashTooltip from "./FlashTooltip.svelte";
-  import { SvelteComponent } from "svelte";
-  import IconLibrary from "src/components/IconLibrary.svelte";
-  import { copyToClipboard } from "src/utils";
+  import type { SvelteComponent } from "svelte";
+  import IconLibrary from "$components/IconLibrary.svelte";
+  import { copyToClipboard } from "$src/utils";
   import { ERC20 } from "rain-sdk";
 
   interface TokenData {

@@ -1,9 +1,9 @@
 <script>
-  import Button from "src/components/Button.svelte";
-  import FormPanel from "src/components/FormPanel.svelte";
-  import Input from "src/components/Input.svelte";
-  import Select from "src/components/Select.svelte";
-  import { localLibrary, networkLibrary } from "src/localAddresses";
+  import Button from "$components/Button.svelte";
+  import FormPanel from "$components/FormPanel.svelte";
+  import Input from "$components/Input.svelte";
+  import Select from "$components/Select.svelte";
+  import { localLibrary, networkLibrary } from "$src/localAddresses";
   import { getContext } from "svelte";
 
   const { close } = getContext("simple-modal");

@@ -1,13 +1,13 @@
 <script lang="ts">
-  import { formatAddress } from "src/utils";
+  import { formatAddress } from "$src/utils";
   import { queryStore } from "@urql/svelte";
   import { formatUnits } from "ethers/lib/utils";
   import { signerAddress } from "svelte-ethers-store";
   import { getContext } from "svelte";
-  import IconLibrary from "../../../components/IconLibrary.svelte";
-  import Switch from "src/components/Switch.svelte";
+  import IconLibrary from "../$components/IconLibrary.svelte";
+  import Switch from "$components/Switch.svelte";
   import EscrowUndepositModal from "./EscrowUndepositModal.svelte";
-  import { client } from "src/stores";
+  import { client } from "$src/stores";
 
   const { open } = getContext("simple-modal");
   export let salesContract, saleData;
@@ -15,12 +15,14 @@
   let checked = true;
   let temp;
 
-  let saleAddress = salesContract ? salesContract.address.toLowerCase() : undefined;
+  let saleAddress = salesContract
+    ? salesContract.address.toLowerCase()
+    : undefined;
   let depositor = $signerAddress.toLowerCase();
 
   $: allUndepositQuery = queryStore({
-      client: $client,
-      query: `
+    client: $client,
+    query: `
         query ($saleAddress: Bytes!) {
           redeemableEscrowSupplyTokenDepositors (where: {iSaleAddress: $saleAddress}, orderBy: totalDeposited, orderDirection: asc) {
             id
@@ -41,15 +43,14 @@
             totalRemaining
           }
         }`,
-      variables: { saleAddress },
-      requestPolicy: "network-only",
-      pause: checked ? false : true
-    }
-  );
+    variables: { saleAddress },
+    requestPolicy: "network-only",
+    pause: checked ? false : true,
+  });
 
   $: myUndepositQuery = queryStore({
-      client: $client,
-      query: `
+    client: $client,
+    query: `
         query ($saleAddress: Bytes!, $depositor: Bytes!) {
           redeemableEscrowSupplyTokenDepositors (where: {iSaleAddress: $saleAddress, depositorAddress: $depositor}, orderBy: totalDeposited, orderDirection: asc) {
             id
@@ -70,16 +71,15 @@
             totalRemaining
           }
         }`,
-      variables: { saleAddress, depositor },
-      requestPolicy: "network-only",
-      pause: !checked ? false : true
-    }
-  );
+    variables: { saleAddress, depositor },
+    requestPolicy: "network-only",
+    pause: !checked ? false : true,
+  });
 
   $: txQuery = checked ? allUndepositQuery : myUndepositQuery;
 
   // handling table refresh
-  const refresh = async() => {
+  const refresh = async () => {
     temp = saleAddress;
     saleAddress = undefined;
     if (await !$txQuery.fetching) {
