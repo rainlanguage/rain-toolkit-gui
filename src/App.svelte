@@ -17,8 +17,8 @@
   import Deploy721BalanceTier from "./routes/erc721-balance-tier/Deploy721BalanceTier.svelte";
   // import DeploySale from "./routes/sale/DeploySale.svelte";
   // import PurchaseSale from "./routes/sale/PurchaseSale.svelte";
-  // import DeployEmissions from "./routes/emissions-erc20/DeployEmissions.svelte";
-  // import ClaimEmissions from "./routes/emissions-erc20/ClaimEmissions.svelte";
+  import DeployEmissions from "./routes/emissions-erc20/DeployEmissions.svelte";
+  import ClaimEmissions from "./routes/emissions-erc20/ClaimEmissions.svelte";
   import Modal from "svelte-simple-modal";
   import DeployVerify from "./routes/verify/DeployVerify.svelte";
   import AdministerVerify from "./routes/verify/AdministerVerify.svelte";
@@ -60,8 +60,8 @@
     // "/sale/purchase/*": PurchaseSale,
     // "/sale/list": ListSale,
 
-    // "/emissions/deploy": DeployEmissions,
-    // "/emissions/claim/*": ClaimEmissions,
+    "/emissions/deploy": DeployEmissions,
+    "/emissions/claim/*": ClaimEmissions,
 
     "/verify/deploy": DeployVerify,
     "/verify/administer/*": AdministerVerify,
