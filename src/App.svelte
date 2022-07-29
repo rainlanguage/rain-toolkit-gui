@@ -23,10 +23,10 @@
   // import CombineTierReport from "./routes/combine-tier/CombineTierReport.svelte";
   // import ListCombineTier from "./routes/combine-tier/ListCombineTier.svelte";
 
-  // //Sale
-  // import DeploySale from "./routes/sale/DeploySale.svelte";
-  // import PurchaseSale from "./routes/sale/PurchaseSale.svelte";
-  // import ListSale from "./routes/sale/ListSale.svelte";
+  //Sale
+  import DeploySale from "./routes/sale/DeploySale.svelte";
+  import PurchaseSale from "./routes/sale/PurchaseSale.svelte";
+  import ListSale from "./routes/sale/ListSale.svelte";
 
   // //Emissions
   // import DeployEmissions from "./routes/emissions-erc20/DeployEmissions.svelte";
@@ -39,10 +39,12 @@
   //AddressLibrary
   import AddressLibrary from "./routes/address-library/AddressLibrary.svelte";
 
+
   //Stake
   import DeployStake from "./routes/stake/DeployStake.svelte";
   import StakeReport from "./routes/stake/StakeReport.svelte";
   import ListStake from "./routes/stake/ListStake.svelte";
+
 
   //Mint ERC20
   import DeployERC20 from "./routes/mint-erc20/DeployERC20.svelte";
@@ -69,9 +71,10 @@
     "/stake/report/*": StakeReport,
     "/stake/list": ListStake,
 
-    // "/sale/deploy": DeploySale,
-    // "/sale/purchase/*": PurchaseSale,
-    // "/sale/list": ListSale,
+
+    "/sale/deploy": DeploySale,
+    "/sale/purchase/*": PurchaseSale,
+    "/sale/list": ListSale,
 
     // "/emissions/deploy": DeployEmissions,
     // "/emissions/claim/*": ClaimEmissions,
