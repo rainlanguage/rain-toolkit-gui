@@ -3,13 +3,13 @@
   import { formatUnits } from "ethers/lib/utils";
   import { signer, signerAddress, provider } from "svelte-ethers-store";
   import { push } from "svelte-spa-router";
-  import Button from "../../components/Button.svelte";
-  import FormPanel from "../../components/FormPanel.svelte";
-  import Input from "../../components/Input.svelte";
+  import Button from "$components/Button.svelte";
+  import FormPanel from "$components/FormPanel.svelte";
+  import Input from "$components/Input.svelte";
   import TokenInfo from "../sale/TokenInfo.svelte";
   import { EmissionsERC20 } from "rain-sdk";
+  import { getERC20 } from "$src/utils";
   import { tierReport } from "../../utils";
-  import { getERC20 } from "src/utils";
   import { queryStore } from "@urql/svelte";
   import { client } from "src/stores";
   import { selectedNetwork } from "src/stores";

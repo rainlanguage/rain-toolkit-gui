@@ -1,10 +1,9 @@
 <script lang="ts">
-  import { selectedNetwork } from "src/stores";
-  import IconLibrary from "src/components/IconLibrary.svelte";
-  import { formatAddress } from "src/utils";
-  import "node_modules/svelte-material-ui/bare.css";
+  import { selectedNetwork } from "$src/stores";
+  import IconLibrary from "$components/IconLibrary.svelte";
+  import { formatAddress } from "$src/utils";
   import { ethers } from "ethers";
-  import HoverTooltip from "src/components/HoverTooltip.svelte";
+  import HoverTooltip from "$components/HoverTooltip.svelte";
 
   export let verifyAddressQuery;
 

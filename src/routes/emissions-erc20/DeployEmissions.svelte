@@ -1,13 +1,13 @@
 <script lang="ts">
   import { signer, signerAddress } from "svelte-ethers-store";
-  import Button from "../../components/Button.svelte";
-  import FormPanel from "../../components/FormPanel.svelte";
-  import Input from "../../components/Input.svelte";
-  import Select from "../../components/Select.svelte";
+  import Button from "$components/Button.svelte";
+  import FormPanel from "$components/FormPanel.svelte";
+  import Input from "$components/Input.svelte";
+  import Select from "$components/Select.svelte";
   import { validateFields } from "../../utils";
   import { addressValidate } from "../../validation";
-  import ContractDeploy from "src/components/ContractDeploy.svelte";
-  import HumanReadable from "../../components/FriendlySource/HumanReadable.svelte";
+  import ContractDeploy from "$components/ContractDeploy.svelte";
+  import HumanReadable from "$components/FriendlySource/HumanReadable.svelte";
   import {
     EmissionsERC20,
     ERC20Config,
@@ -17,7 +17,6 @@
     LinearEmissions,
     SequentialEmissions,
   } from "rain-sdk";
-  
 
   let deployPromise;
 
@@ -92,7 +91,7 @@
   };
 
   const deployEmissions = async () => {
-    const { validationResult, fieldValues } = validateFields(fields);
+    const { validationResult, fieldValues } = await validateFields(fields);
 
     // GET THE SOURCE
 
@@ -196,11 +195,10 @@
         items={emissionsOptions}
         bind:value={emissionsType}
         on:change={() => {
-          if (emissionsType.value){
+          if (emissionsType.value) {
             document.getElementById("maxReward").style.display = "block";
             document.getElementById("inc").style.display = "block";
-          }
-          else {
+          } else {
             document.getElementById("maxReward").style.display = "none";
             document.getElementById("inc").style.display = "none";
           }

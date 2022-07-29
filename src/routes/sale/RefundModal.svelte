@@ -1,11 +1,11 @@
 <script lang="ts">
   import { signer } from "svelte-ethers-store";
   import { formatUnits, Logger } from "ethers/lib/utils";
-  import Button from "../../components/Button.svelte";
-  import Steps from "../../components/steps/Steps.svelte";
-  import Ring from "../../components/Ring.svelte";
+  import Button from "$components/Button.svelte";
+  import Steps from "$components/steps/Steps.svelte";
+  import Ring from "$components/Ring.svelte";
   import { BigNumber } from "ethers";
-  import { selectedNetwork } from "src/stores";
+  import { selectedNetwork } from "$src/stores";
   import { ERC20 } from "rain-sdk";
 
   enum TxStatus {

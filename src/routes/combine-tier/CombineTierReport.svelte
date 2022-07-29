@@ -1,9 +1,9 @@
 <script lang="ts">
   import { signer, signerAddress } from "svelte-ethers-store";
   import { ethers } from "ethers";
-  import FormPanel from "../../components/FormPanel.svelte";
-  import Input from "../../components/Input.svelte";
-  import Button from "../../components/Button.svelte";
+  import FormPanel from "$components/FormPanel.svelte";
+  import Input from "$components/Input.svelte";
+  import Button from "$components/Button.svelte";
   import { tierReport } from "../../utils";
   import { push } from "svelte-spa-router";
   import { CombineTier } from "rain-sdk";
@@ -33,7 +33,7 @@
 
   const report = async () => {
     if (ethers.utils.isAddress(addressToReport)) {
-      const report = await combineTierContract.report(addressToReport);
+      const report = await combineTierContract.report(addressToReport, []);
       parsedReport = tierReport(report.toHexString());
     } else {
       errorMsg = "Not a valid Ethereum address";

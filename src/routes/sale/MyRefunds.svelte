@@ -2,16 +2,16 @@
   import dayjs from "dayjs";
   import { queryStore } from "@urql/svelte";
   import { formatUnits } from "ethers/lib/utils";
-  import IconLibrary from "../../components/IconLibrary.svelte";
-  import { selectedNetwork, client } from "src/stores";
+  import IconLibrary from "$components/IconLibrary.svelte";
+  import { selectedNetwork, client } from "$src/stores";
 
   export let saleContract;
 
   let saleAddress = saleContract.address.toLowerCase();
 
   $: buysQuery = queryStore({
-      client: $client,
-      query: `
+    client: $client,
+    query: `
         query ($saleAddress: Bytes!) {
           sales (where: {id: $saleAddress}) {
             deployer
@@ -40,10 +40,9 @@
             saleStatus
           }
         }`,
-      variables: { saleAddress },
-      requestPolicy: "network-only"
-    }
-  );
+    variables: { saleAddress },
+    requestPolicy: "network-only",
+  });
 
   $: reserve = $buysQuery.data?.sales[0].reserve;
   $: token = $buysQuery.data?.sales[0].token;

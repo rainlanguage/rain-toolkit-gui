@@ -1,20 +1,19 @@
 <script lang="ts">
   import { signer, signerAddress } from "svelte-ethers-store";
-  import Button from "../../components/Button.svelte";
-  import FormPanel from "../../components/FormPanel.svelte";
-  import Input from "../../components/Input.svelte";
+  import Button from "$components/Button.svelte";
+  import FormPanel from "$components/FormPanel.svelte";
+  import Input from "$components/Input.svelte";
   import { op, validateFields } from "../../utils";
   import { addressValidate } from "../../validation";
-  import { concat, parseUnits } from "ethers/lib/utils";
-  import Switch from "src/components/Switch.svelte";
-  import ContractDeploy from "src/components/ContractDeploy.svelte";
+  import ContractDeploy from "$components/ContractDeploy.svelte";
   import {
     EmissionsERC20,
-    ERC20Config,
-    StateConfig,
-    EmissionsERC20DeployArgs,
-    CreateERC20,
+    type ERC20Config,
+    type StateConfig,
+    type EmissionsERC20DeployArgs,
   } from "rain-sdk";
+  import { concat, parseUnits } from "ethers/lib/utils";
+  import Switch from "$components/Switch.svelte";
 
   let deployPromise;
 
