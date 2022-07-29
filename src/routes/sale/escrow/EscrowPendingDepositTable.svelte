@@ -1,14 +1,14 @@
 <script lang="ts">
-  import { formatAddress } from "$src/utils";
+  import { formatAddress } from "src/utils";
   import { queryStore } from "@urql/svelte";
   import { formatUnits } from "ethers/lib/utils";
   import { signerAddress } from "svelte-ethers-store";
   import { getContext } from "svelte";
-  import IconLibrary from "../$components/IconLibrary.svelte";
-  import Switch from "$components/Switch.svelte";
+  import IconLibrary from "../../../components/IconLibrary.svelte";
+  import Switch from "src/components/Switch.svelte";
   import { saleStatuses } from "../sale";
   import EscrowSweepPendingModal from "./EscrowSweepPendingModal.svelte";
-  import { client } from "$src/stores";
+  import { client } from "src/stores";
 
   const { open } = getContext("simple-modal");
 
@@ -17,14 +17,12 @@
   let checked = true;
   let temp;
 
-  let saleAddress = salesContract
-    ? salesContract.address.toLowerCase()
-    : undefined;
+  let saleAddress = salesContract ? salesContract.address.toLowerCase() : undefined;
   let depositor = $signerAddress.toLowerCase();
 
   $: allPendingDepositQuery = queryStore({
-    client: $client,
-    query: `
+      client: $client,
+      query: `
         query ($saleAddress: Bytes!) {
           redeemableEscrowPendingDepositorTokens (where: {iSaleAddress: $saleAddress}, orderBy: totalDeposited, orderDirection: asc) {
             id
@@ -44,14 +42,15 @@
             swept
           }
         }`,
-    variables: { saleAddress },
-    requestPolicy: "network-only",
-    pause: checked ? false : true,
-  });
+      variables: { saleAddress },
+      requestPolicy: "network-only",
+      pause: checked ? false : true
+    }
+  );
 
   $: myPendingDepositQuery = queryStore({
-    client: $client,
-    query: `
+      client: $client,
+      query: `
         query ($saleAddress: Bytes!, $depositor: Bytes!) {
           redeemableEscrowPendingDepositorTokens (where: {iSaleAddress: $saleAddress, depositorAddress: $depositor}, orderBy: totalDeposited, orderDirection: asc) {
             id
@@ -71,15 +70,16 @@
             swept
           }
         }`,
-    variables: { saleAddress, depositor },
-    requestPolicy: "network-only",
-    pause: !checked ? false : true,
-  });
+      variables: { saleAddress, depositor },
+      requestPolicy: "network-only",
+      pause: !checked ? false : true
+    }
+  );
 
   $: txQuery = checked ? allPendingDepositQuery : myPendingDepositQuery;
 
   // handling table refresh
-  const refresh = async () => {
+  const refresh = async() => {
     temp = saleAddress;
     saleAddress = undefined;
     if (await !$txQuery.fetching) {

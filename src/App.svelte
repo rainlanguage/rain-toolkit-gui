@@ -18,15 +18,15 @@
   import BalanceTierReport from "./routes/erc20-balance-tier/BalanceTierReport.svelte";
   import ListBalanceTier from "./routes/erc20-balance-tier/ListBalanceTier.svelte";
 
-  //Combine Tier
-  import DeployCombineTier from "./routes/combine-tier/DeployCombineTier.svelte";
-  import CombineTierReport from "./routes/combine-tier/CombineTierReport.svelte";
-  import ListCombineTier from "./routes/combine-tier/ListCombineTier.svelte";
+  // //Combine Tier
+  // import DeployCombineTier from "./routes/combine-tier/DeployCombineTier.svelte";
+  // import CombineTierReport from "./routes/combine-tier/CombineTierReport.svelte";
+  // import ListCombineTier from "./routes/combine-tier/ListCombineTier.svelte";
 
-  //Sale
-  import DeploySale from "./routes/sale/DeploySale.svelte";
-  import PurchaseSale from "./routes/sale/PurchaseSale.svelte";
-  import ListSale from "./routes/sale/ListSale.svelte";
+  // //Sale
+  // import DeploySale from "./routes/sale/DeploySale.svelte";
+  // import PurchaseSale from "./routes/sale/PurchaseSale.svelte";
+  // import ListSale from "./routes/sale/ListSale.svelte";
 
   // //Emissions
   // import DeployEmissions from "./routes/emissions-erc20/DeployEmissions.svelte";
@@ -38,11 +38,11 @@
 
   //AddressLibrary
   import AddressLibrary from "./routes/address-library/AddressLibrary.svelte";
-  
-  //Stake
-  import DeployStake from "./routes/stake/DeployStake.svelte";
-  import StakeReport from "./routes/stake/StakeReport.svelte";
-  import ListStake from "./routes/stake/ListStake.svelte";
+
+  // //Stake
+  // import DeployStake from "./routes/stake/DeployStake.svelte";
+  // import StakeReport from "./routes/stake/StakeReport.svelte";
+  // import ListStake from "./routes/stake/ListStake.svelte";
 
   //Mint ERC20
   import DeployERC20 from "./routes/mint-erc20/DeployERC20.svelte";
@@ -61,17 +61,17 @@
     "/erc721balancetier/report/*": ERC721BalanceTierReport,
     "/erc721balancetier/list": ListERC721BalanceTier,
 
-    "/stake/deploy": DeployStake,
-    "/stake/report/*": StakeReport,
-    "/stake/list": ListStake,
+    // "/combinetier/deploy": DeployCombineTier,
+    // "/combinetier/report/*": CombineTierReport,
+    // "/combinetier/list": ListCombineTier,
 
-    "/combinetier/deploy": DeployCombineTier,
-    "/combinetier/report/*": CombineTierReport,
-    "/combinetier/list": ListCombineTier,
+    // "/stake/deploy": DeployStake,
+    // "/stake/report/*": StakeReport,
+    // "/stake/list": ListStake,
 
-    "/sale/deploy": DeploySale,
-    "/sale/purchase/*": PurchaseSale,
-    "/sale/list": ListSale,
+    // "/sale/deploy": DeploySale,
+    // "/sale/purchase/*": PurchaseSale,
+    // "/sale/list": ListSale,
 
     // "/emissions/deploy": DeployEmissions,
     // "/emissions/claim/*": ClaimEmissions,

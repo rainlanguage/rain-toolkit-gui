@@ -1,4 +1,4 @@
-import { derived, get, writable, type Readable } from 'svelte/store';
+import { derived, get, Readable, Writable, writable } from 'svelte/store';
 import { selectedNetwork } from './stores';
 
 type NetworkLibrary = Map<string, Map<string, { address: string, type: string }>>

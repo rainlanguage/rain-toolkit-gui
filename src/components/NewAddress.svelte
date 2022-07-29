@@ -1,7 +1,7 @@
 <script lang="ts">
-  import NewAlias from "$src/routes/address-library/NewAlias.svelte";
+  import NewAlias from "src/routes/address-library/NewAlias.svelte";
 
-  import { formatAddress } from "$src/utils";
+  import { formatAddress } from "src/utils";
   import { getContext } from "svelte";
   import IconLibrary from "./IconLibrary.svelte";
 

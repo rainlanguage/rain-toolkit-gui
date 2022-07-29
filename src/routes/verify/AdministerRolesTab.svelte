@@ -1,9 +1,9 @@
 <script lang="ts">
-  import Button from "$components/Button.svelte";
-  import FormPanel from "$components/FormPanel.svelte";
-  import Input from "$components/Input.svelte";
-  import Select from "$components/Select.svelte";
-  import SimpleTransactionModal from "$components/SimpleTransactionModal.svelte";
+  import Button from "src/components/Button.svelte";
+  import FormPanel from "src/components/FormPanel.svelte";
+  import Input from "src/components/Input.svelte";
+  import Select from "src/components/Select.svelte";
+  import SimpleTransactionModal from "src/components/SimpleTransactionModal.svelte";
   import { getContext } from "svelte";
   import { roles } from "./verify";
 

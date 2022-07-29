@@ -1,8 +1,8 @@
 <script lang="ts">
   import { getContext, onMount } from "svelte";
   import Ring from "./Ring.svelte";
-  import { selectedNetwork } from "$src/stores";
-  import type { ContractReceipt } from "ethers";
+  import { selectedNetwork } from "src/stores";
+  import { ContractReceipt } from "ethers";
   import Button from "./Button.svelte";
 
   enum TxStatus {
@@ -10,9 +10,9 @@
     AwaitingSignature,
     AwaitingConfirmation,
     Error,
-    Confirmed,
+    Confirmed
   }
-
+  
   const { close } = getContext("simple-modal");
 
   export let method: Function;

@@ -3,12 +3,12 @@
   import { formatUnits } from "ethers/lib/utils";
   import { signer, signerAddress } from "svelte-ethers-store";
   import { push } from "svelte-spa-router";
-  import Button from "$components/Button.svelte";
-  import FormPanel from "$components/FormPanel.svelte";
-  import Input from "$components/Input.svelte";
+  import Button from "../../components/Button.svelte";
+  import FormPanel from "../../components/FormPanel.svelte";
+  import Input from "../../components/Input.svelte";
   import TokenInfo from "../sale/TokenInfo.svelte";
   import { EmissionsERC20 } from "rain-sdk";
-  import { getERC20 } from "$src/utils";
+  import { getERC20 } from "src/utils";
 
   export let params: {
     wild: string;

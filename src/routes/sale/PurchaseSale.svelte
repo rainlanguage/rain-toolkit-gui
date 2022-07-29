@@ -4,9 +4,9 @@
   import { ethers } from "ethers";
   import { signer } from "svelte-ethers-store";
   import { push } from "svelte-spa-router";
-  import Button from "$components/Button.svelte";
-  import FormPanel from "$components/FormPanel.svelte";
-  import Input from "$components/Input.svelte";
+  import Button from "../../components/Button.svelte";
+  import FormPanel from "../../components/FormPanel.svelte";
+  import Input from "../../components/Input.svelte";
   import Buy from "./Buy.svelte";
   import SaleProgress from "./SaleProgress.svelte";
   import CheckTier from "./CheckTier.svelte";
@@ -19,7 +19,7 @@
   import EscrowPendingDepositTable from "./escrow/EscrowPendingDepositTable.svelte";
   import EscrowUndepositTable from "./escrow/EscrowUndepositTable.svelte";
   import { Sale, ERC20 } from "rain-sdk";
-  import { client } from "$src/stores";
+  import { client } from "src/stores";
 
   export let params: {
     wild: string;
@@ -144,7 +144,7 @@
   {:else if initPromise && !$saleQuery.fetching && $saleQuery.data && $saleQuery.data.sale}
     {#await initPromise}
       Loading...
-    {:then}
+    {:then} 
       <FormPanel>
         <SaleProgress saleContract={sale} />
         <div class="grid grid-cols-2 gap-2 w-full">

@@ -1,26 +1,24 @@
-<!-- <script lang="ts">
+<script lang="ts">
   import { setContext } from "svelte";
   import { BigNumber, ethers } from "ethers";
   import { LayerCake, Svg, Html } from "layercake";
   import { formatUnits, parseUnits } from "ethers/src.ts/utils";
-  import AxisX from "$components/charts/AxisX.svelte";
-  import AxisY from "$components/charts/AxisY.svelte";
-  import Line from "$components/charts/Line.svelte";
-  import Scatter from "$components/charts/Scatter.svelte";
-  import SharedTooltip from "$components/charts/SharedTooltip.svelte";
+  import AxisX from "src/components/charts/AxisX.svelte";
+  import AxisY from "src/components/charts/AxisY.svelte";
+  import Line from "src/components/charts/Line.svelte";
+  import Scatter from "src/components/charts/Scatter.svelte";
+  import SharedTooltip from "src/components/charts/SharedTooltip.svelte";
   import { timeFormat } from "d3-time-format";
   import { writable } from "svelte/store";
-  import IconLibrary from "$components/IconLibrary.svelte";
+  import IconLibrary from "src/components/IconLibrary.svelte";
   import { selectSale } from "./sale";
   import {
     ApplyOpFn,
     FixedPrice,
-    IncDecPrice,
+    IncreasingPrice,
     SaleJS,
-    SaleStorage,
     StateJS,
     vLBP,
-    VM,
   } from "rain-sdk";
 
   export let saleType: selectSale;
@@ -49,7 +47,7 @@
   // setting the simulation variables
   // setting up the custom timestamp function for js-vm BLOCK_TIMESTAMP opcode
   let opcodeFn: ApplyOpFn = {
-    [VM.Opcodes.BLOCK_TIMESTAMP]: (
+    [SaleJS.Opcodes.BLOCK_TIMESTAMP]: (
       state: StateJS,
       operand: number,
       data: any
@@ -57,8 +55,6 @@
       state.stack.push(BigNumber.from(data.timestamp));
     },
   };
-
-  let storageOpFn: ApplyOpFn = {};
 
   const now = Math.floor(Date.now() / 1000);
 
@@ -83,15 +79,14 @@
         saleVals.initialSupply,
         reserveErc20?.erc20decimals
       );
-
-      storageOpFn[SaleStorage.RemainingUnits] = (
+      opcodeFn[SaleJS.Opcodes.REMAINING_UNITS] = (
         state: StateJS,
         operand: number,
         data: any
       ) => {
         state.stack.push(parseUnits(saleVals.initialSupply.toString()));
       };
-      storageOpFn[SaleStorage.TotalReserveIn] = (
+      opcodeFn[SaleJS.Opcodes.TOTAL_RESERVE_IN] = (
         state: StateJS,
         operand: number,
         data: any
@@ -101,7 +96,7 @@
     }
 
     if (saleType == 2) {
-      script = new IncDecPrice(
+      script = new IncreasingPrice(
         saleVals.startPrice,
         saleVals.endPrice,
         startTime,
@@ -111,10 +106,7 @@
     }
 
     // instantiating the SaleJS (ie.e Sale JS-VM)
-    simulSale =
-      saleType == 1
-        ? new SaleJS(script, { applyOpFn: opcodeFn, storageOpFn: storageOpFn })
-        : new SaleJS(script, { applyOpFn: opcodeFn });
+    simulSale = new SaleJS(script, { applyOpFn: opcodeFn });
 
     // executing the simulation
     initSimul();
@@ -133,14 +125,13 @@
     points = [];
 
     for (let i = startTime; i < endTime; i += length) {
-      console.log(await simulSale.run(0, i));
-      // points.push({
-      //   timestamp: i * 1000,
-      //   price: (+formatUnits(
-      //     ,
-      //     reserveErc20?.erc20decimals
-      //   )).toFixed(4),
-      // });
+      points.push({
+        timestamp: i * 1000,
+        price: (+formatUnits(
+          await simulSale.run({ timestamp: i }),
+          reserveErc20?.erc20decimals
+        )).toFixed(4),
+      });
     }
 
     data = points;
@@ -172,7 +163,7 @@
       padding={{ right: 30, bottom: 20, left: 25 }}
       x={xKey}
       y={yKey}
-      yDomain={saleType == 1 ? [0, null] : [0, max]}
+      yDomain={[0, null]}
       {data}
     >
       <Svg>
@@ -208,4 +199,4 @@
     width: 100%;
     height: 300px;
   }
-</style> -->
+</style>

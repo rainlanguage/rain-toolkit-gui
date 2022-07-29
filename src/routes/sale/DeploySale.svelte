@@ -1,25 +1,24 @@
 <script lang="ts">
-  import ContractDeploy from "$components/ContractDeploy.svelte";
+  import ContractDeploy from "../../components/ContractDeploy.svelte";
   import { ethers } from "ethers";
   import { formatUnits } from "ethers/lib/utils";
   import { signer, signerAddress } from "svelte-ethers-store";
-  import Select from "$components/Select.svelte";
-  import Button from "$components/Button.svelte";
-  import FormPanel from "$components/FormPanel.svelte";
-  import Input from "$components/Input.svelte";
-  import Switch from "$components/Switch.svelte";
-  import { getERC20, validateFields, isTier } from "../../utils";
+  import Select from "../../components/Select.svelte";
+  import Button from "../../components/Button.svelte";
+  import FormPanel from "../../components/FormPanel.svelte";
+  import Input from "../../components/Input.svelte";
+  import Switch from "src/components/Switch.svelte";
+  import { getERC20, validateFields } from "../../utils";
   import { saleDeploy, SaleParams, selectSale } from "./sale";
   import { DatePicker, CalendarStyle } from "@beyonk/svelte-datepicker";
   import SaleSmallSimulationChart from "./SaleSmallSimulationChart.svelte";
-  import HumanReadable from "$components/FriendlySource/HumanReadable.svelte";
+  import HumanReadable from "../../components/FriendlySource/HumanReadable.svelte";
 
   let fields: any = {};
   let deployPromise;
+  let sale, token;
   let reserveErc20;
   let saleParams: SaleParams;
-
-  let tierError, tierDiscountError, tierCapMulError;
 
   // some default values for testing
   let recipient = "0xf6CF014a3e92f214a3332F0d379aD32bf0Fae929";
@@ -30,21 +29,23 @@
   let minimumRaise = 1000;
   let startPrice = 10;
   let endPrice = 20;
+  let startTimestamp;
+  let endTimestamp;
   let name = "Raise token";
   let symbol = "rTKN";
   let initialSupply = 1000;
   let distributionEndForwardingAddress = ethers.constants.AddressZero;
   let maxWalletCap = 10;
   let minWalletCap = 3;
-  let tier = "0xe30289f881ee37c51ad5678ed799677e6c3e788f";
+  let tier = "0x6BA1fADB694E806c316337143241Dd6cFebd5033";
   let minimumStatus = 0;
   let raiseRange;
   let extraTimeDiscountThreshold = 5;
   let extraTimeDiscount = 25;
   let extraTime = 30;
   let extraTimeAmount = 150;
-  let tierDiscountAddress = "0xe30289f881ee37c51ad5678ed799677e6c3e788f";
-  let tierCapMulAddress = "0xe30289f881ee37c51ad5678ed799677e6c3e788f";
+  let tierDiscountAddress = "0x1b044f69674c47ab19475cbb57d4d7673f6ccd6c";
+  let tierCapMulAddress = "0x1b044f69674c47ab19475cbb57d4d7673f6ccd6c";
 
   let discountTier1 = 5,
     discountTier2 = 10,
@@ -97,10 +98,11 @@
   let tierDiscountActCheck = false;
   let tierCapMulCheck = false;
   let tierCapMulActCheck = false;
+  let creatorControlCheck = false;
   let afterMinimumRaiseCheck = false;
 
-  const getSaleParams = async () => {
-    const { validationResult, fieldValues } = await validateFields(fields);
+  const getSaleParams = () => {
+    const { validationResult, fieldValues } = validateFields(fields);
     fieldValues.startTimestamp = Math.floor(
       raiseRange?.[0].$d.getTime() / 1000
     );
@@ -118,10 +120,11 @@
       tierDiscountActMode: tierDiscountActCheck,
       tierCapMulMode: tierCapMulCheck,
       tierCapMulActMode: tierCapMulActCheck,
+      creatorControlMode: creatorControlCheck,
       afterMinimumRaiseMode: afterMinimumRaiseCheck,
     };
 
-    return { validationResult, saleParams };
+    return saleParams;
   };
 
   $: saleVals = {
@@ -133,78 +136,84 @@
     initialSupply,
   };
 
-  // $: FriendlySource = {
-  //   startTimestamp: Math.floor(raiseRange?.[0].$d.getTime() / 1000),
-  //   endTimestamp: Math.floor(raiseRange?.[1].$d.getTime() / 1000),
-  //   saleType: saleType?.value,
-  //   maxCapMode: maxCapCheck,
-  //   minCapMode: minCapCheck,
-  //   canEndMode: canEndCheck,
-  //   extraTimeDiscountMode: extraTimeDiscountCheck,
-  //   tierDiscountMode: tierDiscountCheck,
-  //   tierDiscountActMode: tierDiscountActCheck,
-  //   tierCapMulMode: tierCapMulCheck,
-  //   tierCapMulActMode: tierCapMulActCheck,
-  //   afterMinimumRaiseMode: afterMinimumRaiseCheck,
+  $: FriendlySource = {
+    startTimestamp: Math.floor(raiseRange?.[0].$d.getTime() / 1000),
+    endTimestamp: Math.floor(raiseRange?.[1].$d.getTime() / 1000),
+    saleType: saleType?.value,
+    maxCapMode: maxCapCheck,
+    minCapMode: minCapCheck,
+    canEndMode: canEndCheck,
+    extraTimeDiscountMode: extraTimeDiscountCheck,
+    tierDiscountMode: tierDiscountCheck,
+    tierDiscountActMode: tierDiscountActCheck,
+    tierCapMulMode: tierCapMulCheck,
+    tierCapMulActMode: tierCapMulActCheck,
+    creatorControlMode: creatorControlCheck,
+    afterMinimumRaiseMode: afterMinimumRaiseCheck,
 
-  //   recipient,
-  //   reserve,
-  //   startBlock,
-  //   cooldownDuration,
-  //   saleTimeout,
-  //   minimumRaise,
-  //   startPrice,
-  //   endPrice,
-  //   name,
-  //   symbol,
-  //   initialSupply,
-  //   distributionEndForwardingAddress,
-  //   maxWalletCap,
-  //   minWalletCap,
-  //   tier,
-  //   minimumStatus,
-  //   raiseRange,
-  //   extraTimeDiscountThreshold,
-  //   extraTimeDiscount,
-  //   extraTime,
-  //   extraTimeAmount,
-  //   tierDiscountAddress,
-  //   tierCapMulAddress,
-  //   discountTier1,
-  //   discountTier2,
-  //   discountTier3,
-  //   discountTier4,
-  //   discountTier5,
-  //   discountTier6,
-  //   discountTier7,
-  //   discountTier8,
-  //   capMulTier1,
-  //   capMulTier2,
-  //   capMulTier3,
-  //   capMulTier4,
-  //   capMulTier5,
-  //   capMulTier6,
-  //   capMulTier7,
-  //   capMulTier8,
-  //   discountActTier1,
-  //   discountActTier2,
-  //   discountActTier3,
-  //   discountActTier4,
-  //   discountActTier5,
-  //   discountActTier6,
-  //   discountActTier7,
-  //   discountActTier8,
-  //   capMulActTier1,
-  //   capMulActTier2,
-  //   capMulActTier3,
-  //   capMulActTier4,
-  //   capMulActTier5,
-  //   capMulActTier6,
-  //   capMulActTier7,
-  //   capMulActTier8,
 
-  //   saleParam: getSaleParams().saleParams,
-  // };
+    recipient,
+    reserve,
+    startBlock,
+    cooldownDuration,
+    saleTimeout,
+    minimumRaise,
+    startPrice,
+    endPrice,
+    name,
+    symbol,
+    initialSupply,
+    distributionEndForwardingAddress,
+    maxWalletCap,
+    minWalletCap,
+    tier,
+    minimumStatus,
+    raiseRange,
+    extraTimeDiscountThreshold,
+    extraTimeDiscount,
+    extraTime,
+    extraTimeAmount,
+    tierDiscountAddress,
+    tierCapMulAddress,
+    discountTier1,
+    discountTier2,
+    discountTier3,
+    discountTier4,
+    discountTier5,
+    discountTier6,
+    discountTier7,
+    discountTier8,
+    capMulTier1,
+    capMulTier2,
+    capMulTier3,
+    capMulTier4,
+    capMulTier5,
+    capMulTier6,
+    capMulTier7,
+    capMulTier8,
+    discountActTier1,
+    discountActTier2,
+    discountActTier3,
+    discountActTier4,
+    discountActTier5,
+    discountActTier6,
+    discountActTier7,
+    discountActTier8,
+    capMulActTier1,
+    capMulActTier2,
+    capMulActTier3,
+    capMulActTier4,
+    capMulActTier5,
+    capMulActTier6,
+    capMulActTier7,
+    capMulActTier8,
+
+    saleParam: getSaleParams(),
+  };
+
+  const getSaleParams2 = (e) => {
+    // console.log(getSaleParams());
+  };
 
   // @TODO write validators
   const defaultValidator = () => {
@@ -215,40 +224,17 @@
     deployPromise = deploy();
   };
 
-  $: if (tier) {
-    const check = async () => {
-      tierError = await isTier(tier, $signer, $signerAddress);
-    };
-    check();
-  }
-
-  $: if (tierDiscountCheck && tierDiscountAddress) {
-    const check = async () => {
-      tierDiscountError = await isTier(
-        tierDiscountAddress,
-        $signer,
-        $signerAddress
-      );
-    };
-    check();
-  }
-
-  $: if (tierCapMulCheck && tierCapMulAddress) {
-    const check = async () => {
-      tierCapMulError = await isTier(
-        tierCapMulAddress,
-        $signer,
-        $signerAddress
-      );
-    };
-    check();
-  }
-
   const deploy = async () => {
-    const { validationResult, saleParams } = await getSaleParams();
+    const { validationResult, fieldValues } = validateFields(fields);
+    saleParams = getSaleParams();
 
     if (validationResult) {
-      return await saleDeploy($signer, $signerAddress, saleParams);
+      return await saleDeploy(
+        $signer,
+        $signerAddress,
+        saleParams,
+        reserveErc20.erc20decimals
+      );
     }
   };
 
@@ -299,6 +285,7 @@
           type="address"
           bind:this={fields.recipient}
           bind:value={recipient}
+          on:input={getSaleParams2}
           validator={defaultValidator}
         >
           <span slot="label"> Recipient: </span>
@@ -387,6 +374,23 @@
           >
             <span slot="label"> End Price: </span>
           </Input>
+        </div>
+      </FormPanel>
+
+      <FormPanel>
+        <div>
+          <span>Creator Control:</span>
+          <Switch bind:checked={creatorControlCheck} />
+          <br />
+          <span class="text-gray-400"
+            >If switched off, everyone can start/end the sale once the
+            canEnd/Start criteria of the sale is met.</span
+          >
+          <br />
+          <span class="text-gray-400"
+            >If switched on, only the sale creator can start/end the sale once
+            the canEnd/Start criteria of the sale is met.</span
+          >
         </div>
       </FormPanel>
 
@@ -529,7 +533,6 @@
             bind:this={fields.tierDiscountAddress}
             bind:value={tierDiscountAddress}
             validator={defaultValidator}
-            errorMsg={tierDiscountError?.errorMsg}
           >
             <span slot="label">Tier Contract Address: </span>
             <span slot="description">
@@ -884,7 +887,6 @@
             bind:this={fields.tierCapMulAddress}
             bind:value={tierCapMulAddress}
             validator={defaultValidator}
-            errorMsg={tierCapMulError?.errorMsg}
           >
             <span slot="label">Tier Contract Address: </span>
             <span slot="description">
@@ -1151,7 +1153,6 @@
           bind:this={fields.tier}
           bind:value={tier}
           validator={defaultValidator}
-          errorMsg={tierError.errorMsg}
         >
           <span slot="label"> Tier: </span>
           <span slot="description">
@@ -1168,25 +1169,10 @@
           <span slot="label"> Minimum Status: </span>
         </Input>
       </FormPanel>
+
       <FormPanel>
         {#if !deployPromise}
-          <Button
-            disabled={tierError?.errorMsg ||
-              tierDiscountError?.errorMsg ||
-              tierCapMulError?.errorMsg ||
-              !raiseRange}
-            shrink
-            on:click={handleClick}>Deploy Sale</Button
-          >
-          {#if !tierError?.errorMsg && !tierDiscountError?.errorMsg && !tierCapMulError?.errorMsg && !raiseRange}
-            <span class="text-red-400"
-              >Please Select Date/Time to Deploy The Sale</span
-            >
-          {:else if tierError?.errorMsg || tierDiscountError?.errorMsg || tierCapMulError?.errorMsg}
-            <span class="text-red-400"
-              >Please Fill The Fields With Valid Data To Deploy The Sale</span
-            >
-          {/if}
+          <Button shrink on:click={handleClick}>Deploy Sale</Button>
         {:else}
           <ContractDeploy {deployPromise} type="Sale" />
         {/if}
@@ -1195,7 +1181,7 @@
   </div>
 
   <div class="flex w-2/5 flex-col gap-y-4">
-    <!-- {#if saleVals && saleType}
+    {#if saleVals && saleType}
       <span class="relative">
         <FormPanel>
           <SaleSmallSimulationChart
@@ -1205,8 +1191,8 @@
           />
         </FormPanel>
       </span>
-    {/if} -->
-    <!-- {#if FriendlySource && saleType}
+    {/if}
+    {#if FriendlySource && saleType}
       <span class="sticky">
         <FormPanel heading="Human Readable Source">
           <HumanReadable
@@ -1216,7 +1202,7 @@
           />
         </FormPanel>
       </span>
-    {/if} -->
+    {/if}
   </div>
 </div>
 

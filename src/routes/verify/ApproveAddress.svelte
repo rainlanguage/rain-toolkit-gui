@@ -1,8 +1,8 @@
 <script lang="ts">
   import { Contract } from "ethers";
-  import Button from "$components/Button.svelte";
-  import FormPanel from "$components/FormPanel.svelte";
-  import SimpleTransactionModal from "$components/SimpleTransactionModal.svelte";
+  import Button from "src/components/Button.svelte";
+  import FormPanel from "src/components/FormPanel.svelte";
+  import SimpleTransactionModal from "src/components/SimpleTransactionModal.svelte";
   import { getContext } from "svelte";
 
   const { open } = getContext("simple-modal");

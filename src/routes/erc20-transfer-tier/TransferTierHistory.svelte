@@ -1,10 +1,10 @@
-<!-- <script lang="ts">
+<script lang="ts">
   import { getContext } from "svelte";
-  import IconLibrary from "$components/IconLibrary.svelte";
+  import IconLibrary from "../../components/IconLibrary.svelte";
   import dayjs from "dayjs";
-  import { selectedNetwork } from "$src/stores";
+  import { selectedNetwork } from "src/stores";
   import { queryStore } from "@urql/svelte";
-  import { client } from "$src/stores";
+  import { client } from "src/stores";
 
 
   const { open } = getContext("simple-modal");
@@ -74,19 +74,21 @@
     <table class="table-auto w-full space-y-2 text-sm">
       <tr class="border-b border-gray-600 uppercase text-sm">
         <th class="text-gray-400 text-left pb-2 font-light ">Current Tier</th>
-       
+        <!-- <th class="text-gray-400 text-left pb-2 font-light">Changed Tier</th> -->
         <th class="text-gray-400 text-left pb-2 font-light text-center">Time</th
         >
         <th class="text-gray-400 text-left pb-2 font-light text-right pr-2"
           >View</th
         >
-        
+        <!-- <th class="text-gray-400 text-left pb-2 font-light">Price/rTKN</th>
+        <th class="text-gray-400 text-left pb-2 font-light">Fee</th>
+        <th class="text-gray-400 text-left pb-2 font-light">Total</th> -->
         <th />
       </tr>
       
       {#each _transferTier.tierChanges as transaction}
         <tr class="border-b border-gray-700">
-          
+          <!-- <td> Tier {transaction.startTier} </td> -->
           <td class="w-1/4">
             {#if transaction.endTier == 1}
               Exited Tiers
@@ -112,4 +114,4 @@
   {:else}
     You haven't made any transactions.
   {/if}
-</div> -->
+</div>

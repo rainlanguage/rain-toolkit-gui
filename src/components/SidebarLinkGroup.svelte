@@ -1,7 +1,6 @@
 <script>
   import active from "svelte-spa-router/active";
   import ArrowIcon from "./ArrowIcon.svelte";
-
   export let label = "";
   export let url = "";
 

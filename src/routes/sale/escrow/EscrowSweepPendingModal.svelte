@@ -1,9 +1,9 @@
 <script lang="ts">
-  import { formatAddress } from "$src/utils";
-  import Button from "../$components/Button.svelte";
-  import Steps from "../$components/steps/Steps.svelte";
-  import Ring from "../$components/Ring.svelte";
-  import { selectedNetwork } from "$src/stores";
+  import { formatAddress } from "src/utils";
+  import Button from "../../../components/Button.svelte";
+  import Steps from "../../../components/steps/Steps.svelte";
+  import Ring from "../../../components/Ring.svelte";
+  import { selectedNetwork } from "src/stores";
   import { signer } from "svelte-ethers-store";
   import { RedeemableERC20ClaimEscrow } from "rain-sdk";
   import { Logger } from "ethers/lib/utils";

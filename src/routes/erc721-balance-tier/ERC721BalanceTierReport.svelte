@@ -1,16 +1,14 @@
 <script lang="ts">
   import { signerAddress, signer } from "svelte-ethers-store";
   import { ethers } from "ethers";
-  import FormPanel from "$components/FormPanel.svelte";
-  import Input from "$components/Input.svelte";
-  import Button from "$components/Button.svelte";
+  import FormPanel from "../../components/FormPanel.svelte";
+  import Input from "../../components/Input.svelte";
+  import Button from "../../components/Button.svelte";
   import { tierReport } from "../../utils";
   import { push } from "svelte-spa-router";
   import { queryStore } from "@urql/svelte";
-
-  import { client } from "$src/stores";
-  import { ERC721BalanceTier, ERC721, CombineTier } from "rain-sdk";
-
+  import { client } from "src/stores"
+  import { ERC721BalanceTier, ERC721 } from "rain-sdk";
 
   export let params;
 
@@ -47,7 +45,8 @@
     variables: { balanceTierAddress },
     requestPolicy: "network-only",
     pause: params.wild ? false : true,
-  });
+    }
+  );
 
   //query(balanceTier);
 
@@ -63,19 +62,18 @@
   $: _balanceTier = $balanceTier.data?.erc721BalanceTiers[0];
 
   $: if (_balanceTier || $signer) {
-    if (!$balanceTier.fetching && _balanceTier != undefined) {
+    if (!$balanceTier.fetching && _balanceTier != undefined){
       initContract();
     }
   }
 
   const initContract = async () => {
     if (ethers.utils.isAddress(params.wild)) {
-      balanceTierContract = new CombineTier(_balanceTier?.address, $signer);
-      // balanceTierContract = new ERC721BalanceTier(
-      //   _balanceTier?.address,
-      //   $signer,
-      //   _balanceTier?.token.id
-      // );
+      balanceTierContract = new ERC721BalanceTier(
+        _balanceTier?.address,
+        $signer,
+        _balanceTier?.token.id
+      );
       try {
         tierValues = await balanceTierContract.tierValues();
       } catch (error) {

@@ -1,14 +1,14 @@
 <script lang="ts">
   import { queryStore } from "@urql/svelte";
   import { Contract } from "ethers";
-  import FormPanel from "$components/FormPanel.svelte";
-  import IconLibrary from "$components/IconLibrary.svelte";
-  import OverflowMenu from "$components/overflow-menu/OverflowMenu.svelte";
-  import OverFlowMenuItem from "$components/overflow-menu/OverFlowMenuItem.svelte";
+  import FormPanel from "src/components/FormPanel.svelte";
+  import IconLibrary from "src/components/IconLibrary.svelte";
+  import OverflowMenu from "src/components/overflow-menu/OverflowMenu.svelte";
+  import OverFlowMenuItem from "src/components/overflow-menu/OverFlowMenuItem.svelte";
   import { getContext } from "svelte";
   import AccountHistoryModal from "./AccountHistoryModal.svelte";
   import ActionsModal from "./ActionsModal.svelte";
-  import { client } from "$src/stores";
+  import { client } from "src/stores";
   import {
     verifyRequestStatusNames,
     VerifyStatuses,
@@ -20,14 +20,12 @@
   export let verifyContract: Contract;
 
   let temp1, temp2;
-  let verifyAddress = verifyContract
-    ? verifyContract.address.toLowerCase()
-    : undefined;
+  let verifyAddress = verifyContract ? verifyContract.address.toLowerCase() : undefined;
   let verifyContractAddress;
 
   $: verifyAddresses = queryStore({
-    client: $client,
-    query: `
+      client: $client,
+      query: `
         query ($verifyAddress: Bytes!) {
           verify (id: $verifyAddress ) {
             id
@@ -39,13 +37,13 @@
             }
           }
         }`,
-    variables: { verifyAddress },
-    requestPolicy: "network-only",
-  });
+      variables: { verifyAddress },
+      requestPolicy: "network-only"
+    })
 
   $: verifyAddressQuery = queryStore({
-    client: $client,
-    query: `
+      client: $client,
+      query: `
         query ($verifyAddress:Bytes!, $verifyContractAddress:Bytes!) {
           verifyEvents (where: {
             account: $verifyAddress,
@@ -64,11 +62,11 @@
             data
           }
         }`,
-    variables: { verifyAddress, verifyContractAddress },
-    requestPolicy: "network-only",
-  });
+      variables: { verifyAddress, verifyContractAddress },
+      requestPolicy: "network-only"
+    })
 
-  const refresh = async () => {
+  const refresh = async() => {
     temp1 = verifyAddress;
     verifyAddress = undefined;
     if (await !$verifyAddresses.fetching) {
@@ -103,12 +101,10 @@
     });
   };
 
-  const handleEvidence = async (address: string) => {
+  const handleEvidence = async(address: string) => {
     verifyAddress = address.toLowerCase();
-    verifyContractAddress = verifyContract
-      ? verifyContract.address.toLowerCase()
-      : undefined;
-    temp2 = verifyContractAddress;
+    verifyContractAddress = verifyContract ? verifyContract.address.toLowerCase() : undefined;
+    temp2 = verifyContractAddress
     verifyContractAddress = undefined;
     if (await !$verifyAddressQuery) {
       verifyContractAddress = temp2;
@@ -151,7 +147,10 @@
             </td>
             <td class="py-2 text-right w-36">
               <OverflowMenu>
-                {#if (verifyAddress.status !== VerifyStatuses.APPROVED && verifyAddress.status !== VerifyStatuses.BANNED) || verifyAddress.requestStatus == VerifyStatuses.APPROVED}
+                {#if 
+                  (verifyAddress.status !== VerifyStatuses.APPROVED && verifyAddress.status !== VerifyStatuses.BANNED) || 
+                  verifyAddress.requestStatus == VerifyStatuses.APPROVED
+                }
                   <OverFlowMenuItem
                     on:click={() => {
                       handleApprove(verifyAddress.address);

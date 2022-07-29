@@ -194,7 +194,6 @@ export const getERC20 = async (erc20Address, signer, signerAddress) => {
 };
 
 export const validateFields = async (fields: any[]) => {
-
   let fieldValues: any = {};
   const validations = await Promise.all(Object.keys(fields).map(async (key) => {
     const validationResult = await fields[key].validate();
@@ -268,3 +267,7 @@ export const isTier = async (tierAddress, signer, signerAddress) => {
   }
   return { errorMsg };
 }
+
+export const defaultValidator = () => {
+  return true;
+};

@@ -1,7 +1,7 @@
 <script lang="ts">
   import { Contract, logger } from "ethers";
   import { Logger } from "ethers/lib/utils";
-  import { selectedNetwork } from "$src/stores";
+  import { selectedNetwork } from "src/stores";
   import NewAddress from "./NewAddress.svelte";
   import Ring from "./Ring.svelte";
   import { AddressBook } from "rain-sdk";

@@ -1,13 +1,15 @@
 <script>
   import { push } from "svelte-spa-router";
-  import Button from "$components/Button.svelte";
-  import FormPanel from "$components/FormPanel.svelte";
+  import Button from "../../components/Button.svelte";
+  import FormPanel from "../../components/FormPanel.svelte";
   import { queryStore } from "@urql/svelte";
-  import { client } from "$src/stores";
+  import { client } from "src/stores";
+
 
   $: combineTiers = queryStore({
     client: $client,
-    query: `query {
+    query: 
+      `query {
         combineTiers {
           id
           address
@@ -15,8 +17,9 @@
           deployTimestamp
           deployer
         }
-      }`,
-  });
+      }`
+    }
+  );
 
   //query(combineTiers);
 </script>

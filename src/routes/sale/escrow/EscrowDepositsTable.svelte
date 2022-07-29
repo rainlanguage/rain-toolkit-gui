@@ -1,14 +1,14 @@
 <script lang="ts">
-  import { formatAddress } from "$src/utils";
+  import { formatAddress } from "src/utils";
   import { queryStore } from "@urql/svelte";
   import { formatUnits } from "ethers/lib/utils";
   import { signerAddress } from "svelte-ethers-store";
   import { getContext } from "svelte";
-  import IconLibrary from "../$components/IconLibrary.svelte";
-  import Switch from "$components/Switch.svelte";
+  import IconLibrary from "../../../components/IconLibrary.svelte";
+  import Switch from "src/components/Switch.svelte";
   import EscrowWithdrawModal from "./EscrowWithdrawModal.svelte";
   import { onMount } from "svelte/internal";
-  import { client } from "$src/stores";
+  import { client } from "src/stores";
 
   const { open } = getContext("simple-modal");
   export let salesContract, saleData, token;

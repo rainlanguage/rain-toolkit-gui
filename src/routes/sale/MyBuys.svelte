@@ -4,22 +4,20 @@
   import { formatUnits } from "ethers/lib/utils";
   import { signerAddress } from "svelte-ethers-store";
   import { getContext } from "svelte";
-  import IconLibrary from "$components/IconLibrary.svelte";
+  import IconLibrary from "../../components/IconLibrary.svelte";
   import dayjs from "dayjs";
-  import { selectedNetwork, client } from "$src/stores";
+  import { selectedNetwork, client } from "src/stores";
 
   const { open } = getContext("simple-modal");
-
+  
   export let saleContract;
 
-  let saleContractAddress = saleContract
-    ? saleContract.address.toLowerCase()
-    : undefined;
+  let saleContractAddress = saleContract ? saleContract.address.toLowerCase() : undefined;
   let sender = $signerAddress.toLowerCase();
 
   $: buysQuery = queryStore({
-    client: $client,
-    query: `
+      client: $client,
+      query: `
         query ($saleContractAddress: Bytes!, $sender: Bytes!) {
           saleBuys (where: {saleContractAddress: $saleContractAddress, sender: $sender}, orderBy: timestamp, orderDirection: asc) {
             timestamp
@@ -57,9 +55,10 @@
             }
           }
         }`,
-    variables: { saleContractAddress, sender },
-    requestPolicy: "network-only",
-  });
+      variables: { saleContractAddress, sender },
+      requestPolicy: "network-only"
+    }
+  );
 
   $: reserve = $buysQuery.data?.saleBuys[0]?.saleContract.reserve;
   $: token = $buysQuery.data?.saleBuys[0]?.saleContract.token;
