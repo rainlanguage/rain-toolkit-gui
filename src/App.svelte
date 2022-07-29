@@ -23,10 +23,10 @@
   // import CombineTierReport from "./routes/combine-tier/CombineTierReport.svelte";
   // import ListCombineTier from "./routes/combine-tier/ListCombineTier.svelte";
 
-  // //Sale
-  // import DeploySale from "./routes/sale/DeploySale.svelte";
-  // import PurchaseSale from "./routes/sale/PurchaseSale.svelte";
-  // import ListSale from "./routes/sale/ListSale.svelte";
+  //Sale
+  import DeploySale from "./routes/sale/DeploySale.svelte";
+  import PurchaseSale from "./routes/sale/PurchaseSale.svelte";
+  import ListSale from "./routes/sale/ListSale.svelte";
 
   // //Emissions
   // import DeployEmissions from "./routes/emissions-erc20/DeployEmissions.svelte";
@@ -69,9 +69,9 @@
     "/stake/report/*": StakeReport,
     "/stake/list": ListStake,
 
-    // "/sale/deploy": DeploySale,
-    // "/sale/purchase/*": PurchaseSale,
-    // "/sale/list": ListSale,
+    "/sale/deploy": DeploySale,
+    "/sale/purchase/*": PurchaseSale,
+    "/sale/list": ListSale,
 
     // "/emissions/deploy": DeployEmissions,
     // "/emissions/claim/*": ClaimEmissions,
