@@ -19,7 +19,10 @@
 
   let fields: any = {};
 
-  let fixedSupply = false;
+  let fixedSupply = false,
+    faucets = false;
+  let blocks = 100,
+    units = 0;
 
   let erc20name = "MyToken";
   let erc20symbol = "MyTKN";
@@ -34,29 +37,23 @@
   };
 
   const deployEmissions = async () => {
-    const { validationResult, fieldValues } = validateFields(fields);
+    const { validationResult, fieldValues } = await validateFields(fields);
 
     // GET THE SOURCE
 
-    let newEmissionsERC20;
+    let newEmissionsERC20, vmStateConfig: StateConfig;
 
     if (validationResult) {
-      const Amount = fixedSupply ? parseUnits(amount.toString()) : 0;
-      let vmStateConfig: StateConfig = {
-        constants: [ownerAddress, Amount, 0],
-        sources: [
-          concat([
-            op(EmissionsERC20.Opcodes.VAL, 0),
-            op(EmissionsERC20.Opcodes.CLAIMANT_ACCOUNT),
-            op(EmissionsERC20.Opcodes.EQUAL_TO),
-            op(EmissionsERC20.Opcodes.VAL, 1),
-            op(EmissionsERC20.Opcodes.VAL, 2),
-            op(EmissionsERC20.Opcodes.EAGER_IF),
-          ]),
-        ],
-        stackLength: 6,
-        argumentsLength: 0,
-      };
+      const Amount = fixedSupply ? amount : 0;
+
+      if (faucets) {
+        vmStateConfig = new CreateERC20(ownerAddress, Amount, {
+          blocks: blocks,
+          units: units,
+        });
+      } else {
+        vmStateConfig = new CreateERC20(ownerAddress, Amount);
+      }
 
       let erc20Config: ERC20Config;
       erc20Config = {
@@ -168,6 +165,44 @@
           </Input>
         {/if}
       </div>
+    </FormPanel>
+
+    <FormPanel>
+      <div>
+        <span class="font-bold">Faucets</span>
+        <Switch bind:checked={faucets} />
+        <br />
+        <span class="text-gray-400"
+          >ERC20 token will be worked as faucets with ability to mint x number
+          of tokens each x number of blocks passed</span
+        >
+      </div>
+      {#if faucets}
+        <Input
+          type="number"
+          bind:this={fields.blocks}
+          bind:value={blocks}
+          validator={defaultValidator}
+        >
+          <span slot="label"> Number of blocks </span>
+          <span slot="description">
+            Number of blocks needs to pass before being able to do another
+            faucet claim
+          </span>
+        </Input>
+        <Input
+          type="text"
+          bind:this={fields.units}
+          bind:value={units}
+          validator={defaultValidator}
+        >
+          <span slot="label"> Number of token(units) </span>
+          <span slot="description">
+            Number of token to be transfered by the fuacet each time it is
+            triggered (at each claim)
+          </span>
+        </Input>
+      {/if}
     </FormPanel>
 
     <FormPanel>
