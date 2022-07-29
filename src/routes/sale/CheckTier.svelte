@@ -1,7 +1,7 @@
 <script lang="ts">
   import { Signer } from "ethers";
   import { Writable } from "svelte/store";
-  import { tierReport } from "src/utils";
+  import { tierReport } from "$src/utils";
   import { ITier } from "rain-sdk";
 
   interface TierData {

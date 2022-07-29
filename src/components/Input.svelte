@@ -1,11 +1,10 @@
 <script lang="ts">
-  import AddressLibrary from "src/routes/address-library/AddressLibrary.svelte";
-
+  import AddressLibrary from "$src/routes/address-library/AddressLibrary.svelte";
   import { createEventDispatcher, getContext } from "svelte";
   import IconLibrary from "./IconLibrary.svelte";
   import { writable } from "svelte/store";
   import Modal, { bind } from "svelte-simple-modal/src/Modal.svelte";
-  import Ring from "src/components/Ring.svelte";
+  import Ring from "$components/Ring.svelte";
 
   const modal2 = writable(null);
   const showModal = () => modal2.set(bind(AddressLibrary, { onSelectAddress }));

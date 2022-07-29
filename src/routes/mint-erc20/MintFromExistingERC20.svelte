@@ -3,12 +3,12 @@
   import { formatUnits } from "ethers/lib/utils";
   import { signer, signerAddress } from "svelte-ethers-store";
   import { push } from "svelte-spa-router";
-  import Button from "../../components/Button.svelte";
-  import FormPanel from "../../components/FormPanel.svelte";
-  import Input from "../../components/Input.svelte";
+  import Button from "$components/Button.svelte";
+  import FormPanel from "$components/FormPanel.svelte";
+  import Input from "$components/Input.svelte";
   import TokenInfo from "../sale/TokenInfo.svelte";
   import { EmissionsERC20 } from "rain-sdk";
-  import { getERC20 } from "src/utils";
+  import { getERC20 } from "$src/utils";
 
   export let params: {
     wild: string;
@@ -54,14 +54,12 @@
 
   {#if !params.wild}
     <FormPanel>
-      <span class="text-gray-400"
-        >Enter the ERC20 address below</span
-      >
+      <span class="text-gray-400">Enter the ERC20 address below</span>
       <Input
         bind:value={erc20Address}
         type="address"
         placeholder="Contract address"
-        >
+      >
         <span slot="description">Only the owner of the token can mint</span>
       </Input>
       <Button
@@ -113,7 +111,10 @@
               {#await calcMintPromise}
                 Getting eligible mint...
               {:then claim}
-                Mintable amount will be {formatUnits(claim, token.erc20decimals)}
+                Mintable amount will be {formatUnits(
+                  claim,
+                  token.erc20decimals
+                )}
                 {token.erc20symbol}
               {:catch err}
                 <span class="text-lg text-red-400">{err.error.message}</span>

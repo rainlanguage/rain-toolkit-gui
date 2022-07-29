@@ -1,7 +1,7 @@
 <script lang="ts">
-  import Button from "src/components/Button.svelte";
-  import IconLibrary from "src/components/IconLibrary.svelte";
-  import { localLibrary, networkLibrary } from "src/localAddresses";
+  import Button from "$components/Button.svelte";
+  import IconLibrary from "$components/IconLibrary.svelte";
+  import { localLibrary, networkLibrary } from "$src/localAddresses";
   import { getContext } from "svelte";
   import NewAlias from "./NewAlias.svelte";
 

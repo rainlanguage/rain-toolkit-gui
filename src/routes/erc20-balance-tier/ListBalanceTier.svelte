@@ -2,10 +2,10 @@
   import { BigNumber, ethers } from "ethers";
   import { formatUnits } from "ethers/lib/utils";
   import { push } from "svelte-spa-router";
-  import Button from "../../components/Button.svelte";
-  import FormPanel from "../../components/FormPanel.svelte";
+  import Button from "$components/Button.svelte";
+  import FormPanel from "$components/FormPanel.svelte";
   import { queryStore } from "@urql/svelte";
-  import { client } from "../../stores"
+  import { client } from "../../stores";
 
   $: balanceTiers = queryStore({
     client: $client,
@@ -25,9 +25,8 @@
           }
           tierValues
         }
-      }`
-    }
-  );
+      }`,
+  });
 
   // query(balanceTiers);
 </script>

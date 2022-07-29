@@ -1,10 +1,10 @@
 <script lang="ts">
   import { signer, signerAddress } from "svelte-ethers-store";
-  import Input from "../../components/Input.svelte";
+  import Input from "$components/Input.svelte";
   import { ethers } from "ethers";
-  import FormPanel from "../../components/FormPanel.svelte";
-  import Button from "../../components/Button.svelte";
-  import ContractDeploy from "src/components/ContractDeploy.svelte";
+  import FormPanel from "$components/FormPanel.svelte";
+  import Button from "$components/Button.svelte";
+  import ContractDeploy from "$components/ContractDeploy.svelte";
   import { ERC20BalanceTier, ERC20 } from "rain-sdk";
   import { formatUnits } from "ethers/lib/utils";
 
@@ -81,7 +81,8 @@
           <div class="flex flex-col gap-y-2 font-light text-gray-300">
             <span>Token name: {erc20name}</span>
             <span>Token symbol: {erc20symbol}</span>
-            <span>Your balance: {formatUnits(erc20balance, erc20decimals)}</span>
+            <span>Your balance: {formatUnits(erc20balance, erc20decimals)}</span
+            >
           </div>
         {/if}
       </span>

@@ -3,14 +3,14 @@
   import { BigNumber, ethers } from "ethers";
   import { LayerCake, Svg, Html } from "layercake";
   import { formatUnits, parseUnits } from "ethers/src.ts/utils";
-  import AxisX from "src/components/charts/AxisX.svelte";
-  import AxisY from "src/components/charts/AxisY.svelte";
-  import Line from "src/components/charts/Line.svelte";
-  import Scatter from "src/components/charts/Scatter.svelte";
-  import SharedTooltip from "src/components/charts/SharedTooltip.svelte";
+  import AxisX from "$components/charts/AxisX.svelte";
+  import AxisY from "$components/charts/AxisY.svelte";
+  import Line from "$components/charts/Line.svelte";
+  import Scatter from "$components/charts/Scatter.svelte";
+  import SharedTooltip from "$components/charts/SharedTooltip.svelte";
   import { timeFormat } from "d3-time-format";
   import { writable } from "svelte/store";
-  import IconLibrary from "src/components/IconLibrary.svelte";
+  import IconLibrary from "$components/IconLibrary.svelte";
   import { selectSale } from "./sale";
   import {
     ApplyOpFn,

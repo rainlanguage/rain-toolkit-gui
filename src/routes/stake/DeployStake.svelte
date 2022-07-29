@@ -1,11 +1,11 @@
 <script lang="ts">
   import { signer, signerAddress } from "svelte-ethers-store";
-  import Input from "../../components/Input.svelte";
+  import Input from "$components/Input.svelte";
   import { ethers } from "ethers";
-  import FormPanel from "../../components/FormPanel.svelte";
-  import Button from "../../components/Button.svelte";
-  import ContractDeploy from "src/components/ContractDeploy.svelte";
-  import { Stake, ERC20, StakeDeployArgs } from "rain-sdk";
+  import FormPanel from "$components/FormPanel.svelte";
+  import Button from "$components/Button.svelte";
+  import ContractDeploy from "$components/ContractDeploy.svelte";
+  import { Stake, ERC20, type StakeDeployArgs } from "rain-sdk";
   import { formatUnits } from "ethers/lib/utils";
 
   let erc20Address,
