@@ -5,18 +5,12 @@
 
 <div class="min-h-screen w-96 border-r border-gray-700">
   <div class="sticky top-16 flex flex-col  gap-y-3 self-start p-5">
-    <SidebarLinkGroup label="TransferTier" url="/erc20transfertier/*">
-      <SidebarLink url="/erc20transfertier/deploy"
-        >Deploy a ERC20TransferTier</SidebarLink
-      >
+    <SidebarLinkGroup label="Stake" url="/stake/*">
+      <SidebarLink url="/stake/deploy">Deploy a Stake</SidebarLink>
 
-      <SidebarLink url="/erc20transfertier/report/">
-        Check a ERC20TransferTier Report
-      </SidebarLink>
+      <SidebarLink url="/stake/report/">Check a Stake Report</SidebarLink>
 
-      <SidebarLink url="/erc20transfertier/list">
-        Browse deployed ERC20TransferTiers
-      </SidebarLink>
+      <SidebarLink url="/stake/list">Browse deployed Stakes</SidebarLink>
     </SidebarLinkGroup>
 
     <SidebarLinkGroup label="ERC20BalanceTier" url="/erc20balancetier/*">
@@ -59,14 +53,6 @@
       </SidebarLink>
     </SidebarLinkGroup>
 
-    <SidebarLinkGroup label="GatedNFT" url="/gatednft/*">
-      <SidebarLink url="/gatednft/deploy/">Deploy a Gated NFT</SidebarLink>
-
-      <SidebarLink url="/gatednft/mint/">Mint a Gated NFT</SidebarLink>
-
-      <SidebarLink url="/gatednft/list">List deployed GatedNFTs</SidebarLink>
-    </SidebarLinkGroup>
-
     <SidebarLinkGroup label="Sale" url="/sale/*">
       <SidebarLink url="/sale/deploy">Deploy a Sale</SidebarLink>
 
@@ -92,11 +78,11 @@
     </SidebarLinkGroup>
 
     <SidebarLinkGroup label="Deploy ERC20" url="/erc20/*">
-      <SidebarLink url="/erc20/deploy">
-        Deploy an ERC20 Token
-      </SidebarLink>
+      <SidebarLink url="/erc20/deploy">Deploy an ERC20 Token</SidebarLink>
 
       <SidebarLink url="/erc20/mint/">Mint From An Existing ERC20</SidebarLink>
+
+      <SidebarLink url="/erc20/list">List ERC20 Tokens</SidebarLink>
     </SidebarLinkGroup>
   </div>
 </div>
