@@ -18,11 +18,11 @@
   import BalanceTierReport from "./routes/erc20-balance-tier/BalanceTierReport.svelte";
   import ListBalanceTier from "./routes/erc20-balance-tier/ListBalanceTier.svelte";
 
-
   //Combine Tier
   import DeployCombineTier from "./routes/combine-tier/DeployCombineTier.svelte";
   import CombineTierReport from "./routes/combine-tier/CombineTierReport.svelte";
   import ListCombineTier from "./routes/combine-tier/ListCombineTier.svelte";
+
 
   // //Sale
   // import DeploySale from "./routes/sale/DeploySale.svelte";
