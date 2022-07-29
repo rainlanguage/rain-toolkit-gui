@@ -5,7 +5,7 @@
   import FormPanel from "src/components/FormPanel.svelte";
   import Input from "src/components/Input.svelte";
   import { validateFields } from "src/utils";
-  import { defaultValidator } from "../gated-nft/minter-validation";
+  import { defaultValidator } from "../../utils";
   import { ethers } from "ethers";
   import ContractDeploy from "src/components/ContractDeploy.svelte";
   import { Verify, VerifyTier } from "rain-sdk";
