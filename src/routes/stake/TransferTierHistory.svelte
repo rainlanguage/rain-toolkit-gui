@@ -1,10 +1,10 @@
 <!-- <script lang="ts">
   import { getContext } from "svelte";
-  import IconLibrary from "../../components/IconLibrary.svelte";
+  import IconLibrary from "$components/IconLibrary.svelte";
   import dayjs from "dayjs";
-  import { selectedNetwork } from "src/stores";
+  import { selectedNetwork } from "$src/stores";
   import { queryStore } from "@urql/svelte";
-  import { client } from "src/stores";
+  import { client } from "$src/stores";
 
 
   const { open } = getContext("simple-modal");

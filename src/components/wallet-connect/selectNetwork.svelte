@@ -3,9 +3,8 @@
   import { selectedNetwork } from "../../stores";
   import { getContext } from "svelte";
   import { defaultEvmStores } from "svelte-ethers-store";
-  import Select from "../../components/Select.svelte";
+  import Select from "$components/Select.svelte";
 
-  
   export let onNetworkChange = () => {};
   export let library;
   let name;
@@ -49,7 +48,11 @@
 
 <div class="flex flex-col gap-y-4">
   <span>Choose network:</span>
-  <Select bind:value={$selectedNetwork} items={networks} on:change={handleClick} />
+  <Select
+    bind:value={$selectedNetwork}
+    items={networks}
+    on:change={handleClick}
+  />
 
   <!-- <button
     class="rounded-md border-none bg-gray-700 px-4 py-2 text-gray-200"

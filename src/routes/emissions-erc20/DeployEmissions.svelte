@@ -1,13 +1,13 @@
 <script lang="ts">
   import { signer, signerAddress } from "svelte-ethers-store";
-  import Button from "../../components/Button.svelte";
-  import FormPanel from "../../components/FormPanel.svelte";
-  import Input from "../../components/Input.svelte";
-  import Select from "../../components/Select.svelte";
+  import Button from "$components/Button.svelte";
+  import FormPanel from "$components/FormPanel.svelte";
+  import Input from "$components/Input.svelte";
+  import Select from "$components/Select.svelte";
   import { validateFields } from "../../utils";
   import { addressValidate } from "../../validation";
-  import ContractDeploy from "src/components/ContractDeploy.svelte";
-  import HumanReadable from "../../components/FriendlySource/HumanReadable.svelte";
+  import ContractDeploy from "$components/ContractDeploy.svelte";
+  import HumanReadable from "$components/FriendlySource/HumanReadable.svelte";
   import {
     EmissionsERC20,
     ERC20Config,

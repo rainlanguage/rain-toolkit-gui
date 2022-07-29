@@ -1,6 +1,6 @@
 <script lang="ts">
   import { fade } from "svelte/transition";
-  import IconLibrary from "components/IconLibrary.svelte";
+  import IconLibrary from "$components/IconLibrary.svelte";
   import { setContext } from "svelte";
 
   let open, buttonRef, menuRef;

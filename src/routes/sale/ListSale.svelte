@@ -1,16 +1,16 @@
 <script>
   import { push } from "svelte-spa-router";
-  import Button from "../../components/Button.svelte";
-  import FormPanel from "../../components/FormPanel.svelte";
+  import Button from "$components/Button.svelte";
+  import FormPanel from "$components/FormPanel.svelte";
   import { queryStore } from "@urql/svelte";
   import { formatUnits } from "ethers/lib/utils";
-  import { client } from "src/stores";
+  import { client } from "$src/stores";
 
   let skip;
 
   $: sales = queryStore({
-      client: $client,
-      query: `
+    client: $client,
+    query: `
         query {
           sales {
             id
@@ -30,10 +30,8 @@
             }
           }
         }`,
-      variables: { skip }
-    } 
-  );
-
+    variables: { skip },
+  });
 </script>
 
 {#if $sales.fetching}

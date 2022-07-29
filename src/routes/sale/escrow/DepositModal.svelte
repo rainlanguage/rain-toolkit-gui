@@ -1,11 +1,11 @@
 <script lang="ts">
   import { signer } from "svelte-ethers-store";
   import { formatUnits, Logger, parseUnits } from "ethers/lib/utils";
-  import Button from "../../../components/Button.svelte";
-  import Steps from "../../../components/steps/Steps.svelte";
-  import Ring from "../../../components/Ring.svelte";
-  import Input from "src/components/Input.svelte";
-  import { selectedNetwork } from "src/stores";
+  import Button from "../$components/Button.svelte";
+  import Steps from "../$components/steps/Steps.svelte";
+  import Ring from "../$components/Ring.svelte";
+  import Input from "$components/Input.svelte";
+  import { selectedNetwork } from "$src/stores";
   import { saleStatuses } from "../sale";
   import { ERC20, RedeemableERC20ClaimEscrow } from "rain-sdk";
 
