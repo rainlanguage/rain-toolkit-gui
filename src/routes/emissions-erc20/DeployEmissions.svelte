@@ -17,7 +17,6 @@
     LinearEmissions,
     SequentialEmissions,
   } from "rain-sdk";
-  
 
   let deployPromise;
 
@@ -92,7 +91,7 @@
   };
 
   const deployEmissions = async () => {
-    const { validationResult, fieldValues } = validateFields(fields);
+    const { validationResult, fieldValues } = await validateFields(fields);
 
     // GET THE SOURCE
 
@@ -196,11 +195,10 @@
         items={emissionsOptions}
         bind:value={emissionsType}
         on:change={() => {
-          if (emissionsType.value){
+          if (emissionsType.value) {
             document.getElementById("maxReward").style.display = "block";
             document.getElementById("inc").style.display = "block";
-          }
-          else {
+          } else {
             document.getElementById("maxReward").style.display = "none";
             document.getElementById("inc").style.display = "none";
           }
