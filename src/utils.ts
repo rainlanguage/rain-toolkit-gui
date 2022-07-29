@@ -268,3 +268,4 @@ export const isTier = async (tierAddress, signer, signerAddress) => {
   }
   return { errorMsg };
 }
+
