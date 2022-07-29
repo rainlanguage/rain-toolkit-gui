@@ -1,11 +1,11 @@
 <script lang="ts">
   import { signer, signerAddress } from "svelte-ethers-store";
   import Input from "../../components/Input.svelte";
-  import { BigNumber, ethers } from "ethers";
+  import { ethers } from "ethers";
   import FormPanel from "../../components/FormPanel.svelte";
   import Button from "../../components/Button.svelte";
   import ContractDeploy from "src/components/ContractDeploy.svelte";
-  import { Stake, ERC20 } from "rain-sdk";
+  import { Stake, ERC20, StakeDeployArgs } from "rain-sdk";
   import { formatUnits } from "ethers/lib/utils";
 
   let erc20Address,
@@ -14,10 +14,9 @@
     erc20name,
     erc20symbol,
     erc20balance,
-    erc20decimals;
+    erc20decimals,
+    initialRatio;
   let deployPromise;
-  let tiers = [];
-  tiers[0] = 0;
 
   $: if (erc20Address) {
     getERC20();
@@ -42,33 +41,42 @@
     }
   };
 
-  const deployTransferTier = async () => {
-    const parsedTiers = tiers.map((value) =>
-      ethers.utils.parseUnits(value.toString(), erc20decimals)
-    );
+  const deployStake = async () => {
+    let InitialRatio;
+    erc20Address = erc20Address.toLowerCase();
 
-    // let newBalanceTier = await Stake.deploy($signer, {
-    //   erc20: erc20Contract.address,
-    //   tierValues: parsedTiers,
-    // });
+    if (initialRatio) {
+      InitialRatio = ethers.utils
+        .parseUnits("1", "36")
+        .sub(ethers.utils.parseUnits("1", erc20decimals))
+        .mul(ethers.BigNumber.from(initialRatio));
+    }
+    const stakeArgs: StakeDeployArgs = {
+      token: erc20Address,
+      initialRatio: InitialRatio,
+      name: erc20name,
+      symbol: erc20symbol,
+    };
 
-    // return newBalanceTier;
+    let newStake = await Stake.deploy($signer, stakeArgs);
+
+    return newStake;
   };
 
   const handleClick = () => {
-    deployPromise = deployTransferTier();
+    deployPromise = deployStake();
   };
 </script>
 
 <div class="flex max-w-prose flex-col gap-y-4">
   <div class="mb-2 flex flex-col gap-y-2">
-    <span class="text-2xl"> Deploy a new TransferTier. </span>
+    <span class="text-2xl"> Deploy a new Stake. </span>
     <span class="text-gray-400">
       Create Tier statuses corresponding to locking up at least a certain amount
       of an ERC20 in the contract.
     </span>
   </div>
-  <!-- <FormPanel heading="TransferTier settings">
+  <FormPanel heading="Stake settings">
     <Input type="address" placeholder="Token address" bind:value={erc20Address}>
       <span slot="label">ERC20 token address</span>
       <span slot="description">
@@ -86,31 +94,22 @@
         {/if}
       </span>
     </Input>
-    <div class="flex w-full flex-col gap-y-3">
-      <Input
-        type="text"
-        placeholder="Tier 1 value is reserved as ZERO for canceling tier membership"
-        disabled
-      >
-        <span slot="label"
-          >Set the amount of token that must be locked up for each tier</span
-        >
-      </Input>
-      <Input type="number" placeholder="Tier 2" bind:value={tiers[1]} />
-      <Input type="number" placeholder="Tier 3" bind:value={tiers[2]} />
-      <Input type="number" placeholder="Tier 4" bind:value={tiers[3]} />
-      <Input type="number" placeholder="Tier 5" bind:value={tiers[4]} />
-      <Input type="number" placeholder="Tier 6" bind:value={tiers[5]} />
-      <Input type="number" placeholder="Tier 7" bind:value={tiers[6]} />
-      <Input type="number" placeholder="Tier 8" bind:value={tiers[7]} />
-    </div>
-  </FormPanel> -->
+    <Input type="text" placeholder="Name" bind:value={erc20name}>
+      <span slot="label">Name</span>
+    </Input>
+    <Input type="text" placeholder="Symbol" bind:value={erc20symbol}>
+      <span slot="label">Symbol</span>
+    </Input>
+    <Input type="text" placeholder="Initial Ratio" bind:value={initialRatio}>
+      <span slot="label">Initial Ratio</span>
+    </Input>
+  </FormPanel>
   <FormPanel>
     <div class="mt-1 flex flex-col gap-y-2">
       {#if !deployPromise}
-        <Button shrink on:click={handleClick}>Deploy TransferTier</Button>
+        <Button shrink on:click={handleClick}>Deploy Stake</Button>
       {:else}
-        <ContractDeploy {deployPromise} type="ERC20TransferTier" />
+        <ContractDeploy {deployPromise} type="Stake" />
       {/if}
     </div>
   </FormPanel>
