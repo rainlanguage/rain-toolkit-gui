@@ -1,7 +1,6 @@
 <script>
   import active from "svelte-spa-router/active";
   import ArrowIcon from "./ArrowIcon.svelte";
-  import autoAnimate from "@formkit/auto-animate";
 
   export let label = "";
   export let url = "";
@@ -9,7 +8,7 @@
   let open = false;
 </script>
 
-<div use:autoAnimate>
+<div>
   <div
     on:click={() => {
       open = !open;
