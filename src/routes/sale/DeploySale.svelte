@@ -10,9 +10,10 @@
   import Switch from "$components/Switch.svelte";
   import { getERC20, validateFields, isTier } from "../../utils";
   import { saleDeploy, type SaleParams, selectSale } from "./sale";
-  import { DatePicker, CalendarStyle } from "@beyonk/svelte-datepicker";
+  import SveltyPicker from "svelty-picker";
   import SaleSmallSimulationChart from "./SaleSmallSimulationChart.svelte";
   import HumanReadable from "$components/FriendlySource/HumanReadable.svelte";
+  import dayjs from "dayjs";
 
   let fields: any = {};
   let deployPromise;
@@ -38,7 +39,6 @@
   let minWalletCap = 3;
   let tier = "0xe30289f881ee37c51ad5678ed799677e6c3e788f";
   let minimumStatus = 0;
-  let raiseRange;
   let extraTimeDiscountThreshold = 5;
   let extraTimeDiscount = 25;
   let extraTime = 30;
@@ -82,6 +82,13 @@
     capMulActTier7 = 2,
     capMulActTier8 = 1;
 
+  let startTimestamp = `${new Date().toLocaleDateString(
+    "en-US"
+  )} ${new Date().toLocaleTimeString()}`; //"2021-11-11 14:35";
+  let endTimestamp = `${new Date().toLocaleDateString(
+    "en-US"
+  )} ${new Date().toLocaleTimeString()}`; //"2021-11-11 14:35";
+
   const saleOptions = [
     { value: selectSale.fixedPrice, label: "Fixed Price" },
     { value: selectSale.vLBP, label: "vLBP" },
@@ -102,9 +109,11 @@
   const getSaleParams = async () => {
     const { validationResult, fieldValues } = await validateFields(fields);
     fieldValues.startTimestamp = Math.floor(
-      raiseRange?.[0].$d.getTime() / 1000
+      dayjs(startTimestamp).$d.getTime() / 1000
     );
-    fieldValues.endTimestamp = Math.floor(raiseRange?.[1].$d.getTime() / 1000);
+    fieldValues.endTimestamp = Math.floor(
+      dayjs(endTimestamp).$d.getTime() / 1000
+    );
     fieldValues.reserveErc20 = reserveErc20;
 
     saleParams = {
@@ -125,8 +134,8 @@
   };
 
   $: saleVals = {
-    startTimestamp: Math.floor(raiseRange?.[0].$d.getTime() / 1000),
-    endTimestamp: Math.floor(raiseRange?.[1].$d.getTime() / 1000),
+    startTimestamp: Math.floor(dayjs(startTimestamp).$d.getTime() / 1000),
+    endTimestamp: Math.floor(dayjs(endTimestamp).$d.getTime() / 1000),
     startPrice,
     endPrice,
     minimumRaise,
@@ -134,8 +143,8 @@
   };
 
   // $: FriendlySource = {
-  //   startTimestamp: Math.floor(raiseRange?.[0].$d.getTime() / 1000),
-  //   endTimestamp: Math.floor(raiseRange?.[1].$d.getTime() / 1000),
+  //   startTimestamp: Math.floor(dayjs(startTimestamp).$d.getTime() / 1000),
+  //   endTimestamp: Math.floor(dayjs(endTimestamp).$d.getTime() / 1000),
   //   saleType: saleType?.value,
   //   maxCapMode: maxCapCheck,
   //   minCapMode: minCapCheck,
@@ -329,14 +338,32 @@
 
         <span class="z-20 flex w-full flex-col gap-y-3">
           <span>Raise Start/End Time</span>
-          <DatePicker
+          <span class="date-picker">
+            <SveltyPicker
+              inputClasses="form-control"
+              format="mm/dd/yyyy hh:ii"
+              bind:value={startTimestamp}
+              placeholder="Select Date/Time"
+              autoclose
+              clearBtn={false}
+            /> -
+            <SveltyPicker
+              inputClasses="form-control"
+              format="mm/dd/yyyy hh:ii"
+              bind:value={endTimestamp}
+              placeholder="Select Date/Time"
+              autoclose
+              clearBtn={false}
+            />
+          </span>
+          <!-- <DatePicker
             styling={new CalendarStyle({ buttonWidth: "100%" })}
             bind:selected={raiseRange}
             time={true}
             range={true}
             placeholder="Select Date/Time"
             format="DD / MM / YYYY hh:mm"
-          />
+          /> -->
           <span />
         </span>
 
@@ -1174,11 +1201,12 @@
             disabled={tierError?.errorMsg ||
               tierDiscountError?.errorMsg ||
               tierCapMulError?.errorMsg ||
-              !raiseRange}
+              !startTimestamp ||
+              !endTimestamp}
             shrink
             on:click={handleClick}>Deploy Sale</Button
           >
-          {#if !tierError?.errorMsg && !tierDiscountError?.errorMsg && !tierCapMulError?.errorMsg && !raiseRange}
+          {#if !tierError?.errorMsg && !tierDiscountError?.errorMsg && !tierCapMulError?.errorMsg && !startTimestamp && !endTimestamp}
             <span class="text-red-400"
               >Please Select Date/Time to Deploy The Sale</span
             >
@@ -1221,6 +1249,14 @@
 </div>
 
 <style>
+  .date-picker :global(.s-8qVcqDRfOUyA) {
+    border-color: #eee;
+    color: #333;
+    width: 48%;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+  }
   .m-top {
     margin-top: 15px;
   }

@@ -26,7 +26,7 @@
   let eligibleStatus;
 
   const checkTier = async (tier, minimumStatus: number) => {
-    const report = await tier.report($signer.getAddress());
+    const report = await tier.report($signer.getAddress(), []);
     const parsedReport = tierReport(report);
 
     if (minimumStatus !== 0) {

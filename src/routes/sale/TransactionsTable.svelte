@@ -5,7 +5,7 @@
   import { formatUnits } from "ethers/lib/utils";
   import { signerAddress } from "svelte-ethers-store";
   import { getContext } from "svelte";
-  import IconLibrary from "components/IconLibrary.svelte";
+  import IconLibrary from "$components/IconLibrary.svelte";
   import dayjs from "dayjs";
   import { selectedNetwork } from "$src/stores";
   import Switch from "$components/Switch.svelte";
