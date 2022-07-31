@@ -19,27 +19,26 @@
   let tiers = [];
 
   $: if (erc20Address) {
-    getERC20();
-  }
+    erc20Address = erc20Address.toLowerCase();
+    (async () => {
+      if (ethers.utils.isAddress(erc20Address)) {
+        erc20AddressError = null;
 
-  const getERC20 = async () => {
-    if (ethers.utils.isAddress(erc20Address)) {
-      erc20AddressError = null;
+        erc20Contract = new ERC20(erc20Address, $signer);
 
-      erc20Contract = new ERC20(erc20Address, $signer);
-
-      try {
-        erc20name = await erc20Contract.name();
-        erc20balance = await erc20Contract.balanceOf($signerAddress);
-        erc20decimals = await erc20Contract.decimals();
-        erc20symbol = await erc20Contract.symbol();
-      } catch {
-        erc20AddressError = "not a valid ERC20 token address";
+        try {
+          erc20name = await erc20Contract.name();
+          erc20balance = await erc20Contract.balanceOf($signerAddress);
+          erc20decimals = await erc20Contract.decimals();
+          erc20symbol = await erc20Contract.symbol();
+        } catch {
+          erc20AddressError = "not a valid ERC20 token address";
+        }
+      } else {
+        erc20AddressError = "not a valid address";
       }
-    } else {
-      erc20AddressError = "not a valid address";
-    }
-  };
+    })();
+  }
 
   const deployBalanceTier = async () => {
     const parsedTiers = tiers.map((value) =>
@@ -70,18 +69,20 @@
     </span>
   </div>
   <FormPanel heading="BalanceTier settings">
-    <Input type="address" placeholder="Token address" bind:value={erc20Address}>
+    <Input
+      type="address"
+      placeholder="Token address"
+      bind:value={erc20Address}
+      errorMsg={erc20AddressError}
+    >
       <span slot="label">Choose an ERC20 token to check the balance of.</span>
       <span slot="description">
-        {#if erc20AddressError}
-          <span class="text-red-500">
-            {erc20AddressError}
-          </span>
-        {:else if erc20name && erc20balance}
+        {#if erc20name && erc20balance}
           <div class="flex flex-col gap-y-2 font-light text-gray-300">
             <span>Token name: {erc20name}</span>
             <span>Token symbol: {erc20symbol}</span>
-            <span>Your balance: {formatUnits(erc20balance, erc20decimals)}</span>
+            <span>Your balance: {formatUnits(erc20balance, erc20decimals)}</span
+            >
           </div>
         {/if}
       </span>
@@ -104,7 +105,9 @@
   <FormPanel>
     <div class="mt-1 flex flex-col gap-y-2">
       {#if !deployPromise}
-        <Button shrink on:click={handleClick}>Deploy BalanceTier</Button>
+        <Button shrink on:click={handleClick} disabled={erc20AddressError}
+          >Deploy BalanceTier</Button
+        >
       {:else}
         <ContractDeploy {deployPromise} type="ERC20BalanceTier" />
       {/if}

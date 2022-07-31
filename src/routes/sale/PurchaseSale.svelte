@@ -144,7 +144,7 @@
   {:else if initPromise && !$saleQuery.fetching && $saleQuery.data && $saleQuery.data.sale}
     {#await initPromise}
       Loading...
-    {:then} 
+    {:then}
       <FormPanel>
         <SaleProgress saleContract={sale} />
         <div class="grid grid-cols-2 gap-2 w-full">

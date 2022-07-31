@@ -7,12 +7,14 @@
   import Select from "../../components/Select.svelte";
   import ContractDeploy from "src/components/ContractDeploy.svelte";
   import { CombineTier, CombineTierGenerator } from "rain-sdk";
-  import { selectLteLogic, selectLteMode } from "../../utils";
+  import { isTier, selectLteLogic, selectLteMode } from "../../utils";
   import HumanReadable from "../../components/FriendlySource/HumanReadable.svelte";
 
   let tierContractOne: string = "0x6ba1fadb694e806c316337143241dd6cfebd5033",
     tierContractTwo: string = "0xb2b600aeae9bc1efd68ae209e621b7546393ef28",
     deployPromise: any;
+
+  let tierOneError, tierTwoError;
 
   const logicOptions = [
     { value: selectLteLogic.every, label: "Every" },
@@ -34,6 +36,18 @@
     logicValue: logicValue ? logicValue.value : selectLteLogic.every,
     modeValue: modeValue ? modeValue.value : selectLteMode.min,
   };
+
+  $: if (tierContractOne) {
+    (async () => {
+      tierOneError = await isTier(tierContractOne, $signer, $signerAddress);
+    })();
+  }
+
+  $: if (tierContractTwo) {
+    (async () => {
+      tierTwoError = await isTier(tierContractTwo, $signer, $signerAddress);
+    })();
+  }
 
   const deployCombineTier = async () => {
     const combineTierConfig = new CombineTierGenerator(
@@ -64,6 +78,7 @@
         placeholder="Tier address"
         bind:value={tierContractOne}
         validator={addressValidate}
+        errorMsg={tierOneError?.errorMsg}
       >
         <span slot="label">Tier contract #1</span>
       </Input>
@@ -73,6 +88,7 @@
         placeholder="Tier address"
         bind:value={tierContractTwo}
         validator={addressValidate}
+        errorMsg={tierTwoError?.errorMsg}
       >
         <span slot="label">Tier contract #2</span>
       </Input>
@@ -102,7 +118,12 @@
     </FormPanel>
     <FormPanel>
       {#if !deployPromise}
-        <Button shrink on:click={handleClick}>Deploy CombineTier</Button>
+        <Button
+          shrink
+          on:click={handleClick}
+          disabled={tierOneError?.errorMsg || tierTwoError?.errorMsg}
+          >Deploy CombineTier</Button
+        >
       {:else}
         <ContractDeploy {deployPromise} type="CombineTier" />
       {/if}

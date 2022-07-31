@@ -5,12 +5,13 @@
   import { queryStore } from "@urql/svelte";
   import { formatUnits } from "ethers/lib/utils";
   import { client } from "src/stores";
+  import dayjs from "dayjs";
 
   let skip;
 
   $: sales = queryStore({
-      client: $client,
-      query: `
+    client: $client,
+    query: `
         query {
           sales {
             id
@@ -30,10 +31,8 @@
             }
           }
         }`,
-      variables: { skip }
-    } 
-  );
-
+    variables: { skip },
+  });
 </script>
 
 {#if $sales.fetching}
@@ -51,7 +50,7 @@
           <div class="text-gray-400 flex flex-col">
             <span>Sale Address: {sale.id}</span>
             <span>Deployer: {sale.deployer}</span>
-            <span>Deployed: {Date(sale.deployTimestamp).toLocaleString()}</span>
+            <span>Deployed: {dayjs.unix(sale.deployTimestamp).toString()}</span>
             <span>Sales Status: {sale.saleStatus}</span>
             <span
               >Total Raised: {Number(

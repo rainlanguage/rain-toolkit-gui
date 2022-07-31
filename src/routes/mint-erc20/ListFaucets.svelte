@@ -6,6 +6,7 @@
   import { queryStore } from "@urql/svelte";
   import { formatUnits } from "ethers/lib/utils";
   import { client } from "src/stores";
+  import dayjs from "dayjs";
 
   let checked = true;
 
@@ -115,7 +116,7 @@
             >
             <span>Deployer: {emission.deployer}</span>
             <span
-              >Deployed: {Date(emission.deployTimestamp).toLocaleString()}</span
+              >Deployed: {dayjs.unix(emission.deployTimestamp).toString()}</span
             >
           </div>
         </div>

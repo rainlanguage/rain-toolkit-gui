@@ -10,22 +10,21 @@
   import { client } from "src/stores";
   import { ERC20BalanceTier, ERC20 } from "rain-sdk";
 
-
   export let params;
 
   let balanceTierContract,
     erc20Contract,
     errorMsg,
+    erc20AddressError,
     addressToReport,
     parsedReport,
     addressBalance;
 
-  let  balanceTierAddress = params.wild ? params.wild.toLowerCase() : undefined;
+  let balanceTierAddress = params.wild ? params.wild.toLowerCase() : undefined;
 
   $: balanceTier = queryStore({
-      client: $client,
-      query:
-        `query ($balanceTierAddress: Bytes!) {
+    client: $client,
+    query: `query ($balanceTierAddress: Bytes!) {
           erc20BalanceTiers (where: {id: $balanceTierAddress}) {
             id
             address
@@ -41,16 +40,15 @@
             tierValues
           }
         }`,
-      variables: {balanceTierAddress},
-      requestPolicy: "network-only",
-      pause: params.wild ? false : true
-    }
-  );
+    variables: { balanceTierAddress },
+    requestPolicy: "network-only",
+    pause: params.wild ? false : true,
+  });
 
   $: _balanceTier = $balanceTier.data?.erc20BalanceTiers[0];
-  
+
   $: if (_balanceTier || $signer) {
-    if (!$balanceTier.fetching && _balanceTier != undefined){
+    if (!$balanceTier.fetching && _balanceTier != undefined) {
       initContracts();
     }
   }
@@ -64,15 +62,16 @@
 
     erc20Contract = new ERC20(_balanceTier?.token.id, $signer);
   };
+  $: if (addressToReport) {
+    ethers.utils.isAddress(addressToReport)
+      ? (erc20AddressError = null)
+      : (erc20AddressError = "Not a valid Ethereum address");
+  }
 
   const report = async () => {
-    if (ethers.utils.isAddress(addressToReport)) {
-      const report = await balanceTierContract.report(addressToReport);
-      parsedReport = tierReport(report);
-      addressBalance = await erc20Contract.balanceOf(addressToReport);
-    } else {
-      errorMsg = "Not a valid Ethereum address";
-    }
+    const report = await balanceTierContract.report(addressToReport);
+    parsedReport = tierReport(report);
+    addressBalance = await erc20Contract.balanceOf(addressToReport);
   };
 
   const reportMyAddress = () => {
@@ -113,6 +112,7 @@
         bind:value={addressToReport}
         type="text"
         placeholder="Enter an Ethereum address"
+        errorMsg={erc20AddressError}
       />
       <div class="flex flex-row gap-x-2">
         <Button shrink on:click={report}>Get a report</Button>

@@ -6,7 +6,7 @@
   import FormPanel from "../../components/FormPanel.svelte";
   import { queryStore } from "@urql/svelte";
   import { client } from "src/stores";
-
+  import dayjs from "dayjs";
 
   $: transferTiers = queryStore({
     client: $client,
@@ -26,10 +26,8 @@
           }
           tierValues
         }
-      }`
-    }
-  );
-
+      }`,
+  });
 </script>
 
 {#if $transferTiers.fetching}
@@ -48,9 +46,9 @@
             <span>Contract Address: {transferTier.id}</span>
             <span>Deployer: {transferTier.deployer}</span>
             <span
-              >Deployed: {Date(
-                transferTier.deployTimestamp
-              ).toLocaleString()}</span
+              >Deployed: {dayjs
+                .unix(transferTier.deployTimestamp)
+                .toString()}</span
             >
             <span>
               Token tiers:
