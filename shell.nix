@@ -23,6 +23,6 @@ pkgs.stdenv.mkDerivation {
   export PATH=$( npm bin ):$PATH
   git submodule update --init
   # keep it fresh
-  npm install
+  yarn
  '';
 }
