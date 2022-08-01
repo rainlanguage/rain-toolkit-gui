@@ -8,14 +8,14 @@
   import { Stake, ERC20, type StakeDeployArgs } from "rain-sdk";
   import { formatUnits } from "ethers/lib/utils";
 
-  let erc20Address,
+  let erc20Address = "0x25a4Dd4cd97ED462EB5228de47822e636ec3E31A",
     erc20AddressError,
     erc20Contract,
     erc20name,
     erc20symbol,
     erc20balance,
     erc20decimals,
-    initialRatio;
+    initialRatio = 1;
   let deployPromise;
 
   $: if (erc20Address) {
@@ -23,6 +23,7 @@
   }
 
   const getERC20 = async () => {
+    erc20Address = erc20Address.toLowerCase();
     if (ethers.utils.isAddress(erc20Address)) {
       erc20AddressError = null;
 
@@ -107,10 +108,15 @@
   <FormPanel>
     <div class="mt-1 flex flex-col gap-y-2">
       {#if !deployPromise}
-        <Button shrink on:click={handleClick}>Deploy Stake</Button>
+        <Button shrink on:click={handleClick} disabled={erc20AddressError}
+          >Deploy Stake</Button
+        >
       {:else}
         <ContractDeploy {deployPromise} type="Stake" />
       {/if}
     </div>
+    {#if erc20AddressError}
+      <span class="text-red-500">Please enter a valid token address</span>
+    {/if}
   </FormPanel>
 </div>

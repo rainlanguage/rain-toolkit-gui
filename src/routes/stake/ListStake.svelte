@@ -1,4 +1,4 @@
-<!-- <script>
+<script>
   import { BigNumber, ethers } from "ethers";
   import { formatUnits } from "ethers/lib/utils";
   import { push } from "svelte-spa-router";
@@ -6,78 +6,83 @@
   import FormPanel from "$components/FormPanel.svelte";
   import { queryStore } from "@urql/svelte";
   import { client } from "$src/stores";
+  import dayjs from "dayjs";
 
-
-  $: transferTiers = queryStore({
+  $: stakeERC20s = queryStore({
     client: $client,
     query: `
       query {
-        erc20TransferTiers {
-          id
+        stakeERC20S {
           address
-          deployBlock
-          deployTimestamp
           deployer
-          token {
-            id
-            name
-            symbol
-            decimals
-          }
-          tierValues
+          id
+          name
+          symbol
+          initialRatio
+          deployTimestamp
         }
-      }`
-    }
-  );
-
-  //query(transferTiers);
+      }`,
+  });
+  // stakeERC20S {
+  //         address
+  //         deployer
+  //         id
+  //         name
+  //         symbol
+  //         initialRatio
+  //         deployTimestamp
+  //         token {
+  //           decimals
+  //           id
+  //           name
+  //           symbol
+  //         }
+  //       }
 </script>
 
-{#if $transferTiers.fetching}
+<div>{console.log("stakeERC20s", $stakeERC20s)}</div>
+{#if $stakeERC20s.fetching}
   Loading...
-{:else if $transferTiers.error}
+{:else if $stakeERC20s.error}
   <span class="text-red-400"
     >Something went wrong, try refreshing the page.</span
   >
 {:else}
   <div class="flex flex-col gap-y-3">
-    {#each $transferTiers.data.erc20TransferTiers as transferTier}
+    {#each $stakeERC20s.data.stakeERC20S as stake}
       <FormPanel>
         <div class="flex flex-col gap-y-2 mb-4">
-          <span class="text-white">TransferTier details</span>
+          <span class="text-white">Stake details</span>
           <div class="text-gray-400 flex flex-col">
-            <span>Contract Address: {transferTier.id}</span>
-            <span>Deployer: {transferTier.deployer}</span>
-            <span
-              >Deployed: {Date(
-                transferTier.deployTimestamp
-              ).toLocaleString()}</span
+            <span>Contract Address: {stake.id}</span>
+            <span>Deployer: {stake.deployer}</span>
+            <span>Deployed: {dayjs.unix(stake.deployTimestamp).toString()}</span
             >
-            <span>
+
+            <!-- <span>
               Token tiers:
               {#each transferTier.tierValues as tierValue}
                 {#if !BigNumber.from(tierValue).eq(ethers.constants.MaxInt256)}
                   {formatUnits(tierValue, transferTier.token.decimals)},
                 {/if}
               {/each}
-            </span>
+            </span> -->
           </div>
         </div>
         <div class="flex flex-col gap-y-2 mb-4">
-          <span class="text-white">ERC20 details</span>
+          <span class="text-white">ERC20 Token details</span>
           <div class="text-gray-400 flex flex-col">
-            <span>Name: {transferTier.token.name}</span>
-            <span>Symbol: {transferTier.token.symbol}</span>
-            <span>Address: {transferTier.token.id}</span>
+            <span>Name: {stake?.token?.name}</span>
+            <span>Symbol: {stake?.token?.symbol}</span>
+            <span>Address: {stake?.token?.id}</span>
           </div>
         </div>
         <div class="flex flex-row gap-x-2">
-          <Button
-            on:click={push(`/erc20transfertier/report/${transferTier.address}`)}
+          <Button on:click={push(`/stake/report/${stake.address}`)}
             >Report</Button
           >
         </div>
       </FormPanel>
     {/each}
   </div>
-{/if} -->
+{/if}

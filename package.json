@@ -14,7 +14,6 @@
     "@sveltejs/vite-plugin-svelte": "^1.0.1",
     "@tsconfig/svelte": "^3.0.0",
     "autoprefixer": "^10.4.7",
-    "dayjs": "^1.10.7",
     "layercake": "^6.1.0",
     "postcss": "^8.4.14",
     "postcss-load-config": "^4.0.1",
@@ -28,7 +27,7 @@
     "vite": "^3.0.0"
   },
   "dependencies": {
-    "@beyonk/svelte-datepicker": "^12.0.0",
+    "@beyonk/svelte-datepicker": "^12.0.1",
     "@metamask/jazzicon": "^2.0.0",
     "@urql/svelte": "^2.0.2",
     "@walletconnect/web3-provider": "^1.7.8",
@@ -36,17 +35,20 @@
     "autoprefixer": "^9.8.8",
     "d3-quadtree": "^3.0.1",
     "d3-shape": "^3.1.0",
+    "dayjs": "^1.11.4",
     "ethers": "^5.5.2",
     "fortmatic": "^2.4.0",
     "graphql": "^16.5.0",
     "js-sha3": "^0.8.0",
+    "luxon": "^3.0.1",
     "process": "^0.11.10",
-    "rain-sdk": "git+https://github.com/beehive-innovation/rain-sdk.git#6c98c0c1a904f1034b1c648c759fd39ed2b3bc77",
+    "rain-sdk": "git+https://github.com/beehive-innovation/rain-sdk.git#584d67a173a4e807e6acd24179949a78cc68b5a2",
     "svelte-ethers-store": "^0.6.3",
     "svelte-loading-animation": "^0.0.1",
     "svelte-local-storage-store": "^0.2.6",
     "svelte-select": "^4.4.7",
     "svelte-spa-router": "^3.2.0",
+    "svelty-picker": "^2.1.1",
     "web3modal": "^1.9.7"
   }
 }
