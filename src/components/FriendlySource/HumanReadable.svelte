@@ -5,10 +5,10 @@
   //   getBuyWalletCap,
   // } from "../../routes/sale/sale";
   import {
-    HumanFriendlySource,
+    HumanFriendlyRead,
     CombineTierGenerator,
-    EmissionsConfig,
-    StateConfig,
+    type EmissionsConfig,
+    type StateConfig,
     LinearEmissions,
     SequentialEmissions,
   } from "rain-sdk";
@@ -79,7 +79,7 @@
     //       vmStateConfig = new LinearEmissions(emissionsConfig);
     //     }
 
-    //     emissionsSource = HumanFriendlySource.get(vmStateConfig, {
+    //     emissionsSource = HumanFriendlyRead.get(vmStateConfig, {
     //       contract: "emissions",
     //       pretty: true,
     //     });
@@ -92,8 +92,8 @@
     // }
     if (contractType.toLowerCase() === "combinetier") {
       try {
-        combineTierSource = HumanFriendlySource.prettify(
-          HumanFriendlySource.get(
+        combineTierSource = HumanFriendlyRead.prettify(
+          HumanFriendlyRead.get(
             new CombineTierGenerator(
               FriendlySource.tierContractOne
             ).combineWith(
@@ -110,8 +110,8 @@
     }
     // if (contractType.toLowerCase() === "sale") {
     //   try {
-    //     saleDurationConfig = HumanFriendlySource.prettify(
-    //       HumanFriendlySource.get(
+    //     saleDurationConfig = HumanFriendlyRead.prettify(
+    //       HumanFriendlyRead.get(
     //         getSaleDuration(FriendlySource.saleParam, signer)
     //       )
     //     );
@@ -121,8 +121,8 @@
     //   }
 
     //   try {
-    //     buyCapConfig = HumanFriendlySource.prettify(
-    //       HumanFriendlySource.get(getBuyWalletCap(FriendlySource.saleParam))
+    //     buyCapConfig = HumanFriendlyRead.prettify(
+    //       HumanFriendlyRead.get(getBuyWalletCap(FriendlySource.saleParam))
     //     );
     //   } catch (error) {
     //     buyCapConfig = error;
@@ -131,8 +131,8 @@
     //   try {
     //     priceConfig =
     //       FriendlySource.startTimestamp && FriendlySource.endTimestamp
-    //         ? HumanFriendlySource.prettify(
-    //             HumanFriendlySource.get(
+    //         ? HumanFriendlyRead.prettify(
+    //             HumanFriendlyRead.get(
     //               calculatePriceConfig(FriendlySource.saleParam)
     //             )
     //           )
