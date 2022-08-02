@@ -17,6 +17,8 @@
     erc20decimals,
     initialRatio = 1;
   let deployPromise;
+  let stTokenName = "Stake Token";
+  let stTokenSymbol = "stTKN";
 
   $: if (erc20Address) {
     getERC20();
@@ -73,36 +75,39 @@
   <div class="mb-2 flex flex-col gap-y-2">
     <span class="text-2xl"> Deploy a new Stake. </span>
     <span class="text-gray-400">
-      Create Tier statuses corresponding to locking up at least a certain amount
-      of an ERC20 in the contract.
+      Deploy a Staking contract with ability to stake the reserve token to recieve stake tokens (shares) in 
+      exchange at the stake token/ reserve token ratio where stakers are able to claim prorata shares of stake tokens.
     </span>
   </div>
   <FormPanel heading="Stake settings">
     <Input type="address" placeholder="Token address" bind:value={erc20Address}>
-      <span slot="label">ERC20 token address</span>
+      <span slot="label">Reserve Token Address</span>
       <span slot="description">
         {#if erc20AddressError}
           <span class="text-red-500">
             {erc20AddressError}
           </span>
         {:else if erc20name && erc20balance}
-          <div class="flex flex-col gap-y-2 font-light text-gray-300">
-            <span>Token name: {erc20name}</span>
-            <span>Token symbol: {erc20symbol}</span>
+          <div class="flex flex-col gap-y-2 font-light text-gray-400">
+            <span>Name: {erc20name}</span>
+            <span>Symbol: {erc20symbol}</span>
             <span>Your balance: {formatUnits(erc20balance, erc20decimals)}</span
             >
           </div>
         {/if}
       </span>
     </Input>
-    <Input type="text" placeholder="Name" bind:value={erc20name}>
-      <span slot="label">Name</span>
+    <Input type="text" placeholder="Name" bind:value={stTokenName}>
+      <span slot="label">Stake Token Name</span>
     </Input>
-    <Input type="text" placeholder="Symbol" bind:value={erc20symbol}>
-      <span slot="label">Symbol</span>
+    <Input type="text" placeholder="Symbol" bind:value={stTokenSymbol}>
+      <span slot="label">Stake Token Symbol</span>
     </Input>
     <Input type="text" placeholder="Initial Ratio" bind:value={initialRatio}>
       <span slot="label">Initial Ratio</span>
+      <span slot="description">Initial ratio determines how many stake tokens to get minted when the first ever deposit
+        happens compared to how many reserve token gets deposited, after the first mint the ratio will be determined 
+        by the reserve and stake token balances of the stake contract</span>
     </Input>
   </FormPanel>
   <FormPanel>

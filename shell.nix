@@ -13,7 +13,8 @@ in
 pkgs.stdenv.mkDerivation {
  name = "shell";
  buildInputs = [
-  pkgs.nodejs-16_x
+  pkgs.yarn
+  pkgs.nodejs-14_x
   dev
   mnemonic
  ];
