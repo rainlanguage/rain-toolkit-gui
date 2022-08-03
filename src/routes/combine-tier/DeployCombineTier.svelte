@@ -6,12 +6,12 @@
   import { addressValidate } from "../../validation";
   import Select from "$components/Select.svelte";
   import ContractDeploy from "$components/ContractDeploy.svelte";
-  import { CombineTier, CombineTierGenerator } from "rain-sdk";
+  import { CombineTier, CombineTierGenerator, VM } from "rain-sdk";
   import { selectLteLogic, selectLteMode } from "../../utils";
   import HumanReadable from "$components/FriendlySource/HumanReadable.svelte";
 
-  let tierContractOne: string = "0x6ba1fadb694e806c316337143241dd6cfebd5033",
-    tierContractTwo: string = "0xb2b600aeae9bc1efd68ae209e621b7546393ef28",
+  let tierContractOne: string = "0x43F76B029c9BD72A37367DA5c0323f078A86f0b2",
+    tierContractTwo: string = "0x12e418D854E8250c8e3778d5Cb00453FA1475B8f",
     deployPromise: any;
 
   const logicOptions = [
@@ -36,10 +36,20 @@
   };
 
   const deployCombineTier = async () => {
-    const combineTierConfig = new CombineTierGenerator(
-      tierContractOne
-    ).combineWith(tierContractTwo, logicValue.value, modeValue.value);
-    const newCombineTier = await CombineTier.deploy($signer, combineTierConfig);
+    const combineTierConfig = new CombineTierGenerator(tierContractOne, {
+      delegatedReport: true,
+      hasReportForSingleTier: true,
+    }).combineWith(
+      tierContractTwo,
+      logicValue.value,
+      modeValue.value,
+      true,
+      true
+    );
+    const newCombineTier = await CombineTier.deploy($signer, {
+      combinedTiersLength: 0,
+      sourceConfig: combineTierConfig,
+    });
 
     return newCombineTier;
   };
