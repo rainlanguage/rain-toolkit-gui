@@ -36,19 +36,19 @@
   };
 
   const deployCombineTier = async () => {
-    console.log("tierOne", tierContractOne);
-    console.log("tierTwo", tierContractTwo);
-    console.log("Logic", logicValue);
-    console.log("mode", modeValue);
-
-    // const combineTierConfig = new CombineTierGenerator(
-    //   tierContractOne
-    // ).combineWith(tierContractTwo, logicValue.value, modeValue.value);
+    const combineTierConfig = new CombineTierGenerator(tierContractOne, {
+      delegatedReport: true,
+      hasReportForSingleTier: true,
+    }).combineWith(
+      tierContractTwo,
+      logicValue.value,
+      modeValue.value,
+      true,
+      true
+    );
     const newCombineTier = await CombineTier.deploy($signer, {
       combinedTiersLength: 0,
-      sourceConfig: VM.combiner(VM.constant(1), VM.constant(2), {
-        numberOfSources: 0,
-      }),
+      sourceConfig: combineTierConfig,
     });
 
     return newCombineTier;
