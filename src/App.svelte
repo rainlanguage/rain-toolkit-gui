@@ -29,8 +29,8 @@
   import ListSale from "./routes/sale/ListSale.svelte";
 
   // //Emissions
-  // import DeployEmissions from "./routes/emissions-erc20/DeployEmissions.svelte";
-  // import ClaimEmissions from "./routes/emissions-erc20/ClaimEmissions.svelte";
+  import DeployEmissions from "./routes/emissions-erc20/DeployEmissions.svelte";
+  import ClaimEmissions from "./routes/emissions-erc20/ClaimEmissions.svelte";
 
   //Verify
   import DeployVerify from "./routes/verify/DeployVerify.svelte";
@@ -73,8 +73,8 @@
     "/sale/purchase/*": PurchaseSale,
     "/sale/list": ListSale,
 
-    // "/emissions/deploy": DeployEmissions,
-    // "/emissions/claim/*": ClaimEmissions,
+    "/emissions/deploy": DeployEmissions,
+    "/emissions/claim/*": ClaimEmissions,
 
     "/verify/deploy": DeployVerify,
     "/verify/administer/*": AdministerVerify,

@@ -10,10 +10,10 @@
   import HumanReadable from "$components/FriendlySource/HumanReadable.svelte";
   import {
     EmissionsERC20,
-    ERC20Config,
-    StateConfig,
-    EmissionsERC20DeployArgs,
-    EmissionsConfig,
+    type ERC20Config,
+    type StateConfig,
+    type EmissionsERC20DeployArgs,
+    type EmissionsConfig,
     LinearEmissions,
     SequentialEmissions,
   } from "rain-sdk";
@@ -469,7 +469,7 @@
         </FormPanel>
       </span>
     {/if} -->
-    {#if FriendlySource}
+    {#if FriendlySource && emissionsType}
       <span class="sticky">
         <FormPanel heading="Human Readable Source">
           <HumanReadable
