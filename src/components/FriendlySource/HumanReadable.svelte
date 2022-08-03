@@ -1,4 +1,7 @@
 <script lang="ts">
+  import { ethers } from "ethers";
+  import { arrayify } from "ethers/lib/utils";
+
   // import {
   //   calculatePriceConfig,
   //   getSaleDuration,
@@ -21,6 +24,7 @@
     combineTierSource,
     emissionsSource,
     emissionsType,
+    anySource,
     errorMsg,
     err = false;
 
@@ -108,6 +112,21 @@
         err = true;
       }
     }
+    if (contractType.toLowerCase() === "any") {
+      if (ethers.utils.isHexString(FriendlySource.sources[0])) {
+        FriendlySource.sources = FriendlySource.sources.map((source) =>
+          arrayify(source)
+        );
+      }
+      try {
+        anySource = HumanFriendlyRead.prettify(
+          HumanFriendlyRead.get(FriendlySource)
+        );
+      } catch (error) {
+        errorMsg = error;
+        err = true;
+      }
+    }
     // if (contractType.toLowerCase() === "sale") {
     //   try {
     //     saleDurationConfig = HumanFriendlyRead.prettify(
@@ -168,6 +187,11 @@
     {#if contractType.toLowerCase() === "emissions" && !err}
       <span class="break-words pt-2 pb-2 whitespace-pre text">
         {emissionsSource}
+      </span>
+    {/if}
+    {#if contractType.toLowerCase() === "any" && !err}
+      <span class="break-words pt-2 pb-2 whitespace-pre text">
+        {anySource}
       </span>
     {/if}
     {#if err}
