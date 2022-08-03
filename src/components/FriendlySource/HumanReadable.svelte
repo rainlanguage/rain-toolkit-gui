@@ -1,6 +1,6 @@
 <script lang="ts">
   import { ethers } from "ethers";
-  import { arrayify } from "ethers/lib/utils";
+  import { arrayify, hexlify } from "ethers/lib/utils";
 
   // import {
   //   calculatePriceConfig,
@@ -99,11 +99,14 @@
         combineTierSource = HumanFriendlyRead.prettify(
           HumanFriendlyRead.get(
             new CombineTierGenerator(
-              FriendlySource.tierContractOne
+              FriendlySource.tierContractOne,
+              {delegatedReport: true, hasReportForSingleTier: true}
             ).combineWith(
               FriendlySource.tierContractTwo,
               FriendlySource.logicValue,
-              FriendlySource.modeValue
+              FriendlySource.modeValue,
+              true,
+              true
             )
           )
         );
@@ -117,6 +120,10 @@
         FriendlySource.sources = FriendlySource.sources.map((source) =>
           arrayify(source)
         );
+        for (let i = 0; i < FriendlySource.constants.length; i++) {
+          FriendlySource.constants[i] = hexlify(BigInt(FriendlySource.constants[i]));
+        }
+        
       }
       try {
         anySource = HumanFriendlyRead.prettify(

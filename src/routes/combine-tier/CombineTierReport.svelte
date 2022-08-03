@@ -66,7 +66,7 @@
     variables: { address: combineTierContract?.address },
   });
 
-  $: FriendlySource = $combineTier?.data?.combineTier.state;
+  $: FriendlySource = $combineTier?.data?.combineTier?.state;
 
   $: console.log(FriendlySource);
 </script>
