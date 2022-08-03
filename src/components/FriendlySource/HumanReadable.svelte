@@ -1,4 +1,7 @@
 <script lang="ts">
+  import { ethers } from "ethers";
+  import { arrayify, hexlify } from "ethers/lib/utils";
+
   // import {
   //   calculatePriceConfig,
   //   getSaleDuration,
@@ -21,6 +24,7 @@
     combineTierSource,
     emissionsSource,
     emissionsType,
+    anySource,
     errorMsg,
     err = false;
 
@@ -95,13 +99,35 @@
         combineTierSource = HumanFriendlyRead.prettify(
           HumanFriendlyRead.get(
             new CombineTierGenerator(
-              FriendlySource.tierContractOne
+              FriendlySource.tierContractOne,
+              {delegatedReport: true, hasReportForSingleTier: true}
             ).combineWith(
               FriendlySource.tierContractTwo,
               FriendlySource.logicValue,
-              FriendlySource.modeValue
+              FriendlySource.modeValue,
+              true,
+              true
             )
           )
+        );
+      } catch (error) {
+        errorMsg = error;
+        err = true;
+      }
+    }
+    if (contractType.toLowerCase() === "any") {
+      if (ethers.utils.isHexString(FriendlySource.sources[0])) {
+        FriendlySource.sources = FriendlySource.sources.map((source) =>
+          arrayify(source)
+        );
+        for (let i = 0; i < FriendlySource.constants.length; i++) {
+          FriendlySource.constants[i] = hexlify(BigInt(FriendlySource.constants[i]));
+        }
+        
+      }
+      try {
+        anySource = HumanFriendlyRead.prettify(
+          HumanFriendlyRead.get(FriendlySource)
         );
       } catch (error) {
         errorMsg = error;
@@ -168,6 +194,11 @@
     {#if contractType.toLowerCase() === "emissions" && !err}
       <span class="break-words pt-2 pb-2 whitespace-pre text">
         {emissionsSource}
+      </span>
+    {/if}
+    {#if contractType.toLowerCase() === "any" && !err}
+      <span class="break-words pt-2 pb-2 whitespace-pre text">
+        {anySource}
       </span>
     {/if}
     {#if err}
