@@ -63,7 +63,6 @@
               id
               sources
               constants
-              stack
             }
           }
         }`,
@@ -82,18 +81,18 @@
 
     isFaucet =
       emission?.calculateClaimStateConfig.sources[0] ===
-      "0x01002e001d0001010102050008002e0022000104160213021f00240001031c001c00";
+      "0x0000020019000001000211001000020029000004220220021b000005000318001800";
 
     claimableBlockNumber =
       parseInt(claimedBlockNumber) +
-      parseInt(emission.calculateClaimStateConfig.constants[2]);
+      parseInt(emission?.calculateClaimStateConfig.constants[2]);
   };
 
   const initContract = async () => {
     if (ethers.utils.isAddress(params.wild || "")) {
       erc20Contract = new EmissionsERC20(params.wild, $signer);
       token = await getERC20(params.wild, $signer, $signerAddress);
-      const report = await erc20Contract.report($signerAddress);
+      const report = await erc20Contract.report($signerAddress, []);
       parsedReport = tierReport(report);
       faucetData();
     } else if (params.wild) {

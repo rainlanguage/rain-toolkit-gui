@@ -14,7 +14,7 @@
 
     query: `
           query{
-            emissionsERC20S(orderBy: deployTimestamp, orderDirection : desc, where:{ calculateClaimStateConfig_ : { sources_contains : ["0x01002e001d00010124001c00"]}}) {
+            emissionsERC20S(orderBy: deployTimestamp, orderDirection : desc, where:{ calculateClaimStateConfig_ : { sources_contains : ["0x000002001900000100021800"]}}) {
               id
               address
               deployBlock
@@ -34,7 +34,6 @@
                 id
                 sources
                 constants
-                stack
               }
               }
           }`,
@@ -46,7 +45,7 @@
     client: $client,
     query: `
           query{
-            emissionsERC20S(orderBy: deployTimestamp, orderDirection : desc, where:{ calculateClaimStateConfig_ : { sources_contains : ["0x01002e001d0001010102050008002e0022000104160213021f00240001031c001c00"]}}) {
+            emissionsERC20S(orderBy: deployTimestamp, orderDirection : desc, where:{ calculateClaimStateConfig_ : { sources_contains : ["0x0000020019000001000211001000020029000004220220021b000005000318001800"]}}) {
               id
               address
               deployBlock
@@ -66,7 +65,6 @@
                 id
                 sources
                 constants
-                stack
               }
               }
           }`,
