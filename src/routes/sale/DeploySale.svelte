@@ -10,7 +10,8 @@
   import Switch from "$components/Switch.svelte";
   import { getERC20, validateFields, isTier } from "../../utils";
   import { saleDeploy, type SaleParams, selectSale } from "./sale";
-  import SveltyPicker from "svelty-picker";
+  import Flatpickr from "svelte-flatpickr";
+  import "flatpickr/dist/flatpickr.css";
   import SaleSmallSimulationChart from "./SaleSmallSimulationChart.svelte";
   import HumanReadable from "$components/FriendlySource/HumanReadable.svelte";
   import dayjs from "dayjs";
@@ -18,7 +19,7 @@
   let fields: any = {};
   let deployPromise;
   let reserveErc20;
-  let saleParams: SaleParams;
+  let saleParams: SaleParams, saleParam;
 
   let tierError, tierDiscountError, tierCapMulError;
 
@@ -82,12 +83,9 @@
     capMulActTier7 = 2,
     capMulActTier8 = 1;
 
-  let startTimestamp = `${new Date().toLocaleDateString(
-    "en-US"
-  )} ${new Date().toLocaleTimeString()}`; //"2021-11-11 14:35";
-  let endTimestamp = `${new Date().toLocaleDateString(
-    "en-US"
-  )} ${new Date().toLocaleTimeString()}`; //"2021-11-11 14:35";
+  let startTimestamp = new Date();
+
+  let endTimestamp = new Date();
 
   const saleOptions = [
     { value: selectSale.fixedPrice, label: "Fixed Price" },
@@ -130,6 +128,7 @@
       afterMinimumRaiseMode: afterMinimumRaiseCheck,
     };
 
+    saleParam = saleParams;
     return { validationResult, saleParams };
   };
 
@@ -172,7 +171,6 @@
   //   minWalletCap,
   //   tier,
   //   minimumStatus,
-  //   raiseRange,
   //   extraTimeDiscountThreshold,
   //   extraTimeDiscount,
   //   extraTime,
@@ -212,7 +210,7 @@
   //   capMulActTier7,
   //   capMulActTier8,
 
-  //   saleParam: getSaleParams().saleParams,
+  //   saleParam: saleParam,
   // };
 
   // @TODO write validators
@@ -280,6 +278,12 @@
       tierCapMulActCheck = false;
     }
   }
+
+  let value, formattedValue;
+
+  const options = {
+    enableTime: true,
+  };
 </script>
 
 <div class="flex w-full gap-x-3">
@@ -338,32 +342,20 @@
 
         <span class="z-20 flex w-full flex-col gap-y-3">
           <span>Raise Start/End Time</span>
-          <span class="date-picker">
-            <SveltyPicker
-              inputClasses="form-control"
-              format="mm/dd/yyyy hh:ii"
+          <span>
+            <Flatpickr
+              {options}
               bind:value={startTimestamp}
-              placeholder="Select Date/Time"
-              autoclose
-              clearBtn={false}
+              bind:formattedValue={startTimestamp}
+              name="date"
             /> -
-            <SveltyPicker
-              inputClasses="form-control"
-              format="mm/dd/yyyy hh:ii"
+            <Flatpickr
+              {options}
               bind:value={endTimestamp}
-              placeholder="Select Date/Time"
-              autoclose
-              clearBtn={false}
+              bind:formattedValue={endTimestamp}
+              name="date"
             />
           </span>
-          <!-- <DatePicker
-            styling={new CalendarStyle({ buttonWidth: "100%" })}
-            bind:selected={raiseRange}
-            time={true}
-            range={true}
-            placeholder="Select Date/Time"
-            format="DD / MM / YYYY hh:mm"
-          /> -->
           <span />
         </span>
 
@@ -1249,8 +1241,11 @@
 </div>
 
 <style>
-  .date-picker :global(.s-8qVcqDRfOUyA) {
-    border-color: #eee;
+  :global(.open) {
+    --tw-rotate: 0deg !important;
+  }
+
+  :global(.flatpickr-input) {
     color: #333;
     width: 48%;
     padding: 10px;

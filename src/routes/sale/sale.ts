@@ -7,7 +7,7 @@ import {
   vLBP,
   IncDecPrice,
   BetweenTimestamps,
-  BuyCap,
+  BuyAmount,
   SaleVmFrom
 } from 'rain-sdk'
 
@@ -186,7 +186,7 @@ export function calculatePriceConfig(config: SaleParams) {
 
 export const getBuyWalletCap = (config: SaleParams) => {
 
-  const buyCap = new BuyCap()
+  const BuyCap = new BuyAmount()
 
   //if both Min and Max Cap Per Wallet are enabled
   if (config.maxCapMode && config.minCapMode) {
@@ -194,7 +194,7 @@ export const getBuyWalletCap = (config: SaleParams) => {
     if (config.tierCapMulMode) {
       //if tierActivation is enabled
       if (config.tierCapMulActMode) {
-        buyCap.applyWalletCap(
+        BuyCap.applyWalletCap(
           2,
           {
             maxWalletCap: config.inputValues.maxWalletCap,
@@ -225,7 +225,7 @@ export const getBuyWalletCap = (config: SaleParams) => {
         )
       }
       else {
-        buyCap.applyWalletCap(
+        BuyCap.applyWalletCap(
           2,
           {
             maxWalletCap: config.inputValues.maxWalletCap,
@@ -247,7 +247,7 @@ export const getBuyWalletCap = (config: SaleParams) => {
       }
     }
     else {
-      buyCap.applyWalletCap(
+      BuyCap.applyWalletCap(
         2,
         {
           maxWalletCap: config.inputValues.maxWalletCap,
@@ -264,7 +264,7 @@ export const getBuyWalletCap = (config: SaleParams) => {
     if (config.tierCapMulMode) {
       //if tierActivation is enabled
       if (config.tierCapMulActMode) {
-        buyCap.applyWalletCap(
+        BuyCap.applyWalletCap(
           1,
           {
             maxWalletCap: config.inputValues.maxWalletCap,
@@ -293,7 +293,7 @@ export const getBuyWalletCap = (config: SaleParams) => {
         )
       }
       else {
-        buyCap.applyWalletCap(
+        BuyCap.applyWalletCap(
           1,
           {
             maxWalletCap: config.inputValues.maxWalletCap,
@@ -313,7 +313,7 @@ export const getBuyWalletCap = (config: SaleParams) => {
       }
     }
     else {
-      buyCap.applyWalletCap(
+      BuyCap.applyWalletCap(
         1,
         { maxWalletCap: config.inputValues.maxWalletCap }
       )
@@ -322,13 +322,13 @@ export const getBuyWalletCap = (config: SaleParams) => {
 
   //if only Min Cap Per Wallet is enabled
   if (!config.maxCapMode && config.minCapMode) {
-    buyCap.applyWalletCap(
+    BuyCap.applyWalletCap(
       0,
       { minWalletCap: config.inputValues.minWalletCap }
     )
   }
 
-  return buyCap;
+  return BuyCap;
 }
 
 export const getVMStateConfig = (config: SaleParams, deployerAddress: string) => {

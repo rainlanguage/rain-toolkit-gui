@@ -5,7 +5,7 @@
     getBuyWalletCap,
   } from "../../routes/sale/sale";
   import {
-    HumanFriendlySource,
+    HumanFriendlyRead,
     CombineTierGenerator,
     type EmissionsConfig,
     type StateConfig,
@@ -25,75 +25,75 @@
     err = false;
 
   $: {
-    // if (contractType.toLowerCase() === "emissions") {
-    //   try {
-    //     emissionsType = FriendlySource.emissionsType;
+    if (contractType.toLowerCase() === "emissions") {
+      try {
+        emissionsType = FriendlySource.emissionsType;
 
-    //     let emissionsConfig: EmissionsConfig = emissionsType.value
-    //       ? {
-    //           tierAddress: FriendlySource.tierAddress,
-    //           blockTime: FriendlySource.blockTime,
-    //           period: FriendlySource.period,
-    //           periodicRewards: {
-    //             tier1: FriendlySource.tier1,
-    //             tier2: FriendlySource.tier2,
-    //             tier3: FriendlySource.tier3,
-    //             tier4: FriendlySource.tier4,
-    //             tier5: FriendlySource.tier6,
-    //             tier6: FriendlySource.tier6,
-    //             tier7: FriendlySource.tier7,
-    //             tier8: FriendlySource.tier8,
-    //           },
-    //           maxPeriodicRewards: {
-    //             tier1: FriendlySource.maxTier1,
-    //             tier2: FriendlySource.maxTier2,
-    //             tier3: FriendlySource.maxTier3,
-    //             tier4: FriendlySource.maxTier4,
-    //             tier5: FriendlySource.maxTier6,
-    //             tier6: FriendlySource.maxTier6,
-    //             tier7: FriendlySource.maxTier7,
-    //             tier8: FriendlySource.maxTier8,
-    //           },
-    //           numberOfIncrements: FriendlySource.numberOfIncrements,
-    //         }
-    //       : {
-    //           tierAddress: FriendlySource.tierAddress,
-    //           blockTime: FriendlySource.blockTime,
-    //           period: FriendlySource.period,
-    //           periodicRewards: {
-    //             tier1: FriendlySource.tier1,
-    //             tier2: FriendlySource.tier2,
-    //             tier3: FriendlySource.tier3,
-    //             tier4: FriendlySource.tier4,
-    //             tier5: FriendlySource.tier6,
-    //             tier6: FriendlySource.tier6,
-    //             tier7: FriendlySource.tier7,
-    //             tier8: FriendlySource.tier8,
-    //           },
-    //         };
-    //     let vmStateConfig: StateConfig;
-    //     if (emissionsType.value) {
-    //       vmStateConfig = new SequentialEmissions(emissionsConfig);
-    //     }
-    //     if (!emissionsType.value) {
-    //       vmStateConfig = new LinearEmissions(emissionsConfig);
-    //     }
+        let emissionsConfig: EmissionsConfig = emissionsType.value
+          ? {
+              tierAddress: FriendlySource.tierAddress,
+              blockTime: FriendlySource.blockTime,
+              period: FriendlySource.period,
+              periodicRewards: {
+                tier1: FriendlySource.tier1,
+                tier2: FriendlySource.tier2,
+                tier3: FriendlySource.tier3,
+                tier4: FriendlySource.tier4,
+                tier5: FriendlySource.tier6,
+                tier6: FriendlySource.tier6,
+                tier7: FriendlySource.tier7,
+                tier8: FriendlySource.tier8,
+              },
+              maxPeriodicRewards: {
+                tier1: FriendlySource.maxTier1,
+                tier2: FriendlySource.maxTier2,
+                tier3: FriendlySource.maxTier3,
+                tier4: FriendlySource.maxTier4,
+                tier5: FriendlySource.maxTier6,
+                tier6: FriendlySource.maxTier6,
+                tier7: FriendlySource.maxTier7,
+                tier8: FriendlySource.maxTier8,
+              },
+              numberOfIncrements: FriendlySource.numberOfIncrements,
+            }
+          : {
+              tierAddress: FriendlySource.tierAddress,
+              blockTime: FriendlySource.blockTime,
+              period: FriendlySource.period,
+              periodicRewards: {
+                tier1: FriendlySource.tier1,
+                tier2: FriendlySource.tier2,
+                tier3: FriendlySource.tier3,
+                tier4: FriendlySource.tier4,
+                tier5: FriendlySource.tier6,
+                tier6: FriendlySource.tier6,
+                tier7: FriendlySource.tier7,
+                tier8: FriendlySource.tier8,
+              },
+            };
+        let vmStateConfig: StateConfig;
+        if (emissionsType.value) {
+          vmStateConfig = new SequentialEmissions(emissionsConfig);
+        }
+        if (!emissionsType.value) {
+          vmStateConfig = new LinearEmissions(emissionsConfig);
+        }
 
-    //     emissionsSource = HumanFriendlySource.get(vmStateConfig, {
-    //       contract: "emissions",
-    //       pretty: true,
-    //     });
-    //   } catch (error) {
-    //     console.log(error);
+        emissionsSource = HumanFriendlyRead.get(vmStateConfig, {
+          contract: "emissions",
+          pretty: true,
+        });
+      } catch (error) {
+        console.log(error);
 
-    //     errorMsg = error;
-    //     err = true;
-    //   }
-    // }
+        errorMsg = error;
+        err = true;
+      }
+    }
     if (contractType.toLowerCase() === "combinetier") {
       try {
-        combineTierSource = HumanFriendlySource.prettify(
-          HumanFriendlySource.get(
+        combineTierSource = HumanFriendlyRead.prettify(
+          HumanFriendlyRead.get(
             new CombineTierGenerator(
               FriendlySource.tierContractOne
             ).combineWith(
@@ -110,8 +110,8 @@
     }
     if (contractType.toLowerCase() === "sale") {
       try {
-        saleDurationConfig = HumanFriendlySource.prettify(
-          HumanFriendlySource.get(
+        saleDurationConfig = HumanFriendlyRead.prettify(
+          HumanFriendlyRead.get(
             getSaleDuration(FriendlySource.saleParam, signer)
           )
         );
@@ -121,8 +121,8 @@
       }
 
       try {
-        buyCapConfig = HumanFriendlySource.prettify(
-          HumanFriendlySource.get(getBuyWalletCap(FriendlySource.saleParam))
+        buyCapConfig = HumanFriendlyRead.prettify(
+          HumanFriendlyRead.get(getBuyWalletCap(FriendlySource.saleParam))
         );
       } catch (error) {
         buyCapConfig = error;
@@ -131,8 +131,8 @@
       try {
         priceConfig =
           FriendlySource.startTimestamp && FriendlySource.endTimestamp
-            ? HumanFriendlySource.prettify(
-                HumanFriendlySource.get(
+            ? HumanFriendlyRead.prettify(
+                HumanFriendlyRead.get(
                   calculatePriceConfig(FriendlySource.saleParam)
                 )
               )
