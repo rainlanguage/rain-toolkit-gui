@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { ethers, providers } from "ethers";
-  import { formatUnits } from "ethers/lib/utils";
+  import { BigNumber, ethers, providers, Signer } from "ethers";
+  import { formatUnits, hexlify } from "ethers/lib/utils";
   import { signer, signerAddress, provider } from "svelte-ethers-store";
   import { push } from "svelte-spa-router";
   import Button from "$components/Button.svelte";
@@ -27,10 +27,10 @@
     calcClaimPromise,
     claimPromise,
     emissionAddress;
-  let currentBlockNumber,
-    claimedBlockNumber,
+  let currentTimestamp,
+    claimedTimestamp,
     parsedReport,
-    claimableBlockNumber;
+    claimableTimestamp;
   let claimantAddress = $signerAddress;
 
   $: if (params.wild || $signer) {
@@ -76,24 +76,30 @@
       : undefined;
 
   const faucetData = async () => {
-    currentBlockNumber = await $signer.provider.getBlockNumber();
-    claimedBlockNumber = parsedReport[0];
+    currentTimestamp = Math.floor(Date.now() / 1000);
+    claimedTimestamp = parsedReport[0];
 
     isFaucet =
       emission?.calculateClaimStateConfig.sources[0] ===
       "0x0000020019000001000211001000020029000004220220021b000005000318001800";
 
-    claimableBlockNumber =
-      parseInt(claimedBlockNumber) +
-      parseInt(emission?.calculateClaimStateConfig.constants[2]);
+    claimableTimestamp =
+      claimedTimestamp +
+      Number(emission?.calculateClaimStateConfig.constants[2]);
   };
+
+  $: if(emission) {
+    faucetData();
+  }
 
   const initContract = async () => {
     if (ethers.utils.isAddress(params.wild || "")) {
       erc20Contract = new EmissionsERC20(params.wild, $signer);
       token = await getERC20(params.wild, $signer, $signerAddress);
       const report = await erc20Contract.report($signerAddress, []);
-      parsedReport = tierReport(report);
+      console.log(report)
+      parsedReport = tierReport(report.toHexString());
+      console.log(parsedReport)
       faucetData();
     } else if (params.wild) {
       errorMsg = "Not a valid contract address";
@@ -101,12 +107,23 @@
   };
 
   const calculateClaim = async () => {
-    const claim = await erc20Contract.calculateClaim(claimantAddress);
+    const claim = await erc20Contract.calculateClaim(claimantAddress) as BigNumber;
 
-    if (!isFaucet) {
-      showMint = !showMint;
+    if (!claim.isZero()) {
+      showMint = true;
     } else {
-      showClaim = !showClaim;
+      showMint = false;
+    }
+    return claim;
+  };
+
+  const calculateClaimFaucet = async () => {
+    const claim = await erc20Contract.calculateClaim(claimantAddress) as BigNumber;
+
+    if (!claim.isZero()) {
+      showClaim = true;
+    } else {
+      showClaim = false;
     }
     return claim;
   };
@@ -148,10 +165,10 @@
   {/if}
 
   {#if initPromise}
-    {#await initPromise}
+    {#await initPromise && emission}
       Loading...
     {:then}
-      {#if token}
+      {#if token && emission}
         <FormPanel heading="ERC20 Token Details">
           <TokenInfo
             tokenData={{
@@ -164,6 +181,7 @@
           />
         </FormPanel>
 
+        {#if BigInt(emission?.calculateClaimStateConfig?.constants[0]) == BigInt($signerAddress)}
         <FormPanel heading="Mint">
           {#if !showMint}
             <div class="flex flex-col gap-y-4">
@@ -174,7 +192,7 @@
                 on:click={() => {
                   calcMintPromise = calculateClaim();
                 }}
-                disabled={isFaucet}
+
               >
                 Show
               </Button>
@@ -212,6 +230,7 @@
             {/if}
           {/if}
         </FormPanel>
+        {/if}
 
         {#if isFaucet}
           <FormPanel heading="Claim your Faucet">
@@ -225,7 +244,7 @@
               </Input>
               <Button
                 on:click={() => {
-                  calcClaimPromise = calculateClaim();
+                  calcClaimPromise = calculateClaimFaucet();
                 }}
               >
                 Show
@@ -233,21 +252,21 @@
             {/if}
 
             {#if calcClaimPromise}
-              {#if claimableBlockNumber >= parseInt(currentBlockNumber)}
+              {#if claimableTimestamp >= currentTimestamp}
                 <span class="text-red-400"
                   >You will not be able to make another claim until block
                   <a
                     class="text-blue-400 underline"
                     target="_blank"
-                    href={`${$selectedNetwork.blockExplorer}/block/${claimableBlockNumber}`}
+                    href={`${$selectedNetwork.blockExplorer}/block/${claimableTimestamp}`}
                   >
-                    {claimableBlockNumber}
+                    {claimableTimestamp}
                   </a>.
                 </span>
                 <span class="text-red-400">
-                  You have to wait till
+                  You have to wait
                   <span class="text-white"
-                    >{claimableBlockNumber - currentBlockNumber}</span
+                    >{claimableTimestamp - currentTimestamp}</span
                   > blocks</span
                 >
               {:else}
@@ -268,7 +287,7 @@
               {/if}
             {/if}
 
-            {#if showClaim && !(claimableBlockNumber >= parseInt(currentBlockNumber))}
+            {#if showClaim && (claimableTimestamp <= currentTimestamp)}
               <Button
                 shrink
                 on:click={() => {
