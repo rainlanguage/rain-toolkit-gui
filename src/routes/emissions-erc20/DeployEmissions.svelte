@@ -469,7 +469,7 @@
         </FormPanel>
       </span>
     {/if} -->
-    {#if FriendlySource}
+    {#if FriendlySource && emissionsType}
       <span class="sticky">
         <FormPanel heading="Human Readable Source">
           <HumanReadable
