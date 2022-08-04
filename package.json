@@ -10,7 +10,6 @@
     "check": "svelte-check --tsconfig ./tsconfig.json"
   },
   "devDependencies": {
-    "@smui/data-table": "^6.0.0-beta.15",
     "@sveltejs/vite-plugin-svelte": "^1.0.1",
     "@tsconfig/svelte": "^3.0.0",
     "autoprefixer": "^10.4.7",
@@ -28,7 +27,6 @@
     "vite": "^3.0.0"
   },
   "dependencies": {
-    "@beyonk/svelte-datepicker": "^12.0.0",
     "@metamask/jazzicon": "^2.0.0",
     "@urql/svelte": "^2.0.2",
     "@walletconnect/web3-provider": "^1.7.8",
@@ -44,9 +42,6 @@
     "rain-sdk": "git+https://github.com/beehive-innovation/rain-sdk.git#584d67a173a4e807e6acd24179949a78cc68b5a2",
     "svelte-ethers-store": "^0.6.3",
     "svelte-flatpickr": "^3.2.6",
-    "svelte-loading-animation": "^0.0.1",
-    "svelte-local-storage-store": "^0.2.6",
-    "svelte-select": "^4.4.7",
     "svelte-spa-router": "^3.2.0",
     "web3modal": "^1.9.7"
   }
