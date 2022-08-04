@@ -5,7 +5,6 @@
   import FormPanel from "../../components/FormPanel.svelte";
   import { queryStore } from "@urql/svelte";
   import { client } from "src/stores";
-  import { Token } from "graphql";
 
   $: balanceTiers = queryStore({
     client: $client,
