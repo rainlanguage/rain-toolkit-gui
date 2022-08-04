@@ -4,6 +4,9 @@
     getSaleDuration,
     getBuyWalletCap,
   } from "../../routes/sale/sale";
+  import { ethers } from "ethers";
+  import { arrayify, hexlify } from "ethers/lib/utils";
+
   import {
     HumanFriendlyRead,
     CombineTierGenerator,
@@ -21,6 +24,7 @@
     combineTierSource,
     emissionsSource,
     emissionsType,
+    anySource,
     errorMsg,
     err = false;
 
@@ -94,12 +98,15 @@
       try {
         combineTierSource = HumanFriendlyRead.prettify(
           HumanFriendlyRead.get(
-            new CombineTierGenerator(
-              FriendlySource.tierContractOne
-            ).combineWith(
+            new CombineTierGenerator(FriendlySource.tierContractOne, {
+              delegatedReport: true,
+              hasReportForSingleTier: true,
+            }).combineWith(
               FriendlySource.tierContractTwo,
               FriendlySource.logicValue,
-              FriendlySource.modeValue
+              FriendlySource.modeValue,
+              true,
+              true
             )
           )
         );
@@ -118,6 +125,26 @@
       } catch (error) {
         console.log(error);
         saleDurationConfig = error;
+      }
+      if (contractType.toLowerCase() === "any") {
+        if (ethers.utils.isHexString(FriendlySource.sources[0])) {
+          FriendlySource.sources = FriendlySource.sources.map((source) =>
+            arrayify(source)
+          );
+          for (let i = 0; i < FriendlySource.constants.length; i++) {
+            FriendlySource.constants[i] = hexlify(
+              BigInt(FriendlySource.constants[i])
+            );
+          }
+        }
+        try {
+          anySource = HumanFriendlyRead.prettify(
+            HumanFriendlyRead.get(FriendlySource)
+          );
+        } catch (error) {
+          errorMsg = error;
+          err = true;
+        }
       }
 
       try {
@@ -168,6 +195,11 @@
     {#if contractType.toLowerCase() === "emissions" && !err}
       <span class="break-words pt-2 pb-2 whitespace-pre text">
         {emissionsSource}
+      </span>
+    {/if}
+    {#if contractType.toLowerCase() === "any" && !err}
+      <span class="break-words pt-2 pb-2 whitespace-pre text">
+        {anySource}
       </span>
     {/if}
     {#if err}
