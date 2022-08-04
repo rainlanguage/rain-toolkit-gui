@@ -17,27 +17,26 @@
   let tiers = [] as string[];
 
   $: if (erc721Address) {
-    getERC721();
-  }
+    erc721Address = erc721Address.toLowerCase();
+    (async () => {
+      if (erc721Address && ethers.utils.isAddress(erc721Address)) {
+        erc721AddressError = null;
 
-  const getERC721 = async () => {
-    if (erc721Address && ethers.utils.isAddress(erc721Address)) {
-      erc721AddressError = null;
+        erc721Contract = new ERC721(erc721Address, $signer);
 
-      erc721Contract = new ERC721(erc721Address, $signer);
-
-      try {
-        erc721Name = await erc721Contract.name();
-      } catch {}
-      try {
-        erc721Balance = await erc721Contract.balanceOf($signerAddress);
-      } catch (error) {
-        erc721AddressError = "not a valid ERC721 token address";
+        try {
+          erc721Name = await erc721Contract.name();
+        } catch {}
+        try {
+          erc721Balance = await erc721Contract.balanceOf($signerAddress);
+        } catch (error) {
+          erc721AddressError = "not a valid ERC721 token address";
+        }
+      } else {
+        erc721AddressError = "not a valid address";
       }
-    } else {
-      erc721AddressError = "not a valid address";
-    }
-  };
+    })();
+  }
 
   const deployBalanceTier = async () => {
     if (erc721Contract) {
@@ -72,12 +71,11 @@
       type="address"
       placeholder="Token address"
       bind:value={erc721Address}
+      errorMsg={erc721AddressError}
     >
       <span slot="label">Choose an ERC721 token to check the balance of.</span>
       <span slot="description">
-        {#if erc721AddressError}
-          <span class="text-red-500">{erc721AddressError}</span>
-        {:else if erc721Name && erc721Balance}
+        {#if erc721Name && erc721Balance}
           <div class="flex flex-col gap-y-2 font-light text-gray-300">
             <span>Token name: {erc721Name}</span>
             <span>Your balance: {erc721Balance.toString()}</span>

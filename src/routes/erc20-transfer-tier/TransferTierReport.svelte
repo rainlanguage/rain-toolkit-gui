@@ -54,8 +54,7 @@
     variables: { transferTierAddress },
     requestPolicy: "network-only",
     pause: params.wild ? false : true,
-    }
-  );
+  });
 
   $: _transferTier = $transferTier.data?.erc20TransferTiers[0];
 
@@ -80,14 +79,16 @@
     );
   };
 
+  $: if (addressToReport) {
+    ethers.utils.isAddress(addressToReport)
+      ? (errorMsg = null)
+      : (errorMsg = "Not a valid Ethereum address");
+  }
+
   const report = async () => {
-    if (ethers.utils.isAddress(addressToReport)) {
-      const report = await transferTierContract.report(addressToReport);
-      parsedReport = tierReport(report);
-      addressBalance = await erc20Contract.balanceOf(addressToReport);
-    } else {
-      errorMsg = "Not a valid Ethereum address";
-    }
+    const report = await transferTierContract.report(addressToReport);
+    parsedReport = tierReport(report);
+    addressBalance = await erc20Contract.balanceOf(addressToReport);
   };
 
   const reportMyAddress = () => {
@@ -100,7 +101,8 @@
   <div class="mb-2 flex flex-col gap-y-2">
     <span class="text-2xl"> Get a TransferTier report. </span>
     <span class="text-gray-400">
-      TransferTier stores the time (block number) when an address joins a tier by locking up the required amount of tokens for that tier
+      TransferTier stores the time (block number) when an address joins a tier
+      by locking up the required amount of tokens for that tier
     </span>
     {#if !params.wild}
       <span class="text-gray-400">
@@ -119,6 +121,7 @@
         bind:value={addressToReport}
         type="text"
         placeholder="Enter an Ethereum address"
+        {errorMsg}
       />
       <div class="flex flex-row gap-x-2">
         <Button shrink on:click={report}>Get report</Button>
@@ -134,9 +137,7 @@
             {_transferTier?.token.symbol}</span
           >
         {/if}
-        <span class="gap-y-1">
-          TransferTier Report:
-        </span>
+        <span class="gap-y-1"> TransferTier Report: </span>
         {#if _transferTier && _transferTier?.tierValues.length}
           {#each _transferTier.tierValues as value, i}
             <span class="text-gray-400">
@@ -161,17 +162,15 @@
       </div>
       <div class="flex w-full gap-x-2 self-stretch">
         <div class="w-1/2">
-          <span class="gap-y-1">
-            Token values of each tier:
-          </span>
+          <span class="gap-y-1"> Token values of each tier: </span>
           {#if _transferTier && _transferTier?.tierValues.length}
             {#each _transferTier.tierValues as value, i}
               <div class="text-gray-400">
                 Tier {i + 1} : {ethers.utils.formatUnits(
                   value,
                   _transferTier?.token.decimals
-                )
-                } {_transferTier?.token.symbol}
+                )}
+                {_transferTier?.token.symbol}
               </div>
             {/each}
           {/if}
@@ -206,7 +205,10 @@
     </FormPanel>
 
     <FormPanel>
-      <TransferTierHistory tierAddress={transferTierContract?.address} reportingAddress={addressToReport} />
+      <TransferTierHistory
+        tierAddress={transferTierContract?.address}
+        reportingAddress={addressToReport}
+      />
     </FormPanel>
   {:else if errorMsg}
     <span class="text-red-400">{errorMsg}</span>

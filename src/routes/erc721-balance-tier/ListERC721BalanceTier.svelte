@@ -5,6 +5,7 @@
   import FormPanel from "../../components/FormPanel.svelte";
   import { queryStore } from "@urql/svelte";
   import { client } from "src/stores";
+  import dayjs from "dayjs";
 
   $: balanceTiers = queryStore({
     client: $client,
@@ -42,9 +43,9 @@
             <span>Contract Address: {balanceTier.id}</span>
             <span>Deployer: {balanceTier.deployer}</span>
             <span
-              >Deployed: {Date(
-                balanceTier.deployTimestamp
-              ).toLocaleString()}</span
+              >Deployed: {dayjs
+                .unix(balanceTier.deployTimestamp)
+                .toString()}</span
             >
             <span>
               Token tiers:

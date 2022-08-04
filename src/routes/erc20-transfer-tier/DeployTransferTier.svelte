@@ -7,52 +7,60 @@
   import ContractDeploy from "src/components/ContractDeploy.svelte";
   import { ERC20TransferTier, ERC20 } from "rain-sdk";
   import { formatUnits } from "ethers/lib/utils";
+  import { getERC20 } from "src/utils";
 
-  let erc20Address,
-    erc20AddressError,
+  let erc20Address = "0x25a4Dd4cd97ED462EB5228de47822e636ec3E31A",
+    erc20AddressError = null,
     erc20Contract,
     erc20name,
     erc20symbol,
     erc20balance,
     erc20decimals;
   let deployPromise;
+  let erc20;
   let tiers = [];
   tiers[0] = 0;
+  const defaultValidator = () => {
+    return true;
+  };
 
   $: if (erc20Address) {
-    getERC20();
-  }
+    erc20Address = erc20Address.toLowerCase();
 
-  const getERC20 = async () => {
-    if (ethers.utils.isAddress(erc20Address)) {
-      erc20AddressError = null;
+    (async () => {
+      if (ethers.utils.isAddress(erc20Address)) {
+        erc20AddressError = null;
+        erc20Contract = new ERC20(erc20Address, $signer);
 
-      erc20Contract = new ERC20(erc20Address, $signer);
-
-      try {
-        erc20name = await erc20Contract.name();
-        erc20balance = await erc20Contract.balanceOf($signerAddress);
-        erc20decimals = await erc20Contract.decimals();
-        erc20symbol = await erc20Contract.symbol();
-      } catch {
-        erc20AddressError = "not a valid ERC20 token address";
+        try {
+          erc20name = await erc20Contract.name();
+          erc20balance = await erc20Contract.balanceOf($signerAddress);
+          erc20decimals = await erc20Contract.decimals();
+          erc20symbol = await erc20Contract.symbol();
+        } catch {
+          erc20AddressError = "not a valid ERC20 token address";
+        }
+      } else {
+        erc20AddressError = "not a valid address";
       }
-    } else {
-      erc20AddressError = "not a valid address";
-    }
-  };
+    })();
+  }
 
   const deployTransferTier = async () => {
     const parsedTiers = tiers.map((value) =>
-      ethers.utils.parseUnits(value.toString(), erc20decimals)
+      value === 0
+        ? "0"
+        : value
+        ? ethers.utils.parseUnits(value.toString(), erc20decimals)
+        : ethers.constants.MaxInt256
     );
 
-    let newBalanceTier = await ERC20TransferTier.deploy($signer, {
+    let newTransferTier = await ERC20TransferTier.deploy($signer, {
       erc20: erc20Contract.address,
       tierValues: parsedTiers,
     });
 
-    return newBalanceTier;
+    return newTransferTier;
   };
 
   const handleClick = () => {
@@ -69,14 +77,15 @@
     </span>
   </div>
   <FormPanel heading="TransferTier settings">
-    <Input type="address" placeholder="Token address" bind:value={erc20Address}>
+    <Input
+      type="address"
+      placeholder="Token address"
+      bind:value={erc20Address}
+      errorMsg={erc20AddressError}
+    >
       <span slot="label">ERC20 token address</span>
       <span slot="description">
-        {#if erc20AddressError}
-          <span class="text-red-500">
-            {erc20AddressError}
-          </span>
-        {:else if erc20name && erc20balance}
+        {#if erc20name && erc20balance}
           <div class="flex flex-col gap-y-2 font-light text-gray-300">
             <span>Token name: {erc20name}</span>
             <span>Token symbol: {erc20symbol}</span>
@@ -108,7 +117,9 @@
   <FormPanel>
     <div class="mt-1 flex flex-col gap-y-2">
       {#if !deployPromise}
-        <Button shrink on:click={handleClick}>Deploy TransferTier</Button>
+        <Button shrink on:click={handleClick} disabled={erc20AddressError}
+          >Deploy TransferTier</Button
+        >
       {:else}
         <ContractDeploy {deployPromise} type="ERC20TransferTier" />
       {/if}

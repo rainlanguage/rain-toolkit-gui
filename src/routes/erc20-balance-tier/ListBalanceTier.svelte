@@ -5,7 +5,8 @@
   import Button from "../../components/Button.svelte";
   import FormPanel from "../../components/FormPanel.svelte";
   import { queryStore } from "@urql/svelte";
-  import { client } from "../../stores"
+  import { client } from "../../stores";
+  import dayjs from "dayjs";
 
   $: balanceTiers = queryStore({
     client: $client,
@@ -25,10 +26,8 @@
           }
           tierValues
         }
-      }`
-    }
-  );
-
+      }`,
+  });
 </script>
 
 {#if $balanceTiers.fetching}
@@ -47,9 +46,9 @@
             <span>Contract Address: {balanceTier.id}</span>
             <span>Deployer: {balanceTier.deployer}</span>
             <span
-              >Deployed: {Date(
-                balanceTier.deployTimestamp
-              ).toLocaleString()}</span
+              >Deployed: {dayjs
+                .unix(balanceTier.deployTimestamp)
+                .toString()}</span
             >
             <span>
               Token tiers:

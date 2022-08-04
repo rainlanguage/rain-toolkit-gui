@@ -125,35 +125,40 @@
           {#await calcPricePromise}
             Getting price...
           {:then result}
-            <div class="flex flex-row gap-x-3">
-              <span
-                >Price: {Number(
-                  (+formatUnits(
-                    result.subtotal,
-                    saleData.reserve.decimals
-                  )).toFixed(4)
-                )}
+            {#if result.price.gte(ethers.constants.MaxUint256)}
+              <span class="text-red-500">Wallet Cap Breached</span>
+            {:else}
+              <div class="flex flex-row gap-x-3">
+                <span
+                  >Price: {Number(
+                    (+formatUnits(
+                      result.subtotal,
+                      saleData.reserve.decimals
+                    )).toFixed(4)
+                  )}
 
-                {saleData.reserve.symbol}</span
-              >
-              <span
-                >Fee: {Number(
-                  (+formatUnits(result.fee, saleData.reserve.decimals)).toFixed(
-                    4
-                  )
-                )}
-                <!-- {saleData.reserve.symbol} -->
-              </span>
-              <span
-                >Total: {Number(
-                  (+formatUnits(
-                    result.total,
-                    saleData.reserve.decimals
-                  )).toFixed(4)
-                )}
-                {saleData.reserve.symbol}</span
-              >
-            </div>
+                  {saleData.reserve.symbol}</span
+                >
+                <span
+                  >Fee: {Number(
+                    (+formatUnits(
+                      result.fee,
+                      saleData.reserve.decimals
+                    )).toFixed(4)
+                  )}
+                  <!-- {saleData.reserve.symbol} -->
+                </span>
+                <span
+                  >Total: {Number(
+                    (+formatUnits(
+                      result.total,
+                      saleData.reserve.decimals
+                    )).toFixed(4)
+                  )}
+                  {saleData.reserve.symbol}</span
+                >
+              </div>
+            {/if}
           {/await}
         </div>
       {/if}

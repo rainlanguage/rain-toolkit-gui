@@ -50,6 +50,8 @@
     <SidebarLinkGroup label="CombineTier" url="/combinetier/*">
       <SidebarLink url="/combinetier/deploy">Deploy a CombineTier</SidebarLink>
 
+      <SidebarLink url="/combinetier/deployHoldingTimeTransferTier">Deploy a HasHeldFor CombineTier</SidebarLink>
+
       <SidebarLink url="/combinetier/report/">
         Check a CombineTier Report
       </SidebarLink>
@@ -92,11 +94,11 @@
     </SidebarLinkGroup>
 
     <SidebarLinkGroup label="Deploy ERC20" url="/erc20/*">
-      <SidebarLink url="/erc20/deploy">
-        Deploy an ERC20 Token
-      </SidebarLink>
+      <SidebarLink url="/erc20/deploy">Deploy an ERC20 Token</SidebarLink>
 
       <SidebarLink url="/erc20/mint/">Mint From An Existing ERC20</SidebarLink>
+
+      <SidebarLink url="/erc20/list/">List ERC20 Tokens</SidebarLink>
     </SidebarLinkGroup>
   </div>
 </div>

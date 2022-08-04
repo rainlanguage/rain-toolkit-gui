@@ -1186,14 +1186,26 @@
       </FormPanel>
 
       <FormPanel>
-        {#if !deployPromise && !tierError?.errorMsg && !tierDiscountError?.errorMsg && !tierDiscountError?.errorMsg && raiseRange}
-          <Button shrink on:click={handleClick}>Deploy Sale</Button>
-        {:else if deployPromise}
-          <ContractDeploy {deployPromise} type="Sale" />
-        {:else if !tierError?.errorMsg && !tierDiscountError?.errorMsg && !tierDiscountError?.errorMsg && !raiseRange}
-          <span>Please Select Date/Time For The Sale</span>
+        {#if !deployPromise}
+          <Button
+            disabled={tierError?.errorMsg ||
+              tierDiscountError?.errorMsg ||
+              tierCapMulError?.errorMsg ||
+              !raiseRange}
+            shrink
+            on:click={handleClick}>Deploy Sale</Button
+          >
+          {#if !tierError?.errorMsg && !tierDiscountError?.errorMsg && !tierCapMulError?.errorMsg && !raiseRange}
+            <span class="text-red-400"
+              >Please Select Date/Time For The Sale</span
+            >
+          {:else if tierError?.errorMsg || tierDiscountError?.errorMsg || tierCapMulError?.errorMsg}
+            <span class="text-red-400"
+              >Please Fill The Fields With Valid Data To Deploy The Sale</span
+            >
+          {/if}
         {:else}
-          <span>Please Fill The Fields With Valid Data To Deploy The Sale</span>
+          <ContractDeploy {deployPromise} type="Sale" />
         {/if}
       </FormPanel>
     {/if}
