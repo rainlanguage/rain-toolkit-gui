@@ -47,7 +47,7 @@
   //Mint ERC20
   import DeployERC20 from "./routes/mint-erc20/DeployERC20.svelte";
   import MintFromExistingERC20 from "./routes/mint-erc20/MintFromExistingERC20.svelte";
-  // import ListErc20s from "./routes/mint-erc20/ListERC20s.svelte";
+  import ListErc20s from "./routes/mint-erc20/ListERC20s.svelte";
 
   let routes = {};
 
@@ -81,7 +81,7 @@
 
     "/erc20/deploy": DeployERC20,
     "/erc20/mint/*": MintFromExistingERC20,
-    // "/erc20/list": ListErc20s,
+    "/erc20/list": ListErc20s,
 
     "/address-library": AddressLibrary,
 
