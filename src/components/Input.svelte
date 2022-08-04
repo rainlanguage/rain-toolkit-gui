@@ -25,7 +25,7 @@
   $: _type = type == "address" ? "text" : type;
 
   $: borderColor =
-    errorMsg && errorMsg !== "" ? "border-red-500" : "border-gray-500";
+    errorMsg && errorMsg !== "" ? "border-red-500" : "border-gray-600";
 
   const dispatch = createEventDispatcher();
   const { open } = getContext("simple-modal");
@@ -80,7 +80,7 @@
     </div>
   {/if}
   {#if $$slots.description}
-    <span class="text-gray-400">
+    <span class="text-gray-400 text-sm">
       <slot name="description" />
     </span>
   {/if}

@@ -5,7 +5,7 @@
   import { defaultEvmStores } from "svelte-ethers-store";
   import Select from "$components/Select.svelte";
 
-  export let onNetworkChange = () => {};
+  export let onNetworkChange = (name) => {};
   export let library;
   let name;
 

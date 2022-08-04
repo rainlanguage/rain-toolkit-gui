@@ -84,5 +84,14 @@
 
       <SidebarLink url="/erc20/list">List ERC20 Tokens</SidebarLink>
     </SidebarLinkGroup>
+
+    <SidebarLinkGroup label="Vapour721A" url="/vapour721a/*">
+      <SidebarLink url="/vapour721a/deploy">Deploy a new Vapour721A</SidebarLink
+      >
+
+      <SidebarLink url="/vapour721a/manage">Manage a Vapour721A</SidebarLink>
+
+      <SidebarLink url="/vapour721a/mint">Mint from a Vapour721A</SidebarLink>
+    </SidebarLinkGroup>
   </div>
 </div>

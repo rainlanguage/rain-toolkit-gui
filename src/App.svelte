@@ -49,6 +49,10 @@
   import MintFromExistingERC20 from "./routes/mint-erc20/MintFromExistingERC20.svelte";
   // import ListErc20s from "./routes/mint-erc20/ListERC20s.svelte";
 
+  //Deploy 721A
+  import Deploy721A from "./routes/vapour721a/Deploy721A.svelte";
+  // import ListErc20s from "./routes/mint-erc20/ListERC20s.svelte";
+
   let routes = {};
 
   routes = {
@@ -82,6 +86,8 @@
     "/erc20/deploy": DeployERC20,
     "/erc20/mint/*": MintFromExistingERC20,
     // "/erc20/list": ListErc20s,
+
+    "/vapour721a/deploy": Deploy721A,
 
     "/address-library": AddressLibrary,
 
