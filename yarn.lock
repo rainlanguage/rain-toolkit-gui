@@ -167,15 +167,6 @@
     "@babel/helper-validator-identifier" "^7.18.6"
     to-fast-properties "^2.0.0"
 
-"@beyonk/svelte-datepicker@^12.0.0":
-  version "12.0.1"
-  resolved "https://registry.npmmirror.com/@beyonk/svelte-datepicker/-/svelte-datepicker-12.0.1.tgz#ce2128b287716e3ab818a6ee60187261c59f5810"
-  integrity sha512-9RH88EL/dGRZwSLS0Gxt61q/VUC1QYsa2JV1TJgY7crArZRmYKY7dgRejp+VkQcctoKfnz7wZGFA52KuZEjwbQ==
-  dependencies:
-    dayjs "^1.10.7"
-    es6-object-assign "^1.1.0"
-    svelte "^3.24.0"
-
 "@emotion/is-prop-valid@^1.1.0":
   version "1.2.0"
   resolved "https://registry.npmmirror.com/@emotion/is-prop-valid/-/is-prop-valid-1.2.0.tgz#7f2d35c97891669f7e276eb71c83376a5dc44c83"
@@ -576,293 +567,6 @@
     "@jridgewell/resolve-uri" "^3.0.3"
     "@jridgewell/sourcemap-codec" "^1.4.10"
 
-"@material/animation@^13.0.0":
-  version "13.0.0"
-  resolved "https://registry.npmmirror.com/@material/animation/-/animation-13.0.0.tgz#42ec7aee6548ba27edb49063c7a7ae431e4ef450"
-  integrity sha512-YR0/u4u56qXDjKYolQ7F+IvlPkaSBhMl/dZv8DK0FbD6PH4ckOPd3bEXNRndXtprsxwknQQP2pttjPImylkl0g==
-  dependencies:
-    tslib "^2.1.0"
-
-"@material/base@^13.0.0":
-  version "13.0.0"
-  resolved "https://registry.npmmirror.com/@material/base/-/base-13.0.0.tgz#18f7f5ac112bf67e66c1ade6ab543ea9df9d3836"
-  integrity sha512-vFx0JryRfcvUNX3cZ2u32wUMvxzd+c/YW0LFOXNgqCDWlubHcMm0Y6Wz371LhfQo80/NE69u+/4Joo99yKnVeg==
-  dependencies:
-    tslib "^2.1.0"
-
-"@material/checkbox@^13.0.0":
-  version "13.0.0"
-  resolved "https://registry.npmmirror.com/@material/checkbox/-/checkbox-13.0.0.tgz#ee7ca7930586102a748998239672f62724a90ad9"
-  integrity sha512-tRC6n9Jq7GgdU0d1F8NOvUy6WiRZR58tUgL1QqoiQK9PGKSt0dAF3Aa48uubO7/Lt9K4NqgwV6/OeHv8pHaM/w==
-  dependencies:
-    "@material/animation" "^13.0.0"
-    "@material/base" "^13.0.0"
-    "@material/density" "^13.0.0"
-    "@material/dom" "^13.0.0"
-    "@material/feature-targeting" "^13.0.0"
-    "@material/ripple" "^13.0.0"
-    "@material/theme" "^13.0.0"
-    "@material/touch-target" "^13.0.0"
-    tslib "^2.1.0"
-
-"@material/data-table@^13.0.0":
-  version "13.0.0"
-  resolved "https://registry.npmmirror.com/@material/data-table/-/data-table-13.0.0.tgz#b305cdb31eec7722df6a94a78ea3a838b0f0389b"
-  integrity sha512-Z3yEq1T6Om/A3ntPw0bd40dqtOR4H3++pvchgW35kq+V9xDLL0hfzmuiy0QH4plA2ZsFYJxjt02k/SRvnkjKPQ==
-  dependencies:
-    "@material/animation" "^13.0.0"
-    "@material/base" "^13.0.0"
-    "@material/checkbox" "^13.0.0"
-    "@material/density" "^13.0.0"
-    "@material/dom" "^13.0.0"
-    "@material/elevation" "^13.0.0"
-    "@material/feature-targeting" "^13.0.0"
-    "@material/icon-button" "^13.0.0"
-    "@material/linear-progress" "^13.0.0"
-    "@material/list" "^13.0.0"
-    "@material/menu" "^13.0.0"
-    "@material/rtl" "^13.0.0"
-    "@material/select" "^13.0.0"
-    "@material/shape" "^13.0.0"
-    "@material/theme" "^13.0.0"
-    "@material/touch-target" "^13.0.0"
-    "@material/typography" "^13.0.0"
-    tslib "^2.1.0"
-
-"@material/density@^13.0.0":
-  version "13.0.0"
-  resolved "https://registry.npmmirror.com/@material/density/-/density-13.0.0.tgz#5ae2fdec0418775014fed24e7ccdd5ba5d005d54"
-  integrity sha512-ppJTzOsuhjQam5GvHaq/XZocZNUr+41XQ2sd5nONAmQ0wwzXgqG0FaxtF1EXqK3uZFadz+vAu6enagre9DXhTA==
-  dependencies:
-    tslib "^2.1.0"
-
-"@material/dom@^13.0.0":
-  version "13.0.0"
-  resolved "https://registry.npmmirror.com/@material/dom/-/dom-13.0.0.tgz#3f3cc935f6e59fa99e3dafe118d3e48091118c0e"
-  integrity sha512-M9HLAYBZtkTUvf66FL+jAEvUOdhji1HkGA1mV6oyE+HY9gkCkmso+mngvzlLd5+uaAVE9I3WQFhSb9gp0cpXnw==
-  dependencies:
-    "@material/feature-targeting" "^13.0.0"
-    tslib "^2.1.0"
-
-"@material/elevation@^13.0.0":
-  version "13.0.0"
-  resolved "https://registry.npmmirror.com/@material/elevation/-/elevation-13.0.0.tgz#ae3eabc20e864240144fdf5c16b09a1e7a52852c"
-  integrity sha512-hzdblgamVRbC0UwKafcvUVDvKzMiOSveDiwGgFk+EAg/tZRdwMlQPyf/9I6Lr8Cw/pNGnEOPhmCDOYPOHimr0w==
-  dependencies:
-    "@material/animation" "^13.0.0"
-    "@material/base" "^13.0.0"
-    "@material/feature-targeting" "^13.0.0"
-    "@material/rtl" "^13.0.0"
-    "@material/theme" "^13.0.0"
-    tslib "^2.1.0"
-
-"@material/feature-targeting@^13.0.0":
-  version "13.0.0"
-  resolved "https://registry.npmmirror.com/@material/feature-targeting/-/feature-targeting-13.0.0.tgz#7bc7840b40930b6831101a22882acdd0329591c0"
-  integrity sha512-QJClfeaA4EMyAxKJy9WR0Nx+/VwSZCkhGLUVBG9NhxqYGfl/LtaeaidrNm32vYEoNZAofN92VD2RwQTRwp/dMQ==
-  dependencies:
-    tslib "^2.1.0"
-
-"@material/floating-label@^13.0.0":
-  version "13.0.0"
-  resolved "https://registry.npmmirror.com/@material/floating-label/-/floating-label-13.0.0.tgz#d441461591101de7821a06c595cbc2ca0ede2be2"
-  integrity sha512-imAPamD97QrizVCOpxjr3UfQJyDBpEEhDBSbEbKLrCpqG3jQx4/My5rNKKVGWjxUiBYgBA1dhkn98RRX5tGBtQ==
-  dependencies:
-    "@material/animation" "^13.0.0"
-    "@material/base" "^13.0.0"
-    "@material/dom" "^13.0.0"
-    "@material/feature-targeting" "^13.0.0"
-    "@material/rtl" "^13.0.0"
-    "@material/theme" "^13.0.0"
-    "@material/typography" "^13.0.0"
-    tslib "^2.1.0"
-
-"@material/icon-button@^13.0.0":
-  version "13.0.0"
-  resolved "https://registry.npmmirror.com/@material/icon-button/-/icon-button-13.0.0.tgz#e2d3fb5dcd2b944883f8241420b82f0f3ce2ebf2"
-  integrity sha512-SdxFytWvbfN0fj7jHFq3DqK5/Zoms+Ipuv6fI8AzwgDFe7mXJ2euPahN+3XcmJ3BaSMyfYsdbcYdCWs8bgHW1w==
-  dependencies:
-    "@material/base" "^13.0.0"
-    "@material/density" "^13.0.0"
-    "@material/elevation" "^13.0.0"
-    "@material/feature-targeting" "^13.0.0"
-    "@material/ripple" "^13.0.0"
-    "@material/rtl" "^13.0.0"
-    "@material/theme" "^13.0.0"
-    "@material/touch-target" "^13.0.0"
-    tslib "^2.1.0"
-
-"@material/line-ripple@^13.0.0":
-  version "13.0.0"
-  resolved "https://registry.npmmirror.com/@material/line-ripple/-/line-ripple-13.0.0.tgz#9754af8f80eac582d6a9b2ec704852d394266c31"
-  integrity sha512-5djBRXrd1+SiMVUTWr4rD6xv+/qTaGGmgUS5GytBE5mczvnEwcPmM4PzF+HNj2TS+wvNvIfRjRmUzWO2Z6w2lA==
-  dependencies:
-    "@material/animation" "^13.0.0"
-    "@material/base" "^13.0.0"
-    "@material/feature-targeting" "^13.0.0"
-    "@material/theme" "^13.0.0"
-    tslib "^2.1.0"
-
-"@material/linear-progress@^13.0.0":
-  version "13.0.0"
-  resolved "https://registry.npmmirror.com/@material/linear-progress/-/linear-progress-13.0.0.tgz#a1c12140c2074018029425365d121013a70f3ec6"
-  integrity sha512-FJpP6flSME5QRPfkB616uA5bk9aMKJBqkklrHk6dSMZaTKbiHRmc6faxMIZ4w9W49JFMXaSwzC39y96tQTiRQg==
-  dependencies:
-    "@material/animation" "^13.0.0"
-    "@material/base" "^13.0.0"
-    "@material/feature-targeting" "^13.0.0"
-    "@material/progress-indicator" "^13.0.0"
-    "@material/rtl" "^13.0.0"
-    "@material/theme" "^13.0.0"
-    tslib "^2.1.0"
-
-"@material/list@^13.0.0":
-  version "13.0.0"
-  resolved "https://registry.npmmirror.com/@material/list/-/list-13.0.0.tgz#57a77aeff4d177da76f9d849f9e1db0d17027c9c"
-  integrity sha512-poq4WNDEfW6Z3YPAn3wdBX4RSkj3A83Pht6984MmG8YJZMlq34ftHECw37VcdmFJIyRPdpZqywJo/i7CxsSAgQ==
-  dependencies:
-    "@material/base" "^13.0.0"
-    "@material/density" "^13.0.0"
-    "@material/dom" "^13.0.0"
-    "@material/feature-targeting" "^13.0.0"
-    "@material/ripple" "^13.0.0"
-    "@material/rtl" "^13.0.0"
-    "@material/shape" "^13.0.0"
-    "@material/theme" "^13.0.0"
-    "@material/typography" "^13.0.0"
-    tslib "^2.1.0"
-
-"@material/menu-surface@^13.0.0":
-  version "13.0.0"
-  resolved "https://registry.npmmirror.com/@material/menu-surface/-/menu-surface-13.0.0.tgz#b4c6c799e714cba6465513dbf1020ba2fcaee588"
-  integrity sha512-Irfnk0l8AO7z8ucilbBzZI8izbFV/aK1GbiPpT1SmZuKkL1z+04rB2HpB+OqwaBixdLTDq70AyawcnQ0MACeXQ==
-  dependencies:
-    "@material/animation" "^13.0.0"
-    "@material/base" "^13.0.0"
-    "@material/elevation" "^13.0.0"
-    "@material/feature-targeting" "^13.0.0"
-    "@material/rtl" "^13.0.0"
-    "@material/shape" "^13.0.0"
-    "@material/theme" "^13.0.0"
-    tslib "^2.1.0"
-
-"@material/menu@^13.0.0":
-  version "13.0.0"
-  resolved "https://registry.npmmirror.com/@material/menu/-/menu-13.0.0.tgz#60fdca3f3a8457dfee83938adaf6288789ad0ac1"
-  integrity sha512-RY9R2ubYU6a7WRJW3nWr/AoSzdrxwUGqkfJSx0U9M/wK1vbXYYcJ7eCXFzSpa5VrstE7of7PbyYtQ8V61tILEQ==
-  dependencies:
-    "@material/base" "^13.0.0"
-    "@material/dom" "^13.0.0"
-    "@material/elevation" "^13.0.0"
-    "@material/feature-targeting" "^13.0.0"
-    "@material/list" "^13.0.0"
-    "@material/menu-surface" "^13.0.0"
-    "@material/ripple" "^13.0.0"
-    "@material/rtl" "^13.0.0"
-    "@material/theme" "^13.0.0"
-    tslib "^2.1.0"
-
-"@material/notched-outline@^13.0.0":
-  version "13.0.0"
-  resolved "https://registry.npmmirror.com/@material/notched-outline/-/notched-outline-13.0.0.tgz#0a043cb87fc9aa19b00a1a9b7c010eab8250b820"
-  integrity sha512-BHdxr1x2AN4oqycTNg0FGisG3rMHf50z3MuyUoQsJJ3WGjxBMWKd0yK/xl4m38nFKPg1vQnzyHIYTJdRpCaE7A==
-  dependencies:
-    "@material/base" "^13.0.0"
-    "@material/feature-targeting" "^13.0.0"
-    "@material/floating-label" "^13.0.0"
-    "@material/rtl" "^13.0.0"
-    "@material/shape" "^13.0.0"
-    "@material/theme" "^13.0.0"
-    tslib "^2.1.0"
-
-"@material/progress-indicator@^13.0.0":
-  version "13.0.0"
-  resolved "https://registry.npmmirror.com/@material/progress-indicator/-/progress-indicator-13.0.0.tgz#8097208c5fa3dd6753d8b7bf141c28beb0938c23"
-  integrity sha512-IfhAMn03gWg/Rl0Bg26Q1g+DrMnaULllz+ZJeIY7BXZC5qFYq1fLq4+RiQmfPGlJfURUjrWNLcI1VDVyXUHHzg==
-  dependencies:
-    tslib "^2.1.0"
-
-"@material/ripple@^13.0.0":
-  version "13.0.0"
-  resolved "https://registry.npmmirror.com/@material/ripple/-/ripple-13.0.0.tgz#fc6a56ccd33c1edf3f049d9e79294f496c2d72df"
-  integrity sha512-hx4B40hB2rRfsGwf1jwo2GGlYDq0yUQjcMcMmXfQipPJNpQhy8ylmXKc1DBjmWf7EQ/MgbfCSYwPrYXrbGP31w==
-  dependencies:
-    "@material/animation" "^13.0.0"
-    "@material/base" "^13.0.0"
-    "@material/dom" "^13.0.0"
-    "@material/feature-targeting" "^13.0.0"
-    "@material/rtl" "^13.0.0"
-    "@material/theme" "^13.0.0"
-    tslib "^2.1.0"
-
-"@material/rtl@^13.0.0":
-  version "13.0.0"
-  resolved "https://registry.npmmirror.com/@material/rtl/-/rtl-13.0.0.tgz#c8dbdc2b63d122450ff456572d08a9f5639704ab"
-  integrity sha512-nFGy3iQg7k+xLs67eb86mRFVLwa0yi7MusqRK4OM8DXcLO5yoVfUTPKpdSykcbRryp9imVHsxutox2tZawR4og==
-  dependencies:
-    "@material/theme" "^13.0.0"
-    tslib "^2.1.0"
-
-"@material/select@^13.0.0":
-  version "13.0.0"
-  resolved "https://registry.npmmirror.com/@material/select/-/select-13.0.0.tgz#0bd1933c983ec86440bd5a5540e25aeba3918868"
-  integrity sha512-wVprsSMicU/l+LAqXdOU+qdzzdHupLXpWWQo2Rsk8G6AxL1Zna+/+ETnRlDdr2wHHK/KNDXSBdmuCcoEIRshcA==
-  dependencies:
-    "@material/animation" "^13.0.0"
-    "@material/base" "^13.0.0"
-    "@material/density" "^13.0.0"
-    "@material/dom" "^13.0.0"
-    "@material/feature-targeting" "^13.0.0"
-    "@material/floating-label" "^13.0.0"
-    "@material/line-ripple" "^13.0.0"
-    "@material/list" "^13.0.0"
-    "@material/menu" "^13.0.0"
-    "@material/menu-surface" "^13.0.0"
-    "@material/notched-outline" "^13.0.0"
-    "@material/ripple" "^13.0.0"
-    "@material/rtl" "^13.0.0"
-    "@material/shape" "^13.0.0"
-    "@material/theme" "^13.0.0"
-    "@material/typography" "^13.0.0"
-    tslib "^2.1.0"
-
-"@material/shape@^13.0.0":
-  version "13.0.0"
-  resolved "https://registry.npmmirror.com/@material/shape/-/shape-13.0.0.tgz#42751ceb4c709c87026f14340aed1831106fdfda"
-  integrity sha512-exk96+iCjzCujk3aSrvIMhmW773s1Tc0h+MbQKbt6Iv3nHJCyLSiRbxclCHXWHrVwG/9KZRkrt/g2qk7P3VRBg==
-  dependencies:
-    "@material/feature-targeting" "^13.0.0"
-    "@material/rtl" "^13.0.0"
-    "@material/theme" "^13.0.0"
-    tslib "^2.1.0"
-
-"@material/theme@^13.0.0":
-  version "13.0.0"
-  resolved "https://registry.npmmirror.com/@material/theme/-/theme-13.0.0.tgz#dad25ca7c3427d5d35f074343c7f7957cbc1eb8c"
-  integrity sha512-KAe1s0MvvfCGAwJliDVTvgAKuD3ESwhl7F7br4Iam4IPdqME2rWl8NPhKHFfaWqTG7PyCgMMngYEYuA8cLNTsA==
-  dependencies:
-    "@material/feature-targeting" "^13.0.0"
-    tslib "^2.1.0"
-
-"@material/touch-target@^13.0.0":
-  version "13.0.0"
-  resolved "https://registry.npmmirror.com/@material/touch-target/-/touch-target-13.0.0.tgz#330d0b03988f65916cce3a97f38c5b9d74104a27"
-  integrity sha512-2BMjj+nwKIYG7cZZGcNuRSKo53knqDu9ksv9wLidxjLgzqXBd1v9gdXsqMRQXepoOqftWGmYMaRYI0xMnxt6lA==
-  dependencies:
-    "@material/base" "^13.0.0"
-    "@material/feature-targeting" "^13.0.0"
-    "@material/rtl" "^13.0.0"
-    tslib "^2.1.0"
-
-"@material/typography@^13.0.0":
-  version "13.0.0"
-  resolved "https://registry.npmmirror.com/@material/typography/-/typography-13.0.0.tgz#da40615bddea8c56496a89b3a6f8f71c1fccce96"
-  integrity sha512-UfaK4vT3LmGiiySf2RVIrf7fJZa6EJadFwo4YUMJx9bvUMRlBm1oI8Vo9fYpKdLfuSTeA+2BlgbwYVObj3laFw==
-  dependencies:
-    "@material/feature-targeting" "^13.0.0"
-    "@material/theme" "^13.0.0"
-    tslib "^2.1.0"
-
 "@metamask/jazzicon@^2.0.0":
   version "2.0.0"
   resolved "https://registry.npmmirror.com/@metamask/jazzicon/-/jazzicon-2.0.0.tgz#5615528e91c0fc5c9d79202d1f0954a7922525a0"
@@ -904,142 +608,6 @@
   dependencies:
     estree-walker "^2.0.1"
     picomatch "^2.2.2"
-
-"@smui/checkbox@^6.0.0":
-  version "6.0.0"
-  resolved "https://registry.npmmirror.com/@smui/checkbox/-/checkbox-6.0.0.tgz#36f31ef109644ccb290a4b10fd021f0162794a2d"
-  integrity sha512-zFaGjkVvf4ASctFsI0b8NtWjuLam+4/pM6fBDlmv36tTbkqQgUNe+DhkVDDqABfI0ecz92aaioNDrZYfjCP8BQ==
-  dependencies:
-    "@material/checkbox" "^13.0.0"
-    "@smui/common" "^6.0.0"
-    "@smui/ripple" "^6.0.0"
-    svelte2tsx "^0.5.12"
-
-"@smui/common@^6.0.0":
-  version "6.0.0"
-  resolved "https://registry.npmmirror.com/@smui/common/-/common-6.0.0.tgz#aa422f637a8b00c841ca114f6c0a28548a93b23e"
-  integrity sha512-FU9e/1+KnocxjNfOl3Cdpb+nJEXXnvyfTDUPsBV5bJ0tfOVhfEf3wb0maIGx2wZF1hWyRXlkrk8cU0coBwfGjQ==
-  dependencies:
-    "@material/dom" "^13.0.0"
-    "@tsconfig/svelte" "^3.0.0"
-    svelte2tsx "^0.5.12"
-
-"@smui/data-table@^6.0.0-beta.15":
-  version "6.0.0"
-  resolved "https://registry.npmmirror.com/@smui/data-table/-/data-table-6.0.0.tgz#75c26c328d13b7c308103f99a1cda5a3d83ec122"
-  integrity sha512-YVIVf3Q6sCt9bRUJQFUysMK5Z10cUkaWwSYVz1oVEZfgJzj64K9h4bTrbvBfyB4IsRwArk+WLk2uQRpqkA3yFQ==
-  dependencies:
-    "@material/data-table" "^13.0.0"
-    "@material/dom" "^13.0.0"
-    "@smui/checkbox" "^6.0.0"
-    "@smui/common" "^6.0.0"
-    "@smui/icon-button" "^6.0.0"
-    "@smui/ripple" "^6.0.0"
-    "@smui/select" "^6.0.0"
-    svelte2tsx "^0.5.12"
-
-"@smui/floating-label@^6.0.0":
-  version "6.0.0"
-  resolved "https://registry.npmmirror.com/@smui/floating-label/-/floating-label-6.0.0.tgz#d9e5d0b8deaaf74b4f73157875986572a77ed1ce"
-  integrity sha512-ZcUflSPUzc0A/TmaJg96InylZo9V4sv8u1LPm6Rsp9Z5L9+ZGKOc1adyBIQQwqReeHpPN0LIr2jDsF9SmxljyQ==
-  dependencies:
-    "@material/floating-label" "^13.0.0"
-    "@smui/common" "^6.0.0"
-    svelte2tsx "^0.5.12"
-
-"@smui/icon-button@^6.0.0":
-  version "6.0.0"
-  resolved "https://registry.npmmirror.com/@smui/icon-button/-/icon-button-6.0.0.tgz#aa821e65fa080cc5eaa5ba48390e5f964bf5f991"
-  integrity sha512-UgxPpBTM6BrJyF2hSI58+twNdJp7pD4cEnHoAhY0uZg7Ff1DgsiJityaPzvH9RsnqgD5QQXRbkmsYd+EjpbwBA==
-  dependencies:
-    "@material/density" "^13.0.0"
-    "@material/icon-button" "^13.0.0"
-    "@smui/common" "^6.0.0"
-    "@smui/ripple" "^6.0.0"
-    svelte2tsx "^0.5.12"
-
-"@smui/line-ripple@^6.0.0":
-  version "6.0.0"
-  resolved "https://registry.npmmirror.com/@smui/line-ripple/-/line-ripple-6.0.0.tgz#26ee9839c57a4a16984d3ee0b54ac3a021e7dde2"
-  integrity sha512-cEBux/pSuFcOPLLqM06RNDcGASfYqjcpVzBKiWZ+pJg4Zm/yx/6wGG4w31WyIbgPg6Bx0RkasEhjEYfejQJlgA==
-  dependencies:
-    "@material/line-ripple" "^13.0.0"
-    "@smui/common" "^6.0.0"
-    svelte2tsx "^0.5.12"
-
-"@smui/list@^6.0.0":
-  version "6.0.0"
-  resolved "https://registry.npmmirror.com/@smui/list/-/list-6.0.0.tgz#0e76b0212182bd3d3d6794fc2e449b16d7400ddd"
-  integrity sha512-6m8Jh74c3dCHWHafRca71tsGn97RI5rxmcT8hEaFanBrApB7EzRTlBAha9u2XjGFujhAor6HZc2nhu4z8kpIDQ==
-  dependencies:
-    "@material/dom" "^13.0.0"
-    "@material/feature-targeting" "^13.0.0"
-    "@material/list" "^13.0.0"
-    "@smui/common" "^6.0.0"
-    "@smui/ripple" "^6.0.0"
-    svelte2tsx "^0.5.12"
-
-"@smui/menu-surface@^6.0.0":
-  version "6.0.0"
-  resolved "https://registry.npmmirror.com/@smui/menu-surface/-/menu-surface-6.0.0.tgz#aca4dc80053ecbaec9a986e17942521e4bbbab19"
-  integrity sha512-qWYlIRNEYfmyf2sDUYy5GrHVuQF2Q1RAUxcaVoNdZi+E9b5VfFl+trC2UVlvDYQFmfcejAtgkgJ59WRlPTMV3w==
-  dependencies:
-    "@material/animation" "^13.0.0"
-    "@material/menu-surface" "^13.0.0"
-    "@smui/common" "^6.0.0"
-    svelte2tsx "^0.5.12"
-
-"@smui/menu@^6.0.0":
-  version "6.0.0"
-  resolved "https://registry.npmmirror.com/@smui/menu/-/menu-6.0.0.tgz#cab9fd11a5fb6d31c17bda2ee286e9f634e56529"
-  integrity sha512-UjnQvlKEGhoCBbooMVeFTDbpD04s9K+aZL/0//m6GvWpghCsrb8XXLRjeGH3wGInSKoeU7C7CZ0Pdu267F+6zw==
-  dependencies:
-    "@material/dom" "^13.0.0"
-    "@material/menu" "^13.0.0"
-    "@smui/common" "^6.0.0"
-    "@smui/list" "^6.0.0"
-    "@smui/menu-surface" "^6.0.0"
-    svelte2tsx "^0.5.12"
-
-"@smui/notched-outline@^6.0.0":
-  version "6.0.0"
-  resolved "https://registry.npmmirror.com/@smui/notched-outline/-/notched-outline-6.0.0.tgz#21059195dfa4650a2778a4fa493bc1b1f567815f"
-  integrity sha512-GHCIRdKSiWAKvw7LAbsOV/gPspH5fnUf9Dj+oA4OnCEJ8Ez3UZ1Mjdc06/bCJj37AxDRA59FahPVFnoVmeGthg==
-  dependencies:
-    "@material/notched-outline" "^13.0.0"
-    "@smui/common" "^6.0.0"
-    "@smui/floating-label" "^6.0.0"
-    svelte2tsx "^0.5.12"
-
-"@smui/ripple@^6.0.0":
-  version "6.0.0"
-  resolved "https://registry.npmmirror.com/@smui/ripple/-/ripple-6.0.0.tgz#39aa3532061dc8d7d764cbdd1606889e4defdee4"
-  integrity sha512-fFJcBcZX5wtTm95xRL92iNfdJ9jk8S/puxODS+7BI+GizVlDeiGE3gmQIPsIXxpmGicWQCobjEAKdCXj37fr4w==
-  dependencies:
-    "@material/dom" "^13.0.0"
-    "@material/ripple" "^13.0.0"
-    "@smui/common" "^6.0.0"
-    svelte2tsx "^0.5.12"
-
-"@smui/select@^6.0.0":
-  version "6.0.0"
-  resolved "https://registry.npmmirror.com/@smui/select/-/select-6.0.0.tgz#153bb7d08570d2514b73c436ad55e23f90177927"
-  integrity sha512-fxAulMH/7s4TvFho2tJWNcAnMq7/71adjnytao8EytIelqNrYyOP4VhN4RcY1qoBU9oQUSOwWinL6PVswrCcEw==
-  dependencies:
-    "@material/feature-targeting" "^13.0.0"
-    "@material/ripple" "^13.0.0"
-    "@material/rtl" "^13.0.0"
-    "@material/select" "^13.0.0"
-    "@material/theme" "^13.0.0"
-    "@smui/common" "^6.0.0"
-    "@smui/floating-label" "^6.0.0"
-    "@smui/line-ripple" "^6.0.0"
-    "@smui/list" "^6.0.0"
-    "@smui/menu" "^6.0.0"
-    "@smui/menu-surface" "^6.0.0"
-    "@smui/notched-outline" "^6.0.0"
-    "@smui/ripple" "^6.0.0"
-    svelte2tsx "^0.5.12"
 
 "@sveltejs/vite-plugin-svelte@^1.0.1":
   version "1.0.1"
@@ -2052,11 +1620,6 @@ decompress-response@^3.3.0:
   dependencies:
     mimic-response "^1.0.0"
 
-dedent-js@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.npmmirror.com/dedent-js/-/dedent-js-1.0.1.tgz#bee5fb7c9e727d85dffa24590d10ec1ab1255305"
-  integrity sha512-OUepMozQULMLUmhxS95Vudo0jb0UchLimi3+pQ2plj61Fcy8axbP9hbiD4Sz6DPqn6XG3kfmziVfQ1rSys5AJQ==
-
 deepmerge@^4.2.2:
   version "4.2.2"
   resolved "https://registry.npmmirror.com/deepmerge/-/deepmerge-4.2.2.tgz#44d2ea3679b8f4d4ffba33f03d865fc1e7bf4955"
@@ -2196,11 +1759,6 @@ error-ex@^1.3.1:
   integrity sha512-7dFHNmqeFSEt2ZBsCriorKnn3Z2pj+fd9kmI6QoWw4//DL+icEBfc0U7qJCisqrTsKTjw4fNFy2pW9OqStD84g==
   dependencies:
     is-arrayish "^0.2.1"
-
-es6-object-assign@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.npmmirror.com/es6-object-assign/-/es6-object-assign-1.1.0.tgz#c2c3582656247c39ea107cb1e6652b6f9f24523c"
-  integrity sha512-MEl9uirslVwqQU369iHNWZXsI8yaZYGg/D65aOgZkeyFJwHYSxilf7rQzXKI7DdDuBPrBXbfk3sl9hJhmd5AUw==
 
 es6-promise@^3.1.2:
   version "3.3.1"
@@ -2821,6 +2379,11 @@ find-up@^3.0.0:
   dependencies:
     locate-path "^3.0.0"
 
+flatpickr@^4.5.2:
+  version "4.6.13"
+  resolved "https://registry.npmmirror.com/flatpickr/-/flatpickr-4.6.13.tgz#8a029548187fd6e0d670908471e43abe9ad18d94"
+  integrity sha512-97PMG/aywoYpB4IvbvUJi0RQi8vearvU0oov1WW3k0WZPBMrTQVqekSX5CjSG/M4Q3i6A/0FKXC7RyAoAUUSPw==
+
 forever-agent@~0.6.1:
   version "0.6.1"
   resolved "https://registry.npmmirror.com/forever-agent/-/forever-agent-0.6.1.tgz#fbc71f0c41adeb37f96c577ad1ed42d8fdacca91"
@@ -3374,13 +2937,6 @@ loud-rejection@^1.0.0:
     currently-unhandled "^0.4.1"
     signal-exit "^3.0.0"
 
-lower-case@^2.0.2:
-  version "2.0.2"
-  resolved "https://registry.npmmirror.com/lower-case/-/lower-case-2.0.2.tgz#6fa237c63dbdc4a82ca0fd882e4722dc5e634e28"
-  integrity sha512-7fm3l3NAF9WfN6W3JOmf5drwpVqX78JtoGJ3A6W0a6ZnldM41w2fV5D490psKFTpMds8TJse/eHLFFsNHHjHgg==
-  dependencies:
-    tslib "^2.0.3"
-
 ltgt@~2.2.0:
   version "2.2.1"
   resolved "https://registry.npmmirror.com/ltgt/-/ltgt-2.2.1.tgz#f35ca91c493f7b73da0e07495304f17b31f87ee5"
@@ -3564,14 +3120,6 @@ nanoid@^3.3.4:
   resolved "https://registry.npmmirror.com/nanoid/-/nanoid-3.3.4.tgz#730b67e3cd09e2deacf03c027c81c9d9dbc5e8ab"
   integrity sha512-MqBkQh/OHTS2egovRtLk45wEyNXwF+cokD+1YPf9u5VfJiRdAiRwB2froX5Co9Rh20xs4siNPm8naNotSD6RBw==
 
-no-case@^3.0.4:
-  version "3.0.4"
-  resolved "https://registry.npmmirror.com/no-case/-/no-case-3.0.4.tgz#d361fd5c9800f558551a8369fc0dcd4662b6124d"
-  integrity sha512-fgAN3jGAh+RoxUGZHTSOLJIqUc2wmoBwGR4tbpNAKmmovFoWq0OdRkb0VkldReO2a2iBT/OEulG9XSUc10r3zg==
-  dependencies:
-    lower-case "^2.0.2"
-    tslib "^2.0.3"
-
 node-addon-api@^2.0.0:
   version "2.0.2"
   resolved "https://registry.npmmirror.com/node-addon-api/-/node-addon-api-2.0.2.tgz#432cfa82962ce494b132e9d72a15b29f71ff5d32"
@@ -3726,14 +3274,6 @@ parse-json@^4.0.0:
   dependencies:
     error-ex "^1.3.1"
     json-parse-better-errors "^1.0.1"
-
-pascal-case@^3.1.1:
-  version "3.1.2"
-  resolved "https://registry.npmmirror.com/pascal-case/-/pascal-case-3.1.2.tgz#b48e0ef2b98e205e7c1dae747d0b1508237660eb"
-  integrity sha512-uWlGT3YSnK9x3BQJaOdcZwrnV6hPpd8jFH1/ucpiLRPh/2zCVJKS19E4GvYHvaCcACn3foXZ0cLB9Wrx1KGe5g==
-  dependencies:
-    no-case "^3.0.4"
-    tslib "^2.0.3"
 
 path-exists@^3.0.0:
   version "3.0.0"
@@ -4583,20 +4123,17 @@ svelte-ethers-store@^0.6.3:
     svelte "^3.0.0"
     svelte-proxied-store "^1.1.3"
 
+svelte-flatpickr@^3.2.6:
+  version "3.2.6"
+  resolved "https://registry.npmmirror.com/svelte-flatpickr/-/svelte-flatpickr-3.2.6.tgz#595a97b2f25a669e61fe743f90a10dce783bbd49"
+  integrity sha512-0ePUyE9OjInYFqQwRKOxnFSu4dQX9+/rzFMynq2fKYXx406ZUThzSx72gebtjr0DoAQbsH2///BBZa5qk4qZXg==
+  dependencies:
+    flatpickr "^4.5.2"
+
 svelte-hmr@^0.14.12:
   version "0.14.12"
   resolved "https://registry.npmmirror.com/svelte-hmr/-/svelte-hmr-0.14.12.tgz#a127aec02f1896500b10148b2d4d21ddde39973f"
   integrity sha512-4QSW/VvXuqVcFZ+RhxiR8/newmwOCTlbYIezvkeN6302YFRE8cXy0naamHcjz8Y9Ce3ITTZtrHrIL0AGfyo61w==
-
-svelte-loading-animation@^0.0.1:
-  version "0.0.1"
-  resolved "https://registry.npmmirror.com/svelte-loading-animation/-/svelte-loading-animation-0.0.1.tgz#49137edcebce3d5bbe9d28147ae40f6e15d4ca2a"
-  integrity sha512-/rSirWWkl7DcrP795FQh26PjFlVs+M6aGA2zSfCVnR8oKGLu6oeD8/47SJR/wR26b+skGDA9BFRhwWz18Azw8A==
-
-svelte-local-storage-store@^0.2.6:
-  version "0.2.6"
-  resolved "https://registry.npmmirror.com/svelte-local-storage-store/-/svelte-local-storage-store-0.2.6.tgz#33fb5f5fe3b9d70050e9b61183aec5302699b5a1"
-  integrity sha512-7QLCZ4V/0ydvZRyVChNYx7gVkprzrkACD63PpZINy5oFv9nE+5CAP94QN3NBI2awPeDB+cpUzNCB4Q0Yjr9CYQ==
 
 svelte-preprocess@^4.0.0, svelte-preprocess@^4.10.7:
   version "4.10.7"
@@ -4615,11 +4152,6 @@ svelte-proxied-store@^1.1.3:
   resolved "https://registry.npmmirror.com/svelte-proxied-store/-/svelte-proxied-store-1.1.4.tgz#220b2a2f56574b65fff48e526fcea83208934122"
   integrity sha512-Vz8egScKBx3Ve1+MlaX0D6hEgYgtIQzpZx4HtzI6+J0mJiVgfaxnEdvSVGDWNb5E+zGzGGXdmzxqjfOIyNEswQ==
 
-svelte-select@^4.4.7:
-  version "4.4.7"
-  resolved "https://registry.npmmirror.com/svelte-select/-/svelte-select-4.4.7.tgz#fc85414af070487d68e438f7249c653178860af3"
-  integrity sha512-fIf9Z8rPI6F8naHZ9wjXT0Pv5gLyhdHAFkHFJnCfVVfELE8e82uOoF0xEVQP6Kir+b4Q5yOvNAzZ61WbSU6A0A==
-
 svelte-simple-modal@^1.3.4:
   version "1.4.1"
   resolved "https://registry.npmmirror.com/svelte-simple-modal/-/svelte-simple-modal-1.4.1.tgz#1f5c23df26619a2a7f262b5259287b9497b9d19a"
@@ -4632,15 +4164,7 @@ svelte-spa-router@^3.2.0:
   dependencies:
     regexparam "2.0.0"
 
-svelte2tsx@^0.5.12:
-  version "0.5.13"
-  resolved "https://registry.npmmirror.com/svelte2tsx/-/svelte2tsx-0.5.13.tgz#5c36a6510d7121e38afbe0d8ec4610992c39ad87"
-  integrity sha512-JAwln2Gd6gQk8q/Qz91rk8msSqe4M2ABrku8YeDMsFnrqjPTWLnHYvxlXLAlHE5el1Q8sfExTePHF3xAZPh/mw==
-  dependencies:
-    dedent-js "^1.0.1"
-    pascal-case "^3.1.1"
-
-svelte@^3.0.0, svelte@^3.24.0, svelte@^3.49.0:
+svelte@^3.0.0, svelte@^3.49.0:
   version "3.49.0"
   resolved "https://registry.npmmirror.com/svelte/-/svelte-3.49.0.tgz#5baee3c672306de1070c3b7888fc2204e36a4029"
   integrity sha512-+lmjic1pApJWDfPCpUUTc1m8azDqYCG1JN9YEngrx/hUyIcFJo6VZhj0A1Ai0wqoHcEIuQy+e9tk+4uDgdtsFA==
@@ -4725,7 +4249,7 @@ tslib@^1.10.0:
   resolved "https://registry.npmmirror.com/tslib/-/tslib-1.14.1.tgz#cf2d38bdc34a134bcaf1091c41f6619e2f672d00"
   integrity sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==
 
-tslib@^2.0.0, tslib@^2.0.3, tslib@^2.1.0, tslib@^2.4.0:
+tslib@^2.0.0, tslib@^2.4.0:
   version "2.4.0"
   resolved "https://registry.npmmirror.com/tslib/-/tslib-2.4.0.tgz#7cecaa7f073ce680a05847aa77be941098f36dc3"
   integrity sha512-d6xOpEDfsi2CZVlPQzGeux8XMwLT9hssAsaPYExaQMuYskwb+x1x7J371tWlbBdWHroy99KnVB6qIkUbs5X3UQ==

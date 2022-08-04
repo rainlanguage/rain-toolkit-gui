@@ -162,7 +162,12 @@
               {:then}
                 <span class="text-blue-400">Started!</span>
               {:catch error}
-                <span class="text-red-400">{error.data.message}</span>
+                <span class="text-red-400"
+                  >{error.error?.data?.message ||
+                    error.error?.message ||
+                    error.data?.message ||
+                    error?.message}</span
+                >
               {/await}
             {/if}
           </div>
@@ -180,7 +185,12 @@
               {:then}
                 <span class="text-blue-400">Ended!</span>
               {:catch error}
-                <span class="text-red-400">{error.data.message}</span>
+                <span class="text-red-400"
+                  >{error.error?.data?.message ||
+                    error.error?.message ||
+                    error.data?.message ||
+                    error?.message}</span
+                >
               {/await}
             {/if}
           </div>
