@@ -1,7 +1,7 @@
 <script lang="ts">
   import { signer, signerAddress } from "svelte-ethers-store";
   import Input from "$components/Input.svelte";
-  import { ethers } from "ethers";
+  import { ethers, BigNumber } from "ethers";
   import FormPanel from "$components/FormPanel.svelte";
   import Button from "$components/Button.svelte";
   import ContractDeploy from "$components/ContractDeploy.svelte";
@@ -47,11 +47,11 @@
     erc20Address = erc20Address.toLowerCase();
 
     if (initialRatio) {
-      InitialRatio = ethers.utils
-        .parseUnits("1", "36")
-        .sub(ethers.utils.parseUnits("1", erc20decimals))
-        .mul(ethers.BigNumber.from(initialRatio));
+      InitialRatio = BigNumber.from("1".padEnd(36, "0"))
+        .mul(initialRatio)
+        .div(BigNumber.from("1".padEnd(erc20decimals, "0")));
     }
+
     const stakeArgs: StakeDeployArgs = {
       token: erc20Address,
       initialRatio: InitialRatio,

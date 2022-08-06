@@ -10,10 +10,10 @@
   import HumanReadable from "$components/FriendlySource/HumanReadable.svelte";
   import {
     EmissionsERC20,
-    ERC20Config,
-    StateConfig,
-    EmissionsERC20DeployArgs,
-    EmissionsConfig,
+    type ERC20Config,
+    type StateConfig,
+    type EmissionsERC20DeployArgs,
+    type EmissionsConfig,
     LinearEmissions,
     SequentialEmissions,
   } from "rain-sdk";

@@ -1,6 +1,4 @@
 <script>
-  import { BigNumber, ethers } from "ethers";
-  import { formatUnits } from "ethers/lib/utils";
   import { push } from "svelte-spa-router";
   import Button from "$components/Button.svelte";
   import FormPanel from "$components/FormPanel.svelte";
@@ -20,27 +18,17 @@
           symbol
           initialRatio
           deployTimestamp
+          token {
+            decimals
+            id
+            name
+            symbol
+          }
         }
       }`,
   });
-  // stakeERC20S {
-  //         address
-  //         deployer
-  //         id
-  //         name
-  //         symbol
-  //         initialRatio
-  //         deployTimestamp
-  //         token {
-  //           decimals
-  //           id
-  //           name
-  //           symbol
-  //         }
-  //       }
 </script>
 
-<div>{console.log("stakeERC20s", $stakeERC20s)}</div>
 {#if $stakeERC20s.fetching}
   Loading...
 {:else if $stakeERC20s.error}
@@ -58,21 +46,12 @@
             <span>Deployer: {stake.deployer}</span>
             <span>Deployed: {dayjs.unix(stake.deployTimestamp).toString()}</span
             >
-
-            <!-- <span>
-              Token tiers:
-              {#each transferTier.tierValues as tierValue}
-                {#if !BigNumber.from(tierValue).eq(ethers.constants.MaxInt256)}
-                  {formatUnits(tierValue, transferTier.token.decimals)},
-                {/if}
-              {/each}
-            </span> -->
           </div>
         </div>
         <div class="flex flex-col gap-y-2 mb-4">
           <span class="text-white">ERC20 Token details</span>
           <div class="text-gray-400 flex flex-col">
-            <span>Name: {stake?.token?.name}</span>
+            <span>Name: {stake?.token.name}</span>
             <span>Symbol: {stake?.token?.symbol}</span>
             <span>Address: {stake?.token?.id}</span>
           </div>
