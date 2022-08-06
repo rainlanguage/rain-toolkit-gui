@@ -4,8 +4,6 @@
   import IconLibrary from "./IconLibrary.svelte";
   import { writable } from "svelte/store";
   import Modal, { bind } from "svelte-simple-modal/src/Modal.svelte";
-  import Ring from "$components/Ring.svelte";
-
   const modal2 = writable(null);
   const showModal = () => modal2.set(bind(AddressLibrary, { onSelectAddress }));
 
@@ -16,17 +14,18 @@
   export let validator = (value: any): any => null;
   export let debounce: boolean = false;
   export let debounceTime: number = 750;
-  let error: string;
-  let timer;
-  let validating: boolean = false;
-
-  //--------- newly added --------
   export let min = "";
   export let max = "";
   export let disabled = false;
-  //------------------------------
+  export let errorMsg = "";
+
+  let error: string;
+  let timer;
 
   $: _type = type == "address" ? "text" : type;
+
+  $: borderColor =
+    errorMsg && errorMsg !== "" ? "border-red-500" : "border-gray-500";
 
   const dispatch = createEventDispatcher();
   const { open } = getContext("simple-modal");
@@ -49,12 +48,9 @@
     }, debounceTime);
   };
 
-  export const validate = async () => {
-    validating = true;
-    const validation = await validator(value);
-    validating = false;
-
-    if (validation?.error) {
+  export const validate = () => {
+    const validation = validator(value);
+    if (validator(value)?.error) {
       ({ error } = validation);
       return {
         ok: false,
@@ -74,7 +70,6 @@
 
   const onSelectAddress = (address) => {
     value = address;
-    validate();
   };
 </script>
 
@@ -89,27 +84,18 @@
       <slot name="description" />
     </span>
   {/if}
-  <div class="flex w-full flex-row items-center gap-x-2 self-stretch relative">
-    <div class="w-full relative">
-      <input
-        type={_type}
-        {value}
-        {placeholder}
-        on:input={handleInput}
-        on:blur={validate}
-        disabled={disabled || validating}
-        {min}
-        {max}
-        class="w-full rounded-md border border-gray-500 bg-transparent p-2 font-light text-gray-200"
-      />
-      {#if validating}
-        <div
-          class="absolute right-1 top-0 bottom-0 flex flex-col justify-center"
-        >
-          <Ring size="30px" color="#FFF" />
-        </div>
-      {/if}
-    </div>
+  <div class="flex w-full flex-row items-center gap-x-2 self-stretch">
+    <input
+      type={_type}
+      {value}
+      {placeholder}
+      on:input={handleInput}
+      on:blur={validate}
+      {disabled}
+      {min}
+      {max}
+      class="w-full rounded-md border bg-transparent p-2 font-light text-gray-200 {borderColor}"
+    />
     {#if type == "address"}
       {#if from == "depositModal"}
         <Modal
@@ -133,6 +119,9 @@
     {/if}
   </div>
   {#if error}
-    <span class="text-red-400">{error}</span>
+    <span class="text-red-500">{error}</span>
+  {/if}
+  {#if errorMsg && errorMsg !== ""}
+    <span class="text-red-500">{errorMsg}</span>
   {/if}
 </div>

@@ -17,6 +17,7 @@
     LinearEmissions,
     SequentialEmissions,
   } from "rain-sdk";
+  import { parseEther, parseUnits } from "ethers/lib/utils";
 
   let deployPromise;
 
@@ -154,7 +155,7 @@
         name: fieldValues.erc20name,
         symbol: fieldValues.erc20symbol,
         distributor: fieldValues.ownerAddress,
-        initialSupply: fieldValues.initSupply,
+        initialSupply: parseEther(fieldValues.initSupply.toString()),
       };
 
       let emissionsDeployArg: EmissionsERC20DeployArgs;
@@ -469,7 +470,7 @@
         </FormPanel>
       </span>
     {/if} -->
-    {#if FriendlySource}
+    {#if FriendlySource && emissionsType}
       <span class="sticky">
         <FormPanel heading="Human Readable Source">
           <HumanReadable

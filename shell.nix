@@ -2,7 +2,7 @@ let
  pkgs = import <nixpkgs> {};
 
  dev = pkgs.writeShellScriptBin "dev" ''
-  npm run dev
+  yarn dev
  '';
 
  mnemonic = pkgs.writeShellScriptBin "mnemonic" ''

@@ -54,7 +54,11 @@
           // txReceipt = await error.replacement.wait();
         }
       } else {
-        errorMsg = error.data?.message || error?.message;
+        errorMsg =
+          error.error?.data?.message ||
+          error.error?.message ||
+          error.data?.message ||
+          error?.message;
         err = true;
         return;
       }

@@ -18,19 +18,19 @@
   import BalanceTierReport from "./routes/erc20-balance-tier/BalanceTierReport.svelte";
   import ListBalanceTier from "./routes/erc20-balance-tier/ListBalanceTier.svelte";
 
-  // //Combine Tier
-  // import DeployCombineTier from "./routes/combine-tier/DeployCombineTier.svelte";
-  // import CombineTierReport from "./routes/combine-tier/CombineTierReport.svelte";
-  // import ListCombineTier from "./routes/combine-tier/ListCombineTier.svelte";
+  //Combine Tier
+  import DeployCombineTier from "./routes/combine-tier/DeployCombineTier.svelte";
+  import CombineTierReport from "./routes/combine-tier/CombineTierReport.svelte";
+  import ListCombineTier from "./routes/combine-tier/ListCombineTier.svelte";
 
-  // //Sale
-  // import DeploySale from "./routes/sale/DeploySale.svelte";
-  // import PurchaseSale from "./routes/sale/PurchaseSale.svelte";
-  // import ListSale from "./routes/sale/ListSale.svelte";
+  //Sale
+  import DeploySale from "./routes/sale/DeploySale.svelte";
+  import PurchaseSale from "./routes/sale/PurchaseSale.svelte";
+  import ListSale from "./routes/sale/ListSale.svelte";
 
   // //Emissions
-  // import DeployEmissions from "./routes/emissions-erc20/DeployEmissions.svelte";
-  // import ClaimEmissions from "./routes/emissions-erc20/ClaimEmissions.svelte";
+  import DeployEmissions from "./routes/emissions-erc20/DeployEmissions.svelte";
+  import ClaimEmissions from "./routes/emissions-erc20/ClaimEmissions.svelte";
 
   //Verify
   import DeployVerify from "./routes/verify/DeployVerify.svelte";
@@ -47,7 +47,7 @@
   //Mint ERC20
   import DeployERC20 from "./routes/mint-erc20/DeployERC20.svelte";
   import MintFromExistingERC20 from "./routes/mint-erc20/MintFromExistingERC20.svelte";
-  // import ListErc20s from "./routes/mint-erc20/ListERC20s.svelte";
+  import ListErc20s from "./routes/mint-erc20/ListERC20s.svelte";
 
   let routes = {};
 
@@ -61,27 +61,27 @@
     "/erc721balancetier/report/*": ERC721BalanceTierReport,
     "/erc721balancetier/list": ListERC721BalanceTier,
 
-    // "/combinetier/deploy": DeployCombineTier,
-    // "/combinetier/report/*": CombineTierReport,
-    // "/combinetier/list": ListCombineTier,
+    "/combinetier/deploy": DeployCombineTier,
+    "/combinetier/report/*": CombineTierReport,
+    "/combinetier/list": ListCombineTier,
 
     "/stake/deploy": DeployStake,
     "/stake/report/*": StakeReport,
     "/stake/list": ListStake,
 
-    // "/sale/deploy": DeploySale,
-    // "/sale/purchase/*": PurchaseSale,
-    // "/sale/list": ListSale,
+    "/sale/deploy": DeploySale,
+    "/sale/purchase/*": PurchaseSale,
+    "/sale/list": ListSale,
 
-    // "/emissions/deploy": DeployEmissions,
-    // "/emissions/claim/*": ClaimEmissions,
+    "/emissions/deploy": DeployEmissions,
+    "/emissions/claim/*": ClaimEmissions,
 
     "/verify/deploy": DeployVerify,
     "/verify/administer/*": AdministerVerify,
 
     "/erc20/deploy": DeployERC20,
     "/erc20/mint/*": MintFromExistingERC20,
-    // "/erc20/list": ListErc20s,
+    "/erc20/list": ListErc20s,
 
     "/address-library": AddressLibrary,
 
