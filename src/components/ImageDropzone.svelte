@@ -55,7 +55,7 @@
   {#if progress}
     <div
       in:fade
-      class="absolute top-2 right-2 flex flex-row items-center gap-x-2 text-sm"
+      class="absolute top-2 right-2 flex flex-row items-center gap-x-2 text-sm bg-black bg-opacity-70 p-3 rounded-full"
     >
       {progressPercent}
       <CircularProgressBar width={20} {progress} />

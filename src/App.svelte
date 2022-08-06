@@ -108,9 +108,9 @@
   classContent="p-6"
 >
   <Header />
-  <main class="relative flex font-light text-gray-50">
+  <main class=" flex font-light text-gray-50 sticky">
     <Sidebar />
-    <div class="w-full py-5 px-8">
+    <div class="w-full py-5 px-8 sticky">
       {#if $signer}
         <Router {routes} />
       {:else}

@@ -2,7 +2,7 @@
   import { createEventDispatcher } from "svelte";
 
   export let items = [];
-  export let value = items[0];
+  export let value = items[0].value;
 
   const dispatch = createEventDispatcher();
 
@@ -14,7 +14,7 @@
   };
 </script>
 
-<div class="flex w-full flex-col gap-y-2">
+<div class="flex flex-col gap-y-2">
   {#if $$slots.label}
     <div class="font-light text-gray-100">
       <slot name="label" />
@@ -25,7 +25,7 @@
       <slot name="description" />
     </span>
   {/if}
-  <div class="self-start rounded-md border border-gray-500 text-white">
+  <div class="self-start rounded-md bg-gray-800 text-white">
     <select
       class="text-light outline-none mr-2 border-none bg-transparent px-4 py-2
       text-gray-400"
@@ -35,7 +35,7 @@
       }}
     >
       {#each items as item}
-        <option class="text-white" value={item}>{item.label}</option>
+        <option class="text-white" value={item.value}>{item.label}</option>
       {/each}
     </select>
   </div>
