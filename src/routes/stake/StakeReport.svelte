@@ -29,7 +29,7 @@
     parsedReport,
     addressBalance;
 
-  let reportTier;
+  let reportTier, parsedTiers;
   let tierValue: { value: number; label: string } = null;
 
   const tierValues = [
@@ -93,7 +93,7 @@
 
   const report = async () => {
     if (ethers.utils.isAddress(addressToReport)) {
-      const parsedTiers = tiers.map((value) =>
+      parsedTiers = tiers.map((value) =>
         value
           ? ethers.utils.parseUnits(
               value.toString(),
@@ -180,7 +180,9 @@
       </div>
 
       <div class="flex flex-row gap-x-2">
-        <Button shrink on:click={report}>Get report</Button>
+        <Button shrink disabled={!addressToReport} on:click={report}
+          >Get report</Button
+        >
         <Button shrink on:click={reportMyAddress}>Get my report</Button>
       </div>
       <div class="flex flex-col gap-y-2">
