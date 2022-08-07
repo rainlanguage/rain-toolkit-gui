@@ -2,18 +2,23 @@
   import { fade } from "svelte/transition";
   import CircularProgressBar from "./CircularProgressBar.svelte";
   import { filedrop } from "filedrop-svelte";
+  import { writable } from "svelte/store";
 
   export let imageFile;
-  export let upload = null;
-  export let complete = false;
+  export let upload;
+  export let mediaUploadResp = null;
+
+  $: console.log(mediaUploadResp);
 
   let options = {};
-  let files, image, progress, progressPercent;
+  let image, uploadComplete, error;
+  const progress = writable(0);
+  $: progressPercent = `${Math.floor($progress * 100)}%`;
 
-  const uploadProgress = (p: any) => {
-    progress = p.loaded / p.total;
-    progressPercent = `${Math.floor(progress * 100)}%`;
-  };
+  // const uploadProgress = (p: any) => {
+  //   progress = p.loaded / p.total;
+  //   progressPercent = `${Math.floor(progress * 100)}%`;
+  // };
 
   const reader = new FileReader();
 
@@ -27,14 +32,25 @@
   );
 
   const readFile = async (files) => {
+    uploadComplete = false;
+    $progress = 0;
     reader.readAsDataURL(files.accepted[0]);
     imageFile = files.accepted[0];
-    if (upload) {
-      complete = await upload(imageFile, uploadProgress);
+    try {
+      mediaUploadResp = await upload(imageFile, progress);
+      if (mediaUploadResp?.name == "AxiosError") {
+        error = "whoops... try again 😭";
+      } else {
+        uploadComplete = true;
+      }
+    } catch {
+      error = "whoops... try again 😭";
     }
   };
 
   $: imageDropped = image?.src;
+
+  $: console.log(error);
 </script>
 
 <div
@@ -52,13 +68,21 @@
     <span class="underline text-gray-400">Pick a file</span>
   {/if}
 
-  {#if progress}
+  {#if $progress || error}
     <div
       in:fade
       class="absolute top-2 right-2 flex flex-row items-center gap-x-2 text-sm bg-black bg-opacity-70 p-3 rounded-full"
     >
-      {progressPercent}
-      <CircularProgressBar width={20} {progress} />
+      {#if uploadComplete}
+        <span in:fade> Uploaded </span>
+      {:else if error}
+        <span in:fade>
+          {error}
+        </span>
+      {:else}
+        {progressPercent}
+        <CircularProgressBar width={20} progress={$progress} />
+      {/if}
     </div>
   {/if}
 

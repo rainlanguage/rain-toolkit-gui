@@ -22,7 +22,6 @@
     initVapourPhase,
   } from "$routes/vapour721a/vapour721a";
 
-  let uploadComplete;
   let addPhaseBtn;
 
   // fields
@@ -192,7 +191,7 @@
     <ImageDropzone
       bind:imageFile={config.imageFile}
       upload={pin}
-      bind:complete={uploadComplete}
+      bind:mediaUploadResp={config.mediaUploadResp}
     />
     <div class="flex flex-col gap-y-2 items-start pt-4">
       <span class="text-3xl">{config.name || "Name"}</span>

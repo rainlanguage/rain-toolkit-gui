@@ -24,13 +24,17 @@ export interface Vapour721AConfig {
     currencyContract: Contract,
     phases: Phase[],
     soulbound: boolean,
-    erc20info: {
-        ready: boolean,
-        name: string,
-        symbol: string,
-        decimals: BigNumber,
-        balance: BigNumber,
-    }
+    erc20info: ERC20Info,
+    mediaUploadResp: any,
+    baseURI: string
+}
+
+export interface ERC20Info {
+    ready: boolean,
+    name: string,
+    symbol: string,
+    decimals: BigNumber,
+    balance: BigNumber,
 }
 
 export interface Phase {
