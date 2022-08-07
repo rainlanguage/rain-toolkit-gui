@@ -46,26 +46,32 @@ export const initVapourConfig = (signerAddress): Vapour721AConfig => {
         currencyContract: null,
         phases: [
             {
-                "start": "2022-08-07T21:36",
+                "start": "now",
                 "pricing": {
                     "type": 0,
-                    "startPrice": 0
+                    "startPrice": 1
                 },
                 "allowedGroups": [
                     {
                         "type": 0,
-                        "contractAddress": "0x43F76B029c9BD72A37367DA5c0323f078A86f0b2"
+                        "contractAddress": "0x08E46BB0510180bB5e763E73bF3Ae5d49004D6D5"
                     }
                 ],
                 "walletCap": 5
             },
             {
-                "start": "2022-08-09T20:36",
+                "start": "2022-08-07T23:38",
                 "pricing": {
                     "type": 0,
                     "startPrice": 10
                 },
-                "allowedGroups": [],
+                "allowedGroups": [
+                    {
+                        "type": 1,
+                        "contractAddress": "0x8d88dfb98ba02a6a15784966ed9e6ffa734ad4a6",
+                        "minBalance": 1
+                    }
+                ],
                 "walletCap": 20
             }
         ],
@@ -253,7 +259,7 @@ const alwaysTrue = (): StateConfig => {
                 op(Opcode.CONSTANT, 0)
             ]),
         ],
-        constants: [1]
+        constants: [ethers.constants.MaxUint256]
     }
 }
 
@@ -263,18 +269,31 @@ const prepareBuyConfig = (config: Vapour721AConfig): StateConfig => {
         const groupConditions: Condition[] = phase.allowedGroups.map((group) => {
             return generateGroupCondition(group)
         })
-        const groupConditionsGroup: ConditionGroup =
-            groupConditions.length > 1 ? { conditions: groupConditions, operator: 'and' }
-                : { conditions: groupConditions, operator: 'true' }
+        const groupConditionsGroup: ConditionGroup = { conditions: groupConditions, operator: 'and' }
 
         // generate the condition for the time
         const timeCondition: Condition = generateTimeCondition(phase, { phases, phaseIndex })
         console.log(timeCondition)
+
         // combine them, or if we got back null for time condition just use the group conditions
-        const conditions: ConditionGroup =
-            !timeCondition ? groupConditionsGroup
-                : !groupConditions.length ? { conditions: [timeCondition], operator: "true" }
-                    : { conditions: [groupConditionsGroup, timeCondition], operator: "and" }
+        let conditions: ConditionGroup
+        console.log(groupConditions)
+        console.log(timeCondition)
+        if (!timeCondition && !groupConditions.length) {
+            conditions = { conditions: [{ struct: alwaysTrue(), operator: "true" }], operator: "true" }
+        }
+        else if (!timeCondition && groupConditions.length == 1) {
+            console.log('should be 1')
+            conditions = { conditions: groupConditions, operator: "true" }
+        } else if (!timeCondition && groupConditions.length > 1) {
+            conditions = { conditions: groupConditions, operator: "and" }
+        } else if (timeCondition && !groupConditions.length) {
+            conditions = { conditions: [timeCondition], operator: "true" }
+        } else if (timeCondition && groupConditions.length == 1) {
+            conditions = { conditions: [...groupConditions, timeCondition], operator: "and" }
+        } else if (timeCondition && groupConditions.length > 1) {
+            conditions = { conditions: [groupConditionsGroup, timeCondition], operator: "and" }
+        }
 
         // quantity and price
         const quantity: Quantity = { struct: maxCapForWallet(ethers.BigNumber.from(phase.walletCap)) }
@@ -291,11 +310,11 @@ const prepareBuyConfig = (config: Vapour721AConfig): StateConfig => {
         rules,
         default: {
             quantity: { struct: alwaysFalse() },
-            price: { struct: alwaysFalse() }
+            price: { struct: alwaysTrue() }
         },
         pick: {
             quantities: "max",
-            prices: "min"
+            prices: "max"
         }
     }
     console.log(JSON.stringify(currency, null, 2))

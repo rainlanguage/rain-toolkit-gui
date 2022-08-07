@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { signer } from "svelte-ethers-store";
   import { fade } from "svelte/transition";
   import Button from "$components/Button.svelte";
   import type {
@@ -10,6 +11,8 @@
   import { prepare } from "$routes/vapour721a/vapour721a";
   import { writable } from "svelte/store";
   import { generateMetadata, pin } from "$routes/vapour721a/uploadToIPFS";
+  import VapourFactoryArtifact from "$routes/vapour721a/abi/Vapour721AFactory.json";
+  import { ethers } from "ethers";
 
   export let step: CreateSteps, config: Vapour721AConfig;
   const progress = writable(0);
@@ -43,6 +46,13 @@
     config.baseURI = `ipfs://${mediaUploadResp.IpfsHash}`;
     const args = prepare(config);
     console.log(args);
+    const factory = new ethers.Contract(
+      "0xeC33aA18e88136C162aEeE30b13530D78B2076c4",
+      VapourFactoryArtifact.abi,
+      $signer
+    );
+    const tx = await factory.createChildTyped(args);
+    await tx.wait();
   };
 </script>
 
