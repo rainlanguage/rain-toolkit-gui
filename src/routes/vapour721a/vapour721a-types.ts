@@ -1,9 +1,42 @@
-import type { BigNumber } from "ethers"
+import type { BigNumber, BigNumberish, BytesLike, Contract } from "ethers"
+import { AllStandardOps } from "rain-sdk"
+
+// UI stuff
+export enum CreateSteps {
+    Configure,
+    Confirm,
+    Complete
+}
+
+// Config
+export interface Vapour721AConfig {
+    name: string,
+    symbol: string,
+    description: string,
+    imageFile: File,
+    maxSupply: number,
+    currency: string,
+    royalty: number,
+    recipient: string,
+    owner: string,
+    admin: string,
+    useNativeToken: boolean,
+    currencyContract: Contract,
+    phases: Phase[],
+    soulbound: boolean,
+    erc20info: {
+        ready: boolean,
+        name: string,
+        symbol: string,
+        decimals: BigNumber,
+        balance: BigNumber,
+    }
+}
 
 export interface Phase {
     start: string,
-    end: string,
     pricing: PriceRule,
+    walletCap: number,
     allowedGroups?: Group[]
 }
 
@@ -71,7 +104,42 @@ export const groupOptions = [
     { value: AllowedGroup.SBTHolders, label: "SBT Holders" },
 ];
 
-// export interface Holders20 extends Group {
-//     contractAddress: string,
-//     minBalance: number
-// }
+// For the contract
+
+export type StateConfigStruct = {
+    sources: BytesLike[];
+    constants: BigNumberish[];
+};
+
+export type InitializeConfigStruct = {
+    name: string;
+    symbol: string;
+    baseURI: string;
+    supplyLimit: BigNumberish;
+    recipient: string;
+    owner: string;
+    admin: string;
+    royaltyBPS: BigNumberish;
+    currency: string;
+    vmStateConfig: StateConfigStruct;
+};
+
+// Opcode stuff
+
+enum LocalOpcodes {
+    IERC721A_TOTAL_SUPPLY = AllStandardOps.length,
+    IERC721A_TOTAL_MINTED = AllStandardOps.length + 1,
+    IERC721A_NUMBER_MINTED = AllStandardOps.length + 2,
+    IERC721A_NUMBER_BURNED = AllStandardOps.length + 3,
+}
+
+export const Opcode = {
+    ...AllStandardOps,
+    ...LocalOpcodes,
+};
+
+export enum StorageOpcodes {
+    SUPPLY_LIMIT,
+    AMOUNT_WITHDRAWN,
+    AMOUNT_PAYABLE,
+}

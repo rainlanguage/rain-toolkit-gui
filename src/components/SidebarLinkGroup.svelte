@@ -1,4 +1,5 @@
 <script>
+  import autoAnimate from "@formkit/auto-animate";
   import active from "svelte-spa-router/active";
   import ArrowIcon from "./ArrowIcon.svelte";
 
@@ -8,7 +9,7 @@
   let open = false;
 </script>
 
-<div>
+<div use:autoAnimate>
   <div
     on:click={() => {
       open = !open;
@@ -20,11 +21,11 @@
       <ArrowIcon fill="#999" />
     </div>
   </div>
-  <div class="ml-5 flex flex-col gap-y-4">
-    {#if open}
+  {#if open}
+    <div class="ml-5 flex flex-col gap-y-4">
       <slot />
-    {/if}
-  </div>
+    </div>
+  {/if}
 </div>
 
 <style global lang="postcss">

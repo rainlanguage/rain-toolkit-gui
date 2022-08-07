@@ -86,12 +86,13 @@
     </SidebarLinkGroup>
 
     <SidebarLinkGroup label="Vapour721A" url="/vapour721a/*">
-      <SidebarLink url="/vapour721a/deploy">Deploy a new Vapour721A</SidebarLink
+      <SidebarLink url="/vapour721a/create"
+        >Create a new NFT collection</SidebarLink
       >
 
-      <SidebarLink url="/vapour721a/manage">Manage a Vapour721A</SidebarLink>
+      <SidebarLink url="/vapour721a/manage">Manage a collection</SidebarLink>
 
-      <SidebarLink url="/vapour721a/mint">Mint from a Vapour721A</SidebarLink>
+      <SidebarLink url="/vapour721a/mint">Mint from a collection</SidebarLink>
     </SidebarLinkGroup>
   </div>
 </div>

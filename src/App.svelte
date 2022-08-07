@@ -1,4 +1,5 @@
 <script lang="ts" type="module">
+  import { fade } from "svelte/transition";
   import Home from "./routes/Home.svelte";
   import Header from "./layout/Header.svelte";
   import Sidebar from "./layout/Sidebar.svelte";
@@ -50,7 +51,7 @@
   // import ListErc20s from "./routes/mint-erc20/ListERC20s.svelte";
 
   //Deploy 721A
-  import Deploy721A from "./routes/vapour721a/Deploy721A.svelte";
+  import CreateVapour721A from "$routes/vapour721a/CreateVapour721A.svelte";
   // import ListErc20s from "./routes/mint-erc20/ListERC20s.svelte";
 
   let routes = {};
@@ -87,7 +88,7 @@
     "/erc20/mint/*": MintFromExistingERC20,
     // "/erc20/list": ListErc20s,
 
-    "/vapour721a/deploy": Deploy721A,
+    "/vapour721a/create": CreateVapour721A,
 
     "/address-library": AddressLibrary,
 
@@ -110,9 +111,11 @@
   <Header />
   <main class=" flex font-light text-gray-50 sticky">
     <Sidebar />
-    <div class="w-full py-5 px-8 sticky">
+    <div class="w-full py-5 px-8">
       {#if $signer}
-        <Router {routes} />
+        <div class="w-full" in:fade>
+          <Router {routes} />
+        </div>
       {:else}
         Connect your wallet to get started.
       {/if}

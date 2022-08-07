@@ -82,7 +82,6 @@
     </div>
     {#if phase.start !== "now" && first}
       <span
-        transition:fade
         on:click={() => {
           phase.start = "now";
         }}
@@ -90,9 +89,19 @@
       >
     {/if}
   </div>
+
   <div class="flex flex-col gap-y-2">
     <SalePricing bind:pricing={phase.pricing} />
   </div>
+
+  <Input type="number" placeholder="No wallet cap" bind:value={phase.walletCap}>
+    <span slot="label">Wallet</span>
+    <span slot="description"
+      >Caps apply for each wallet <span class="italic">across phases</span
+      >.</span
+    >
+  </Input>
+
   <div use:autoAnimate class="flex flex-col gap-y-2">
     <span class="text-sm">Allowed groups</span>
     {#if !phase.allowedGroups.length}

@@ -9,8 +9,13 @@
   const showModal = () => modal2.set(bind(AddressLibrary, { onSelectAddress }));
 
   export let from: string | undefined = undefined;
-  export let type: "text" | "number" | "range" | "address" | "datetime-local" =
-    "text";
+  export let type:
+    | "text"
+    | "number"
+    | "range"
+    | "address"
+    | "datetime-local"
+    | "textarea" = "text";
   export let value: string | number = "";
   export let placeholder = "";
   export let validator = async (value: any): Promise<any> => null;
