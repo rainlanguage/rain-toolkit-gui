@@ -46,7 +46,7 @@
       true,
       true
     );
-    console.log(combineTierConfig);
+    // console.log(combineTierConfig);
     const newCombineTier = await CombineTier.deploy($signer, {
       combinedTiersLength: 0,
       sourceConfig: combineTierConfig,
