@@ -47,7 +47,7 @@
     const { validationResult, fieldValues } = await validateFields(
       verifyFields
     );
-    console.log(fieldValues);
+    // console.log(fieldValues);
     console.log({
       admin: fieldValues.adminAddress,
       callback: ethers.constants.AddressZero,
