@@ -4,11 +4,7 @@
   import { onDestroy } from "svelte";
   import ProgressBar from "$components/ProgressBar.svelte";
   import { timeString } from "$src/utils";
-  import {
-    getAfterTimestamp,
-    getAfterTimestampDate,
-    saleStatuses,
-  } from "./sale";
+  import { saleStatuses } from "./sale";
   import dayjs from "dayjs";
 
   import { client } from "$src/stores";
@@ -25,31 +21,33 @@
     client: $client,
     query: `
         query ($saleAddress: Bytes!) {
-          saleStarts(where: {saleContract: $saleAddress}) {
-            saleContract {
-              minimumRaise
-              unitsAvailable
-              totalRaised
-              percentRaised
-              id
-              deployer
-              endEvent {
+          sales (where: {id: $saleAddress}) {
+            id
+            deployer
+            startEvent {
                 timestamp
-              }
-              startEvent {
-                timestamp
-              }
-              reserve {
-                decimals
-                name
-                symbol
-              }
-              saleStatus
-              token {
-                decimals
-                symbol
-                name
-              }
+            }
+            endEvent {
+              timestamp
+            }
+            token {
+              symbol
+              name
+              decimals
+            }
+            reserve {
+              symbol
+              name
+              decimals
+            }
+            minimumRaise
+            unitsAvailable
+            totalRaised
+            percentRaised
+            saleStatus
+            vmStateConfig {
+              constants
+              sources
             }
           }
         }`,
@@ -72,7 +70,7 @@
   };
 
   // alias the sale for convenience
-  $: sale = $buysQuery.data?.saleStarts[0]?.saleContract;
+  $: sale = $buysQuery.data?.sales[0];
 
   // the first time we get data, start a loop that updates the timer every 3 seconds
   $: if (!$buysQuery.fetching) {
@@ -87,22 +85,21 @@
   // update the time elapse/remaining
   const getTime = () => {
     const now = Math.floor(Date.now() / 1000);
-    const end = parseInt(sale?.startEvent.timestamp);
-    //   (sale.canEndStateConfig.sources[0] ===
-    //     "0x060001001f002f0001021e002002060001011f002102" ||
-    //     sale.canEndStateConfig.sources[0] ===
-    //       "0x010307001d00060001001f002f0001021e002002060001011f00210201041c00") &&
-    //   Number(+formatUnits(sale.totalRaised, sale.reserve.decimals)) >=
-    //     Number(+formatUnits(sale.canEndStateConfig.constants[2]))
-    //     ? getAfterTimestampDate(sale.canEndStateConfig, 1).getTime() / 1000
-    //     : (sale.canEndStateConfig.sources[0] ===
-    //         "0x060001001f0001012f001e002102" ||
-    //         sale.canEndStateConfig.sources[0] ===
-    //           "0x010207001d00060001001f0001012f001e00210201031c00") &&
-    //       Number(+formatUnits(sale.totalRaised, sale.reserve.decimals)) >=
-    //         Number(+formatUnits(sale.canEndStateConfig.constants[1]))
-    //     ? now
-    //     : getAfterTimestampDate(sale.canEndStateConfig, 0).getTime() / 1000;
+    const end =
+      // first cond for extra time
+      sale.vmStateConfig.sources[0] ===
+        "0x110000001b00110000011d00000303011d001702110000021d001a021a02" &&
+      Number(+formatUnits(sale.totalRaised, sale.reserve.decimals)) >=
+        Number(+formatUnits(sale.vmStateConfig.constants[2]))
+        ? sale.vmStateConfig.constants[1] / 1000
+        : //2nd cond for minimum target
+        (sale.vmStateConfig.sources[0] === "0x110000001b00110000011d001a02" ||
+            sale.vmStateConfig.sources[0] ===
+              "0x110000001b00110000011d00030100021d001a021a02") &&
+          Number(+formatUnits(sale.totalRaised, sale.reserve.decimals)) >=
+            Number(+formatUnits(sale.vmStateConfig.constants[2]))
+        ? now
+        : sale.vmStateConfig.constants[0] / 1000;
 
     if (sale?.saleStatus == 1) {
       const start = parseInt(sale.startEvent.timestamp);
@@ -120,13 +117,13 @@
 </script>
 
 {#if sale}
-  <!-- {#if sale.canEndStateConfig.sources[0] === "0x060001001f002f0001021e002002060001011f002102" || sale.canEndStateConfig.sources[0] === "0x010307001d00060001001f002f0001021e002002060001011f00210201041c00"}
+  {#if sale.vmStateConfig.sources[0] === "0x110000001b00110000011d00000303011d001702110000021d001a021a02"}
     <div class="mb-2 flex flex-col gap-y-2">
       <span class="text-xl"
         ><span class="text-gray-400">Sale Duration Mode:</span> Extra Time</span
       >
     </div>
-  {:else if sale.canEndStateConfig.sources[0] === "0x060001001f0001012f001e002102" || sale.canEndStateConfig.sources[0] === "0x010207001d00060001001f0001012f001e00210201031c00"}
+  {:else if sale.vmStateConfig.sources[0] === "0x110000001b00110000011d00030100021d001a021a02"}
     <div class="mb-2 flex flex-col gap-y-2">
       <span class="text-xl"
         ><span class="text-gray-400">Sale Duration Mode:</span> Minimum Target</span
@@ -138,7 +135,7 @@
         ><span class="text-gray-400">Sale Duration Mode:</span> Normal</span
       >
     </div>
-  {/if}-->
+  {/if}
   <div class="grid w-full grid-cols-2 items-start">
     <table class="table-auto">
       <tr>
@@ -180,53 +177,29 @@
       <tr>
         <td class="text-gray-400">Could start:</td>
         <td>
-          {dayjs.unix(sale.startEvent.timestamp).format("MMM D h:mm:ssa")}
-          <!-- {#if sale.canStartStateConfig.sources[0] === "0x010107001d00060001001f0001021c00"}
-            <span class="text-xs text-gray-400">(only by the creator)</span>
-          {/if} -->
+          {dayjs.unix(sale.vmStateConfig.constants[0]).format("MMM D h:mm:ssa")}
         </td>
       </tr>
-      <!-- {#if (sale.canEndStateConfig.sources[0] === "0x060001001f002f0001021e002002060001011f002102" || sale.canEndStateConfig.sources[0] === "0x010307001d00060001001f002f0001021e002002060001011f00210201041c00") && Number(+formatUnits(sale.totalRaised, sale.reserve.decimals)) >= Number(+formatUnits(sale.canEndStateConfig.constants[2]))}
+
+      {#if sale.vmStateConfig.sources[0] === "0x110000001b00110000011d00000303011d001702110000021d001a021a02" && Number(+formatUnits(sale.totalRaised, sale.reserve.decimals)) >= Number(+formatUnits(sale.vmStateConfig.constants[2]))}
         <tr>
           <td class="text-gray-400">Can end:</td>
           <td>
             {dayjs
-              .unix(getAfterTimestamp(sale.canEndStateConfig, 1))
+              .unix(sale.vmStateConfig.constants[1])
               .format("MMM D h:mm:ssa")}
-            {#if sale.canStartStateConfig.sources[0] === "0x010107001d00060001001f0001021c00"}
-              <span class="text-xs text-gray-400">(only by the creator)</span>
-            {/if}
           </td>
         </tr>
-      {:else if sale.canEndStateConfig.sources[0] === "0x060001001f0001012f001e002102" || sale.canEndStateConfig.sources[0] === "0x010207001d00060001001f0001012f001e00210201031c00"}
+      {:else if sale.vmStateConfig.sources[0] === "0x110000001b00110000011d001a02" || sale.vmStateConfig.sources[0] === "0x110000001b00110000011d00030100021d001a021a02"}
         <tr>
           <td class="text-gray-400">Can end:</td>
           <td>
             {dayjs
-              .unix(getAfterTimestamp(sale.canEndStateConfig, 0))
+              .unix(sale.vmStateConfig.constants[0])
               .format("MMM D h:mm:ssa")}
-            {#if sale.canStartStateConfig.sources[0] === "0x010107001d00060001001f0001021c00"}
-              <span class="text-gray-400 text-xs"
-                >(or min target hit-creator)</span
-              >
-            {:else}
-              <span class="text-gray-400 text-xs">(or by min target hit)</span>
-            {/if}
           </td>
         </tr>
-      {:else}
-        <tr>
-          <td class="text-gray-400">Can end:</td>
-          <td>
-            {dayjs
-              .unix(getAfterTimestamp(sale.canEndStateConfig, 0))
-              .format("MMM D h:mm:ssa")}
-            {#if sale.canStartStateConfig.sources[0] === "0x010107001d00060001001f0001021c00"}
-              <span class="text-gray-400 text-xs">(only by the creator)</span>
-            {/if}
-          </td>
-        </tr>
-      {/if} -->
+      {/if}
       {#if !(sale?.saleStatus == 0)}
         <tr>
           <td class="text-gray-400">Started at:</td>
@@ -236,7 +209,7 @@
         </tr>
       {/if}
       {#if sale?.saleStatus == 1}
-        <!-- {#if (sale.canEndStateConfig.sources[0] === "0x060001001f002f0001021e002002060001011f002102" || sale.canEndStateConfig.sources[0] === "0x010307001d00060001001f002f0001021e002002060001011f00210201041c00") && Number(+formatUnits(sale.totalRaised, sale.reserve.decimals)) >= Number(+formatUnits(sale.canEndStateConfig.constants[2]))}
+        {#if sale.vmStateConfig.sources[0] === "0x110000001b00110000011d00000303011d001702110000021d001a021a02" && Number(+formatUnits(sale.totalRaised, sale.reserve.decimals)) >= Number(+formatUnits(sale.vmStateConfig.constants[2]))}
           <tr>
             <td class="text-gray-400">Time remaining (Extra Time):</td>
             <td>{timeRemaining}</td>
@@ -246,41 +219,39 @@
             <td class="text-gray-400">Time remaining:</td>
             <td>{timeRemaining}</td>
           </tr>
-        {/if} -->
+        {/if}
         <tr>
           <td class="text-gray-400">Time elapsed:</td>
           <td>{timeElapsed}</td>
         </tr>
       {/if}
-      <!-- {#if sale?.saleStatus == 2}
+      {#if sale?.saleStatus == 2}
         <tr>
           <td class="text-gray-400">Ended at:</td>
           <td>{dayjs.unix(sale.endEvent.timestamp).format("MMM D h:mm:ssa")}</td
           >
         </tr>
-      {/if} -->
+      {/if}
     </table>
   </div>
-  <!-- {#if (sale.canEndStateConfig.sources[0] === "0x060001001f002f0001021e002002060001011f002102" || sale.canEndStateConfig.sources[0] === "0x010307001d00060001001f002f0001021e002002060001011f00210201041c00") && Number(+formatUnits(sale.totalRaised, sale.reserve.decimals)) >= Number(+formatUnits(sale.canEndStateConfig.constants[2]))}
+  {#if sale.vmStateConfig.sources[0] === "0x110000001b00110000011d00000303011d001702110000021d001a021a02" && Number(+formatUnits(sale.totalRaised, sale.reserve.decimals)) >= Number(+formatUnits(sale.vmStateConfig.constants[2]))}
     {#if sale?.saleStatus == 1}
       <span style="font-size:medium"
         >*The threshold of {Number(
-          +formatUnits(sale.canEndStateConfig.constants[2])
+          +formatUnits(sale.vmStateConfig.constants[2])
         )}
         {sale.reserve.symbol} has been reached and raise can now continue for
-        {(getAfterTimestamp(sale.canEndStateConfig, 1) -
-          getAfterTimestamp(sale.canEndStateConfig, 0)) /
+        {(sale.vmStateConfig.constants[1] - sale.vmStateConfig.constants[0]) /
           60} more minutes in extra time
       </span>
     {:else}
       <span style="font-size:medium"
         >*This sale had
-        {(getAfterTimestamp(sale.canEndStateConfig, 1) -
-          getAfterTimestamp(sale.canEndStateConfig, 0)) /
+        {(sale.vmStateConfig.constants[1] - sale.vmStateConfig.constants[0]) /
           60} minutes of extra time
       </span>
     {/if}
-  {/if} -->
+  {/if}
   {#if sale?.saleStatus == 1 || 2}
     <ProgressBar color="blue" total={100} progress={sale.percentRaised} />
   {/if}

@@ -31,35 +31,6 @@ export type SaleParams = {
   afterMinimumRaiseMode: boolean;
 };
 
-export const getAfterTimestampDate = (stateConfig, i) => {
-  if (stateConfig.sources[0] ===
-    "0x0100" ||
-    "0x060001001f00" ||
-    "0x010107001d00060001001f0001021c00" ||
-    "0x060001001f002f0001021e002002060001011f002102" ||
-    "0x010307001d00060001001f002f0001021e002002060001011f00210201041c00" ||
-    "0x060001001f0001012f001e002102" ||
-    "0x010207001d00060001001f0001012f001e00210201031c00") {
-
-    return new Date(parseInt(stateConfig.constants[i]) * 1000);
-  }
-};
-
-
-export const getAfterTimestamp = (stateConfig, i) => {
-  if (stateConfig.sources[0] ===
-    "0x0100" ||
-    "0x060001001f00" ||
-    "0x010107001d00060001001f0001021c00" ||
-    "0x060001001f002f0001021e002002060001011f002102" ||
-    "0x010307001d00060001001f002f0001021e002002060001011f00210201041c00" ||
-    "0x060001001f0001012f001e002102" ||
-    "0x010207001d00060001001f0001012f001e00210201031c00") {
-
-    return parseInt(stateConfig.constants[i]);
-  }
-};
-
 export const saleStatuses = ["Pending", "Active", "Success", "Fail"];
 
 
