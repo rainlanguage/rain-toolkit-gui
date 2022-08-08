@@ -1,12 +1,12 @@
 <script lang="ts">
+  import {
+    calculatePriceConfig,
+    getSaleDuration,
+    getBuyWalletCap,
+  } from "../../routes/sale/sale";
   import { ethers } from "ethers";
   import { arrayify, hexlify } from "ethers/lib/utils";
 
-  // import {
-  //   calculatePriceConfig,
-  //   getSaleDuration,
-  //   getBuyWalletCap,
-  // } from "../../routes/sale/sale";
   import {
     HumanFriendlyRead,
     CombineTierGenerator,
@@ -98,10 +98,10 @@
       try {
         combineTierSource = HumanFriendlyRead.prettify(
           HumanFriendlyRead.get(
-            new CombineTierGenerator(
-              FriendlySource.tierContractOne,
-              {delegatedReport: true, hasReportForSingleTier: true}
-            ).combineWith(
+            new CombineTierGenerator(FriendlySource.tierContractOne, {
+              delegatedReport: true,
+              hasReportForSingleTier: true,
+            }).combineWith(
               FriendlySource.tierContractTwo,
               FriendlySource.logicValue,
               FriendlySource.modeValue,
@@ -115,58 +115,59 @@
         err = true;
       }
     }
-    if (contractType.toLowerCase() === "any") {
-      if (ethers.utils.isHexString(FriendlySource.sources[0])) {
-        FriendlySource.sources = FriendlySource.sources.map((source) =>
-          arrayify(source)
-        );
-        for (let i = 0; i < FriendlySource.constants.length; i++) {
-          FriendlySource.constants[i] = hexlify(BigInt(FriendlySource.constants[i]));
-        }
-        
-      }
+    if (contractType.toLowerCase() === "sale") {
       try {
-        anySource = HumanFriendlyRead.prettify(
-          HumanFriendlyRead.get(FriendlySource)
+        saleDurationConfig = HumanFriendlyRead.prettify(
+          HumanFriendlyRead.get(
+            getSaleDuration(FriendlySource.saleParam, signer)
+          )
         );
       } catch (error) {
-        errorMsg = error;
-        err = true;
+        console.log(error);
+        saleDurationConfig = error;
+      }
+      if (contractType.toLowerCase() === "any") {
+        if (ethers.utils.isHexString(FriendlySource.sources[0])) {
+          FriendlySource.sources = FriendlySource.sources.map((source) =>
+            arrayify(source)
+          );
+          for (let i = 0; i < FriendlySource.constants.length; i++) {
+            FriendlySource.constants[i] = hexlify(
+              BigInt(FriendlySource.constants[i])
+            );
+          }
+        }
+        try {
+          anySource = HumanFriendlyRead.prettify(
+            HumanFriendlyRead.get(FriendlySource)
+          );
+        } catch (error) {
+          errorMsg = error;
+          err = true;
+        }
+      }
+
+      try {
+        buyCapConfig = HumanFriendlyRead.prettify(
+          HumanFriendlyRead.get(getBuyWalletCap(FriendlySource.saleParam))
+        );
+      } catch (error) {
+        buyCapConfig = error;
+      }
+
+      try {
+        priceConfig =
+          FriendlySource.startTimestamp && FriendlySource.endTimestamp
+            ? HumanFriendlyRead.prettify(
+                HumanFriendlyRead.get(
+                  calculatePriceConfig(FriendlySource.saleParam)
+                )
+              )
+            : "Select Sale's Start & End Date/Time To Show Price Script";
+      } catch (error) {
+        priceConfig = error;
       }
     }
-    // if (contractType.toLowerCase() === "sale") {
-    //   try {
-    //     saleDurationConfig = HumanFriendlyRead.prettify(
-    //       HumanFriendlyRead.get(
-    //         getSaleDuration(FriendlySource.saleParam, signer)
-    //       )
-    //     );
-    //   } catch (error) {
-    //     console.log(error);
-    //     saleDurationConfig = error;
-    //   }
-
-    //   try {
-    //     buyCapConfig = HumanFriendlyRead.prettify(
-    //       HumanFriendlyRead.get(getBuyWalletCap(FriendlySource.saleParam))
-    //     );
-    //   } catch (error) {
-    //     buyCapConfig = error;
-    //   }
-
-    //   try {
-    //     priceConfig =
-    //       FriendlySource.startTimestamp && FriendlySource.endTimestamp
-    //         ? HumanFriendlyRead.prettify(
-    //             HumanFriendlyRead.get(
-    //               calculatePriceConfig(FriendlySource.saleParam)
-    //             )
-    //           )
-    //         : "Select Sale's Start & End Date/Time To Show Price Script";
-    //   } catch (error) {
-    //     priceConfig = error;
-    //   }
-    // }
   }
 </script>
 

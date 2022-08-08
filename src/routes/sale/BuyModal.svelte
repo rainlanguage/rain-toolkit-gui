@@ -55,8 +55,9 @@
     );
     units = _units;
 
-    const price = await sale.calculatePrice(_units);
-    const subtotal = price.mul(_units).div(one);
+    const price = await sale.calculateBuy(_units);
+
+    const subtotal = price[1].mul(_units).div(one);
     fee = subtotal.div(BigNumber.from(100));
     const total = subtotal.add(fee);
 
@@ -96,7 +97,12 @@
           txReceipt = await error.replacement.wait();
         }
       } else {
-        errorMsg = error.data?.message || error?.message;
+        errorMsg =
+          error.error?.data?.message ||
+          error.error?.message ||
+          error.data?.message ||
+          error?.message;
+
         txStatus = TxStatus.Error;
         return;
       }
