@@ -3,11 +3,14 @@ import { formatEther, formatUnits } from "ethers/lib/utils";
 import { connected, contracts, defaultEvmStores, signer, signerAddress } from "svelte-ethers-store";
 import { derived, writable, type Readable } from "svelte/store";
 import { toast } from "@zerodevx/svelte-toast";
-import WethArtifact from "$abi/weth.json";
-import { NATIVE_NAME } from "$src/constants";
-import { client } from "$src/stores";
-import { gql } from "@urql/svelte";
-import Vapour721AArtifact from "$abi/Vapour721A.json";
+import { createClient, gql } from "@urql/svelte";
+import Vapour721AArtifact from "../abi/Vapour721A.json";
+import { ERC20 } from "rain-sdk";
+
+const client = createClient({
+    url: "https://api.thegraph.com/subgraphs/name/vishalkale151071/rain-protocol"
+    // url: AddressBook.getSubgraphEndpoint(Number($selectedNetwork.config.chainId))
+})
 
 export type MintQuote = {
     maxUnits?;
@@ -89,18 +92,19 @@ contractAddress.subscribe(address => {
 const tick = writable(0)
 
 // the derived store itself
-const _contractInfo: Readable<any> = derived([client, contractAddress, tick], ([$client, $contractAddress, $tick], set) => {
-    if ($client && $contractAddress) {
+const _contractInfo: Readable<any> = derived([contractAddress, tick], ([$contractAddress, $tick], set) => {
+    if (client && $contractAddress) {
         Promise.all([
-            $client.query(query, { contractAddress: $contractAddress.toLowerCase() }).toPromise(),
-            $client.query(nftQuery, { contractAddress: $contractAddress.toLowerCase() }).toPromise()
+            client.query(query, { contractAddress: $contractAddress.toLowerCase() }).toPromise(),
+            client.query(nftQuery, { contractAddress: $contractAddress.toLowerCase() }).toPromise()
         ]).then(([queryRes, nftQueryRes]) => {
+            console.log(queryRes)
             let info = queryRes.data.vapour721A
             info.noOfNfts = nftQueryRes.data.nfts[0]?.tokenId || 0
             set(info)
         })
-        $client.query(nftQuery, { contractAddress: $contractAddress }).toPromise()
-        $client.query(query, { contractAddress: $contractAddress }).toPromise().then(res => {
+        client.query(nftQuery, { contractAddress: $contractAddress }).toPromise()
+        client.query(query, { contractAddress: $contractAddress }).toPromise().then(res => {
             set(res.data.vapour721A)
         })
     }
@@ -131,20 +135,15 @@ export const currencyInfo = derived([signer, currency], ([$signer, $currency], s
             set({
                 isNative: true,
                 address: $currency,
-                name: NATIVE_NAME,
-                symbol: NATIVE_NAME,
+                name: "ETH",
+                symbol: "ETH",
                 decimals: ethers.BigNumber.from(18),
                 signerBalance,
                 signerBalanceFormatted: formatEther(signerBalance)
             })
         })
     } else if ($currency && $signer) {
-        defaultEvmStores.attachContract(
-            "reserve",
-            $currency,
-            JSON.stringify(WethArtifact.abi)
-        );
-        const contract = new ethers.Contract($currency, WethArtifact.abi, $signer)
+        const contract = new ERC20($currency, $signer)
         try {
             Promise.all([contract.name(), contract.symbol(), contract.decimals(), contract.balanceOf($signer.getAddress())]).then(res => {
                 const [name, symbol, decimals, signerBalance] = res

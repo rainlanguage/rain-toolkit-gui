@@ -11,7 +11,7 @@ export const nextTokenMetadata: Readable<any> = derived(contractInfo, ($contract
         const noOfNfts = $contractInfo?.noOfNfts % 9;
         const convertedGatewayUrl = new IPFSGatewayTools().convertToDesiredGateway(
             `${$contractInfo.baseURI}/${noOfNfts + 1}.json`,
-            "https://feelerheads.mypinata.cloud"
+            "https://cloudflare-ipfs.com/"
         );
         try {
             (async () => {
@@ -20,7 +20,7 @@ export const nextTokenMetadata: Readable<any> = derived(contractInfo, ($contract
                 if (imgURL.protocol == "ipfs:") {
                     metadata.image = new IPFSGatewayTools().convertToDesiredGateway(
                         metadata.image,
-                        "https://feelerheads.mypinata.cloud"
+                        "https://cloudflare-ipfs.com/"
                     )
                 }
                 const img = new Image();

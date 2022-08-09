@@ -52,6 +52,7 @@
 
   //Deploy 721A
   import CreateVapour721A from "$routes/vapour721a/CreateVapour721A.svelte";
+  import MintVapour721A from "$routes/vapour721a/mint/MintVapour721A.svelte";
   // import ListErc20s from "./routes/mint-erc20/ListERC20s.svelte";
 
   let routes = {};
@@ -89,6 +90,7 @@
     // "/erc20/list": ListErc20s,
 
     "/vapour721a/create": CreateVapour721A,
+    "/vapour721a/mint/*": MintVapour721A,
 
     "/address-library": AddressLibrary,
 

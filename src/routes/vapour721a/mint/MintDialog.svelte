@@ -91,52 +91,32 @@
     />
   </div>
 {:else}
-  <div in:fade class="flex flex-col-reverse items-stretch md:flex-row">
-    <div
-      use:autoAnimate
-      class="flex w-60 flex-col gap-y-6 border-gray-500 px-8 pb-8 md:border-r md:p-8"
-    >
-      <div class="hidden flex-col gap-y-6 md:flex">
-        {#each [...stepNames.entries()] as _step, i}
-          {@const active = _step[0] == step}
-          {@const complete = _step[0] < step}
-          <div class="flex flex-row items-center gap-x-2">
-            <div
-              class:activeStep={active}
-              class:step={!active}
-              class:complete
-              class="transition-all"
-            >
-              {_step[1]}
-            </div>
-            {#if complete}
-              <div class="-mt-1">
-                <IconLibrary icon="tick" color="text-primary" width={18} />
-              </div>
-            {/if}
-            {#if i == 4 && active}
-              🎉
-            {/if}
+  <div use:autoAnimate in:fade class="flex items-stretch flex-col gap-y-12">
+    <div class="flex-row gap-x-8 flex border-b border-gray-400 pb-4">
+      {#each [...stepNames.entries()] as _step, i}
+        {@const active = _step[0] == step}
+        {@const complete = _step[0] < step}
+        <div class="flex flex-row items-center gap-x-2">
+          <div
+            class:activeStep={active}
+            class:step={!active}
+            class:complete
+            class="transition-all"
+          >
+            {_step[1]}
           </div>
-        {/each}
-      </div>
-      {#if $quote}
-        <div use:autoAnimate class="border-gray-500 md:border-t md:pt-6">
-          {#if $quote?.targetUnits > 0}
-            <div in:fade>
-              <Quote quote={$quote} />
+          {#if complete}
+            <div class="-mt-1">
+              <IconLibrary icon="tick" color="text-green-500" width={18} />
             </div>
           {/if}
-          {#if $quote?.calculating}
-            <div in:fade class="flex flex-row gap-x-2">
-              <Ring size="25px" color="#FFF" />
-              <span> Getting price... </span>
-            </div>
+          {#if i == 4 && active}
+            🎉
           {/if}
         </div>
-      {/if}
+      {/each}
     </div>
-    <div use:autoAnimate class="relative flex w-96 flex-col gap-y-6 p-8">
+    <div use:autoAnimate class="relative flex flex-col gap-y-6">
       {#if step == MintingSteps.SelectAmount}
         <div class="font-heading text-3xl">
           How many NFTs would you like to mint?
@@ -144,7 +124,12 @@
         <div>
           <MintAmountInput bind:value={$targetUnits} />
         </div>
-        <Button disabled={!$quote?.totalPrice} on:click={null}>Next</Button>
+        <Button
+          disabled={!$quote?.totalPrice}
+          on:click={() => {
+            step++;
+          }}>Next</Button
+        >
       {:else if step == MintingSteps.ApproveReserve}
         <div class="text-xl font-semibold">
           Approve the minting contract for your {$currencyInfo.symbol}.
@@ -175,17 +160,32 @@
           <ConfettiExplosion />
         </div>
         <div class="text-xl font-semibold">
-          Congratulations! You are now a proud owner of a Feelerhead.
+          Congratulations! You've minted a scriptable NFT.
         </div>
-        <div class="text-lg font-semibold">Next steps</div>
+        <div class="text-lg font-semibold">View on Rarible</div>
       {/if}
     </div>
   </div>
+  {#if $quote}
+    <div use:autoAnimate class="mt-8 bg-gray-800 rounded-lg p-4">
+      {#if $quote?.targetUnits > 0}
+        <div in:fade>
+          <Quote quote={$quote} />
+        </div>
+      {/if}
+      {#if $quote?.calculating}
+        <div in:fade class="flex flex-row gap-x-2">
+          <Ring size="25px" color="#FFF" />
+          <span> Getting price... </span>
+        </div>
+      {/if}
+    </div>
+  {/if}
 {/if}
 
 <style lang="postcss">
   .activeStep {
-    @apply font-semibold text-gray-700;
+    @apply font-semibold text-violet-400;
   }
 
   .step {

@@ -1,13 +1,12 @@
 <script lang="ts">
   import { fade } from "svelte/transition";
   import { contractInfo } from "./mint";
-  import { nextTokenMetadata, singleQuote } from "$routes/mint/feelerhead-mint";
-  import Connect from "$lib/Connect.svelte";
+  import { nextTokenMetadata, singleQuote } from "./feelerhead-mint";
+  import Connect from "$components/Connect.svelte";
   import { defaultEvmStores } from "svelte-ethers-store";
-  import { PROVIDER } from "$src/constants";
   import { onDestroy, onMount } from "svelte";
 
-  defaultEvmStores.setProvider(PROVIDER, null);
+  // defaultEvmStores.setProvider(PROVIDER, null);
 
   let interval;
   onMount(() => {
@@ -25,59 +24,50 @@
   $: show = $nextTokenMetadata && $singleQuote && $contractInfo;
 </script>
 
-<!-- <button on:click={contractInfo.refresh}>tick</button> -->
+<!-- <span class="text-2xl">Next token...</span> -->
 <div
-  class="flex max-w-5xl flex-col-reverse gap-y-6 p-7 md:grid md:grid-cols-2 md:gap-y-0 md:gap-x-7 md:p-10"
+  class="flex flex-col gap-y-4 max-w-sm border border-gray-600 p-2 rounded-2xl"
 >
-  <div class="flex flex-col justify-between gap-y-6 md:gap-y-0">
-    <div class="flex flex-col gap-y-8 md:mb-6">
-      <div>
-        <span class="font-heading text-7xl">Feelerhead</span>
-        <span class="font-heading text-3xl">WELCOMES...</span>
+  <div class="rounded-lg overflow-hidden">
+    {#if show}
+      <img alt="the next feelerhead" in:fade src={$nextTokenMetadata.image} />
+    {:else}
+      <div class="opacity-30">
+        <img
+          alt="loading the next feelerhead"
+          class="animate-pulse"
+          src="/images/unknown.png"
+        />
       </div>
-      {#if show}
-        <span in:fade class="text-4xl">{$nextTokenMetadata.name}</span>
-      {:else}
-        <span class="text-4xl opacity-0">name</span>
-      {/if}
-      <div class="grid grid-cols-2 text-3xl">
-        <div class="flex flex-col gap-y-2">
-          <span class="statHeading">MINT PRICE</span>
-          {#if show}
-            <span in:fade>{$singleQuote} ETH</span>
-          {:else}
-            <span class="animate-pulse animate-bounce">...</span>
-          {/if}
-        </div>
-        <div class="flex flex-col gap-y-2">
-          <span class="statHeading">TOKEN</span>
-          {#if show}
-            <span in:fade
-              >{+$contractInfo.noOfNfts + 1} / {$contractInfo.supplyLimit}</span
-            >
-          {:else}
-            <span class="animate-pulse animate-bounce">...</span>
-          {/if}
-        </div>
-      </div>
-    </div>
-    <Connect />
+    {/if}
   </div>
   {#if show}
-    <img alt="the next feelerhead" in:fade src={$nextTokenMetadata.image} />
-  {:else}
-    <div class="opacity-30">
-      <img
-        alt="loading the next feelerhead"
-        class="animate-pulse"
-        src="/images/unknown.png"
-      />
+    <div class="flex flex-col">
+      <span in:fade class="text-xl">{$nextTokenMetadata.name}</span>
+      <span in:fade class="text-gray-400">{$nextTokenMetadata.description}</span
+      >
     </div>
+  {:else}
+    <span class="text-2xl opacity-0">name</span>
   {/if}
+  <div class="grid grid-cols-2 bg-gray-800 rounded-lg p-2">
+    <!-- <div class="flex flex-col gap-y-2">
+      <span class="text-sm text-gray-400">Mint price</span>
+      {#if show}
+        <span in:fade>{$singleQuote} ETH</span>
+      {:else}
+        <span class="animate-pulse animate-bounce">...</span>
+      {/if}
+    </div> -->
+    <div class="flex flex-col gap-y-1">
+      <span class=" text-gray-400">Next token</span>
+      {#if show}
+        <span in:fade
+          >{+$contractInfo.noOfNfts + 1} / {$contractInfo.supplyLimit}</span
+        >
+      {:else}
+        <span class="animate-pulse animate-bounce">...</span>
+      {/if}
+    </div>
+  </div>
 </div>
-
-<style>
-  .statHeading {
-    @apply font-heading;
-  }
-</style>
