@@ -12,11 +12,16 @@
   import { writable } from "svelte/store";
   import { generateMetadata, pin } from "$routes/vapour721a/uploadToIPFS";
   import VapourFactoryArtifact from "$routes/vapour721a/abi/Vapour721AFactory.json";
+  import VapourArtifact from "$routes/vapour721a/abi/Vapour721A.json";
+
   import { ethers } from "ethers";
+  import ContractDeploy from "$components/ContractDeploy.svelte";
+  import { getNewChildFromReceipt } from "$src/utils";
 
   export let step: CreateSteps, config: Vapour721AConfig;
   const progress = writable(0);
   let uploadComplete, error;
+  let deployPromise;
 
   $: console.log($progress, uploadComplete, error);
 
@@ -52,7 +57,9 @@
       $signer
     );
     const tx = await factory.createChildTyped(args);
-    await tx.wait();
+    const receipt = await tx.wait();
+    const address = getNewChildFromReceipt(receipt, factory);
+    return new ethers.Contract(address, VapourArtifact.abi, $signer);
   };
 </script>
 
@@ -62,6 +69,15 @@
       step--;
     }}>Back</Button
   >
+  <Button
+    on:click={() => {
+      deployPromise = deploy721A();
+    }}>Deploy</Button
+  >
+  {#if deployPromise}
+    <ContractDeploy {deployPromise} type="Vapour721A" />
+  {/if}
+
   <pre>
     {JSON.stringify(
       { ...config, currencyContract: null, erc20info: null },
@@ -69,5 +85,4 @@
       2
     )}
   </pre>
-  <Button on:click={deploy721A}>Back</Button>
 </div>

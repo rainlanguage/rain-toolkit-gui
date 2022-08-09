@@ -192,6 +192,7 @@
       bind:imageFile={config.imageFile}
       upload={pin}
       bind:mediaUploadResp={config.mediaUploadResp}
+      bind:image={config.image}
     />
     <div class="flex flex-col gap-y-2 items-start pt-4">
       <span class="text-3xl">{config.name || "Name"}</span>

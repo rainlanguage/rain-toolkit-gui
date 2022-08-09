@@ -3,6 +3,7 @@
   import CircularProgressBar from "./CircularProgressBar.svelte";
   import { filedrop } from "filedrop-svelte";
   import { writable } from "svelte/store";
+  import { onMount } from "svelte";
 
   export let imageFile;
   export let upload;
@@ -19,6 +20,11 @@
   //   progress = p.loaded / p.total;
   //   progressPercent = `${Math.floor(progress * 100)}%`;
   // };
+  onMount(() => {
+    if (imageFile) {
+      reader.readAsDataURL(imageFile);
+    }
+  });
 
   const reader = new FileReader();
 

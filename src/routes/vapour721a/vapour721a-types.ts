@@ -27,7 +27,8 @@ export interface Vapour721AConfig {
     soulbound: boolean,
     erc20info: ERC20Info,
     mediaUploadResp: any,
-    baseURI: string
+    baseURI: string,
+    image?: string
 }
 
 export interface ERC20Info {

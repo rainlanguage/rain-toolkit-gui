@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Contract, logger } from "ethers";
+  import type { Contract } from "ethers";
   import { Logger } from "ethers/lib/utils";
   import { selectedNetwork } from "$src/stores";
   import NewAddress from "./NewAddress.svelte";
@@ -45,7 +45,8 @@
                 e.address === addresses.noticeBoard ||
                 e.address === addresses.redeemableERC20Factory ||
                 e.address === addresses.verifyFactory ||
-                e.address === addresses.verifyTierFactory)
+                e.address === addresses.verifyTierFactory ||
+                e.address === "0xeC33aA18e88136C162aEeE30b13530D78B2076c4")
           );
 
           contractAddress =

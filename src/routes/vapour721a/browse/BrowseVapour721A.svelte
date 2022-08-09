@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { fade } from "svelte/transition";
   import { signerAddress } from "svelte-ethers-store";
   import { deployer } from "./browse";
   import Button from "$components/Button.svelte";
@@ -26,18 +27,23 @@
 </script>
 
 <div
-  class="flex flex-row items-center justify-end gap-x-3 mb-8 text-sm text-gray-300"
+  class="flex flex-row items-center justify-between gap-x-3 mb-8 text-sm text-gray-300"
 >
-  <span>Show only contracts I've deployed </span><Switch bind:checked />
-  <span
-    on:click={listVapour721As.refresh}
-    class="bg-gray-700 py-2 px-3 rounded-full flex flex-row gap-x-2 hover:bg-gray-600 transition-colors cursor-pointer"
+  <span in:fade={{ duration: 2000 }} class="font-heading text-6xl text-white"
+    >Vapour721A marketplace</span
   >
-    Refresh
-    <span class="flex flex-col justify-center"
-      ><IconLibrary icon="reload" /></span
+  <div class="flex flex-row gap-x-4 items-center">
+    <span>Show only contracts I've deployed </span><Switch bind:checked />
+    <span
+      on:click={listVapour721As.refresh}
+      class="bg-gray-700 py-2 px-3 rounded-full flex flex-row gap-x-2 hover:bg-gray-600 transition-colors cursor-pointer"
     >
-  </span>
+      Refresh
+      <span class="flex flex-col justify-center"
+        ><IconLibrary icon="reload" /></span
+      >
+    </span>
+  </div>
 </div>
 <div class="grid grid-cols-4 gap-4">
   {#if dataPromises.length}
