@@ -57,7 +57,6 @@
   };
 
   export const validate = async () => {
-    console.log(value);
     validating = true;
     const validation = await validator(value);
     validating = false;

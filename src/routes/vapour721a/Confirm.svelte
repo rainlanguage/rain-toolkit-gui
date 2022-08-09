@@ -1,4 +1,5 @@
 <script lang="ts">
+  import autoAnimate from "@formkit/auto-animate";
   import { signer } from "svelte-ethers-store";
   import { fade } from "svelte/transition";
   import Button from "$components/Button.svelte";
@@ -18,12 +19,14 @@
   import ContractDeploy from "$components/ContractDeploy.svelte";
   import { getNewChildFromReceipt } from "$src/utils";
   import HumanReadableVapour from "$routes/vapour721a/HumanReadableVapour.svelte";
+  import IconLibrary from "$components/IconLibrary.svelte";
 
   export let step: CreateSteps, config: Vapour721AConfig;
   let uploadComplete: boolean,
     error: string,
     args: InitializeConfigStruct,
     deployPromise: Promise<Contract>;
+  let deploying;
 
   const progress = writable(0);
 
@@ -48,42 +51,57 @@
   };
 
   const deploy721A = async () => {
+    deploying = true;
     const factory = new ethers.Contract(
       "0xeC33aA18e88136C162aEeE30b13530D78B2076c4",
       VapourFactoryArtifact.abi,
       $signer
     );
-    const tx = await factory.createChildTyped(args);
-    const receipt = await tx.wait();
-    const address = getNewChildFromReceipt(receipt, factory);
+    let address;
+    try {
+      const tx = await factory.createChildTyped(args);
+      const receipt = await tx.wait();
+      address = getNewChildFromReceipt(receipt, factory);
+    } catch {
+      deploying = false;
+    }
+    deploying = false;
     return new ethers.Contract(address, VapourArtifact.abi, $signer);
   };
+  $: console.log(deploying);
 </script>
 
-<div in:fade>
-  <Button
+<div use:autoAnimate class="flex flex-col gap-y-8" in:fade>
+  <div
     on:click={() => {
       step--;
-    }}>Back</Button
+    }}
+    class="flex flex-row items-center gap-x-2 rounded-full py-2 px-4 bg-gray-800 self-start cursor-pointer hover:bg-gray-700 transition-colors"
   >
-  <Button
-    disabled={!uploadComplete}
-    on:click={() => {
-      deployPromise = deploy721A();
-    }}>Deploy</Button
-  >
-  {#if deployPromise}
-    <ContractDeploy {deployPromise} type="Vapour721A" />
-  {/if}
-
-  <pre>
+    <IconLibrary icon="back" width={15} />
+    Back
+  </div>
+  <!-- <pre>
     {JSON.stringify(
       { ...config, currencyContract: null, erc20info: null },
       null,
       2
-    )}
-  </pre>
+      )}
+    </pre> -->
+  <span class="text-3xl">Nearly there!</span>
   {#if args}
     <HumanReadableVapour vmStateConfig={args.vmStateConfig} />
+    <Button
+      classes="opacity-80 hover:opacity-100 transition-opacity cursor-pointer bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-lg rounded-md py-3 text-center"
+      disabled={!uploadComplete || deploying}
+      on:click={() => {
+        deployPromise = deploy721A();
+      }}>Deploy</Button
+    >
+  {:else}
+    Generating your Rain script and uploading metadata...
+  {/if}
+  {#if deployPromise}
+    <ContractDeploy {deployPromise} type="Vapour721A" />
   {/if}
 </div>

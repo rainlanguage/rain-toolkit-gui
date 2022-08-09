@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { createEventDispatcher } from "svelte";
 
   const dispatch = createEventDispatcher();
@@ -13,7 +13,11 @@
   export let small = false;
   export let id = "";
   export let shrink = false;
+  export let classes: string = null;
+
+  $: console.log(disabled);
   $: variantCalc = disabled ? "disabled" : variant;
+  $: _classes = disabled ? "" : classes;
 </script>
 
 {#if small}
@@ -21,8 +25,7 @@
     {disabled}
     {id}
     on:click={click}
-    class={"rounded-lg transition-colors text-sm leading-none py-3 px-5 text-white " +
-      variantCalc}
+    class={`rounded-lg transition-colors text-sm leading-none py-3 px-5 text-white ${variantCalc}`}
   >
     <slot />
     {#if !$$slots.default}
@@ -34,8 +37,8 @@
     {disabled}
     {id}
     on:click={click}
-    class={"transition-colors rounded-lg text-base leading-none py-3 px-5 text-white " +
-      variantCalc}
+    class={_classes ||
+      `transition-colors rounded-lg text-base leading-none py-3 px-5 text-white ${variantCalc}`}
   >
     <slot />
     {#if !$$slots.default}
@@ -47,8 +50,8 @@
     {disabled}
     {id}
     on:click={click}
-    class={"w-full transition-colors rounded-lg text-base leading-none py-3 px-5 text-white " +
-      variantCalc}
+    class={_classes ||
+      `w-full transition-colors rounded-lg text-base leading-none py-3 px-5 text-white ${variantCalc}`}
   >
     <slot />
     {#if !$$slots.default}
