@@ -53,6 +53,7 @@
   //Deploy 721A
   import CreateVapour721A from "$routes/vapour721a/CreateVapour721A.svelte";
   import MintVapour721A from "$routes/vapour721a/mint/MintVapour721A.svelte";
+  import BrowseVapour721A from "$routes/vapour721a/browse/BrowseVapour721A.svelte";
   // import ListErc20s from "./routes/mint-erc20/ListERC20s.svelte";
 
   let routes = {};
@@ -91,6 +92,7 @@
 
     "/vapour721a/create": CreateVapour721A,
     "/vapour721a/mint/*": MintVapour721A,
+    "/vapour721a/browse": BrowseVapour721A,
 
     "/address-library": AddressLibrary,
 
@@ -105,8 +107,8 @@
 <Modal
   unstyled={true}
   closeButton={false}
-  classWindow="relative max-w-full max-h-full my-2 mx-auto text-white rounded-xl shadow-md bg-gray-800"
-  classBg="fixed top-0 left-0 w-screen h-screen flex flex-col justify-center bg-gray-900 bg-opacity-75 z-50 backdrop-blur"
+  classWindow="relative max-w-full max-h-full my-2 mx-auto text-white rounded-xl shadow-md bg-gray-900"
+  classBg="fixed top-0 left-0 w-screen h-screen flex flex-col justify-center bg-gray-800 bg-opacity-75 z-50 backdrop-blur"
   classWindowWrap="relative m-2 max-h-full flex flex-col"
   classContent="p-6"
 >

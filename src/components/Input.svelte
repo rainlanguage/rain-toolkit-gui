@@ -119,7 +119,7 @@
             show={$modal2}
             styleContent={{ color: "rgba(249, 250, 251, 1)" }}
             styleWindow={{
-              backgroundColor: "rgba(17, 24, 39, 1) !important",
+              backgroundColor: "rgba(0, 0, 0, 0) !important",
               width: "fit-content",
             }}
             closeButton={false}

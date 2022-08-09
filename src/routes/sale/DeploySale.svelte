@@ -93,7 +93,7 @@
     { value: selectSale.increasingPrice, label: "Increasing Price" },
   ];
 
-  let saleType: { value: number; label: string } = null;
+  let saleType: number = null;
   let maxCapCheck = false;
   let minCapCheck = false;
   let canEndCheck = false;
@@ -116,7 +116,7 @@
 
     saleParams = {
       inputValues: fieldValues,
-      saleType: saleType?.value,
+      saleType: saleType,
       maxCapMode: maxCapCheck,
       minCapMode: minCapCheck,
       canEndMode: canEndCheck,
@@ -297,7 +297,7 @@
         items={saleOptions}
         bind:value={saleType}
         on:change={() => {
-          if (saleType.value == 2)
+          if (saleType == 2)
             document.getElementById("B").style.display = "block";
           else document.getElementById("B").style.display = "none";
         }}
@@ -377,7 +377,7 @@
           <span slot="label"> Minimum raise: </span>
         </Input>
 
-        {#if saleType.value == 0}
+        {#if saleType == 0}
           <Input
             type="number"
             bind:this={fields.startPrice}

@@ -90,9 +90,9 @@
         >Create a new NFT collection</SidebarLink
       >
 
-      <SidebarLink url="/vapour721a/manage">Manage a collection</SidebarLink>
-
-      <SidebarLink url="/vapour721a/mint">Mint from a collection</SidebarLink>
+      <!-- <SidebarLink url="/vapour721a/manage">Manage a collection</SidebarLink>
+      <SidebarLink url="/vapour721a/mint">Mint from a collection</SidebarLink> -->
+      <SidebarLink url="/vapour721a/browse">Browse all collections</SidebarLink>
     </SidebarLinkGroup>
   </div>
 </div>

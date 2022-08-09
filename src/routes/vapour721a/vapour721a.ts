@@ -314,11 +314,11 @@ const prepareBuyConfig = (config: Vapour721AConfig): StateConfig => {
         },
         pick: {
             quantities: "max",
-            prices: "max"
+            prices: "min"
         }
     }
     console.log(JSON.stringify(currency, null, 2))
-    return RuleBuilder.singleBuild(currency)
+    return new RuleBuilder([currency])
 }
 
 const prepareSoulConfig = (config: Vapour721AConfig): StateConfig => {
@@ -332,6 +332,7 @@ export const prepare = (config: Vapour721AConfig): InitializeConfigStruct => {
     const soulConfig: StateConfig = prepareSoulConfig(config)
     const vmStateConfig = VM.combiner(soulConfig, buyConfig, { numberOfSources: 0 })
     const royaltyBPS = (config.royalty / 100) * 10000;
+    const currency = config.useNativeToken ? ethers.constants.AddressZero : config.currency
 
     return {
         name: config.name,
@@ -342,7 +343,7 @@ export const prepare = (config: Vapour721AConfig): InitializeConfigStruct => {
         owner: config.owner,
         admin: config.admin,
         royaltyBPS,
-        currency: config.currency,
+        currency: currency,
         vmStateConfig
     }
 }

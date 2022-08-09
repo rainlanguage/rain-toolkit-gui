@@ -348,6 +348,7 @@ export const saleDeploy = async (
   config: SaleParams,
   ...args
 ): Promise<Sale> => {
+  console.log(config)
 
   const newSale = Sale.deploy(
     deployer,

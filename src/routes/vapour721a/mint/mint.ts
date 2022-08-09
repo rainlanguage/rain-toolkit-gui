@@ -1,4 +1,4 @@
-import { BigNumber, ethers } from "ethers";
+import { BigNumber, ethers, type BigNumberish } from "ethers";
 import { formatEther, formatUnits } from "ethers/lib/utils";
 import { connected, contracts, defaultEvmStores, signer, signerAddress } from "svelte-ethers-store";
 import { derived, writable, type Readable } from "svelte/store";
@@ -7,7 +7,7 @@ import { createClient, gql } from "@urql/svelte";
 import Vapour721AArtifact from "../abi/Vapour721A.json";
 import { ERC20 } from "rain-sdk";
 
-const client = createClient({
+export const client = createClient({
     url: "https://api.thegraph.com/subgraphs/name/vishalkale151071/rain-protocol"
     // url: AddressBook.getSubgraphEndpoint(Number($selectedNetwork.config.chainId))
 })
@@ -17,7 +17,7 @@ export type MintQuote = {
     price?;
     totalPrice?;
     totalPriceFormatted?;
-    finalUnits?;
+    finalUnits?: BigNumber;
     signerReserveBalance?;
     signerReserveBalanceFormatted?;
     targetUnits?;
@@ -128,6 +128,8 @@ export const currency = derived(
     }
     , "");
 
+export const reserveContract = writable(null)
+
 // derived store for getting all the ERC20 info
 export const currencyInfo = derived([signer, currency], ([$signer, $currency], set) => {
     if ($currency == ethers.constants.AddressZero && $signer) {
@@ -144,6 +146,7 @@ export const currencyInfo = derived([signer, currency], ([$signer, $currency], s
         })
     } else if ($currency && $signer) {
         const contract = new ERC20($currency, $signer)
+        reserveContract.set(contract)
         try {
             Promise.all([contract.name(), contract.symbol(), contract.decimals(), contract.balanceOf($signer.getAddress())]).then(res => {
                 const [name, symbol, decimals, signerBalance] = res

@@ -49,10 +49,11 @@ export interface Phase {
 export enum PricingRules {
     FixedPrice,
     StartEndPrice,
-    LinearIncrease
+    // LinearIncrease
 }
 
-export type PriceRule = FixedPrice | StartEndPrice | LinearIncrease
+export type PriceRule = FixedPrice | StartEndPrice
+// | LinearIncrease
 
 export interface FixedPrice {
     type: PricingRules.FixedPrice
@@ -64,17 +65,17 @@ export interface StartEndPrice {
     startPrice: number,
     endPrice: number
 }
-export interface LinearIncrease {
-    type: PricingRules.LinearIncrease
-    startPrice: number,
-    increase: number,
-    period: number
-}
+// export interface LinearIncrease {
+//     type: PricingRules.LinearIncrease
+//     startPrice: number,
+//     increase: number,
+//     period: number
+// }
 
 export const pricingOptions = [
     { value: PricingRules.FixedPrice, label: "Fixed Price" },
     { value: PricingRules.StartEndPrice, label: "Start/End Price" },
-    { value: PricingRules.LinearIncrease, label: "Increasing Price" },
+    // { value: PricingRules.LinearIncrease, label: "Increasing Price" },
 ];
 
 // Access groups

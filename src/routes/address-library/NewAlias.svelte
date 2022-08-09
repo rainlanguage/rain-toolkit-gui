@@ -10,18 +10,18 @@
 
   $: selectItems = [
     ...[...$networkLibrary.keys()].map((g) => {
-      return { label: g };
+      return { label: g, value: g };
     }),
-    { label: "+ Add new group" },
+    { label: "+ Add new group", value: "+ Add new group" },
   ];
-
+  $: console.log(selectGroup, selectItems);
   let selectGroup, groupField;
   let group, alias;
   export let address, type;
 
   const handleAdd = () => {
     const _group =
-      selectGroup?.label == "+ Add new group" ? groupField : selectGroup.label;
+      selectGroup == "+ Add new group" ? groupField : selectGroup.label;
     localLibrary.addAlias(_group, alias, address, type);
     close();
   };
@@ -32,7 +32,7 @@
   <Select items={selectItems} bind:value={selectGroup}>
     <span slot="label">Group</span>
   </Select>
-  {#if selectGroup?.label == "+ Add new group"}
+  {#if selectGroup == "+ Add new group"}
     <Input type="text" bind:value={groupField} />
   {/if}
   <Input type="text" bind:value={alias}>

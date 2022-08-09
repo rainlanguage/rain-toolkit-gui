@@ -1,15 +1,17 @@
 <script lang="ts">
   import { fade, fly } from "svelte/transition";
-  import { connected, defaultEvmStores } from "svelte-ethers-store";
+  import { connected, defaultEvmStores, contracts } from "svelte-ethers-store";
   import { contractAddress, currencyInfo } from "./mint";
-  import TokenPreview from "$routes/vapour721a/mint/TokenPreview.svelte";
   import MintDialog from "$routes/vapour721a/mint/MintDialog.svelte";
+  import NextToken from "$routes/vapour721a/mint/NextToken.svelte";
 
   export let params: {
     wild: string;
   };
 
   $: $contractAddress = params.wild;
+
+  $: console.log($contracts);
   // defaultEvmStores.setProvider(PROVIDER, null);
 </script>
 
@@ -25,7 +27,7 @@
       <MintDialog />
     </div>
     <div class="col-span-3">
-      <TokenPreview />
+      <NextToken />
     </div>
   {/if}
 </div>

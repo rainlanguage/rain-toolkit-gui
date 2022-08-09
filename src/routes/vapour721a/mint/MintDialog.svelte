@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { reserveContract } from "./mint.ts";
   import { fade } from "svelte/transition";
   import { targetUnits, quote, currencyInfo } from "./mint";
   import type { ContractFunction } from "ethers";
@@ -43,7 +44,7 @@
 
   const approve = async () => {
     contractTransaction = {
-      method: $contracts.reserve.approve,
+      method: $reserveContract.approve,
       args: [$contracts.nftContract.address, $quote.totalPrice],
       confirmationMsg: "Approval transaction confirmed",
       callback: () => {
@@ -116,7 +117,7 @@
         </div>
       {/each}
     </div>
-    <div use:autoAnimate class="relative flex flex-col gap-y-6">
+    <div use:autoAnimate class="relative flex flex-col gap-y-6 max-w-md">
       {#if step == MintingSteps.SelectAmount}
         <div class="font-heading text-3xl">
           How many NFTs would you like to mint?
@@ -125,7 +126,7 @@
           <MintAmountInput bind:value={$targetUnits} />
         </div>
         <Button
-          disabled={!$quote?.totalPrice}
+          disabled={!$quote?.totalPrice && !$quote?.finalUnits?.isZero()}
           on:click={() => {
             step++;
           }}>Next</Button
@@ -162,12 +163,12 @@
         <div class="text-xl font-semibold">
           Congratulations! You've minted a scriptable NFT.
         </div>
-        <div class="text-lg font-semibold">View on Rarible</div>
+        <!-- <div class="text-lg font-semibold">View on Rarible</div> -->
       {/if}
     </div>
   </div>
-  {#if $quote}
-    <div use:autoAnimate class="mt-8 bg-gray-800 rounded-lg p-4">
+  {#if $quote && step !== MintingSteps.Complete}
+    <div use:autoAnimate class="mt-8 bg-gray-800 rounded-lg p-4 max-w-md">
       {#if $quote?.targetUnits > 0}
         <div in:fade>
           <Quote quote={$quote} />
@@ -179,6 +180,18 @@
           <span> Getting price... </span>
         </div>
       {/if}
+    </div>
+  {:else if $quote}
+    <span class="text-gray-300"
+      >You minted <span class="font-semibold text-white"
+        >{$quote.finalUnits} NFTs
+      </span>
+    </span>
+    <div class="">
+      <span class="text-gray-300">For</span>
+      <span class="font-semibold"
+        >{$quote.totalPriceFormatted} {$currencyInfo.symbol}
+      </span>
     </div>
   {/if}
 {/if}
