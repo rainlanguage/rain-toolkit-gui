@@ -4161,6 +4161,11 @@ svelte-check@^2.0.0:
     svelte-preprocess "^4.0.0"
     typescript "*"
 
+svelte-confetti-explosion@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/svelte-confetti-explosion/-/svelte-confetti-explosion-0.2.0.tgz#57d70e2e69c7a72d548de6de41ff52137d94e3b3"
+  integrity sha512-quwQzRWtyf0MZR113PCIAx8zi3NExkofrDab5YG2pwjIxvqeNEJ9N0OZl2vCszFbisw/nPDeOT7m8vEtzYbdFg==
+
 svelte-ethers-store@^0.6.3:
   version "0.6.4"
   resolved "https://registry.npmmirror.com/svelte-ethers-store/-/svelte-ethers-store-0.6.4.tgz#dd77ce60e859989baf00f92bbe04cd79102ef89d"

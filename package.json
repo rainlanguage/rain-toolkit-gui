@@ -43,6 +43,7 @@
     "js-sha3": "^0.8.0",
     "process": "^0.11.10",
     "rain-sdk": "git+https://github.com/beehive-innovation/rain-sdk.git#ca8908eaa569b0cc3a3e1a23611b9b818614afa0",
+    "svelte-confetti-explosion": "^0.2.0",
     "svelte-ethers-store": "^0.6.3",
     "svelte-flatpickr": "^3.2.6",
     "svelte-spa-router": "^3.2.0",

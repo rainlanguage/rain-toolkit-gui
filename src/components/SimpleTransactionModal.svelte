@@ -19,6 +19,8 @@
   export let args: any[];
   export let confirmationMsg: string;
   let errorMsg: string, receipt: ContractReceipt, txStatus: TxStatus;
+  export let confirmedCallback: Function = () => {};
+  export let errorCallback: Function = () => {};
 
   onMount(async () => {
     let tx;
@@ -34,13 +36,14 @@
         error.data?.message ||
         error?.message;
       txStatus = TxStatus.Error;
+      errorCallback();
       return;
     }
 
     txStatus = TxStatus.AwaitingConfirmation;
 
     receipt = await tx.wait();
-
+    confirmedCallback();
     txStatus = TxStatus.Confirmed;
   });
 </script>
