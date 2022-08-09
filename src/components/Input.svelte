@@ -1,4 +1,5 @@
 <script lang="ts">
+  import autoAnimate from "@formkit/auto-animate";
   import AddressLibrary from "$src/routes/address-library/AddressLibrary.svelte";
   import { createEventDispatcher, getContext } from "svelte";
   import IconLibrary from "./IconLibrary.svelte";
@@ -37,7 +38,8 @@
   const { open } = getContext("simple-modal");
 
   const handleInput = (e: any) => {
-    const v = type.match(/^(number|range)$/) ? +e.target.value : e.target.value;
+    const v = e.target.value;
+    // const v = type.match(/^(number|range)$/) ? +e.target.value : e.target.value;
     if (debounce) {
       doDebounce(v);
     } else {
@@ -55,6 +57,7 @@
   };
 
   export const validate = async () => {
+    console.log(value);
     validating = true;
     const validation = await validator(value);
     validating = false;
@@ -82,7 +85,7 @@
   };
 </script>
 
-<div class="flex w-full flex-col gap-y-2">
+<div use:autoAnimate class="flex w-full flex-col gap-y-2">
   {#if $$slots.label}
     <div class="font-light text-gray-10 text-sm">
       <slot name="label" />
@@ -100,7 +103,10 @@
         {value}
         {placeholder}
         on:input={handleInput}
-        on:blur={validate}
+        on:blur={() => {
+          console.log("blur");
+          validate();
+        }}
         {disabled}
         {min}
         {max}
@@ -138,9 +144,9 @@
     </div>
   </div>
   {#if error}
-    <span class="text-red-500">{error}</span>
+    <span class="text-red-500 text-sm">{error}</span>
   {/if}
   {#if errorMsg && errorMsg !== ""}
-    <span class="text-red-500">{errorMsg}</span>
+    <span class="text-red-500 text-sm">{errorMsg}</span>
   {/if}
 </div>

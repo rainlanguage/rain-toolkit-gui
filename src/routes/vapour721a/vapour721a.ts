@@ -31,76 +31,51 @@ export const initVapourPhase = (): Phase => {
 }
 
 export const initVapourConfig = (signerAddress): Vapour721AConfig => {
-    return {
-        name: "josh",
-        symbol: "test",
-        description: "a description",
-        imageFile: null,
-        maxSupply: 20,
-        currency: "0x25a4Dd4cd97ED462EB5228de47822e636ec3E31A",
-        royalty: 20,
-        recipient: signerAddress,
-        owner: signerAddress,
-        admin: signerAddress,
-        useNativeToken: false,
-        currencyContract: null,
-        phases: [
-            {
-                "start": "now",
-                "pricing": {
-                    "type": 0,
-                    "startPrice": 1
-                },
-                "allowedGroups": [
-                    {
-                        "type": 0,
-                        "contractAddress": "0x08E46BB0510180bB5e763E73bF3Ae5d49004D6D5"
-                    }
-                ],
-                "walletCap": 5
-            },
-            {
-                "start": "2022-08-07T23:38",
-                "pricing": {
-                    "type": 0,
-                    "startPrice": 10
-                },
-                "allowedGroups": [
-                    {
-                        "type": 1,
-                        "contractAddress": "0x8d88dfb98ba02a6a15784966ed9e6ffa734ad4a6",
-                        "minBalance": 1
-                    }
-                ],
-                "walletCap": 20
-            }
-        ],
-        soulbound: true,
-        erc20info: {
-            ready: false,
-            name: null,
-            symbol: null,
-            decimals: null,
-            balance: null,
-        },
-        mediaUploadResp: null,
-        baseURI: null
-    }
     // return {
-    //     name: null,
-    //     symbol: null,
-    //     description: null,
+    //     name: "josh",
+    //     symbol: "test",
+    //     description: "a description",
     //     imageFile: null,
-    //     maxSupply: null,
-    //     currency: null,
-    //     royalty: null,
+    //     maxSupply: 20,
+    //     currency: "0x25a4Dd4cd97ED462EB5228de47822e636ec3E31A",
+    //     royalty: 20,
     //     recipient: signerAddress,
     //     owner: signerAddress,
     //     admin: signerAddress,
     //     useNativeToken: false,
     //     currencyContract: null,
-    //     phases: [initVapourPhase()],
-    //     soulbound: false,
+    //     phases: [
+    //         {
+    //             "start": "now",
+    //             "pricing": {
+    //                 "type": 0,
+    //                 "startPrice": 1
+    //             },
+    //             "allowedGroups": [
+    //                 {
+    //                     "type": 0,
+    //                     "contractAddress": "0x08E46BB0510180bB5e763E73bF3Ae5d49004D6D5"
+    //                 }
+    //             ],
+    //             "walletCap": 5
+    //         },
+    //         {
+    //             "start": "2022-08-07T23:38",
+    //             "pricing": {
+    //                 "type": 0,
+    //                 "startPrice": 10
+    //             },
+    //             "allowedGroups": [
+    //                 {
+    //                     "type": 1,
+    //                     "contractAddress": "0x8d88dfb98ba02a6a15784966ed9e6ffa734ad4a6",
+    //                     "minBalance": 1
+    //                 }
+    //             ],
+    //             "walletCap": 20
+    //         }
+    //     ],
+    //     soulbound: true,
     //     erc20info: {
     //         ready: false,
     //         name: null,
@@ -111,6 +86,31 @@ export const initVapourConfig = (signerAddress): Vapour721AConfig => {
     //     mediaUploadResp: null,
     //     baseURI: null
     // }
+    return {
+        name: null,
+        symbol: null,
+        description: null,
+        imageFile: null,
+        maxSupply: null,
+        currency: null,
+        royalty: null,
+        recipient: signerAddress,
+        owner: signerAddress,
+        admin: signerAddress,
+        useNativeToken: false,
+        currencyContract: null,
+        phases: [initVapourPhase()],
+        soulbound: false,
+        erc20info: {
+            ready: false,
+            name: null,
+            symbol: null,
+            decimals: null,
+            balance: null,
+        },
+        mediaUploadResp: null,
+        baseURI: null
+    }
 }
 
 
@@ -290,7 +290,7 @@ const prepareBuyConfig = (config: Vapour721AConfig): StateConfig => {
         }
 
         // quantity and price
-        const quantity: Quantity = { struct: maxCapForWallet(ethers.BigNumber.from(phase.walletCap)) }
+        const quantity: Quantity = { struct: maxCapForWallet(ethers.BigNumber.from(phase.walletCap || ethers.constants.MaxUint256)) }
         const price: Price = generatePrice(phase.pricing, { phase, phases, phaseIndex, currencyInfo: config.erc20info })
 
         return {

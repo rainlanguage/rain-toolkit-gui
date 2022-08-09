@@ -10,7 +10,6 @@
   import { getMetadata, listVapour721As } from "./browse";
   import IconLibrary from "$components/IconLibrary.svelte";
 
-  $: console.log($listVapour721As);
   let checked;
   $: $deployer = checked ? $signerAddress : null;
 

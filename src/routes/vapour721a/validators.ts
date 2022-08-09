@@ -1,6 +1,7 @@
-export const validateRoyalty = async (value): Promise<true | { error: string }> => {
-    console.log(value)
-    if (value == "") {
+import type { Validator } from "$src/types";
+
+export const validateRoyalty = async (value): Validator => {
+    if (value == "" || !value) {
         return { error: "Can't be blank" };
     }
     if (value > 100) {

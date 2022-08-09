@@ -16,7 +16,7 @@
   const handleClick = async () => {
     open(SimpleTransactionModal, {
       method: verifyContract.grantRole,
-      args: [selectedRole.value, roleAddress],
+      args: [selectedRole, roleAddress],
       confirmationMsg: `${roleAddress} has been granted role '${selectedRole.label}'.`,
     });
   };

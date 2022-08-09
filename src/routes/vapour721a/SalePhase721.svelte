@@ -1,11 +1,9 @@
 <script lang="ts">
-  import { fade } from "svelte/transition";
   import autoAnimate from "@formkit/auto-animate";
   import IconLibrary from "$components/IconLibrary.svelte";
   import Input from "$components/Input.svelte";
   import {
     type Phase,
-    type Group,
     AllowedGroup,
   } from "$routes/vapour721a/vapour721a-types";
   import SaleAllowedGroup from "$routes/vapour721a/SaleAllowedGroup.svelte";
@@ -13,11 +11,13 @@
   import SalePricing from "$routes/vapour721a/SalePricing.svelte";
   import { arrayAdd, arrayRemove } from "$routes/vapour721a/vapour721a";
   import { createEventDispatcher } from "svelte";
+  import { required } from "$src/validation";
 
   export let phase: Phase;
   export let i: number;
   export let first: boolean;
   export let last: boolean;
+  export let fields: any[];
 
   const dispatch = createEventDispatcher();
 
@@ -51,7 +51,7 @@
 
   <div class="flex flex-col gap-y-2">
     <span class="text-sm">Start</span>
-    <div class="flex flex-row gap-x-6 items-center">
+    <div class="flex flex-row gap-x-6 items-start">
       {#if phase.start === "now"}
         <div
           class="w-full justify-between flex flex-row text-sm text-gray-300 bg-gray-800 px-4 py-3 rounded-md"
@@ -67,10 +67,15 @@
         </div>
       {:else}
         <div class="w-full flex-grow">
-          <Input type="datetime-local" bind:value={phase.start} />
+          <Input
+            type="datetime-local"
+            bind:value={phase.start}
+            validator={required}
+            bind:this={fields[`start-${i}`]}
+          />
         </div>
       {/if}
-      <div class:opacity-0={!last} class="transition-opacity">
+      <div class:opacity-0={!last} class="transition-opacity mt-2">
         <IconLibrary width={15} icon="forward" />
       </div>
       <div
@@ -91,7 +96,7 @@
   </div>
 
   <div class="flex flex-col gap-y-2">
-    <SalePricing bind:pricing={phase.pricing} />
+    <SalePricing bind:fields bind:i bind:pricing={phase.pricing} />
   </div>
 
   <Input type="number" placeholder="No wallet cap" bind:value={phase.walletCap}>
@@ -107,9 +112,11 @@
     {#if !phase.allowedGroups.length}
       <span class="text-sm text-gray-500">No restrictions</span>
     {:else}
-      {#each phase.allowedGroups as group, i}
+      {#each phase.allowedGroups as group, index}
         <SaleAllowedGroup
           bind:group
+          i={`${i}-${index}`}
+          {fields}
           on:remove={() => {
             removeGroup(i);
           }}

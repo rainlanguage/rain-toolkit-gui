@@ -1,5 +1,7 @@
 import { isAddress } from "ethers/lib/utils";
 
+// validators
+
 export const addressValidate = async (value): Promise<true | { error: string }> => {
   if (value == "") {
     return { error: "Can't be blank" };
@@ -14,7 +16,10 @@ export const required = async (value): Promise<true | { error: string }> => {
   if (typeof value == 'string' && value == "") {
     return { error: "Can't be blank" };
   }
-  if (typeof value == 'number' && value == undefined) {
+  if (typeof value == 'number' && (value == undefined || value == null)) {
+    return { error: "Can't be blank" };
+  }
+  if (value == undefined || value == null) {
     return { error: "Can't be blank" };
   }
   return true;

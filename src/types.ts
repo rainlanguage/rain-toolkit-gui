@@ -8,3 +8,5 @@ export type NFTData = {
     totalSupply: number;
     address?: string;
 };
+
+export type Validator = Promise<true | { error: string }>

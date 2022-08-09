@@ -197,7 +197,10 @@ export const validateFields = async (fields: any[]) => {
 
   let fieldValues: any = {};
   const validations = await Promise.all(Object.keys(fields).map(async (key) => {
+    console.log(key, fields)
+    console.log(key, fields[key])
     const validationResult = await fields[key].validate();
+    console.log(key)
     fieldValues[key] = validationResult.value;
     return validationResult;
   }));

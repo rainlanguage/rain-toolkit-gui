@@ -21,6 +21,8 @@
     initVapourConfig,
     initVapourPhase,
   } from "$routes/vapour721a/vapour721a";
+  import type { SvelteComponent } from "svelte";
+  import { validateFields } from "$src/utils";
 
   let addPhaseBtn;
 
@@ -29,6 +31,7 @@
 
   // ui stuff
   export let step: CreateSteps;
+  let fields: any = {};
 
   const addPhase = () => {
     config.phases = arrayAdd(config.phases, initVapourPhase());
@@ -41,6 +44,15 @@
 
   const removePhase = (i: number) => {
     config.phases = arrayRemove(config.phases, i);
+  };
+
+  const confirm = async () => {
+    const { validationResult } = await validateFields(fields);
+    if (validationResult) {
+      step++;
+    } else {
+      window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+    }
   };
 </script>
 
@@ -56,6 +68,7 @@
     <FormSubheading noRuler>Collection details</FormSubheading>
 
     <Input
+      bind:this={fields.name}
       bind:value={config.name}
       type="text"
       validator={required}
@@ -65,6 +78,7 @@
     </Input>
 
     <Input
+      bind:this={fields.symbol}
       bind:value={config.symbol}
       type="text"
       validator={required}
@@ -74,6 +88,7 @@
     </Input>
 
     <Input
+      bind:this={fields.description}
       bind:value={config.description}
       type="textarea"
       validator={required}
@@ -83,6 +98,7 @@
     </Input>
 
     <Input
+      bind:this={fields.maxSupply}
       bind:value={config.maxSupply}
       type="number"
       validator={required}
@@ -92,6 +108,7 @@
     </Input>
 
     <Input
+      bind:this={fields.royalty}
       bind:value={config.royalty}
       type="number"
       validator={validateRoyalty}
@@ -102,6 +119,7 @@
 
     <div class="flex flex-col gap-y-4">
       <Erc20Input
+        bind:this={fields.currency}
         disabled={config.useNativeToken}
         bind:value={config.currency}
         signer={$signer}
@@ -118,7 +136,12 @@
 
     <FormSubheading>Roles</FormSubheading>
 
-    <Input bind:value={config.admin} type="address" validator={addressValidate}>
+    <Input
+      bind:this={fields.admin}
+      bind:value={config.admin}
+      type="address"
+      validator={addressValidate}
+    >
       <slot slot="label">Admin</slot>
       <slot slot="description"
         >The admin can grant other senders access to the mintNFTto function.</slot
@@ -126,6 +149,7 @@
     </Input>
 
     <Input
+      bind:this={fields.recipient}
       bind:value={config.recipient}
       type="address"
       validator={addressValidate}
@@ -136,7 +160,12 @@
       >
     </Input>
 
-    <Input bind:value={config.owner} type="address" validator={addressValidate}>
+    <Input
+      bind:this={fields.owner}
+      bind:value={config.owner}
+      type="address"
+      validator={addressValidate}
+    >
       <slot slot="label">Owner</slot>
       <slot slot="description"
         >The owner has no privileges on the contract, but can set collection
@@ -149,6 +178,7 @@
     <div class="flex flex-col col-span-full gap-y-2" use:autoAnimate>
       {#each config.phases as phase, i}
         <SalePhase721
+          bind:fields
           bind:phase
           {i}
           first={i == 0}
@@ -179,9 +209,7 @@
       </div>
       <div
         class="opacity-80 hover:opacity-100 transition-opacity cursor-pointer bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-lg rounded-md py-3 text-center"
-        on:click={() => {
-          step++;
-        }}
+        on:click={confirm}
       >
         Review and deploy
       </div>
@@ -192,6 +220,7 @@
       bind:imageFile={config.imageFile}
       upload={pin}
       bind:mediaUploadResp={config.mediaUploadResp}
+      bind:this={fields.image}
     />
     <div class="flex flex-col gap-y-2 items-start pt-4">
       <span class="text-3xl">{config.name || "Name"}</span>

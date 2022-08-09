@@ -22,7 +22,7 @@
 
   // pass thru the validate function from the Input component
   export const validate = () => {
-    input?.validate();
+    return input.validate();
   };
 
   // if the signer changes when we've already validated, we have to re-validate
@@ -42,7 +42,7 @@
     gotERC20 = null;
     erc20Info.ready = false;
 
-    if (value == "") {
+    if (value == "" || !value) {
       return { error: "Can't be blank" };
     }
     if (!isAddress(value)) {

@@ -2,15 +2,18 @@
   import { fade } from "svelte/transition";
   import CircularProgressBar from "./CircularProgressBar.svelte";
   import { filedrop } from "filedrop-svelte";
-  import { writable } from "svelte/store";
+  import { writable, type Writable } from "svelte/store";
   import { onMount } from "svelte";
 
-  export let imageFile;
-  export let upload;
+  export let imageFile: File;
+  export let upload: (
+    data: Object[] | File,
+    progressStore?: Writable<number>
+  ) => any;
   export let mediaUploadResp = null;
 
   let options = {};
-  let image, uploadComplete, error;
+  let image, uploadComplete: boolean, error: string;
 
   const progress = writable(0);
   $: progressPercent = `${Math.floor($progress * 100)}%`;
@@ -33,6 +36,7 @@
   );
 
   const readFile = async (files) => {
+    error = null;
     uploadComplete = false;
     $progress = 0;
     reader.readAsDataURL(files.accepted[0]);
@@ -50,6 +54,21 @@
   };
 
   $: imageDropped = image?.src;
+
+  export const validate = async () => {
+    if (!mediaUploadResp?.IpfsHash) {
+      error = "No image uploaded";
+      return {
+        ok: false,
+      };
+    } else {
+      error = null;
+      return {
+        ok: true,
+        mediaUploadResp,
+      };
+    }
+  };
 </script>
 
 <div
@@ -75,7 +94,7 @@
       {#if uploadComplete}
         <span in:fade> Uploaded </span>
       {:else if error}
-        <span in:fade>
+        <span class="text-red-400" in:fade>
           {error}
         </span>
       {:else}
