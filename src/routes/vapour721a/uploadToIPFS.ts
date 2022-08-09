@@ -11,7 +11,6 @@ const apiSecret = import.meta.env.VITE_PINATA_API_SECRET
 export const pin = async (data: Object[] | File, progressStore?: Writable<number>) => {
     const url = `https://api.pinata.cloud/pinning/pinFileToIPFS`;
     let formData = new FormData();
-    console.log(data)
     // if we're pinning metadata (objets)
     if (data instanceof Array) {
         data = data as Object[]
@@ -36,7 +35,7 @@ export const pin = async (data: Object[] | File, progressStore?: Writable<number
         },
         data: formData,
         onUploadProgress: ((p) => {
-            console.log(`${p.loaded} / ${p.total}`);
+            console.log(`Uploading...  ${p.loaded} / ${p.total}`);
             progressStore.set(p.loaded / p.total);
         }),
     })

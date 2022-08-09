@@ -24,11 +24,11 @@
 
   let addPhaseBtn;
 
-  // fields
+  // config
   export let config: Vapour721AConfig = initVapourConfig($signerAddress);
-  export let step: CreateSteps;
 
-  $: console.log(step);
+  // ui stuff
+  export let step: CreateSteps;
 
   const addPhase = () => {
     config.phases = arrayAdd(config.phases, initVapourPhase());
@@ -192,7 +192,6 @@
       bind:imageFile={config.imageFile}
       upload={pin}
       bind:mediaUploadResp={config.mediaUploadResp}
-      bind:image={config.image}
     />
     <div class="flex flex-col gap-y-2 items-start pt-4">
       <span class="text-3xl">{config.name || "Name"}</span>

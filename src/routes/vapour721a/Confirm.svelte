@@ -4,9 +4,9 @@
   import Button from "$components/Button.svelte";
   import type {
     CreateSteps,
+    InitializeConfigStruct,
     Vapour721AConfig,
   } from "$routes/vapour721a/vapour721a-types";
-
   import { onMount } from "svelte";
   import { prepare } from "$routes/vapour721a/vapour721a";
   import { writable } from "svelte/store";
@@ -14,43 +14,40 @@
   import VapourFactoryArtifact from "$routes/vapour721a/abi/Vapour721AFactory.json";
   import VapourArtifact from "$routes/vapour721a/abi/Vapour721A.json";
 
-  import { ethers } from "ethers";
+  import { Contract, ethers } from "ethers";
   import ContractDeploy from "$components/ContractDeploy.svelte";
   import { getNewChildFromReceipt } from "$src/utils";
+  import HumanReadableVapour from "$routes/vapour721a/HumanReadableVapour.svelte";
 
   export let step: CreateSteps, config: Vapour721AConfig;
+  let uploadComplete: boolean,
+    error: string,
+    args: InitializeConfigStruct,
+    deployPromise: Promise<Contract>;
+
   const progress = writable(0);
-  let uploadComplete, error;
-  let deployPromise;
 
-  $: console.log($progress, uploadComplete, error);
-
-  onMount(() => {
+  onMount(async () => {
     window.scrollTo(0, 0);
+    args = await prepareDeployArgs();
   });
 
-  const deploy721A = async () => {
+  const prepareDeployArgs = async () => {
     uploadComplete = false;
     $progress = 0;
     const metadatas = generateMetadata(config);
-    let mediaUploadResp;
-    // try {
-    mediaUploadResp = await pin(metadatas, progress);
-    console.log(mediaUploadResp);
+    const mediaUploadResp = await pin(metadatas, progress);
     if (mediaUploadResp?.name == "AxiosError") {
       error = "whoops... try again 😭";
       return;
     } else {
       uploadComplete = true;
     }
-    // }
-    // catch {
-    //   error = "whoops... try again 😭";
-    //   return;
-    // }
     config.baseURI = `ipfs://${mediaUploadResp.IpfsHash}`;
-    const args = prepare(config);
-    console.log(args);
+    return prepare(config);
+  };
+
+  const deploy721A = async () => {
     const factory = new ethers.Contract(
       "0xeC33aA18e88136C162aEeE30b13530D78B2076c4",
       VapourFactoryArtifact.abi,
@@ -70,6 +67,7 @@
     }}>Back</Button
   >
   <Button
+    disabled={!uploadComplete}
     on:click={() => {
       deployPromise = deploy721A();
     }}>Deploy</Button
@@ -85,4 +83,7 @@
       2
     )}
   </pre>
+  {#if args}
+    <HumanReadableVapour vmStateConfig={args.vmStateConfig} />
+  {/if}
 </div>

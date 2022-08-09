@@ -9,17 +9,12 @@
   export let upload;
   export let mediaUploadResp = null;
 
-  $: console.log(mediaUploadResp);
-
   let options = {};
   let image, uploadComplete, error;
+
   const progress = writable(0);
   $: progressPercent = `${Math.floor($progress * 100)}%`;
 
-  // const uploadProgress = (p: any) => {
-  //   progress = p.loaded / p.total;
-  //   progressPercent = `${Math.floor(progress * 100)}%`;
-  // };
   onMount(() => {
     if (imageFile) {
       reader.readAsDataURL(imageFile);
@@ -55,8 +50,6 @@
   };
 
   $: imageDropped = image?.src;
-
-  $: console.log(error);
 </script>
 
 <div

@@ -148,7 +148,6 @@ const generateGroupCondition = (group: Group): Condition => {
 const generateTimeCondition = (phase: Phase, context: { phases: Phase[], phaseIndex: number }): Condition => {
     // generate the start times for each phase
     const startTimes: number[] = context.phases.map(phase => new Date(phase.start).getTime() / 1000)
-    console.log(context.phaseIndex, context.phases.length)
     if (phase.start == "now" && context.phases.length == 1) {
         return null
     }
@@ -164,7 +163,6 @@ const generateTimeCondition = (phase: Phase, context: { phases: Phase[], phaseIn
         }
     }
     else if (context.phaseIndex == context.phases.length - 1) {
-        console.log('should be after time')
         return {
             struct: {
                 subject: "after-time",
@@ -273,17 +271,13 @@ const prepareBuyConfig = (config: Vapour721AConfig): StateConfig => {
 
         // generate the condition for the time
         const timeCondition: Condition = generateTimeCondition(phase, { phases, phaseIndex })
-        console.log(timeCondition)
 
         // combine them, or if we got back null for time condition just use the group conditions
         let conditions: ConditionGroup
-        console.log(groupConditions)
-        console.log(timeCondition)
         if (!timeCondition && !groupConditions.length) {
             conditions = { conditions: [{ struct: alwaysTrue(), operator: "true" }], operator: "true" }
         }
         else if (!timeCondition && groupConditions.length == 1) {
-            console.log('should be 1')
             conditions = { conditions: groupConditions, operator: "true" }
         } else if (!timeCondition && groupConditions.length > 1) {
             conditions = { conditions: groupConditions, operator: "and" }
@@ -317,7 +311,7 @@ const prepareBuyConfig = (config: Vapour721AConfig): StateConfig => {
             prices: "min"
         }
     }
-    console.log(JSON.stringify(currency, null, 2))
+    // console.log(JSON.stringify(currency, null, 2))
     return new RuleBuilder([currency])
 }
 
