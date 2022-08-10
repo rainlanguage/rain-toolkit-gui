@@ -5,7 +5,10 @@
   import { queryStore } from "@urql/svelte";
   import { formatUnits } from "ethers/lib/utils";
   import { client } from "$src/stores";
+  import { signer } from "svelte-ethers-store";
+  import WalletConnect from "$components/wallet-connect/WalletConnect.svelte";
 
+  let defineSigner = true;
   let skip;
 
   $: sales = queryStore({
@@ -32,7 +35,14 @@
         }`,
     variables: { skip },
   });
+  const connectWallet = () => {
+    defineSigner = false;
+  };
 </script>
+
+{#if !defineSigner && !$signer}
+  <WalletConnect isSigner={false} />
+{/if}
 
 {#if $sales.fetching}
   Loading...
@@ -70,8 +80,12 @@
           </div>
         </div>
         <div class="flex flex-row gap-x-2">
-          <Button on:click={push(`/sale/purchase/${sale.address}`)}
-            >Purchase</Button
+          <Button
+            on:click={() => {
+              $signer
+                ? push(`/sale/purchase/${sale.address}`)
+                : connectWallet();
+            }}>Purchase</Button
           >
         </div>
       </FormPanel>

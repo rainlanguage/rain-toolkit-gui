@@ -20,12 +20,16 @@
   import EscrowUndepositTable from "./escrow/EscrowUndepositTable.svelte";
   import { Sale, ERC20 } from "rain-sdk";
   import { client } from "$src/stores";
+  import WalletConnect from "$components/wallet-connect/WalletConnect.svelte";
 
   export let params: {
     wild: string;
   };
 
-  let sale, reserve, token;
+  let sale,
+    reserve,
+    token,
+    defineSigner = true;
   let errorMsg, saleAddress, saleAddressInput, latestBlock;
   let startPromise, endPromise, initPromise;
 
@@ -111,7 +115,14 @@
   onMount(async () => {
     latestBlock = await $signer.provider.getBlockNumber();
   });
+  const connectWallet = () => {
+    defineSigner = false;
+  };
 </script>
+
+{#if !defineSigner && !$signer}
+  <WalletConnect isSigner={false} />
+{/if}
 
 <div class="flex w-900 flex-col gap-y-4">
   <div class="mb-2 flex flex-col gap-y-2">
@@ -127,7 +138,9 @@
       />
       <Button
         on:click={() => {
-          push(`/sale/purchase/${saleAddressInput}`);
+          $signer
+            ? push(`/sale/purchase/${saleAddressInput}`)
+            : connectWallet();
         }}
       >
         Load
