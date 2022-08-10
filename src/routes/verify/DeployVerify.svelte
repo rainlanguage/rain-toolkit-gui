@@ -9,6 +9,7 @@
   import { ethers } from "ethers";
   import ContractDeploy from "$components/ContractDeploy.svelte";
   import { Verify, VerifyTier } from "rain-sdk";
+  import WalletConnect from "$components/wallet-connect/WalletConnect.svelte";
 
   export const roles = [
     {
@@ -42,6 +43,7 @@
     deployVerifyPromise,
     deployVerifyTierPromise,
     verifyChild;
+  let defineSigner = true;
 
   const deployVerify = async () => {
     const { validationResult, fieldValues } = await validateFields(
@@ -73,7 +75,14 @@
 
     return newVerifyTier;
   };
+  const connectWallet = () => {
+    defineSigner = false;
+  };
 </script>
+
+{#if !defineSigner && !$signer}
+  <WalletConnect isSigner={false} />
+{/if}
 
 <div class="flex max-w-prose flex-col gap-y-4">
   <div class="mb-2 flex flex-col gap-y-2">
@@ -110,8 +119,10 @@
       <Button
         shrink
         on:click={() => {
-          deployVerifyPromise = deployVerify();
-        }}>Deploy Verify</Button
+          $signer ? (deployVerifyPromise = deployVerify()) : connectWallet();
+        }}
+      >
+        Deploy Verify</Button
       >
     {:else}
       <ContractDeploy deployPromise={deployVerifyPromise} type="Verify" />
@@ -137,7 +148,9 @@
       <Button
         shrink
         on:click={() => {
-          deployVerifyTierPromise = deployVerifyTier();
+          $signer
+            ? (deployVerifyTierPromise = deployVerifyTier())
+            : connectWallet();
         }}>Deploy VerifyTier</Button
       >
     {:else}

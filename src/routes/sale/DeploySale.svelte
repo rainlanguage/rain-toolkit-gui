@@ -15,14 +15,15 @@
   import SaleSmallSimulationChart from "./SaleSmallSimulationChart.svelte";
   import HumanReadable from "$components/FriendlySource/HumanReadable.svelte";
   import dayjs from "dayjs";
+  import WalletConnect from "$components/wallet-connect/WalletConnect.svelte";
 
+  let defineSigner = true;
   let fields: any = {};
   let deployPromise;
   let reserveErc20;
   let saleParams: SaleParams, saleParam;
 
   let tierError, tierDiscountError, tierCapMulError;
-
   // some default values for testing
   let recipient = "0xf6CF014a3e92f214a3332F0d379aD32bf0Fae929";
   let reserve = "0x25a4Dd4cd97ED462EB5228de47822e636ec3E31A";
@@ -284,7 +285,15 @@
   const options = {
     enableTime: true,
   };
+
+  const connectWallet = () => {
+    defineSigner = false;
+  };
 </script>
+
+{#if !defineSigner && !$signer}
+  <WalletConnect isSigner={false} />
+{/if}
 
 <div class="flex w-full gap-x-3">
   <div class="z-10 flex w-3/5 flex-col gap-y-4">
@@ -1189,22 +1198,30 @@
       </FormPanel>
       <FormPanel>
         {#if !deployPromise}
-          <Button
-            disabled={tierError?.errorMsg ||
-              tierDiscountError?.errorMsg ||
-              tierCapMulError?.errorMsg ||
-              !startTimestamp ||
-              !endTimestamp}
-            shrink
-            on:click={handleClick}>Deploy Sale</Button
+          <!-- disabled={tierError?.errorMsg ||
+            tierDiscountError?.errorMsg ||
+            tierCapMulError?.errorMsg ||
+            !startTimestamp ||
+            !endTimestamp} -->
+          <Button shrink on:click={$signer ? handleClick : connectWallet}
+            >{#if !$signer}
+              Connect Wallet
+            {:else}
+              Deploy Sale
+            {/if}</Button
           >
+
           {#if !tierError?.errorMsg && !tierDiscountError?.errorMsg && !tierCapMulError?.errorMsg && !startTimestamp && !endTimestamp}
             <span class="text-red-400"
               >Please Select Date/Time to Deploy The Sale</span
             >
           {:else if tierError?.errorMsg || tierDiscountError?.errorMsg || tierCapMulError?.errorMsg}
             <span class="text-red-400"
-              >Please Fill The Fields With Valid Data To Deploy The Sale</span
+              >Please {#if !$signer}
+                Connect your wallet
+              {:else}
+                Fill The Fields With Valid Data To Deploy The Sale
+              {/if}</span
             >
           {/if}
         {:else}

@@ -10,12 +10,17 @@
   import AccountsTable from "./AccountsTable.svelte";
   import ApproveAddress from "./ApproveAddress.svelte";
   import { Verify } from "rain-sdk";
+  import WalletConnect from "$components/wallet-connect/WalletConnect.svelte";
 
   export let params: {
     wild: string;
   };
 
-  let errorMsg, verifyAddressInput, verifyContract, selectedRole;
+  let errorMsg,
+    verifyAddressInput,
+    verifyContract,
+    selectedRole,
+    defineSigner = true;
 
   const initContract = async (address) => {
     verifyContract = new Verify(address, $signer);
@@ -26,7 +31,14 @@
   } else if (params.wild) {
     errorMsg = "Not a valid contract address";
   }
+  const connectWallet = () => {
+    defineSigner = false;
+  };
 </script>
+
+{#if !defineSigner && !$signer}
+  <WalletConnect isSigner={false} />
+{/if}
 
 <div class="flex w-900 flex-col gap-y-4">
   <div class="mb-2 flex flex-col gap-y-2">
@@ -43,7 +55,9 @@
       />
       <Button
         on:click={() => {
-          push(`/verify/administer/${verifyAddressInput}`);
+          $signer
+            ? push(`/verify/administer/${verifyAddressInput}`)
+            : connectWallet();
         }}
       >
         Load

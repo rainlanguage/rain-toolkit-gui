@@ -15,8 +15,10 @@
   } from "rain-sdk";
   import { concat, parseUnits } from "ethers/lib/utils";
   import Switch from "$components/Switch.svelte";
+  import WalletConnect from "$components/wallet-connect/WalletConnect.svelte";
 
-  let deployPromise;
+  let deployPromise,
+    defineSigner = true;
 
   let fields: any = {};
 
@@ -28,7 +30,8 @@
   let erc20name = "MyToken";
   let erc20symbol = "MyTKN";
 
-  let ownerAddress = $signerAddress;
+  let ownerAddress = "";
+  $: if ($signer) ownerAddress = $signerAddress;
   let initSupply = 0;
   let amount = 0;
 
@@ -85,7 +88,14 @@
   const handleClick = () => {
     deployPromise = deployEmissions();
   };
+  const connectWallet = () => {
+    defineSigner = false;
+  };
 </script>
+
+{#if !defineSigner && !$signer}
+  <WalletConnect isSigner={false} />
+{/if}
 
 <div class="flex w-full gap-x-3">
   <div class="flex w-3/5 flex-col gap-y-4">
@@ -208,7 +218,13 @@
 
     <FormPanel>
       {#if !deployPromise}
-        <Button shrink on:click={handleClick}>Deploy ERC20 Token</Button>
+        <Button shrink on:click={$signer ? handleClick : connectWallet}
+          >{#if !$signer}
+            Connect Wallet
+          {:else}
+            Deploy ERC20 Token
+          {/if}</Button
+        >
       {:else}
         <ContractDeploy {deployPromise} type="ERC20 Token" />
       {/if}

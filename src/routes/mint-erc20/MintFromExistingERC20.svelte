@@ -1,7 +1,7 @@
 <script lang="ts">
   import { BigNumber, ethers, providers, Signer } from "ethers";
   import { formatUnits, hexlify } from "ethers/lib/utils";
-  import { signer, signerAddress, provider } from "svelte-ethers-store";
+  import { signer, signerAddress } from "svelte-ethers-store";
   import { push } from "svelte-spa-router";
   import Button from "$components/Button.svelte";
   import FormPanel from "$components/FormPanel.svelte";
@@ -13,12 +13,15 @@
   import { queryStore } from "@urql/svelte";
   import { client } from "$src/stores";
   import { selectedNetwork } from "$src/stores";
+  import WalletConnect from "$components/wallet-connect/WalletConnect.svelte";
 
   export let params: {
     wild: string;
   };
 
-  let erc20Contract, token;
+  let erc20Contract,
+    token,
+    defineSigner = true;
   let errorMsg, erc20Address;
   let showMint, showClaim, isFaucet;
   let initPromise,
@@ -27,10 +30,7 @@
     calcClaimPromise,
     claimPromise,
     emissionAddress;
-  let currentTimestamp,
-    claimedTimestamp,
-    parsedReport,
-    claimableTimestamp;
+  let currentTimestamp, claimedTimestamp, parsedReport, claimableTimestamp;
   let claimantAddress = $signerAddress;
 
   $: if (params.wild || $signer) {
@@ -88,7 +88,7 @@
       Number(emission?.calculateClaimStateConfig.constants[2]);
   };
 
-  $: if(emission) {
+  $: if (emission && parsedReport) {
     faucetData();
   }
 
@@ -97,9 +97,9 @@
       erc20Contract = new EmissionsERC20(params.wild, $signer);
       token = await getERC20(params.wild, $signer, $signerAddress);
       const report = await erc20Contract.report($signerAddress, []);
-      console.log(report)
+      console.log(report);
       parsedReport = tierReport(report.toHexString());
-      console.log(parsedReport)
+      console.log(parsedReport);
       faucetData();
     } else if (params.wild) {
       errorMsg = "Not a valid contract address";
@@ -107,7 +107,9 @@
   };
 
   const calculateClaim = async () => {
-    const claim = await erc20Contract.calculateClaim(claimantAddress) as BigNumber;
+    const claim = (await erc20Contract.calculateClaim(
+      claimantAddress
+    )) as BigNumber;
 
     if (!claim.isZero()) {
       showMint = true;
@@ -118,7 +120,9 @@
   };
 
   const calculateClaimFaucet = async () => {
-    const claim = await erc20Contract.calculateClaim(claimantAddress) as BigNumber;
+    const claim = (await erc20Contract.calculateClaim(
+      claimantAddress
+    )) as BigNumber;
 
     if (!claim.isZero()) {
       showClaim = true;
@@ -135,8 +139,15 @@
     );
     return await tx.wait();
   };
+
+  const connectWallet = () => {
+    defineSigner = false;
+  };
 </script>
 
+{#if !defineSigner && !$signer}
+  <WalletConnect isSigner={false} />
+{/if}
 <div class="flex w-full max-w-prose flex-col gap-y-4">
   <div class="mb-2 flex flex-col gap-y-2">
     <span class="text-2xl">Mint from an already deployed ERC20 token</span>
@@ -154,7 +165,7 @@
       </Input>
       <Button
         on:click={() => {
-          push(`/erc20/mint/${erc20Address}`);
+          $signer ? push(`/erc20/mint/${erc20Address}`) : connectWallet();
         }}
       >
         Load
@@ -182,54 +193,53 @@
         </FormPanel>
 
         {#if BigInt(emission?.calculateClaimStateConfig?.constants[0]) == BigInt($signerAddress)}
-        <FormPanel heading="Mint">
-          {#if !showMint}
-            <div class="flex flex-col gap-y-4">
-              <span class="text-gray-400"
-                >Show mintable amount for {$signerAddress}</span
-              >
-              <Button
-                on:click={() => {
-                  calcMintPromise = calculateClaim();
-                }}
-
-              >
-                Show
-              </Button>
-            </div>
-          {/if}
-          {#if calcMintPromise}
-            <div>
-              {#await calcMintPromise}
-                Getting eligible mint...
-              {:then claim}
-                Mintable amount will be {formatUnits(
-                  claim,
-                  token.erc20decimals
-                )}
-                {token.erc20symbol}
-              {:catch err}
-                <span class="text-lg text-red-400">{err.error.message}</span>
-              {/await}
-            </div>
-          {/if}
-
-          {#if showMint}
-            <Button
-              shrink
-              on:click={() => {
-                mintPromise = claim();
-              }}>Mint</Button
-            >
-            {#if mintPromise}
-              {#await mintPromise}
-                Minting...
-              {:then}
-                Mint complete! Refresh to see your new balance.
-              {/await}
+          <FormPanel heading="Mint">
+            {#if !showMint}
+              <div class="flex flex-col gap-y-4">
+                <span class="text-gray-400"
+                  >Show mintable amount for {$signerAddress}</span
+                >
+                <Button
+                  on:click={() => {
+                    calcMintPromise = calculateClaim();
+                  }}
+                >
+                  Show
+                </Button>
+              </div>
             {/if}
-          {/if}
-        </FormPanel>
+            {#if calcMintPromise}
+              <div>
+                {#await calcMintPromise}
+                  Getting eligible mint...
+                {:then claim}
+                  Mintable amount will be {formatUnits(
+                    claim,
+                    token.erc20decimals
+                  )}
+                  {token.erc20symbol}
+                {:catch err}
+                  <span class="text-lg text-red-400">{err.error.message}</span>
+                {/await}
+              </div>
+            {/if}
+
+            {#if showMint}
+              <Button
+                shrink
+                on:click={() => {
+                  mintPromise = claim();
+                }}>Mint</Button
+              >
+              {#if mintPromise}
+                {#await mintPromise}
+                  Minting...
+                {:then}
+                  Mint complete! Refresh to see your new balance.
+                {/await}
+              {/if}
+            {/if}
+          </FormPanel>
         {/if}
 
         {#if isFaucet}
@@ -287,7 +297,7 @@
               {/if}
             {/if}
 
-            {#if showClaim && (claimableTimestamp <= currentTimestamp)}
+            {#if showClaim && claimableTimestamp <= currentTimestamp}
               <Button
                 shrink
                 on:click={() => {

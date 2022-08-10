@@ -1,13 +1,21 @@
-<script>
+<script lang="ts">
   import DisplayAddress from "./DisplayAddress.svelte";
   import Jazzicon from "./Jazzicon.svelte";
+  import { chainId } from "svelte-ethers-store";
+  import { networks } from "../constants";
 
   export let address;
   export let label = null;
 
   export let name;
   export let avatar;
-  export let network;
+  export let network: any | undefined = undefined;
+
+  networks.forEach((element) => {
+    if (parseInt(element.config.chainId) === $chainId) {
+      network = element.config.chainName;
+    }
+  });
 </script>
 
 <div class="flex flex-col space-y-2">
@@ -18,7 +26,9 @@
   {/if}
   <div class="flex flex-row items-center space-x-2 font-medium">
     {#if !name && !avatar}
-      <span class="space-x-2 ">{network.toUpperCase()} -</span>
+      <span class="space-x-2 "
+        >{network ? network.toUpperCase() : network} -</span
+      >
       <DisplayAddress {address} />
       <Jazzicon {address} width="24" />
     {/if}

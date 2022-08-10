@@ -10,6 +10,7 @@
   import { CombineTier } from "rain-sdk";
   import HumanReadable from "$components/FriendlySource/HumanReadable.svelte";
   import { queryStore } from "@urql/svelte";
+  import WalletConnect from "$components/wallet-connect/WalletConnect.svelte";
 
   export let params: { wild: string },
     errorMsg: string,
@@ -17,6 +18,8 @@
     addressToReport: string,
     parsedReport: number[],
     combineTierContract;
+
+  let defineSigner = true;
 
   const tierValues = new Array(8);
 
@@ -69,7 +72,15 @@
   $: FriendlySource = $combineTier?.data?.combineTier?.state;
 
   $: console.log(FriendlySource);
+
+  const connectWallet = () => {
+    defineSigner = false;
+  };
 </script>
+
+{#if !defineSigner && !$signer}
+  <WalletConnect isSigner={false} />
+{/if}
 
 <div class="mb-2 flex flex-col gap-y-2">
   <span class="text-2xl"> Get a CombineTier report. </span>
@@ -127,7 +138,9 @@
         />
         <Button
           on:click={() => {
-            push(`/combinetier/report/${combineTierAddress}`);
+            $signer
+              ? push(`/combinetier/report/${combineTierAddress}`)
+              : connectWallet();
           }}
         >
           Load

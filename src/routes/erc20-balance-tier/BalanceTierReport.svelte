@@ -9,6 +9,7 @@
   import { queryStore } from "@urql/svelte";
   import { client } from "$src/stores";
   import { ERC20BalanceTier, ERC20 } from "rain-sdk";
+  import WalletConnect from "$components/wallet-connect/WalletConnect.svelte";
 
   export let params;
 
@@ -18,6 +19,7 @@
     addressToReport,
     parsedReport,
     addressBalance;
+  let defineSigner = true;
 
   let balanceTierAddress = params.wild ? params.wild.toLowerCase() : undefined;
 
@@ -76,7 +78,14 @@
     addressToReport = $signerAddress;
     report();
   };
+  const connectWallet = () => {
+    defineSigner = false;
+  };
 </script>
+
+{#if !defineSigner && !$signer}
+  <WalletConnect isSigner={false} />
+{/if}
 
 <div class="flex w-full max-w-prose flex-col gap-y-4">
   <div class="mb-2 flex flex-col gap-y-2">
@@ -154,7 +163,9 @@
       />
       <Button
         on:click={() => {
-          push(`/erc20balancetier/report/${balanceTierAddress}`);
+          $signer
+            ? push(`/erc20balancetier/report/${balanceTierAddress}`)
+            : connectWallet();
         }}
       >
         Load

@@ -9,12 +9,15 @@
   import TokenInfo from "../sale/TokenInfo.svelte";
   import { EmissionsERC20 } from "rain-sdk";
   import { getERC20 } from "$src/utils";
+  import WalletConnect from "$components/wallet-connect/WalletConnect.svelte";
 
   export let params: {
     wild: string;
   };
 
-  let emissionsContract, token;
+  let emissionsContract,
+    token,
+    defineSigner = true;
   let errorMsg, emissionsAddress;
   let showClaim;
   let initPromise, calcClaimPromise, claimPromise;
@@ -45,7 +48,14 @@
     );
     return await tx.wait();
   };
+  const connectWallet = () => {
+    defineSigner = false;
+  };
 </script>
+
+{#if !defineSigner && !$signer}
+  <WalletConnect isSigner={false} />
+{/if}
 
 <div class="flex w-full max-w-prose flex-col gap-y-4">
   <div class="mb-2 flex flex-col gap-y-2">
@@ -64,7 +74,9 @@
       />
       <Button
         on:click={() => {
-          push(`/emissions/claim/${emissionsAddress}`);
+          $signer
+            ? push(`/emissions/claim/${emissionsAddress}`)
+            : connectWallet();
         }}
       >
         Load

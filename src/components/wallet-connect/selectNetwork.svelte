@@ -2,11 +2,10 @@
   import { networks } from "../../constants";
   import { selectedNetwork } from "../../stores";
   import { getContext } from "svelte";
-  import { defaultEvmStores } from "svelte-ethers-store";
+  import { defaultEvmStores, provider } from "svelte-ethers-store";
   import Select from "$components/Select.svelte";
 
   export let onNetworkChange = () => {};
-  export let library;
   let name;
 
   const { close } = getContext("simple-modal");
@@ -20,7 +19,7 @@
   const switchNetwork = async (network) => {
     try {
       // await window.ethereum.request({
-      await library.provider.request({
+      await $provider.provider.request({
         method: "wallet_switchEthereumChain",
         params: [{ chainId: network.config.chainId }],
       });
@@ -31,7 +30,7 @@
       if (switchError.code === 4902) {
         try {
           // await window.ethereum.request({
-          await library.provider.request({
+          await $provider.provider.request({
             method: "wallet_addEthereumChain",
             params: [network.config],
           });

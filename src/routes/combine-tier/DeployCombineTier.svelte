@@ -9,10 +9,12 @@
   import { CombineTier, CombineTierGenerator, VM } from "rain-sdk";
   import { selectLteLogic, selectLteMode } from "../../utils";
   import HumanReadable from "$components/FriendlySource/HumanReadable.svelte";
+  import WalletConnect from "$components/wallet-connect/WalletConnect.svelte";
 
   let tierContractOne: string = "0x43F76B029c9BD72A37367DA5c0323f078A86f0b2",
     tierContractTwo: string = "0x12e418D854E8250c8e3778d5Cb00453FA1475B8f",
-    deployPromise: any;
+    deployPromise: any,
+    defineSigner = true;
 
   const logicOptions = [
     { value: selectLteLogic.every, label: "Every" },
@@ -58,7 +60,14 @@
   const handleClick = () => {
     deployPromise = deployCombineTier();
   };
+  const connectWallet = () => {
+    defineSigner = false;
+  };
 </script>
+
+{#if !defineSigner && !$signer}
+  <WalletConnect isSigner={false} />
+{/if}
 
 <div class="flex w-full gap-x-3">
   <div class="flex w-3/5 flex-col gap-y-4">
@@ -113,7 +122,13 @@
     </FormPanel>
     <FormPanel>
       {#if !deployPromise}
-        <Button shrink on:click={handleClick}>Deploy CombineTier</Button>
+        <Button shrink on:click={$signer ? handleClick : connectWallet}
+          >{#if !$signer}
+            Connect Wallet
+          {:else}
+            Deploy CombineTier
+          {/if}</Button
+        >
       {:else}
         <ContractDeploy {deployPromise} type="CombineTier" />
       {/if}
