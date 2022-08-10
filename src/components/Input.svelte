@@ -114,6 +114,7 @@
       {#if validating}
         <div
           class="absolute right-1 top-0 bottom-0 flex flex-col justify-center"
+          class:push-loader={type == "address"}
         >
           <Ring size="30px" color="#FFF" />
         </div>
@@ -149,3 +150,9 @@
     <span class="text-red-500 text-sm">{errorMsg}</span>
   {/if}
 </div>
+
+<style>
+  .push-loader {
+    @apply right-8;
+  }
+</style>

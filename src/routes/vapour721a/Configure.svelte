@@ -23,6 +23,7 @@
   } from "$routes/vapour721a/vapour721a";
   import type { SvelteComponent } from "svelte";
   import { validateFields } from "$src/utils";
+  import Ring from "$components/Ring.svelte";
 
   let addPhaseBtn;
 
@@ -32,6 +33,7 @@
   // ui stuff
   export let step: CreateSteps;
   let fields: any = {};
+  let validating: boolean;
 
   const addPhase = () => {
     config.phases = arrayAdd(config.phases, initVapourPhase());
@@ -47,12 +49,14 @@
   };
 
   const confirm = async () => {
+    validating = true;
     const { validationResult } = await validateFields(fields);
     if (validationResult) {
       step++;
     } else {
       window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
     }
+    validating = false;
   };
 </script>
 
@@ -118,19 +122,22 @@
     </Input>
 
     <div class="flex flex-col gap-y-4">
-      <Erc20Input
-        bind:this={fields.currency}
-        disabled={config.useNativeToken}
-        bind:value={config.currency}
-        signer={$signer}
-        bind:erc20Info={config.erc20info}
-        bind:contract={config.currencyContract}
-      >
-        <span slot="label"> Currency </span>
-      </Erc20Input>
-      <div class="flex flex-row gap-x-2">
-        <span>Use native token </span>
-        <Switch bind:checked={config.useNativeToken} />
+      <div class="flex flex-col">
+        <span class="text-sm"> Currency </span>
+        {#if !config.useNativeToken}
+          <Erc20Input
+            bind:this={fields.currency}
+            disabled={config.useNativeToken}
+            bind:value={config.currency}
+            signer={$signer}
+            bind:erc20Info={config.erc20info}
+            bind:contract={config.currencyContract}
+          />
+        {/if}
+        <div class="flex flex-row gap-x-2 mt-2">
+          <span>Use native token </span>
+          <Switch bind:checked={config.useNativeToken} />
+        </div>
       </div>
     </div>
 
@@ -211,7 +218,11 @@
         class="opacity-80 hover:opacity-100 transition-opacity cursor-pointer bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-lg rounded-md py-3 text-center"
         on:click={confirm}
       >
-        Review and deploy
+        {#if validating}
+          <Ring color="#FFF" size="30px" />
+        {:else}
+          Review and deploy
+        {/if}
       </div>
     </div>
   </div>

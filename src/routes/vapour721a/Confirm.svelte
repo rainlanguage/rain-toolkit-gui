@@ -20,6 +20,7 @@
   import { getNewChildFromReceipt } from "$src/utils";
   import HumanReadableVapour from "$routes/vapour721a/HumanReadableVapour.svelte";
   import IconLibrary from "$components/IconLibrary.svelte";
+  import Ring from "$components/Ring.svelte";
 
   export let step: CreateSteps, config: Vapour721AConfig;
   let uploadComplete: boolean,
@@ -99,7 +100,10 @@
       }}>Deploy</Button
     >
   {:else}
-    Generating your Rain script and uploading metadata...
+    <div class="flex flex-rowg gap-x-4">
+      <Ring color="#FFF" size="20px" />
+      <span> Generating your Rain script and uploading metadata... </span>
+    </div>
   {/if}
   {#if deployPromise}
     <ContractDeploy {deployPromise} type="Vapour721A" />
