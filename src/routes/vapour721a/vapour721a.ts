@@ -341,3 +341,57 @@ export const prepare = (config: Vapour721AConfig): InitializeConfigStruct => {
         vmStateConfig
     }
 }
+
+export const getNumberOfRules = (config: Vapour721AConfig): number => {
+    const rules: Rule[] = config.phases.map((phase, phaseIndex, phases) => {
+        // generate all the conditions for allowed groups
+        const groupConditions: Condition[] = phase.allowedGroups.map((group) => {
+            return generateGroupCondition(group)
+        })
+        const groupConditionsGroup: ConditionGroup = { conditions: groupConditions, operator: 'and' }
+
+        // generate the condition for the time
+        const timeCondition: Condition = generateTimeCondition(phase, { phases, phaseIndex })
+
+        // combine them, or if we got back null for time condition just use the group conditions
+        let conditions: ConditionGroup
+        if (!timeCondition && !groupConditions.length) {
+            conditions = { conditions: [{ struct: alwaysTrue(), operator: "true" }], operator: "true" }
+        }
+        else if (!timeCondition && groupConditions.length == 1) {
+            conditions = { conditions: groupConditions, operator: "true" }
+        } else if (!timeCondition && groupConditions.length > 1) {
+            conditions = { conditions: groupConditions, operator: "and" }
+        } else if (timeCondition && !groupConditions.length) {
+            conditions = { conditions: [timeCondition], operator: "true" }
+        } else if (timeCondition && groupConditions.length == 1) {
+            conditions = { conditions: [...groupConditions, timeCondition], operator: "and" }
+        } else if (timeCondition && groupConditions.length > 1) {
+            conditions = { conditions: [groupConditionsGroup, timeCondition], operator: "and" }
+        }
+
+        // quantity and price
+        const quantity: Quantity = { struct: maxCapForWallet(ethers.BigNumber.from(phase.walletCap || ethers.constants.MaxUint256)) }
+        const price: Price = generatePrice(phase.pricing, { phase, phases, phaseIndex, currencyInfo: config.erc20info })
+
+        return {
+            priceConditions: conditions,
+            quantityConditions: conditions,
+            quantity,
+            price
+        }
+    })
+    const currency: Currency = {
+        rules,
+        default: {
+            quantity: { struct: alwaysFalse() },
+            price: { struct: alwaysTrue() }
+        },
+        pick: {
+            quantities: "max",
+            prices: "min"
+        }
+    }
+
+    return currency.rules.length
+}

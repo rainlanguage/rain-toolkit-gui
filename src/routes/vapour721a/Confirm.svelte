@@ -9,7 +9,7 @@
     Vapour721AConfig,
   } from "$routes/vapour721a/vapour721a-types";
   import { onMount } from "svelte";
-  import { prepare } from "$routes/vapour721a/vapour721a";
+  import { getNumberOfRules, prepare } from "$routes/vapour721a/vapour721a";
   import { writable } from "svelte/store";
   import { generateMetadata, pin } from "$routes/vapour721a/uploadToIPFS";
   import VapourFactoryArtifact from "$routes/vapour721a/abi/Vapour721AFactory.json";
@@ -26,7 +26,8 @@
   let uploadComplete: boolean,
     error: string,
     args: InitializeConfigStruct,
-    deployPromise: Promise<Contract>;
+    deployPromise: Promise<Contract>,
+    numberOfRules: number;
   let deploying;
 
   const progress = writable(0);
@@ -48,6 +49,7 @@
       uploadComplete = true;
     }
     config.baseURI = `ipfs://${mediaUploadResp.IpfsHash}`;
+    numberOfRules = getNumberOfRules(config)
     return prepare(config);
   };
 
@@ -91,7 +93,7 @@
     </pre> -->
   <span class="text-3xl">Nearly there!</span>
   {#if args}
-    <HumanReadableVapour vmStateConfig={args.vmStateConfig} />
+    <HumanReadableVapour vmStateConfig={args.vmStateConfig} {numberOfRules}/>
     <Button
       classes="opacity-80 hover:opacity-100 transition-opacity cursor-pointer bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-lg rounded-md py-3 text-center"
       disabled={!uploadComplete || deploying}

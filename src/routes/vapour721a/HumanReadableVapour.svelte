@@ -9,9 +9,9 @@
   } from "rain-sdk";
 
   export let vmStateConfig: StateConfig;
+  export let numberOfRules: number;
 
-  let soulboundScript: StateConfig;
-  let saleScript: StateConfig;
+  let tags: string[] = [];
 
   const vapourOpMeta: typeof OpMeta = new Map([
     ...OpMeta,
@@ -76,29 +76,26 @@
       },
     ],
   ]);
-
   HumanFriendlyRead.set(vapourOpMeta);
+
   $: {
-    soulboundScript = {
-      constants: vmStateConfig.constants,
-      sources: [vmStateConfig.sources[0]],
-    };
-    saleScript = {
-      constants: vmStateConfig.constants,
-      sources: [vmStateConfig.sources[1]],
-    };
+    tags = [];
+    tags.push(`Transferability`);
+    for (let i = 0; i < numberOfRules; i++) {
+      tags.push(`Sale Quantity Rule ${i + 1}`)
+      tags.push(`Sale Price Rule ${i + 1}`)
+    }
+    tags.push('Sale Default Price', 'Sale Quantities', 'Sale Prices');
   }
-  $: humanFriendlySoulbound = HumanFriendlyRead.get(soulboundScript, {
+
+  $: humanFriendly = HumanFriendlyRead.get(vmStateConfig, {
     pretty: true,
     storageEnums: ["SUPPLY_LIMIT", "AMOUNT_WITHDRAWN", "AMOUNT_PAYABLE"],
     contextEnums: ["ACCOUNT", "BUY_UNITS"],
+    aliases: tags,
+    ruleBuilder: true
   });
 
-  $: humanFriendlySale = HumanFriendlyRead.get(saleScript, {
-    pretty: true,
-    storageEnums: ["SUPPLY_LIMIT", "AMOUNT_WITHDRAWN", "AMOUNT_PAYABLE"],
-    contextEnums: ["ACCOUNT", "BUY_UNITS"],
-  });
 </script>
 
 <div class="flex w-full flex-col gap-y-2 p-4 border-gray-700 rounded-lg border">
@@ -106,20 +103,10 @@
   <div class="flex flex-col justify-between">
     <span class="break-words pt-2 pb-2 whitespace-pre text">
       <span class="text-gray-400"
-        >Asset's Human Friendly Readable Soulbound Script:</span
+        >Asset's Human Friendly Readable Script:</span
       >
       <div class="mt-2">
-        {humanFriendlySoulbound}
-      </div>
-    </span>
-  </div>
-  <div class="flex flex-col justify-between">
-    <span class="break-words pt-2 pb-2 whitespace-pre text">
-      <span class="text-gray-400"
-        >Asset's Human Friendly Readable Sale Script:</span
-      >
-      <div>
-        {humanFriendlySale}
+        {humanFriendly}
       </div>
     </span>
   </div>
