@@ -45,6 +45,10 @@ query ($contractAddress: Bytes!) {
         amount
         timeStamp
       }
+      vmStateConfig {
+        sources
+        constants
+      }
       mintTransactions {
         id
         hash
