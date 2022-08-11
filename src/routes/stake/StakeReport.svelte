@@ -69,6 +69,7 @@
           }
           decimals
           totalSupply
+          tokenPoolSize
         }
       }`,
     variables: { stakeAddress },
@@ -220,27 +221,6 @@
           {/each}
         {/if}
       </div>
-    </FormPanel>
-
-    <FormPanel heading="Deposit Token">
-      <Button
-        on:click={() => {
-          open(DepositToken, { stakeContract, _stake });
-        }}>Deposit</Button
-      >
-    </FormPanel>
-    <FormPanel>
-      <StakeDepositTable {_stake} {stakeContract} />
-    </FormPanel>
-    <FormPanel heading="Withdraw Token">
-      <Button
-        on:click={() => {
-          open(StakeWithdrawModal, { stakeContract, _stake });
-        }}>Withdraw</Button
-      >
-    </FormPanel>
-    <FormPanel>
-      <StakeWithdrawTable {_stake} {stakeContract} />
     </FormPanel>
   {:else if errorMsg}
     <span class="text-red-400">{errorMsg}</span>

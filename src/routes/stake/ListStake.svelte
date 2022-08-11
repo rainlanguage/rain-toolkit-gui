@@ -5,16 +5,20 @@
   import { queryStore } from "@urql/svelte";
   import { client } from "$src/stores";
   import dayjs from "dayjs";
+  import { formatUnits } from "ethers/lib/utils";
+  import { ethers } from "ethers";
 
   $: stakeERC20s = queryStore({
     client: $client,
     query: `
       query {
-        stakeERC20S {
+        stakeERC20S (orderBy: deployTimestamp, orderDirection:desc) {
           address
           deployer
+          deployTimestamp
           id
           name
+          decimals
           symbol
           initialRatio
           deployTimestamp
@@ -23,6 +27,10 @@
             id
             name
             symbol
+          }
+          tokenPoolSize
+          holders {
+            id
           }
         }
       }`,
@@ -46,6 +54,15 @@
             <span>Deployer: {stake.deployer}</span>
             <span>Deployed: {dayjs.unix(stake.deployTimestamp).toString()}</span
             >
+            <span>Name: {stake?.name}</span>
+            <span>Symbol: {stake?.symbol}</span>
+            <span
+              >Total pool size: {formatUnits(
+                stake?.tokenPoolSize,
+                ethers.BigNumber.from(stake?.token.decimals)
+              )}</span
+            >
+            <span>Stake token holders: {stake?.holders.length}</span>
           </div>
         </div>
         <div class="flex flex-col gap-y-2 mb-4">
@@ -57,8 +74,15 @@
           </div>
         </div>
         <div class="flex flex-row gap-x-2">
-          <Button on:click={push(`/stake/report/${stake.address}`)}
-            >Report</Button
+          <Button
+            on:click={() => {
+              push(`/stake/stake/${stake.address}`);
+            }}>Stake</Button
+          >
+          <Button
+            on:click={() => {
+              push(`/stake/report/${stake.address}`);
+            }}>Report</Button
           >
         </div>
       </FormPanel>

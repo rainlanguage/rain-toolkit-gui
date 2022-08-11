@@ -57,8 +57,8 @@
     const stakeArgs: StakeDeployArgs = {
       token: erc20Address,
       initialRatio: InitialRatio,
-      name: erc20name,
-      symbol: erc20symbol,
+      name: stTokenName,
+      symbol: stTokenSymbol,
     };
 
     let newStake = await Stake.deploy($signer, stakeArgs);
@@ -75,8 +75,10 @@
   <div class="mb-2 flex flex-col gap-y-2">
     <span class="text-2xl"> Deploy a new Stake. </span>
     <span class="text-gray-400">
-      Deploy a Staking contract with ability to stake the reserve token to recieve stake tokens (shares) in 
-      exchange at the stake token/ reserve token ratio where stakers are able to claim prorata shares of stake tokens.
+      Deploy a Staking contract with ability to stake the reserve token to
+      recieve stake tokens (shares) in exchange at the stake token/ reserve
+      token ratio where stakers are able to claim prorata shares of stake
+      tokens.
     </span>
   </div>
   <FormPanel heading="Stake settings">
@@ -105,9 +107,12 @@
     </Input>
     <Input type="text" placeholder="Initial Ratio" bind:value={initialRatio}>
       <span slot="label">Initial Ratio</span>
-      <span slot="description">Initial ratio determines how many stake tokens to get minted when the first ever deposit
-        happens compared to how many reserve token gets deposited, after the first mint the ratio will be determined 
-        by the reserve and stake token balances of the stake contract</span>
+      <span slot="description"
+        >Initial ratio determines how many stake tokens to get minted when the
+        first ever deposit happens compared to how many reserve token gets
+        deposited, after the first mint the ratio will be determined by the
+        reserve and stake token balances of the stake contract</span
+      >
     </Input>
   </FormPanel>
   <FormPanel>

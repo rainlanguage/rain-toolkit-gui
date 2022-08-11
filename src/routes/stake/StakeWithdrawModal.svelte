@@ -98,7 +98,7 @@
           calcPricePromise = calculatePrice(detail);
         }}
       >
-        <span slot="label">Enter the number of units to deposit:</span>
+        <span slot="label">Enter the number of stake tokens to unstake:</span>
       </Input>
       <div class="flex flex-row gap-x-3">
         {#if calcPricePromise}
