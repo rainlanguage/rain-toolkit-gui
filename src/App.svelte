@@ -48,7 +48,7 @@
   //Mint ERC20
   import DeployERC20 from "./routes/mint-erc20/DeployERC20.svelte";
   import MintFromExistingERC20 from "./routes/mint-erc20/MintFromExistingERC20.svelte";
-  // import ListErc20s from "./routes/mint-erc20/ListERC20s.svelte";
+  import ListErc20s from "./routes/mint-erc20/ListERC20s.svelte";
 
   //Deploy 721A
   import CreateVapour721A from "$routes/vapour721a/CreateVapour721A.svelte";
@@ -88,7 +88,7 @@
 
     "/erc20/deploy": DeployERC20,
     "/erc20/mint/*": MintFromExistingERC20,
-    // "/erc20/list": ListErc20s,
+    "/erc20/list": ListErc20s,
 
     "/vapour721a/create": CreateVapour721A,
     "/vapour721a/mint/*": MintVapour721A,
