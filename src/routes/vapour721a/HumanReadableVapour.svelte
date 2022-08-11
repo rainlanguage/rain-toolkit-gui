@@ -93,7 +93,7 @@
     storageEnums: ["SUPPLY_LIMIT", "AMOUNT_WITHDRAWN", "AMOUNT_PAYABLE"],
     contextEnums: ["ACCOUNT", "BUY_UNITS"],
     aliases: tags,
-    ruleBuilder: true
+    enableTagging: true
   });
 
 </script>

@@ -44,7 +44,7 @@
     "graphql": "^16.5.0",
     "js-sha3": "^0.8.0",
     "process": "^0.11.10",
-    "rain-sdk": "git+https://github.com/beehive-innovation/rain-sdk.git#e6d06bbc96d503c5fce7040d1eb1e1dc3f89f2ff",
+    "rain-sdk": "git+https://github.com/beehive-innovation/rain-sdk.git#5d2265efae425ba266cdb5baaccbdfa7893b157f",
     "svelte-confetti-explosion": "^0.2.0",
     "svelte-ethers-store": "^2.5.5",
     "svelte-flatpickr": "^3.2.6",

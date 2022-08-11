@@ -3729,9 +3729,9 @@ quick-lru@^5.1.1:
   resolved "https://registry.npmmirror.com/quick-lru/-/quick-lru-5.1.1.tgz#366493e6b3e42a3a6885e2e99d18f80fb7a8c932"
   integrity sha512-WuyALRjWPDGtt/wzJiadO5AXY+8hZ80hVpe6MyivgraREW751X3SbhRvG3eLKOYN+8VEvqLcf3wdnt44Z4S4SA==
 
-"rain-sdk@git+https://github.com/beehive-innovation/rain-sdk.git#e6d06bbc96d503c5fce7040d1eb1e1dc3f89f2ff":
+"rain-sdk@git+https://github.com/beehive-innovation/rain-sdk.git#5d2265efae425ba266cdb5baaccbdfa7893b157f":
   version "2.1.1-beta"
-  resolved "git+https://github.com/beehive-innovation/rain-sdk.git#e6d06bbc96d503c5fce7040d1eb1e1dc3f89f2ff"
+  resolved "git+https://github.com/beehive-innovation/rain-sdk.git#5d2265efae425ba266cdb5baaccbdfa7893b157f"
   dependencies:
     ethers "^5.5.2"
     prettier "^2.6.2"
