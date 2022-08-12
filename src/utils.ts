@@ -207,6 +207,19 @@ export const validateFields = async (fields: any[]) => {
   };
 };
 
+export const FriendlySourceValidate = (fields: any[]) => {
+  let fieldValues: any = {};
+  const validations = Object.keys(fields).map((key) => {
+    const validationResult = fields[key].validate();
+    fieldValues[key] = validationResult.value;
+    return validationResult;
+  });
+  return {
+    validationResult: validations.every((validation) => validation.ok),
+    fieldValues,
+  };
+};
+
 // to split a timestamp into the separate components
 export function splitTime(timestamp) {
   const msPerMinute = 60 * 1000;

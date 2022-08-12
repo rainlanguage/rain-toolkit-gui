@@ -78,6 +78,7 @@
         dy=""
         text-anchor={textAnchor(i)}>{formatTick(tick)}</text
       >
+      {console.log(formatTick(tick))}
     </g>
   {/each}
   {#if baseline === true}

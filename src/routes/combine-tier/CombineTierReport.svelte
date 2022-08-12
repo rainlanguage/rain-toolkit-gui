@@ -8,7 +8,7 @@
   import { tierReport } from "../../utils";
   import { push } from "svelte-spa-router";
   import { CombineTier } from "rain-sdk";
-  import HumanReadable from "$components/FriendlySource/HumanReadable.svelte";
+  import HumanReadable from "$components/FriendlySource/HumanFriendlyReadable.svelte";
   import { queryStore } from "@urql/svelte";
 
   export let params: { wild: string },

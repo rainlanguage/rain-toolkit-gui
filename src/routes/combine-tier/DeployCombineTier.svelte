@@ -8,7 +8,7 @@
   import ContractDeploy from "$components/ContractDeploy.svelte";
   import { CombineTier, CombineTierGenerator, VM } from "rain-sdk";
   import { selectLteLogic, selectLteMode } from "../../utils";
-  import HumanReadable from "$components/FriendlySource/HumanReadable.svelte";
+  import HumanReadable from "$components/FriendlySource/HumanFriendlyReadable.svelte";
 
   let tierContractOne: string = "0x43F76B029c9BD72A37367DA5c0323f078A86f0b2",
     tierContractTwo: string = "0x12e418D854E8250c8e3778d5Cb00453FA1475B8f",

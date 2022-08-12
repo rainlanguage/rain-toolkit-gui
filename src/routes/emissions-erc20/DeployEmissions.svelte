@@ -7,7 +7,7 @@
   import { validateFields } from "../../utils";
   import { addressValidate } from "../../validation";
   import ContractDeploy from "$components/ContractDeploy.svelte";
-  import HumanReadable from "$components/FriendlySource/HumanReadable.svelte";
+  import HumanReadable from "$components/FriendlySource/HumanFriendlyReadable.svelte";
   import {
     EmissionsERC20,
     type ERC20Config,
@@ -18,6 +18,7 @@
     SequentialEmissions,
   } from "rain-sdk";
   import { parseEther, parseUnits } from "ethers/lib/utils";
+  import EmissionSmallSimulationChart from "./EmissionSmallSimulationChart.svelte";
 
   let deployPromise;
 
@@ -41,6 +42,10 @@
   let numberOfIncrements = 12;
   let ownerAddress = $signerAddress;
   let initSupply = 0;
+  let FriendlySource;
+  let NumberOfIc;
+  let BlockTime;
+  let Period;
 
   let tier1 = 100,
     tier2 = 200,
@@ -65,31 +70,62 @@
     return true;
   };
 
-  $: FriendlySource = {
-    tierAddress,
-    blockTime,
-    period,
-    numberOfIncrements,
-    ownerAddress,
-    initSupply,
-    tier1,
-    tier2,
-    tier3,
-    tier4,
-    tier5,
-    tier6,
-    tier7,
-    tier8,
-    maxTier1,
-    maxTier2,
-    maxTier3,
-    maxTier4,
-    maxTier5,
-    maxTier6,
-    maxTier7,
-    maxTier8,
-    emissionsType,
-  };
+  // $: FriendlySource = {
+  //   tierAddress,
+  //   blockTime,
+  //   period,
+  //   numberOfIncrements,
+  //   ownerAddress,
+  //   initSupply,
+  //   tier1,
+  //   tier2,
+  //   tier3,
+  //   tier4,
+  //   tier5,
+  //   tier6,
+  //   tier7,
+  //   tier8,
+  //   maxTier1,
+  //   maxTier2,
+  //   maxTier3,
+  //   maxTier4,
+  //   maxTier5,
+  //   maxTier6,
+  //   maxTier7,
+  //   maxTier8,
+  //   emissionsType,
+  // };
+  $: {
+    NumberOfIc =
+      numberOfIncrements && numberOfIncrements > 2 ? numberOfIncrements : 3;
+    BlockTime = blockTime ? blockTime : 2;
+    Period = period >= BlockTime ? period : BlockTime;
+    FriendlySource = {
+      tierAddress,
+      blockTime: BlockTime,
+      period: Period,
+      numberOfIncrements: NumberOfIc,
+      ownerAddress,
+      initSupply,
+      tier1,
+      tier2,
+      tier3,
+      tier4,
+      tier5,
+      tier6,
+      tier7,
+      tier8,
+      maxTier1,
+      maxTier2,
+      maxTier3,
+      maxTier4,
+      maxTier5,
+      maxTier6,
+      maxTier7,
+      maxTier8,
+      emissionsType,
+    };
+  }
 
   const deployEmissions = async () => {
     const { validationResult, fieldValues } = await validateFields(fields);
@@ -459,17 +495,13 @@
     {/if}
   </div>
   <div class="flex w-2/5 flex-col gap-y-4">
-    <!-- {#if emissionVals && emissionsType}
+    {#if FriendlySource && emissionsType}
       <span class="relative">
         <FormPanel>
-          <SaleSmallSimulationChart
-            emissionsType={emissionsType.value}
-            {saleVals}
-            {reserveErc20}
-          />
+          <EmissionSmallSimulationChart {FriendlySource} />
         </FormPanel>
       </span>
-    {/if} -->
+    {/if}
     {#if FriendlySource && emissionsType}
       <span class="sticky">
         <FormPanel heading="Human Readable Source">

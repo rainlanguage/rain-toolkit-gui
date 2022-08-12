@@ -1,4 +1,4 @@
-<!-- <script lang="ts">
+<script lang="ts">
   import { setContext } from "svelte";
   import { BigNumber, ethers } from "ethers";
   import { LayerCake, Svg, Html } from "layercake";
@@ -11,14 +11,14 @@
   import { timeFormat } from "d3-time-format";
   import { writable } from "svelte/store";
   import IconLibrary from "$components/IconLibrary.svelte";
-  import { selectSale } from "./sale";
+  import type { selectSale } from "./sale";
   import {
-    ApplyOpFn,
+    type FnPtrsJSVM,
     FixedPrice,
     IncDecPrice,
-    SaleJS,
+    SaleJSVM,
     SaleStorage,
-    StateJS,
+    type StateJSVM,
     vLBP,
     VM,
   } from "rain-sdk";
@@ -30,7 +30,7 @@
   let xKey = "timestamp";
   let yKey = "price";
   let data;
-  let simulSale: SaleJS;
+  let simulSale: SaleJSVM;
   let script;
   let points;
   let startTime;
@@ -48,9 +48,9 @@
 
   // setting the simulation variables
   // setting up the custom timestamp function for js-vm BLOCK_TIMESTAMP opcode
-  let opcodeFn: ApplyOpFn = {
+  let opcodeFn: FnPtrsJSVM = {
     [VM.Opcodes.BLOCK_TIMESTAMP]: (
-      state: StateJS,
+      state: StateJSVM,
       operand: number,
       data: any
     ) => {
@@ -58,15 +58,17 @@
     },
   };
 
-  let storageOpFn: ApplyOpFn = {};
+  let storageOpFn: FnPtrsJSVM = {};
 
   const now = Math.floor(Date.now() / 1000);
 
   $: {
     // setting up the timestamps for simulation
-    startTime = saleVals.startTimestamp ? saleVals.startTimestamp : now; // current timestamp as default
-    endTime = saleVals.endTimestamp
-      ? saleVals.endTimestamp
+    startTime = saleVals?.startTimestamp ? saleVals.startTimestamp : now; // current timestamp as default
+    endTime = saleVals?.endTimestamp
+      ? saleVals.endTimestamp == saleVals.startTimestamp
+        ? saleVals.endTimestamp + 60 * 60 * 24
+        : saleVals.endTimestamp
       : now + 60 * 60 * 24; // 24 hours from now as default
     saleRange = endTime - startTime;
 
@@ -83,16 +85,15 @@
         saleVals.initialSupply,
         reserveErc20?.erc20decimals
       );
-
       storageOpFn[SaleStorage.RemainingUnits] = (
-        state: StateJS,
+        state: StateJSVM,
         operand: number,
         data: any
       ) => {
         state.stack.push(parseUnits(saleVals.initialSupply.toString()));
       };
       storageOpFn[SaleStorage.TotalReserveIn] = (
-        state: StateJS,
+        state: StateJSVM,
         operand: number,
         data: any
       ) => {
@@ -110,11 +111,14 @@
       );
     }
 
-    // instantiating the SaleJS (ie.e Sale JS-VM)
+    // instantiating the SaleJSVM (ie.e Sale JS-VM)
     simulSale =
       saleType == 1
-        ? new SaleJS(script, { applyOpFn: opcodeFn, storageOpFn: storageOpFn })
-        : new SaleJS(script, { applyOpFn: opcodeFn });
+        ? new SaleJSVM(script, {
+            applyOpFn: opcodeFn,
+            storageOpFn: storageOpFn,
+          })
+        : new SaleJSVM(script, { applyOpFn: opcodeFn });
 
     // executing the simulation
     initSimul();
@@ -133,20 +137,21 @@
     points = [];
 
     for (let i = startTime; i < endTime; i += length) {
-      console.log(await simulSale.run(0, i));
-      // points.push({
-      //   timestamp: i * 1000,
-      //   price: (+formatUnits(
-      //     ,
-      //     reserveErc20?.erc20decimals
-      //   )).toFixed(4),
-      // });
+      points.push({
+        timestamp: i * 1000,
+        price: (+formatUnits(
+          await (
+            await simulSale.run({ timestamp: i })
+          )[0],
+          reserveErc20?.erc20decimals
+        )).toFixed(4),
+      });
     }
 
     data = points;
 
     // consol the points for dev
-    // console.log(data);
+    // console.log("points", points);
 
     // min and max prices among points for dev
     min = points.reduce((e, m) =>
@@ -184,7 +189,7 @@
         <AxisY
           gridlines={true}
           ticks={5}
-          formatTick={(d) => `${d} ${reserveErc20?.erc20symbol ?? ""}`}
+          formatTick={(d) => `${d} ${reserveErc20?.erc20symbol ?? ""} `}
         />
         <Line stroke="rgba(59, 130, 246)" />
         <Scatter />
@@ -208,4 +213,4 @@
     width: 100%;
     height: 300px;
   }
-</style> -->
+</style>

@@ -8,12 +8,17 @@
   import FormPanel from "$components/FormPanel.svelte";
   import Input from "$components/Input.svelte";
   import Switch from "$components/Switch.svelte";
-  import { getERC20, validateFields, isTier } from "../../utils";
+  import {
+    getERC20,
+    validateFields,
+    isTier,
+    FriendlySourceValidate,
+  } from "../../utils";
   import { saleDeploy, type SaleParams, selectSale } from "./sale";
   import Flatpickr from "svelte-flatpickr";
   import "flatpickr/dist/flatpickr.css";
   import SaleSmallSimulationChart from "./SaleSmallSimulationChart.svelte";
-  import HumanReadable from "$components/FriendlySource/HumanReadable.svelte";
+  import HumanReadable from "$components/FriendlySource/HumanFriendlyReadable.svelte";
   import dayjs from "dayjs";
 
   let fields: any = {};
@@ -104,8 +109,8 @@
   let tierCapMulActCheck = false;
   let afterMinimumRaiseCheck = false;
 
-  const getSaleParams = async () => {
-    const { validationResult, fieldValues } = await validateFields(fields);
+  const getSaleParams = () => {
+    const { validationResult, fieldValues } = FriendlySourceValidate(fields);
     fieldValues.startTimestamp = Math.floor(
       dayjs(startTimestamp).$d.getTime() / 1000
     );
@@ -128,8 +133,7 @@
       afterMinimumRaiseMode: afterMinimumRaiseCheck,
     };
 
-    saleParam = saleParams;
-    return { validationResult, saleParams };
+    return { saleParams };
   };
 
   $: saleVals = {
@@ -141,77 +145,77 @@
     initialSupply,
   };
 
-  // $: FriendlySource = {
-  //   startTimestamp: Math.floor(dayjs(startTimestamp).$d.getTime() / 1000),
-  //   endTimestamp: Math.floor(dayjs(endTimestamp).$d.getTime() / 1000),
-  //   saleType: saleType?.value,
-  //   maxCapMode: maxCapCheck,
-  //   minCapMode: minCapCheck,
-  //   canEndMode: canEndCheck,
-  //   extraTimeDiscountMode: extraTimeDiscountCheck,
-  //   tierDiscountMode: tierDiscountCheck,
-  //   tierDiscountActMode: tierDiscountActCheck,
-  //   tierCapMulMode: tierCapMulCheck,
-  //   tierCapMulActMode: tierCapMulActCheck,
-  //   afterMinimumRaiseMode: afterMinimumRaiseCheck,
+  $: FriendlySource = {
+    startTimestamp: Math.floor(dayjs(startTimestamp).$d.getTime() / 1000),
+    endTimestamp: Math.floor(dayjs(endTimestamp).$d.getTime() / 1000),
+    saleType: saleType?.value,
+    maxCapMode: maxCapCheck,
+    minCapMode: minCapCheck,
+    canEndMode: canEndCheck,
+    extraTimeDiscountMode: extraTimeDiscountCheck,
+    tierDiscountMode: tierDiscountCheck,
+    tierDiscountActMode: tierDiscountActCheck,
+    tierCapMulMode: tierCapMulCheck,
+    tierCapMulActMode: tierCapMulActCheck,
+    afterMinimumRaiseMode: afterMinimumRaiseCheck,
 
-  //   recipient,
-  //   reserve,
-  //   startBlock,
-  //   cooldownDuration,
-  //   saleTimeout,
-  //   minimumRaise,
-  //   startPrice,
-  //   endPrice,
-  //   name,
-  //   symbol,
-  //   initialSupply,
-  //   distributionEndForwardingAddress,
-  //   maxWalletCap,
-  //   minWalletCap,
-  //   tier,
-  //   minimumStatus,
-  //   extraTimeDiscountThreshold,
-  //   extraTimeDiscount,
-  //   extraTime,
-  //   extraTimeAmount,
-  //   tierDiscountAddress,
-  //   tierCapMulAddress,
-  //   discountTier1,
-  //   discountTier2,
-  //   discountTier3,
-  //   discountTier4,
-  //   discountTier5,
-  //   discountTier6,
-  //   discountTier7,
-  //   discountTier8,
-  //   capMulTier1,
-  //   capMulTier2,
-  //   capMulTier3,
-  //   capMulTier4,
-  //   capMulTier5,
-  //   capMulTier6,
-  //   capMulTier7,
-  //   capMulTier8,
-  //   discountActTier1,
-  //   discountActTier2,
-  //   discountActTier3,
-  //   discountActTier4,
-  //   discountActTier5,
-  //   discountActTier6,
-  //   discountActTier7,
-  //   discountActTier8,
-  //   capMulActTier1,
-  //   capMulActTier2,
-  //   capMulActTier3,
-  //   capMulActTier4,
-  //   capMulActTier5,
-  //   capMulActTier6,
-  //   capMulActTier7,
-  //   capMulActTier8,
+    recipient,
+    reserve,
+    startBlock,
+    cooldownDuration,
+    saleTimeout,
+    minimumRaise,
+    startPrice,
+    endPrice,
+    name,
+    symbol,
+    initialSupply,
+    distributionEndForwardingAddress,
+    maxWalletCap,
+    minWalletCap,
+    tier,
+    minimumStatus,
+    extraTimeDiscountThreshold,
+    extraTimeDiscount,
+    extraTime,
+    extraTimeAmount,
+    tierDiscountAddress,
+    tierCapMulAddress,
+    discountTier1,
+    discountTier2,
+    discountTier3,
+    discountTier4,
+    discountTier5,
+    discountTier6,
+    discountTier7,
+    discountTier8,
+    capMulTier1,
+    capMulTier2,
+    capMulTier3,
+    capMulTier4,
+    capMulTier5,
+    capMulTier6,
+    capMulTier7,
+    capMulTier8,
+    discountActTier1,
+    discountActTier2,
+    discountActTier3,
+    discountActTier4,
+    discountActTier5,
+    discountActTier6,
+    discountActTier7,
+    discountActTier8,
+    capMulActTier1,
+    capMulActTier2,
+    capMulActTier3,
+    capMulActTier4,
+    capMulActTier5,
+    capMulActTier6,
+    capMulActTier7,
+    capMulActTier8,
 
-  //   saleParam: saleParam,
-  // };
+    saleParam: getSaleParams().saleParams,
+  };
 
   // @TODO write validators
   const defaultValidator = () => {
@@ -252,7 +256,28 @@
   }
 
   const deploy = async () => {
-    const { validationResult, saleParams } = await getSaleParams();
+    const { validationResult, fieldValues } = await validateFields(fields);
+    fieldValues.startTimestamp = Math.floor(
+      dayjs(startTimestamp).$d.getTime() / 1000
+    );
+    fieldValues.endTimestamp = Math.floor(
+      dayjs(endTimestamp).$d.getTime() / 1000
+    );
+    fieldValues.reserveErc20 = reserveErc20;
+
+    saleParams = {
+      inputValues: fieldValues,
+      saleType: saleType?.value,
+      maxCapMode: maxCapCheck,
+      minCapMode: minCapCheck,
+      canEndMode: canEndCheck,
+      extraTimeDiscountMode: extraTimeDiscountCheck,
+      tierDiscountMode: tierDiscountCheck,
+      tierDiscountActMode: tierDiscountActCheck,
+      tierCapMulMode: tierCapMulCheck,
+      tierCapMulActMode: tierCapMulActCheck,
+      afterMinimumRaiseMode: afterMinimumRaiseCheck,
+    };
 
     if (validationResult) {
       return await saleDeploy($signer, $signerAddress, saleParams);
@@ -1215,7 +1240,7 @@
   </div>
 
   <div class="flex w-2/5 flex-col gap-y-4">
-    <!-- {#if saleVals && saleType}
+    {#if saleVals && saleType}
       <span class="relative">
         <FormPanel>
           <SaleSmallSimulationChart
@@ -1225,8 +1250,8 @@
           />
         </FormPanel>
       </span>
-    {/if} -->
-    <!-- {#if FriendlySource && saleType}
+    {/if}
+    {#if FriendlySource && saleType}
       <span class="sticky">
         <FormPanel heading="Human Readable Source">
           <HumanReadable
@@ -1236,7 +1261,7 @@
           />
         </FormPanel>
       </span>
-    {/if} -->
+    {/if}
   </div>
 </div>
 

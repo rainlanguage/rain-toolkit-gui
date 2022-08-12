@@ -14,6 +14,10 @@
     type StateConfig,
     LinearEmissions,
     SequentialEmissions,
+    EmissionsERC20Context,
+    CombineTierContext,
+    SaleContext,
+    SaleStorage,
   } from "rain-sdk";
 
   export let FriendlySource, signer, contractType;
@@ -84,8 +88,8 @@
         }
 
         emissionsSource = HumanFriendlyRead.get(vmStateConfig, {
-          contract: "emissions",
           pretty: true,
+          contextEnums: [EmissionsERC20Context[0]],
         });
       } catch (error) {
         console.log(error);
@@ -96,19 +100,21 @@
     }
     if (contractType.toLowerCase() === "combinetier") {
       try {
-        combineTierSource = HumanFriendlyRead.prettify(
-          HumanFriendlyRead.get(
-            new CombineTierGenerator(FriendlySource.tierContractOne, {
-              delegatedReport: true,
-              hasReportForSingleTier: true,
-            }).combineWith(
-              FriendlySource.tierContractTwo,
-              FriendlySource.logicValue,
-              FriendlySource.modeValue,
-              true,
-              true
-            )
-          )
+        combineTierSource = HumanFriendlyRead.get(
+          new CombineTierGenerator(FriendlySource.tierContractOne, {
+            delegatedReport: true,
+            hasReportForSingleTier: true,
+          }).combineWith(
+            FriendlySource.tierContractTwo,
+            FriendlySource.logicValue,
+            FriendlySource.modeValue,
+            true,
+            true
+          ),
+          {
+            pretty: true,
+            contextEnums: [CombineTierContext[0], CombineTierContext[1]],
+          }
         );
       } catch (error) {
         errorMsg = error;
@@ -117,55 +123,87 @@
     }
     if (contractType.toLowerCase() === "sale") {
       try {
-        saleDurationConfig = HumanFriendlyRead.prettify(
-          HumanFriendlyRead.get(
-            getSaleDuration(FriendlySource.saleParam, signer)
-          )
+        saleDurationConfig = HumanFriendlyRead.get(
+          getSaleDuration(FriendlySource.saleParam, signer),
+          {
+            pretty: true,
+            contextEnums: [SaleContext[0]],
+            storageEnums: [
+              SaleStorage[0],
+              SaleStorage[1],
+              SaleStorage[2],
+              SaleStorage[3],
+            ],
+          }
         );
       } catch (error) {
         console.log(error);
         saleDurationConfig = error;
       }
-      if (contractType.toLowerCase() === "any") {
-        if (ethers.utils.isHexString(FriendlySource.sources[0])) {
-          FriendlySource.sources = FriendlySource.sources.map((source) =>
-            arrayify(source)
-          );
-          for (let i = 0; i < FriendlySource.constants.length; i++) {
-            FriendlySource.constants[i] = hexlify(
-              BigInt(FriendlySource.constants[i])
-            );
-          }
-        }
-        try {
-          anySource = HumanFriendlyRead.prettify(
-            HumanFriendlyRead.get(FriendlySource)
-          );
-        } catch (error) {
-          errorMsg = error;
-          err = true;
-        }
-      }
 
       try {
-        buyCapConfig = HumanFriendlyRead.prettify(
-          HumanFriendlyRead.get(getBuyWalletCap(FriendlySource.saleParam))
+        buyCapConfig = HumanFriendlyRead.get(
+          getBuyWalletCap(FriendlySource.saleParam),
+          {
+            pretty: true,
+            contextEnums: [SaleContext[0]],
+            storageEnums: [
+              SaleStorage[0],
+              SaleStorage[1],
+              SaleStorage[2],
+              SaleStorage[3],
+            ],
+          }
         );
       } catch (error) {
         buyCapConfig = error;
       }
-
       try {
         priceConfig =
           FriendlySource.startTimestamp && FriendlySource.endTimestamp
-            ? HumanFriendlyRead.prettify(
-                HumanFriendlyRead.get(
-                  calculatePriceConfig(FriendlySource.saleParam)
-                )
+            ? HumanFriendlyRead.get(
+                calculatePriceConfig(FriendlySource.saleParam),
+                {
+                  pretty: true,
+                  contextEnums: [SaleContext[0]],
+                  storageEnums: [
+                    SaleStorage[0],
+                    SaleStorage[1],
+                    SaleStorage[2],
+                    SaleStorage[3],
+                  ],
+                }
               )
             : "Select Sale's Start & End Date/Time To Show Price Script";
       } catch (error) {
         priceConfig = error;
+      }
+    }
+    if (contractType.toLowerCase() === "any") {
+      if (ethers.utils.isHexString(FriendlySource.sources[0])) {
+        FriendlySource.sources = FriendlySource.sources.map((source) =>
+          arrayify(source)
+        );
+        for (let i = 0; i < FriendlySource.constants.length; i++) {
+          FriendlySource.constants[i] = hexlify(
+            BigInt(FriendlySource.constants[i])
+          );
+        }
+      }
+      try {
+        anySource = HumanFriendlyRead.get(FriendlySource, {
+          pretty: true,
+          contextEnums: [SaleContext[0]],
+          storageEnums: [
+            SaleStorage[0],
+            SaleStorage[1],
+            SaleStorage[2],
+            SaleStorage[3],
+          ],
+        });
+      } catch (error) {
+        errorMsg = error;
+        err = true;
       }
     }
   }
