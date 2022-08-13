@@ -32,7 +32,7 @@
               address
               decimals
               initialRatio
-              stateTokenToTokenRatio
+              stakeTokenToTokenRatio
               tokenToStakeTokenRatio
               tokenPoolSize
               totalSupply
@@ -58,7 +58,7 @@
               address
               decimals
               initialRatio
-              stateTokenToTokenRatio
+              stakeTokenToTokenRatio
               tokenToStakeTokenRatio
               tokenPoolSize
               totalSupply
@@ -100,6 +100,7 @@
       >
     </div>
   </div>
+
   {#if $txQuery.fetching}
     Loading transactions...
   {:else if $txQuery.error}

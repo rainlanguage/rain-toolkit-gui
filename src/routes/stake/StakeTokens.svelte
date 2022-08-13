@@ -36,7 +36,7 @@
         symbol
         initialRatio
         deployTimestamp
-        stateTokenToTokenRatio
+        stakeTokenToTokenRatio
         tokenToStakeTokenRatio
         token {
           decimals
@@ -89,6 +89,7 @@
       </span>
     {/if}
   </div>
+
   {#if !$stake.fetching && !$stake.error && $stake.data}
     <FormPanel>
       <div class="flex flex-col gap-y-2 mb-4">
@@ -155,7 +156,7 @@
       />
       <Button
         on:click={() => {
-          push(`/stake/report/${stakeAddress}`);
+          push(`/stake/stake/${stakeAddress}`);
         }}
       >
         Load

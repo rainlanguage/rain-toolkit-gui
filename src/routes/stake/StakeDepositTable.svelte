@@ -34,8 +34,8 @@
               deployBlock
               deployTimestamp
               deployer
-              stateTokenToTokenRatio
               tokenPoolSize
+              stakeTokenToTokenRatio
               tokenToStakeTokenRatio
               totalSupply
               name
@@ -63,8 +63,8 @@
               deployBlock
               deployTimestamp
               deployer
-              stateTokenToTokenRatio
               tokenPoolSize
+              stakeTokenToTokenRatio
               tokenToStakeTokenRatio
               totalSupply
               name
@@ -106,6 +106,7 @@
       >
     </div>
   </div>
+
   {#if $txQuery.fetching}
     Loading transactions...
   {:else if $txQuery.error}
