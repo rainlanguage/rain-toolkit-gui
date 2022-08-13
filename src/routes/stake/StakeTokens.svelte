@@ -80,11 +80,11 @@
     <span class="text-gray-400"> Stake or unstake tokens. </span>
     {#if !params.wild}
       <span class="text-gray-400">
-        Enter a TransferTier contract address below, or <span
+        Enter a Stake contract address below, or <span
           class="cursor-pointer underline"
           on:click={() => {
             push("/stake/list");
-          }}>browse all deployed TransferTier contracts.</span
+          }}>browse all deployed Stake contracts.</span
         >
       </span>
     {/if}

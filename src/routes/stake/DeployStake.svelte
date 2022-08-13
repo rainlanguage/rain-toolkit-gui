@@ -76,7 +76,7 @@
     <span class="text-2xl"> Deploy a new Stake. </span>
     <span class="text-gray-400">
       Deploy a Staking contract with ability to stake the reserve token to
-      recieve stake tokens (shares) in exchange at the stake token/ reserve
+      receive stake tokens (shares) in exchange at the stake token/ reserve
       token ratio where stakers are able to claim prorata shares of stake
       tokens.
     </span>

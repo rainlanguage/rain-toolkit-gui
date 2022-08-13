@@ -135,11 +135,11 @@
     </span>
     {#if !params.wild}
       <span class="text-gray-400">
-        Enter a TransferTier contract address below, or <span
+        Enter a Stake contract address below, or <span
           class="cursor-pointer underline"
           on:click={() => {
             push("/stake/list");
-          }}>browse all deployed TransferTier contracts.</span
+          }}>browse all deployed Stake contracts.</span
         >
       </span>
     {/if}
@@ -196,7 +196,7 @@
             {_stake?.token.symbol}</span
           >
         {/if}
-        <span class="gap-y-1"> TransferTier Report: </span>
+        <span class="gap-y-1"> Stake Report: </span>
         {#if _stake}
           {#each tiers as value, i}
             {#if timeForTierCheck}
