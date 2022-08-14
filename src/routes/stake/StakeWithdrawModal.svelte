@@ -7,6 +7,7 @@
   import { signer } from "svelte-ethers-store";
   import { Logger, formatUnits, parseUnits } from "ethers/lib/utils";
   import Input from "$components/Input.svelte";
+  import { required } from "$src/validation";
 
   enum TxStatus {
     None,
@@ -97,6 +98,7 @@
         on:input={({ detail }) => {
           calcPricePromise = calculatePrice(detail);
         }}
+        validator={required}
       >
         <span slot="label">Enter the number of stake tokens to unstake:</span>
       </Input>

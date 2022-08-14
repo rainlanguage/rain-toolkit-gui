@@ -15,6 +15,7 @@
   import { ethers } from "ethers";
   import { formatUnits } from "ethers/lib/utils";
   import dayjs from "dayjs";
+  import { addressValidate } from "$src/validation";
 
   const { open } = getContext("simple-modal");
 
@@ -153,6 +154,7 @@
         bind:value={stakeAddress}
         type="address"
         placeholder="Contract address"
+        validator={addressValidate}
       />
       <Button
         on:click={() => {

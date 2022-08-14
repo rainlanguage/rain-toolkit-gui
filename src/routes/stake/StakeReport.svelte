@@ -17,6 +17,7 @@
   import StakeWithdrawModal from "./StakeWithdrawModal.svelte";
   import Switch from "$components/Switch.svelte";
   import Select from "$components/Select.svelte";
+  import { addressValidate, required } from "$src/validation";
 
   const { open } = getContext("simple-modal");
 
@@ -150,6 +151,7 @@
         bind:value={addressToReport}
         type="text"
         placeholder="Enter an Ethereum address"
+        validator={addressValidate}
       />
       <div>
         <span
@@ -165,19 +167,59 @@
         </Select>
       {/if}
       <div class="flex w-full flex-col gap-y-3">
-        <Input type="number" placeholder="Tier 1" bind:value={tiers[0]}>
+        <Input
+          type="number"
+          placeholder="Tier 1"
+          bind:value={tiers[0]}
+          validator={required}
+        >
           <span slot="label"
             >Enter the amount of token that must be used as threshold value for
             each of the tiers.</span
           >
         </Input>
-        <Input type="number" placeholder="Tier 2" bind:value={tiers[1]} />
-        <Input type="number" placeholder="Tier 3" bind:value={tiers[2]} />
-        <Input type="number" placeholder="Tier 4" bind:value={tiers[3]} />
-        <Input type="number" placeholder="Tier 5" bind:value={tiers[4]} />
-        <Input type="number" placeholder="Tier 6" bind:value={tiers[5]} />
-        <Input type="number" placeholder="Tier 7" bind:value={tiers[6]} />
-        <Input type="number" placeholder="Tier 8" bind:value={tiers[7]} />
+        <Input
+          type="number"
+          placeholder="Tier 2"
+          bind:value={tiers[1]}
+          validator={required}
+        />
+        <Input
+          type="number"
+          placeholder="Tier 3"
+          bind:value={tiers[2]}
+          validator={required}
+        />
+        <Input
+          type="number"
+          placeholder="Tier 4"
+          bind:value={tiers[3]}
+          validator={required}
+        />
+        <Input
+          type="number"
+          placeholder="Tier 5"
+          bind:value={tiers[4]}
+          validator={required}
+        />
+        <Input
+          type="number"
+          placeholder="Tier 6"
+          bind:value={tiers[5]}
+          validator={required}
+        />
+        <Input
+          type="number"
+          placeholder="Tier 7"
+          bind:value={tiers[6]}
+          validator={required}
+        />
+        <Input
+          type="number"
+          placeholder="Tier 8"
+          bind:value={tiers[7]}
+          validator={required}
+        />
       </div>
 
       <div class="flex flex-row gap-x-2">
@@ -230,6 +272,7 @@
         bind:value={stakeAddress}
         type="address"
         placeholder="Contract address"
+        validator={addressValidate}
       />
       <Button
         on:click={() => {

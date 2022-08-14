@@ -10,6 +10,19 @@ export const addressValidate = (value): true | { error: string } => {
   return true;
 };
 
+export const required = async (value): Promise<true | { error: string }> => {
+  if (typeof value == 'string' && value == "") {
+    return { error: "Can't be blank" };
+  }
+  if (typeof value == 'number' && (value == undefined || value == null)) {
+    return { error: "Can't be blank" };
+  }
+  if (value == undefined || value == null) {
+    return { error: "Can't be blank" };
+  }
+  return true;
+};
+
 export const defaultValidator = () => {
   return true;
 };

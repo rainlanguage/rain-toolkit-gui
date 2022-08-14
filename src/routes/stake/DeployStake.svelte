@@ -7,6 +7,7 @@
   import ContractDeploy from "$components/ContractDeploy.svelte";
   import { Stake, ERC20, type StakeDeployArgs } from "rain-sdk";
   import { formatUnits } from "ethers/lib/utils";
+  import { addressValidate, required } from "$src/validation";
 
   let erc20Address = "0x25a4Dd4cd97ED462EB5228de47822e636ec3E31A",
     erc20AddressError,
@@ -82,7 +83,12 @@
     </span>
   </div>
   <FormPanel heading="Stake settings">
-    <Input type="address" placeholder="Token address" bind:value={erc20Address}>
+    <Input
+      type="address"
+      placeholder="Token address"
+      bind:value={erc20Address}
+      validator={addressValidate}
+    >
       <span slot="label">Reserve Token Address</span>
       <span slot="description">
         {#if erc20AddressError}
@@ -99,13 +105,28 @@
         {/if}
       </span>
     </Input>
-    <Input type="text" placeholder="Name" bind:value={stTokenName}>
+    <Input
+      type="text"
+      placeholder="Name"
+      bind:value={stTokenName}
+      validator={required}
+    >
       <span slot="label">Stake Token Name</span>
     </Input>
-    <Input type="text" placeholder="Symbol" bind:value={stTokenSymbol}>
+    <Input
+      type="text"
+      placeholder="Symbol"
+      bind:value={stTokenSymbol}
+      validator={required}
+    >
       <span slot="label">Stake Token Symbol</span>
     </Input>
-    <Input type="text" placeholder="Initial Ratio" bind:value={initialRatio}>
+    <Input
+      type="text"
+      placeholder="Initial Ratio"
+      bind:value={initialRatio}
+      validator={required}
+    >
       <span slot="label">Initial Ratio</span>
       <span slot="description"
         >Initial ratio determines how many stake tokens to get minted when the
