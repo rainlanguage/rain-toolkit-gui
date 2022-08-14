@@ -7,6 +7,7 @@
   import ContractDeploy from "$components/ContractDeploy.svelte";
   import { Stake, ERC20, type StakeDeployArgs } from "rain-sdk";
   import { formatUnits } from "ethers/lib/utils";
+  import { addressValidate, required } from "$src/validation";
 
   let erc20Address,
     erc20AddressError,
@@ -77,7 +78,12 @@
     </span>
   </div>
   <FormPanel heading="Stake settings">
-    <Input type="address" placeholder="Token address" bind:value={erc20Address}>
+    <Input
+      type="address"
+      placeholder="Token address"
+      bind:value={erc20Address}
+      validator={addressValidate}
+    >
       <span slot="label">ERC20 token address</span>
       <span slot="description">
         {#if erc20AddressError}
@@ -94,13 +100,28 @@
         {/if}
       </span>
     </Input>
-    <Input type="text" placeholder="Name" bind:value={erc20name}>
+    <Input
+      type="text"
+      placeholder="Name"
+      bind:value={erc20name}
+      validator={required}
+    >
       <span slot="label">Name</span>
     </Input>
-    <Input type="text" placeholder="Symbol" bind:value={erc20symbol}>
+    <Input
+      type="text"
+      placeholder="Symbol"
+      bind:value={erc20symbol}
+      validator={required}
+    >
       <span slot="label">Symbol</span>
     </Input>
-    <Input type="text" placeholder="Initial Ratio" bind:value={initialRatio}>
+    <Input
+      type="text"
+      placeholder="Initial Ratio"
+      bind:value={initialRatio}
+      validator={required}
+    >
       <span slot="label">Initial Ratio</span>
     </Input>
   </FormPanel>

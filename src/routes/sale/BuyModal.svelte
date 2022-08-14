@@ -6,6 +6,7 @@
   import { BigNumber, ethers } from "ethers";
   import Input from "$components/Input.svelte";
   import { selectedNetwork } from "$src/stores";
+  import { required } from "$src/validation";
 
   enum TxStatus {
     None,
@@ -130,6 +131,7 @@
           calcPricePromise = calculatePrice(detail);
         }}
         debounce
+        validator={required}
       >
         <span slot="label">Enter the number of units to buy:</span>
       </Input>

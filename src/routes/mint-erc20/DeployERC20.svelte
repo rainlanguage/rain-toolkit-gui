@@ -4,7 +4,7 @@
   import FormPanel from "$components/FormPanel.svelte";
   import Input from "$components/Input.svelte";
   import { op, validateFields } from "../../utils";
-  import { addressValidate } from "../../validation";
+  import { addressValidate, required } from "../../validation";
   import ContractDeploy from "$components/ContractDeploy.svelte";
   import {
     EmissionsERC20,
@@ -31,11 +31,6 @@
   let ownerAddress = $signerAddress;
   let initSupply = 0;
   let amount = 0;
-
-  // @TODO write validators
-  const defaultValidator = () => {
-    return true;
-  };
 
   const deployEmissions = async () => {
     const { validationResult, fieldValues } = await validateFields(fields);
@@ -100,7 +95,7 @@
         placeholder="Name"
         bind:this={fields.erc20name}
         bind:value={erc20name}
-        validator={defaultValidator}
+        validator={required}
       >
         <span slot="label">Name</span>
       </Input>
@@ -110,7 +105,7 @@
         placeholder="Symbol"
         bind:this={fields.erc20symbol}
         bind:value={erc20symbol}
-        validator={defaultValidator}
+        validator={required}
       >
         <span slot="label">Symbol</span>
       </Input>
@@ -128,7 +123,7 @@
           type="number"
           bind:this={fields.initSupply}
           bind:value={initSupply}
-          validator={defaultValidator}
+          validator={required}
         >
           <span slot="label">Initial Supply</span>
         </Input>
@@ -137,7 +132,7 @@
           type="number"
           bind:this={fields.initSupply}
           bind:value={initSupply}
-          validator={defaultValidator}
+          validator={required}
         >
           <span slot="label">Total Supply (Fixed)</span>
         </Input>
@@ -158,7 +153,7 @@
             type="number"
             bind:this={fields.amount}
             bind:value={amount}
-            validator={defaultValidator}
+            validator={required}
           >
             <span slot="label"
               >Amount of tokens to mint each time in future</span
@@ -183,7 +178,7 @@
           type="number"
           bind:this={fields.blocks}
           bind:value={blocks}
-          validator={defaultValidator}
+          validator={required}
         >
           <span slot="label"> Number of blocks </span>
           <span slot="description">
@@ -195,7 +190,7 @@
           type="text"
           bind:this={fields.units}
           bind:value={units}
-          validator={defaultValidator}
+          validator={required}
         >
           <span slot="label"> Number of token(units) </span>
           <span slot="description">

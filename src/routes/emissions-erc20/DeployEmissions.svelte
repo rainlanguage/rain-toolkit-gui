@@ -5,7 +5,7 @@
   import Input from "$components/Input.svelte";
   import Select from "$components/Select.svelte";
   import { validateFields } from "../../utils";
-  import { addressValidate } from "../../validation";
+  import { addressValidate, required } from "../../validation";
   import ContractDeploy from "$components/ContractDeploy.svelte";
   import HumanReadable from "$components/FriendlySource/HumanReadable.svelte";
   import {
@@ -59,11 +59,6 @@
     maxTier6 = 8000,
     maxTier7 = 16000,
     maxTier8 = 32000;
-
-  // @TODO write validators
-  const defaultValidator = () => {
-    return true;
-  };
 
   $: FriendlySource = {
     tierAddress,
@@ -216,7 +211,7 @@
           placeholder="Name"
           bind:this={fields.erc20name}
           bind:value={erc20name}
-          validator={defaultValidator}
+          validator={required}
         >
           <span slot="label">Name</span>
         </Input>
@@ -226,7 +221,7 @@
           placeholder="Symbol"
           bind:this={fields.erc20symbol}
           bind:value={erc20symbol}
-          validator={defaultValidator}
+          validator={required}
         >
           <span slot="label">Symbol</span>
         </Input>
@@ -234,7 +229,7 @@
           type="number"
           bind:this={fields.blockTime}
           bind:value={blockTime}
-          validator={defaultValidator}
+          validator={required}
         >
           <span slot="label">Block Time</span>
           <span slot="description"
@@ -246,7 +241,7 @@
           type="number"
           bind:this={fields.period}
           bind:value={period}
-          validator={defaultValidator}
+          validator={required}
         >
           <span slot="label">Claim Period</span>
           <span slot="description"
@@ -258,7 +253,7 @@
             type="number"
             bind:this={fields.numberOfIncrements}
             bind:value={numberOfIncrements}
-            validator={defaultValidator}
+            validator={required}
           >
             <span slot="label">Periods Length</span>
             <span slot="description"
@@ -279,7 +274,7 @@
           type="number"
           bind:this={fields.initSupply}
           bind:value={initSupply}
-          validator={defaultValidator}
+          validator={required}
         >
           <span slot="label">Amount of eTKN to mint</span>
         </Input>
@@ -303,7 +298,7 @@
           placeholder=""
           bind:this={fields.tier1}
           bind:value={tier1}
-          validator={defaultValidator}
+          validator={required}
         >
           <span slot="label">Tier 1</span>
         </Input>
@@ -312,7 +307,7 @@
           placeholder=""
           bind:this={fields.tier2}
           bind:value={tier2}
-          validator={defaultValidator}
+          validator={required}
         >
           <span slot="label">Tier 2</span>
         </Input>
@@ -321,7 +316,7 @@
           placeholder=""
           bind:this={fields.tier3}
           bind:value={tier3}
-          validator={defaultValidator}
+          validator={required}
         >
           <span slot="label">Tier 3</span>
         </Input>
@@ -330,7 +325,7 @@
           placeholder=""
           bind:this={fields.tier4}
           bind:value={tier4}
-          validator={defaultValidator}
+          validator={required}
         >
           <span slot="label">Tier 4</span>
         </Input>
@@ -339,7 +334,7 @@
           placeholder=""
           bind:this={fields.tier5}
           bind:value={tier5}
-          validator={defaultValidator}
+          validator={required}
         >
           <span slot="label">Tier 5</span>
         </Input>
@@ -348,7 +343,7 @@
           placeholder=""
           bind:this={fields.tier6}
           bind:value={tier6}
-          validator={defaultValidator}
+          validator={required}
         >
           <span slot="label">Tier 6</span>
         </Input>
@@ -357,7 +352,7 @@
           placeholder=""
           bind:this={fields.tier7}
           bind:value={tier7}
-          validator={defaultValidator}
+          validator={required}
         >
           <span slot="label">Tier 7</span>
         </Input>
@@ -366,7 +361,7 @@
           placeholder=""
           bind:this={fields.tier8}
           bind:value={tier8}
-          validator={defaultValidator}
+          validator={required}
         >
           <span slot="label">Tier 8</span>
         </Input>
@@ -379,7 +374,7 @@
             placeholder=""
             bind:this={fields.maxTier1}
             bind:value={maxTier1}
-            validator={defaultValidator}
+            validator={required}
           >
             <span slot="label">Tier 1</span>
           </Input>
@@ -388,7 +383,7 @@
             placeholder=""
             bind:this={fields.maxTier2}
             bind:value={maxTier2}
-            validator={defaultValidator}
+            validator={required}
           >
             <span slot="label">Tier 2</span>
           </Input>
@@ -397,7 +392,7 @@
             placeholder=""
             bind:this={fields.maxTier3}
             bind:value={maxTier3}
-            validator={defaultValidator}
+            validator={required}
           >
             <span slot="label">Tier 3</span>
           </Input>
@@ -406,7 +401,7 @@
             placeholder=""
             bind:this={fields.maxTier4}
             bind:value={maxTier4}
-            validator={defaultValidator}
+            validator={required}
           >
             <span slot="label">Tier 4</span>
           </Input>
@@ -415,7 +410,7 @@
             placeholder=""
             bind:this={fields.maxTier5}
             bind:value={maxTier5}
-            validator={defaultValidator}
+            validator={required}
           >
             <span slot="label">Tier 5</span>
           </Input>
@@ -424,7 +419,7 @@
             placeholder=""
             bind:this={fields.maxTier6}
             bind:value={maxTier6}
-            validator={defaultValidator}
+            validator={required}
           >
             <span slot="label">Tier 6</span>
           </Input>
@@ -433,7 +428,7 @@
             placeholder=""
             bind:this={fields.maxTier7}
             bind:value={maxTier7}
-            validator={defaultValidator}
+            validator={required}
           >
             <span slot="label">Tier 7</span>
           </Input>
@@ -442,7 +437,7 @@
             placeholder=""
             bind:this={fields.maxTier8}
             bind:value={maxTier8}
-            validator={defaultValidator}
+            validator={required}
           >
             <span slot="label">Tier 8</span>
           </Input>

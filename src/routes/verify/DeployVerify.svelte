@@ -5,7 +5,7 @@
   import FormPanel from "$components/FormPanel.svelte";
   import Input from "$components/Input.svelte";
   import { validateFields } from "$src/utils";
-  import { defaultValidator } from "../../validation";
+  import { required } from "../../validation";
   import { ethers } from "ethers";
   import ContractDeploy from "$components/ContractDeploy.svelte";
   import { Verify, VerifyTier } from "rain-sdk";
@@ -95,7 +95,7 @@
     <Input
       type="text"
       bind:this={verifyFields.adminAddress}
-      validator={defaultValidator}
+      validator={required}
       value={$signerAddress}
     >
       <span slot="label">Admin address: </span>
@@ -122,7 +122,7 @@
     <Input
       type="text"
       bind:this={verifyTierFields.verifyAddress}
-      validator={defaultValidator}
+      validator={required}
       value={verifyChild}
     >
       <span slot="label">Verify address: </span>

@@ -15,6 +15,7 @@
   import SaleSmallSimulationChart from "./SaleSmallSimulationChart.svelte";
   import HumanReadable from "$components/FriendlySource/HumanReadable.svelte";
   import dayjs from "dayjs";
+  import { addressValidate, required } from "$src/validation";
 
   let fields: any = {};
   let deployPromise;
@@ -213,11 +214,6 @@
   //   saleParam: saleParam,
   // };
 
-  // @TODO write validators
-  const defaultValidator = () => {
-    return true;
-  };
-
   const handleClick = async () => {
     deployPromise = deploy();
   };
@@ -312,7 +308,7 @@
           type="address"
           bind:this={fields.recipient}
           bind:value={recipient}
-          validator={defaultValidator}
+          validator={addressValidate}
         >
           <span slot="label"> Recipient: </span>
         </Input>
@@ -321,7 +317,7 @@
           type="address"
           bind:this={fields.reserve}
           bind:value={reserve}
-          validator={defaultValidator}
+          validator={addressValidate}
         >
           <span slot="label"> Reserve token: </span>
           <span slot="description">
@@ -363,7 +359,7 @@
           type="number"
           bind:this={fields.cooldownDuration}
           bind:value={cooldownDuration}
-          validator={defaultValidator}
+          validator={required}
         >
           <span slot="label"> Cool down duration (in blocks): </span>
         </Input>
@@ -372,7 +368,7 @@
           type="number"
           bind:this={fields.minimumRaise}
           bind:value={minimumRaise}
-          validator={defaultValidator}
+          validator={required}
         >
           <span slot="label"> Minimum raise: </span>
         </Input>
@@ -382,7 +378,7 @@
             type="number"
             bind:this={fields.startPrice}
             bind:value={startPrice}
-            validator={defaultValidator}
+            validator={required}
           >
             <span slot="label"> Price: </span>
           </Input>
@@ -391,7 +387,7 @@
             type="number"
             bind:this={fields.startPrice}
             bind:value={startPrice}
-            validator={defaultValidator}
+            validator={required}
           >
             <span slot="label"> Start Price: </span>
           </Input>
@@ -402,7 +398,7 @@
             type="number"
             bind:this={fields.endPrice}
             bind:value={endPrice}
-            validator={defaultValidator}
+            validator={required}
           >
             <span slot="label"> End Price: </span>
           </Input>
@@ -456,7 +452,7 @@
             type="number"
             bind:this={fields.extraTime}
             bind:value={extraTime}
-            validator={defaultValidator}
+            validator={required}
           >
             <span slot="label"> Extra Time: </span>
             <span slot="description">
@@ -469,7 +465,7 @@
             type="number"
             bind:this={fields.extraTimeAmount}
             bind:value={extraTimeAmount}
-            validator={defaultValidator}
+            validator={required}
           >
             <span slot="label"> Extra Time trigger amount: </span>
             <span slot="description">
@@ -499,7 +495,7 @@
               type="range"
               bind:this={fields.extraTimeDiscount}
               bind:value={extraTimeDiscount}
-              validator={defaultValidator}
+              validator={required}
               min="0"
               max="99"
             >
@@ -510,7 +506,7 @@
               type="number"
               bind:this={fields.extraTimeDiscountThreshold}
               bind:value={extraTimeDiscountThreshold}
-              validator={defaultValidator}
+              validator={required}
             >
               <span slot="label"> Discount Threshold: </span>
               <span slot="description">
@@ -547,7 +543,7 @@
             type="address"
             bind:this={fields.tierDiscountAddress}
             bind:value={tierDiscountAddress}
-            validator={defaultValidator}
+            validator={addressValidate}
             errorMsg={tierDiscountError?.errorMsg}
           >
             <span slot="label">Tier Contract Address: </span>
@@ -582,7 +578,7 @@
                     type="range"
                     bind:this={fields.discountTier1}
                     bind:value={discountTier1}
-                    validator={defaultValidator}
+                    validator={required}
                     min="0"
                     max="99"
                   >
@@ -598,7 +594,7 @@
                     type="number"
                     bind:this={fields.discountActTier1}
                     bind:value={discountActTier1}
-                    validator={defaultValidator}
+                    validator={required}
                     disabled={!tierDiscountActCheck}
                   >
                     <span slot="description"> Tier 1 Duration:</span>
@@ -611,7 +607,7 @@
                     type="range"
                     bind:this={fields.discountTier2}
                     bind:value={discountTier2}
-                    validator={defaultValidator}
+                    validator={required}
                     min="0"
                     max="99"
                   >
@@ -627,7 +623,7 @@
                     type="number"
                     bind:this={fields.discountActTier2}
                     bind:value={discountActTier2}
-                    validator={defaultValidator}
+                    validator={required}
                     disabled={!tierDiscountActCheck}
                   >
                     <span slot="description"> Tier 2 Duration:</span>
@@ -640,7 +636,7 @@
                     type="range"
                     bind:this={fields.discountTier3}
                     bind:value={discountTier3}
-                    validator={defaultValidator}
+                    validator={required}
                     min="0"
                     max="99"
                   >
@@ -656,7 +652,7 @@
                     type="number"
                     bind:this={fields.discountActTier3}
                     bind:value={discountActTier3}
-                    validator={defaultValidator}
+                    validator={required}
                     disabled={!tierDiscountActCheck}
                   >
                     <span slot="description"> Tier 3 Duration:</span>
@@ -669,7 +665,7 @@
                     type="range"
                     bind:this={fields.discountTier4}
                     bind:value={discountTier4}
-                    validator={defaultValidator}
+                    validator={required}
                     min="0"
                     max="99"
                   >
@@ -685,7 +681,7 @@
                     type="number"
                     bind:this={fields.discountActTier4}
                     bind:value={discountActTier4}
-                    validator={defaultValidator}
+                    validator={required}
                     disabled={!tierDiscountActCheck}
                   >
                     <span slot="description"> Tier 4 Duration:</span>
@@ -698,7 +694,7 @@
                     type="range"
                     bind:this={fields.discountTier5}
                     bind:value={discountTier5}
-                    validator={defaultValidator}
+                    validator={required}
                     min="0"
                     max="99"
                   >
@@ -714,7 +710,7 @@
                     type="number"
                     bind:this={fields.discountActTier5}
                     bind:value={discountActTier5}
-                    validator={defaultValidator}
+                    validator={required}
                     disabled={!tierDiscountActCheck}
                   >
                     <span slot="description"> Tier 5 Duration:</span>
@@ -727,7 +723,7 @@
                     type="range"
                     bind:this={fields.discountTier6}
                     bind:value={discountTier6}
-                    validator={defaultValidator}
+                    validator={required}
                     min="0"
                     max="99"
                   >
@@ -743,7 +739,7 @@
                     type="number"
                     bind:this={fields.discountActTier6}
                     bind:value={discountActTier6}
-                    validator={defaultValidator}
+                    validator={required}
                     disabled={!tierDiscountActCheck}
                   >
                     <span slot="description"> Tier 6 Duration:</span>
@@ -756,7 +752,7 @@
                     type="range"
                     bind:this={fields.discountTier7}
                     bind:value={discountTier7}
-                    validator={defaultValidator}
+                    validator={required}
                     min="0"
                     max="99"
                   >
@@ -772,7 +768,7 @@
                     type="number"
                     bind:this={fields.discountActTier7}
                     bind:value={discountActTier7}
-                    validator={defaultValidator}
+                    validator={required}
                     disabled={!tierDiscountActCheck}
                   >
                     <span slot="description"> Tier 7 Duration:</span>
@@ -785,7 +781,7 @@
                     type="range"
                     bind:this={fields.discountTier8}
                     bind:value={discountTier8}
-                    validator={defaultValidator}
+                    validator={required}
                     min="0"
                     max="99"
                   >
@@ -801,7 +797,7 @@
                     type="number"
                     bind:this={fields.discountActTier8}
                     bind:value={discountActTier8}
-                    validator={defaultValidator}
+                    validator={required}
                     disabled={!tierDiscountActCheck}
                   >
                     <span slot="description"> Tier 8 Duration:</span>
@@ -831,7 +827,7 @@
                   type="number"
                   bind:this={fields.maxWalletCap}
                   bind:value={maxWalletCap}
-                  validator={defaultValidator}
+                  validator={required}
                 >
                   <span slot="description" />
                 </Input>
@@ -862,7 +858,7 @@
                   type="number"
                   bind:this={fields.minWalletCap}
                   bind:value={minWalletCap}
-                  validator={defaultValidator}
+                  validator={required}
                 />
               </td>
             </tr>
@@ -902,7 +898,7 @@
             type="address"
             bind:this={fields.tierCapMulAddress}
             bind:value={tierCapMulAddress}
-            validator={defaultValidator}
+            validator={addressValidate}
             errorMsg={tierCapMulError?.errorMsg}
           >
             <span slot="label">Tier Contract Address: </span>
@@ -939,7 +935,7 @@
                     type="number"
                     bind:this={fields.capMulTier1}
                     bind:value={capMulTier1}
-                    validator={defaultValidator}
+                    validator={required}
                   >
                     <span slot="description"> Tier 1 Multiplier:</span>
                   </Input>
@@ -949,7 +945,7 @@
                     type="number"
                     bind:this={fields.capMulActTier1}
                     bind:value={capMulActTier1}
-                    validator={defaultValidator}
+                    validator={required}
                     disabled={!tierCapMulActCheck}
                   >
                     <span slot="description"> Tier 1 Duration:</span>
@@ -962,7 +958,7 @@
                     type="number"
                     bind:this={fields.capMulTier2}
                     bind:value={capMulTier2}
-                    validator={defaultValidator}
+                    validator={required}
                   >
                     <span slot="description"> Tier 2 Multiplier:</span>
                   </Input>
@@ -972,7 +968,7 @@
                     type="number"
                     bind:this={fields.capMulActTier2}
                     bind:value={capMulActTier2}
-                    validator={defaultValidator}
+                    validator={required}
                     disabled={!tierCapMulActCheck}
                   >
                     <span slot="description"> Tier 2 Duration:</span>
@@ -985,7 +981,7 @@
                     type="number"
                     bind:this={fields.capMulTier3}
                     bind:value={capMulTier3}
-                    validator={defaultValidator}
+                    validator={required}
                   >
                     <span slot="description"> Tier 3 Multiplier:</span>
                   </Input>
@@ -995,7 +991,7 @@
                     type="number"
                     bind:this={fields.capMulActTier3}
                     bind:value={capMulActTier3}
-                    validator={defaultValidator}
+                    validator={required}
                     disabled={!tierCapMulActCheck}
                   >
                     <span slot="description"> Tier 3 Duration:</span>
@@ -1008,7 +1004,7 @@
                     type="number"
                     bind:this={fields.capMulTier4}
                     bind:value={capMulTier4}
-                    validator={defaultValidator}
+                    validator={required}
                   >
                     <span slot="description"> Tier 4 Multiplier:</span>
                   </Input>
@@ -1018,7 +1014,7 @@
                     type="number"
                     bind:this={fields.capMulActTier4}
                     bind:value={capMulActTier4}
-                    validator={defaultValidator}
+                    validator={required}
                     disabled={!tierCapMulActCheck}
                   >
                     <span slot="description"> Tier 4 Duration:</span>
@@ -1031,7 +1027,7 @@
                     type="number"
                     bind:this={fields.capMulTier5}
                     bind:value={capMulTier5}
-                    validator={defaultValidator}
+                    validator={required}
                   >
                     <span slot="description"> Tier 5 Multiplier:</span>
                   </Input>
@@ -1041,7 +1037,7 @@
                     type="number"
                     bind:this={fields.capMulActTier5}
                     bind:value={capMulActTier5}
-                    validator={defaultValidator}
+                    validator={required}
                     disabled={!tierCapMulActCheck}
                   >
                     <span slot="description"> Tier 5 Duration:</span>
@@ -1054,7 +1050,7 @@
                     type="number"
                     bind:this={fields.capMulTier6}
                     bind:value={capMulTier6}
-                    validator={defaultValidator}
+                    validator={required}
                   >
                     <span slot="description"> Tier 6 Multiplier:</span>
                   </Input>
@@ -1064,7 +1060,7 @@
                     type="number"
                     bind:this={fields.capMulActTier6}
                     bind:value={capMulActTier6}
-                    validator={defaultValidator}
+                    validator={required}
                     disabled={!tierCapMulActCheck}
                   >
                     <span slot="description"> Tier 6 Duration:</span>
@@ -1077,7 +1073,7 @@
                     type="number"
                     bind:this={fields.capMulTier7}
                     bind:value={capMulTier7}
-                    validator={defaultValidator}
+                    validator={required}
                   >
                     <span slot="description"> Tier 7 Multiplier:</span>
                   </Input>
@@ -1087,7 +1083,7 @@
                     type="number"
                     bind:this={fields.capMulActTier7}
                     bind:value={capMulActTier7}
-                    validator={defaultValidator}
+                    validator={required}
                     disabled={!tierCapMulActCheck}
                   >
                     <span slot="description"> Tier 7 Duration:</span>
@@ -1100,7 +1096,7 @@
                     type="number"
                     bind:this={fields.capMulTier8}
                     bind:value={capMulTier8}
-                    validator={defaultValidator}
+                    validator={required}
                   >
                     <span slot="description"> Tier 8 Multiplier:</span>
                   </Input>
@@ -1110,7 +1106,7 @@
                     type="number"
                     bind:this={fields.capMulActTier8}
                     bind:value={capMulActTier8}
-                    validator={defaultValidator}
+                    validator={required}
                     disabled={!tierCapMulActCheck}
                   >
                     <span slot="description"> Tier 8 Duration:</span>
@@ -1127,7 +1123,7 @@
           type="text"
           bind:this={fields.name}
           bind:value={name}
-          validator={defaultValidator}
+          validator={required}
         >
           <span slot="label"> Name: </span>
         </Input>
@@ -1136,7 +1132,7 @@
           type="text"
           bind:this={fields.symbol}
           bind:value={symbol}
-          validator={defaultValidator}
+          validator={required}
         >
           <span slot="label"> Symbol: </span>
         </Input>
@@ -1145,7 +1141,7 @@
           type="number"
           bind:this={fields.initialSupply}
           bind:value={initialSupply}
-          validator={defaultValidator}
+          validator={required}
         >
           <span slot="label"> Initial supply: </span>
         </Input>
@@ -1154,7 +1150,7 @@
           type="address"
           bind:this={fields.distributionEndForwardingAddress}
           bind:value={distributionEndForwardingAddress}
-          validator={defaultValidator}
+          validator={addressValidate}
         >
           <span slot="label">Forwarding address: </span>
           <span slot="description">
@@ -1169,7 +1165,7 @@
           type="address"
           bind:this={fields.tier}
           bind:value={tier}
-          validator={defaultValidator}
+          validator={addressValidate}
           errorMsg={tierError.errorMsg}
         >
           <span slot="label"> Tier: </span>
@@ -1182,7 +1178,7 @@
           type="number"
           bind:this={fields.minimumStatus}
           bind:value={minimumStatus}
-          validator={defaultValidator}
+          validator={required}
         >
           <span slot="label"> Minimum Status: </span>
         </Input>
