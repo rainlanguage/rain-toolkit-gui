@@ -1,6 +1,6 @@
 import { isAddress } from "ethers/lib/utils";
 
-export const addressValidate = (value): true | { error: string } => {
+export const addressValidate = async (value): Promise<true | { error: string }> => {
   if (value == "") {
     return { error: "Can't be blank" };
   }

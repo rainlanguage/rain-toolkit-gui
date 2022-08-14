@@ -8,6 +8,8 @@
   import { Stake, ERC20, type StakeDeployArgs } from "rain-sdk";
   import { formatUnits } from "ethers/lib/utils";
   import { addressValidate, required } from "$src/validation";
+  import Erc20Input from "$components/Erc20Input.svelte";
+  import { validateFields } from "$src/utils";
 
   let erc20Address = "0x25a4Dd4cd97ED462EB5228de47822e636ec3E31A",
     erc20AddressError,
@@ -20,6 +22,8 @@
   let deployPromise;
   let stTokenName = "Stake Token";
   let stTokenSymbol = "stTKN";
+
+  let fields: any = {};
 
   $: if (erc20Address) {
     getERC20();
@@ -67,7 +71,11 @@
     return newStake;
   };
 
-  const handleClick = () => {
+  const handleClick = async () => {
+    // validate all fields before proceeding
+    const { validationResult } = await validateFields(fields);
+    if (!validationResult) return;
+
     deployPromise = deployStake();
   };
 </script>
@@ -83,32 +91,20 @@
     </span>
   </div>
   <FormPanel heading="Stake settings">
-    <Input
-      type="address"
+    <Erc20Input
+      bind:contract={erc20Contract}
+      signer={$signer}
+      value={erc20Address}
       placeholder="Token address"
-      bind:value={erc20Address}
-      validator={addressValidate}
+      bind:this={fields.token}
     >
       <span slot="label">Reserve Token Address</span>
-      <span slot="description">
-        {#if erc20AddressError}
-          <span class="text-red-500">
-            {erc20AddressError}
-          </span>
-        {:else if erc20name && erc20balance}
-          <div class="flex flex-col gap-y-2 font-light text-gray-400">
-            <span>Name: {erc20name}</span>
-            <span>Symbol: {erc20symbol}</span>
-            <span>Your balance: {formatUnits(erc20balance, erc20decimals)}</span
-            >
-          </div>
-        {/if}
-      </span>
-    </Input>
+    </Erc20Input>
     <Input
       type="text"
       placeholder="Name"
       bind:value={stTokenName}
+      bind:this={fields.stTokenName}
       validator={required}
     >
       <span slot="label">Stake Token Name</span>
@@ -117,6 +113,7 @@
       type="text"
       placeholder="Symbol"
       bind:value={stTokenSymbol}
+      bind:this={fields.stTokenSymbol}
       validator={required}
     >
       <span slot="label">Stake Token Symbol</span>
@@ -126,6 +123,7 @@
       placeholder="Initial Ratio"
       bind:value={initialRatio}
       validator={required}
+      bind:this={fields.initialRatio}
     >
       <span slot="label">Initial Ratio</span>
       <span slot="description"
@@ -146,8 +144,5 @@
         <ContractDeploy {deployPromise} type="Stake" />
       {/if}
     </div>
-    {#if erc20AddressError}
-      <span class="text-red-500">Please enter a valid token address</span>
-    {/if}
   </FormPanel>
 </div>
