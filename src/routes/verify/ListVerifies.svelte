@@ -75,7 +75,7 @@
         </div>
         <div class="flex flex-col gap-y-2 mb-4 w-full">
           <span
-            class="text-white cursor-pointer underline"
+            class="text-white cursor-pointer underline hover:text-sky-600"
             on:click={() => {
               handleClick(i);
             }}>Admins Details</span
