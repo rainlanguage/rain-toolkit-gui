@@ -103,17 +103,6 @@
       <div class="flex flex-col gap-y-2">
         <span class="gap-y-1"> VerifyTier Report: </span>
         {#if _verifyTier && parsedReport != undefined}
-          <!-- {#each tiers as value, i} -->
-          <!-- <span class="text-gray-400">
-              Tier {i + 1} : {value}
-              {#if parsedReport ? hexlify(parsedReport?.[i]) != "0xffffffff" : "" && parsedReport != undefined}
-                ✅
-              {:else if parsedReport ? hexlify(parsedReport?.[i]) == "0xffffffff" : ""}
-                ❌
-              {/if}
-            </span> -->
-          <!-- {/each} -->
-
           {#if reportTier?.toHexString() != "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" && reportTier != undefined}
             Tier set on {dayjs.unix(parsedReport?.[0]).toString()}
           {:else}
