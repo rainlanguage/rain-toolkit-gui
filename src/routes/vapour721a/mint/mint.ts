@@ -8,7 +8,7 @@ import Vapour721AArtifact from "../abi/Vapour721A.json";
 import { ERC20 } from "rain-sdk";
 
 export const client = createClient({
-    url: "https://api.thegraph.com/subgraphs/name/vishalkale151071/rain-protocol"
+    url: "https://api.thegraph.com/subgraphs/name/vishalkale151071/blocks"
     // url: AddressBook.getSubgraphEndpoint(Number($selectedNetwork.config.chainId))
 })
 

@@ -1,6 +1,6 @@
 <script lang="ts">
   import autoAnimate from "@formkit/auto-animate";
-  import { signer } from "svelte-ethers-store";
+  import { signer, signerAddress } from "svelte-ethers-store";
   import { fade } from "svelte/transition";
   import Button from "$components/Button.svelte";
   import type {
@@ -14,13 +14,14 @@
   import { generateMetadata, pin } from "$routes/vapour721a/uploadToIPFS";
   import VapourFactoryArtifact from "$routes/vapour721a/abi/Vapour721AFactory.json";
   import VapourArtifact from "$routes/vapour721a/abi/Vapour721A.json";
-
   import { Contract, ethers } from "ethers";
   import ContractDeploy from "$components/ContractDeploy.svelte";
-  import { getNewChildFromReceipt } from "$src/utils";
+  import { getNewChildFromReceipt, replacer } from "$src/utils";
   import HumanReadableVapour from "$routes/vapour721a/HumanReadableVapour.svelte";
   import IconLibrary from "$components/IconLibrary.svelte";
   import Ring from "$components/Ring.svelte";
+  import { RuleBuilder, type Currency } from "rain-sdk";
+  import { StorageOps, vapourOpMeta } from "$routes/vapour721a/opMeta";
 
   export let step: CreateSteps, config: Vapour721AConfig;
   let uploadComplete: boolean,
@@ -29,6 +30,7 @@
     deployPromise: Promise<Contract>,
     numberOfRules: number;
   let deploying;
+  let rules: Currency;
 
   const progress = writable(0);
 
@@ -49,19 +51,32 @@
       uploadComplete = true;
     }
     config.baseURI = `ipfs://${mediaUploadResp.IpfsHash}`;
-    numberOfRules = getNumberOfRules(config)
-    return prepare(config);
+    numberOfRules = getNumberOfRules(config);
+    const [_args, _rules] = prepare(config);
+    rules = _rules;
+
+    // testing out the eval
+    const rulesEval = await RuleBuilder.eval([rules], $signer, {
+      contract: "0x135c64fbde0d530d16182e9e29d66a002db299fd",
+      opMeta: vapourOpMeta,
+      storageOpFn: StorageOps,
+      context: [$signerAddress, "100"],
+    });
+    console.log(rules, rulesEval);
+
+    return _args;
   };
 
   const deploy721A = async () => {
     deploying = true;
     const factory = new ethers.Contract(
-      "0xeC33aA18e88136C162aEeE30b13530D78B2076c4",
+      "0xE60Feb0C119692A03a6f92E9d47F97e054B92600",
       VapourFactoryArtifact.abi,
       $signer
     );
     let address;
     try {
+      console.log(args);
       const tx = await factory.createChildTyped(args);
       const receipt = await tx.wait();
       address = getNewChildFromReceipt(receipt, factory);
@@ -69,6 +84,8 @@
       deploying = false;
     }
     deploying = false;
+    // window.localStorage.setItem(address, JSON.stringify(rules, replacer));
+    $tempRuleStorage = rules;
     return new ethers.Contract(address, VapourArtifact.abi, $signer);
   };
   $: console.log(deploying);
@@ -93,7 +110,7 @@
     </pre> -->
   <span class="text-3xl">Nearly there!</span>
   {#if args}
-    <HumanReadableVapour vmStateConfig={args.vmStateConfig} {numberOfRules}/>
+    <HumanReadableVapour vmStateConfig={args.vmStateConfig} {numberOfRules} />
     <Button
       classes="opacity-80 hover:opacity-100 transition-opacity cursor-pointer bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-lg rounded-md py-3 text-center"
       disabled={!uploadComplete || deploying}

@@ -111,7 +111,7 @@ export const StorageOps: FnPtrsJSVM = {
 export const vapourOpMeta: typeof OpMeta = new Map([
     ...OpMeta,
     [
-        47,
+        46,
         {
             enum: Opcode.IERC721A_TOTAL_SUPPLY,
             name: "IERC721A_TOTAL_SUPPLY",
@@ -121,7 +121,7 @@ export const vapourOpMeta: typeof OpMeta = new Map([
         },
     ],
     [
-        48,
+        47,
         {
             enum: Opcode.IERC721A_TOTAL_MINTED,
             name: "IERC721A_TOTAL_MINTED",
@@ -131,7 +131,7 @@ export const vapourOpMeta: typeof OpMeta = new Map([
         },
     ],
     [
-        49,
+        48,
         {
             enum: Opcode.IERC721A_NUMBER_MINTED,
             name: "IERC721A_NUMBER_MINTED",
@@ -146,7 +146,7 @@ export const vapourOpMeta: typeof OpMeta = new Map([
         },
     ],
     [
-        50,
+        49,
         {
             enum: Opcode.IERC721A_NUMBER_BURNED,
             name: "IERC721A_NUMBER_BURNED",

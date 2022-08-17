@@ -261,7 +261,7 @@ const alwaysTrue = (): StateConfig => {
     }
 }
 
-const prepareBuyConfig = (config: Vapour721AConfig): StateConfig => {
+const prepareBuyConfig = (config: Vapour721AConfig): [StateConfig, Currency] => {
     const rules: Rule[] = config.phases.map((phase, phaseIndex, phases) => {
         // generate all the conditions for allowed groups
         const groupConditions: Condition[] = phase.allowedGroups.map((group) => {
@@ -312,7 +312,7 @@ const prepareBuyConfig = (config: Vapour721AConfig): StateConfig => {
         }
     }
     // console.log(JSON.stringify(currency, null, 2))
-    return new RuleBuilder([currency])
+    return [new RuleBuilder([currency]), currency]
 }
 
 const prepareSoulConfig = (config: Vapour721AConfig): StateConfig => {
@@ -321,14 +321,14 @@ const prepareSoulConfig = (config: Vapour721AConfig): StateConfig => {
         : alwaysTrue()
 }
 
-export const prepare = (config: Vapour721AConfig): InitializeConfigStruct => {
-    const buyConfig: StateConfig = prepareBuyConfig(config)
+export const prepare = (config: Vapour721AConfig): [InitializeConfigStruct, Currency] => {
+    const [buyConfig, rules]: [StateConfig, Currency] = prepareBuyConfig(config)
     const soulConfig: StateConfig = prepareSoulConfig(config)
     const vmStateConfig = VM.combiner(soulConfig, buyConfig, { numberOfSources: 0 })
     const royaltyBPS = (config.royalty / 100) * 10000;
     const currency = config.useNativeToken ? ethers.constants.AddressZero : config.currency
 
-    return {
+    return [{
         name: config.name,
         symbol: config.symbol,
         baseURI: config.baseURI,
@@ -339,7 +339,7 @@ export const prepare = (config: Vapour721AConfig): InitializeConfigStruct => {
         royaltyBPS,
         currency: currency,
         vmStateConfig
-    }
+    }, rules]
 }
 
 export const getNumberOfRules = (config: Vapour721AConfig): number => {
