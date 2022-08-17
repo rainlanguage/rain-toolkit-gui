@@ -85,7 +85,6 @@
     }
     deploying = false;
     // window.localStorage.setItem(address, JSON.stringify(rules, replacer));
-    $tempRuleStorage = rules;
     return new ethers.Contract(address, VapourArtifact.abi, $signer);
   };
   $: console.log(deploying);
