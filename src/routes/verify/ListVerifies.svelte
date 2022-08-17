@@ -8,6 +8,7 @@
   import { signerAddress } from "svelte-ethers-store";
   import AdminList from "./AdminList.svelte";
   import { slide } from "svelte/transition";
+  import IconLibrary from "$components/IconLibrary.svelte";
 
   let checked = true;
 
@@ -75,10 +76,15 @@
         </div>
         <div class="flex flex-col gap-y-2 mb-4 w-full">
           <span
-            class="text-white cursor-pointer underline hover:text-sky-600"
+            class="text-white cursor-pointer"
             on:click={() => {
               handleClick(i);
-            }}>Admins Details</span
+            }}
+            >Admins Details {#if value !== i}
+              <IconLibrary inline icon="plus" width={25} />
+            {:else}
+              <IconLibrary inline icon="dash" width={25} />
+            {/if}</span
           >
           {#if value === i}
             <div
