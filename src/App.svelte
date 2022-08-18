@@ -35,6 +35,8 @@
   //Verify
   import DeployVerify from "./routes/verify/DeployVerify.svelte";
   import AdministerVerify from "./routes/verify/AdministerVerify.svelte";
+  import ListVerifies from "$routes/verify/ListVerifies.svelte";
+  import ListVerifyTiers from "$routes/verify/ListVerifyTiers.svelte";
 
   //AddressLibrary
   import AddressLibrary from "./routes/address-library/AddressLibrary.svelte";
@@ -48,6 +50,7 @@
   import DeployERC20 from "./routes/mint-erc20/DeployERC20.svelte";
   import MintFromExistingERC20 from "./routes/mint-erc20/MintFromExistingERC20.svelte";
   import ListErc20s from "./routes/mint-erc20/ListERC20s.svelte";
+  import VerifyTierReport from "$routes/verify/VerifyTierReport.svelte";
 
   let routes = {};
 
@@ -78,6 +81,9 @@
 
     "/verify/deploy": DeployVerify,
     "/verify/administer/*": AdministerVerify,
+    "/verify/list": ListVerifies,
+    "/verify/verifyTiers/list": ListVerifyTiers,
+    "/verify/verifyTiers/report/*": VerifyTierReport,
 
     "/erc20/deploy": DeployERC20,
     "/erc20/mint/*": MintFromExistingERC20,

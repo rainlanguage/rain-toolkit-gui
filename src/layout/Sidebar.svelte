@@ -75,6 +75,11 @@
       </SidebarLink>
 
       <SidebarLink url="/verify/administer/">Administer a Verify</SidebarLink>
+
+      <SidebarLink url="/verify/list">Browse all Verifies</SidebarLink>
+      <SidebarLink url="/verify/verifyTiers/list"
+        >Browse all VerifyTiers</SidebarLink
+      >
     </SidebarLinkGroup>
 
     <SidebarLinkGroup label="Deploy ERC20" url="/erc20/*">
