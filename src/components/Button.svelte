@@ -15,7 +15,6 @@
   export let shrink = false;
   export let classes: string = null;
 
-  $: console.log(disabled);
   $: variantCalc = disabled ? "disabled" : variant;
   $: _classes = disabled ? "" : classes;
 </script>

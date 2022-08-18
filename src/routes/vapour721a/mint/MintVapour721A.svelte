@@ -1,15 +1,16 @@
 <script lang="ts">
   import { fade, fly } from "svelte/transition";
-  import { connected } from "svelte-ethers-store";
+  import { connected, signerAddress, signer } from "svelte-ethers-store";
   import { contractAddress, contractInfo, currencyInfo } from "./mint";
   import MintDialog from "$routes/vapour721a/mint/MintDialog.svelte";
   import NextToken from "$routes/vapour721a/mint/NextToken.svelte";
   import HumanReadableVapour from "$routes/vapour721a/HumanReadableVapour.svelte";
   import { onMount } from "svelte";
-  import type { Currency } from "rain-sdk";
+  import { RuleBuilder, type Currency } from "rain-sdk";
   import { getAddress } from "ethers/lib/utils";
   import { StorageOps, vapourOpMeta } from "$routes/vapour721a/opMeta";
   import { reviver } from "$src/utils";
+  import RuleEval from "$routes/vapour721a/ruleEval/RuleEval.svelte";
 
   export let params: {
     wild: string;
@@ -19,22 +20,16 @@
 
   $: $contractAddress = params.wild;
 
-  // $: if ($contractAddress)
-  //   (async () => {
-  //     // rules = JSON.parse(
-  //     //   window.localStorage.getItem(getAddress($contractAddress)),
-  //     //   reviver
-  //     // );
-  //     rules = $tempRuleStorage;
-  //     console.log(rules);
-  //     rulesEval = await RuleBuilder.eval([rules], $signer, {
-  //       contract: $contractAddress,
-  //       opMeta: vapourOpMeta,
-  //       storageOpFn: StorageOps,
-  //       context: [$signerAddress, "100"],
-  //     });
-  //     // console.log(rules, rulesEval);
-  //   })();
+  $: if ($contractAddress && $signer) {
+    getAndEvalRules();
+  }
+
+  const getAndEvalRules = async () => {
+    rules = JSON.parse(
+      window.localStorage.getItem(getAddress($contractAddress)),
+      reviver
+    );
+  };
 
   onMount(async () => {
     window.scrollTo(0, 0);
@@ -51,11 +46,23 @@
   {#if $connected && $currencyInfo}
     <div class="col-span-4">
       <MintDialog />
-      {#if $contractInfo?.vmStateConfig}
+      {#if rules}
+        <div class="mt-8">
+          <RuleEval
+            {rules}
+            signer={$signer}
+            currencyInfo={$currencyInfo}
+            contract={$contractAddress}
+            opMeta={vapourOpMeta}
+            storageOpFn={StorageOps}
+          />
+        </div>
+      {/if}
+      <!-- {#if $contractInfo?.vmStateConfig}
         <div class="mt-8">
           <HumanReadableVapour vmStateConfig={$contractInfo.vmStateConfig} />
         </div>
-      {/if}
+      {/if} -->
     </div>
     <div class="col-span-3">
       <NextToken />

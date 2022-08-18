@@ -9,19 +9,22 @@
     Vapour721AConfig,
   } from "$routes/vapour721a/vapour721a-types";
   import { onMount } from "svelte";
-  import { getNumberOfRules, prepare } from "$routes/vapour721a/vapour721a";
+  import {
+    getNumberOfRules,
+    hexlifySources,
+    prepare,
+  } from "$routes/vapour721a/vapour721a";
   import { writable } from "svelte/store";
   import { generateMetadata, pin } from "$routes/vapour721a/uploadToIPFS";
   import VapourFactoryArtifact from "$routes/vapour721a/abi/Vapour721AFactory.json";
   import VapourArtifact from "$routes/vapour721a/abi/Vapour721A.json";
   import { Contract, ethers } from "ethers";
   import ContractDeploy from "$components/ContractDeploy.svelte";
-  import { getNewChildFromReceipt, replacer } from "$src/utils";
+  import { getNewChildFromReceipt, replacer, reviver } from "$src/utils";
   import HumanReadableVapour from "$routes/vapour721a/HumanReadableVapour.svelte";
   import IconLibrary from "$components/IconLibrary.svelte";
   import Ring from "$components/Ring.svelte";
-  import { RuleBuilder, type Currency } from "rain-sdk";
-  import { StorageOps, vapourOpMeta } from "$routes/vapour721a/opMeta";
+  import type { Currency } from "rain-sdk";
 
   export let step: CreateSteps, config: Vapour721AConfig;
   let uploadComplete: boolean,
@@ -54,16 +57,6 @@
     numberOfRules = getNumberOfRules(config);
     const [_args, _rules] = prepare(config);
     rules = _rules;
-
-    // testing out the eval
-    const rulesEval = await RuleBuilder.eval([rules], $signer, {
-      contract: "0x135c64fbde0d530d16182e9e29d66a002db299fd",
-      opMeta: vapourOpMeta,
-      storageOpFn: StorageOps,
-      context: [$signerAddress, "100"],
-    });
-    console.log(rules, rulesEval);
-
     return _args;
   };
 
@@ -84,10 +77,12 @@
       deploying = false;
     }
     deploying = false;
-    // window.localStorage.setItem(address, JSON.stringify(rules, replacer));
+    window.localStorage.setItem(
+      address,
+      JSON.stringify(hexlifySources(rules), replacer)
+    );
     return new ethers.Contract(address, VapourArtifact.abi, $signer);
   };
-  $: console.log(deploying);
 </script>
 
 <div use:autoAnimate class="flex flex-col gap-y-8" in:fade>

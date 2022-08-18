@@ -1,7 +1,7 @@
 import { AllowedGroup, Opcode, PricingRules, type ERC20Info, type Group, type InitializeConfigStruct, type Phase, type PriceRule, type Vapour721AConfig } from "$routes/vapour721a/vapour721a-types";
 import { op } from "$src/utils";
 import { ethers, type BigNumber } from "ethers";
-import { concat, parseUnits } from "ethers/lib/utils";
+import { concat, hexlify, parseUnits } from "ethers/lib/utils";
 import { RuleBuilder, VM, type Condition, type ConditionGroup, type Currency, type Price, type Quantity, type Rule, type StateConfig } from "rain-sdk";
 
 export const arrayAdd = (array: any[], add: any) => {
@@ -31,61 +31,61 @@ export const initVapourPhase = (): Phase => {
 }
 
 export const initVapourConfig = (signerAddress): Vapour721AConfig => {
-    // return {
-    //     name: "josh",
-    //     symbol: "test",
-    //     description: "a description",
-    //     imageFile: null,
-    //     maxSupply: 20,
-    //     currency: "0x25a4Dd4cd97ED462EB5228de47822e636ec3E31A",
-    //     royalty: 20,
-    //     recipient: signerAddress,
-    //     owner: signerAddress,
-    //     admin: signerAddress,
-    //     useNativeToken: false,
-    //     currencyContract: null,
-    //     phases: [
-    //         {
-    //             "start": "now",
-    //             "pricing": {
-    //                 "type": 0,
-    //                 "startPrice": 1
-    //             },
-    //             "allowedGroups": [
-    //                 {
-    //                     "type": 0,
-    //                     "contractAddress": "0x08E46BB0510180bB5e763E73bF3Ae5d49004D6D5"
-    //                 }
-    //             ],
-    //             "walletCap": 5
-    //         },
-    //         {
-    //             "start": "2022-08-07T23:38",
-    //             "pricing": {
-    //                 "type": 0,
-    //                 "startPrice": 10
-    //             },
-    //             "allowedGroups": [
-    //                 {
-    //                     "type": 1,
-    //                     "contractAddress": "0x8d88dfb98ba02a6a15784966ed9e6ffa734ad4a6",
-    //                     "minBalance": 1
-    //                 }
-    //             ],
-    //             "walletCap": 20
-    //         }
-    //     ],
-    //     soulbound: true,
-    //     erc20info: {
-    //         ready: false,
-    //         name: null,
-    //         symbol: null,
-    //         decimals: null,
-    //         balance: null,
-    //     },
-    //     mediaUploadResp: null,
-    //     baseURI: null
-    // }
+    return {
+        name: "josh",
+        symbol: "test",
+        description: "a description",
+        imageFile: null,
+        maxSupply: 20,
+        currency: "0x25a4Dd4cd97ED462EB5228de47822e636ec3E31A",
+        royalty: 20,
+        recipient: signerAddress,
+        owner: signerAddress,
+        admin: signerAddress,
+        useNativeToken: false,
+        currencyContract: null,
+        phases: [
+            {
+                "start": "now",
+                "pricing": {
+                    "type": 0,
+                    "startPrice": 1
+                },
+                "allowedGroups": [
+                    {
+                        "type": 0,
+                        "contractAddress": "0x08E46BB0510180bB5e763E73bF3Ae5d49004D6D5"
+                    }
+                ],
+                "walletCap": 5
+            },
+            {
+                "start": "2022-08-07T23:38",
+                "pricing": {
+                    "type": 0,
+                    "startPrice": 10
+                },
+                "allowedGroups": [
+                    {
+                        "type": 1,
+                        "contractAddress": "0x8d88dfb98ba02a6a15784966ed9e6ffa734ad4a6",
+                        "minBalance": 1
+                    }
+                ],
+                "walletCap": 20
+            }
+        ],
+        soulbound: true,
+        erc20info: {
+            ready: false,
+            name: null,
+            symbol: null,
+            decimals: null,
+            balance: null,
+        },
+        mediaUploadResp: null,
+        baseURI: null
+    }
     return {
         name: null,
         symbol: null,
@@ -394,4 +394,21 @@ export const getNumberOfRules = (config: Vapour721AConfig): number => {
     }
 
     return currency.rules.length
+}
+
+export const hexlifySources = (currency: Currency): Currency => {
+    const traverse = (data: any) => {
+        Object.entries(data).forEach(([key, value]: [any, any]) => {
+            if (value?.sources) {
+                data[key].sources.forEach((source, i) => {
+                    data[key].sources[i] = hexlify(data[key].sources[i])
+                })
+            }
+            else if (typeof value === "object") {
+                traverse(value)
+            }
+        })
+        return data
+    }
+    return traverse(currency)
 }

@@ -49,7 +49,6 @@ export async function OpIERC721A_NUMBER_MINTED(
         const account_ = utils.paddedUInt160(item1_);
         const erc721Contract_ = new ethers.Contract(this.self, Vapour721AArtifact.abi, this.signer)
         state.stack.push(await erc721Contract_.numberMinted(account_));
-
     }
     else throw new Error('Undefined signer');
 }
@@ -137,12 +136,7 @@ export const vapourOpMeta: typeof OpMeta = new Map([
             name: "IERC721A_NUMBER_MINTED",
             pushes: pnp.one,
             pops: pnp.one,
-            jsvmfn: function (
-                this: RainJSVM,
-                state: StateJSVM,
-                operand: number,
-                data?: any
-            ): void { },
+            jsvmfn: OpIERC721A_NUMBER_MINTED,
         },
     ],
     [
@@ -152,12 +146,7 @@ export const vapourOpMeta: typeof OpMeta = new Map([
             name: "IERC721A_NUMBER_BURNED",
             pushes: pnp.one,
             pops: pnp.one,
-            jsvmfn: function (
-                this: RainJSVM,
-                state: StateJSVM,
-                operand: number,
-                data?: any
-            ): void { },
+            jsvmfn: OpIERC721A_NUMBER_BURNED,
         },
     ],
 ]);
