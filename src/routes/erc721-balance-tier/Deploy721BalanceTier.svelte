@@ -7,6 +7,7 @@
   import ContractDeploy from "$components/ContractDeploy.svelte";
   import { ERC721BalanceTier, ERC721 } from "rain-sdk";
   import { addressValidate, required } from "$src/validation";
+  import { validateFields } from "$src/utils";
 
   let deployPromise;
   let erc721Address: string | undefined,
@@ -16,6 +17,8 @@
     erc721Name: string,
     erc721Symbol: string;
   let tiers = [] as string[];
+
+  let fields: any = {};
 
   $: if (erc721Address) {
     getERC721();
@@ -55,7 +58,11 @@
     }
   };
 
-  const handleClick = () => {
+  const handleClick = async () => {
+    const { validationResult } = await validateFields(fields);
+
+    if (!validationResult) return;
+
     deployPromise = deployBalanceTier();
   };
 </script>
@@ -73,6 +80,7 @@
       type="address"
       placeholder="Token address"
       bind:value={erc721Address}
+      bind:this={fields.erc721Address}
       validator={addressValidate}
     >
       <span slot="label">Choose an ERC721 token to check the balance of.</span>
@@ -93,6 +101,7 @@
         placeholder="Tier 1"
         bind:value={tiers[0]}
         validator={required}
+        bind:this={fields.tiers1}
       >
         <span slot="label">
           Set the amount of token that must be held for each of the tiers.
@@ -103,42 +112,49 @@
         placeholder="Tier 2"
         bind:value={tiers[1]}
         validator={required}
+        bind:this={fields.tiers2}
       />
       <Input
         type="number"
         placeholder="Tier 3"
         bind:value={tiers[2]}
         validator={required}
+        bind:this={fields.tiers3}
       />
       <Input
         type="number"
         placeholder="Tier 4"
         bind:value={tiers[3]}
         validator={required}
+        bind:this={fields.tiers4}
       />
       <Input
         type="number"
         placeholder="Tier 5"
         bind:value={tiers[4]}
         validator={required}
+        bind:this={fields.tiers5}
       />
       <Input
         type="number"
         placeholder="Tier 6"
         bind:value={tiers[5]}
         validator={required}
+        bind:this={fields.tiers6}
       />
       <Input
         type="number"
         placeholder="Tier 7"
         bind:value={tiers[6]}
         validator={required}
+        bind:this={fields.tiers7}
       />
       <Input
         type="number"
         placeholder="Tier 8"
         bind:value={tiers[7]}
         validator={required}
+        bind:this={fields.tiers8}
       />
     </div>
   </FormPanel>

@@ -32,53 +32,49 @@
   let initSupply = 0;
   let amount = 0;
 
-  const deployEmissions = async () => {
-    const { validationResult, fieldValues } = await validateFields(fields);
-
+  const deployEmissions = async (fieldValues) => {
     // GET THE SOURCE
 
     let newEmissionsERC20, vmStateConfig: StateConfig;
 
-    if (validationResult) {
-      const Amount = fixedSupply ? amount : 0;
+    const Amount = fixedSupply ? amount : 0;
 
-      if (faucets) {
-        vmStateConfig = new CreateERC20(ownerAddress, Amount, {
-          blocks: blocks,
-          units: units,
-        });
-      } else {
-        vmStateConfig = new CreateERC20(ownerAddress, Amount);
-      }
-
-      let erc20Config: ERC20Config;
-      erc20Config = {
-        name: fieldValues.erc20name,
-        symbol: fieldValues.erc20symbol,
-        distributor: fieldValues.ownerAddress,
-        initialSupply: parseUnits(fieldValues.initSupply.toString()),
-      };
-
-      let emissionsDeployArg: EmissionsERC20DeployArgs;
-      emissionsDeployArg = {
-        allowDelegatedClaims: false,
-        erc20Config,
-        vmStateConfig,
-      };
-
-      newEmissionsERC20 = await EmissionsERC20.deploy(
-        $signer,
-        emissionsDeployArg
-      );
+    if (faucets) {
+      vmStateConfig = new CreateERC20(ownerAddress, Amount, {
+        blocks: blocks,
+        units: units,
+      });
     } else {
-      return;
+      vmStateConfig = new CreateERC20(ownerAddress, Amount);
     }
+
+    let erc20Config: ERC20Config;
+    erc20Config = {
+      name: fieldValues.erc20name,
+      symbol: fieldValues.erc20symbol,
+      distributor: fieldValues.ownerAddress,
+      initialSupply: parseUnits(fieldValues.initSupply.toString()),
+    };
+
+    let emissionsDeployArg: EmissionsERC20DeployArgs;
+    emissionsDeployArg = {
+      allowDelegatedClaims: false,
+      erc20Config,
+      vmStateConfig,
+    };
+
+    newEmissionsERC20 = await EmissionsERC20.deploy(
+      $signer,
+      emissionsDeployArg
+    );
 
     return newEmissionsERC20;
   };
 
-  const handleClick = () => {
-    deployPromise = deployEmissions();
+  const handleClick = async () => {
+    const { validationResult, fieldValues } = await validateFields(fields);
+    if (!validationResult) return;
+    deployPromise = deployEmissions(fieldValues);
   };
 </script>
 

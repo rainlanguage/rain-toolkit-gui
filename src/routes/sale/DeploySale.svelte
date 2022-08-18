@@ -15,6 +15,7 @@
   import SaleSmallSimulationChart from "./SaleSmallSimulationChart.svelte";
   import HumanReadable from "$components/FriendlySource/HumanReadable.svelte";
   import dayjs from "dayjs";
+  import Erc20Input from "$components/Erc20Input.svelte";
   import { addressValidate, required } from "$src/validation";
 
   let fields: any = {};
@@ -214,8 +215,16 @@
   //   saleParam: saleParam,
   // };
 
+  // @TODO write validators
+  const defaultValidator = () => {
+    return true;
+  };
+
   const handleClick = async () => {
-    deployPromise = deploy();
+    const { validationResult, saleParams } = await getSaleParams();
+
+    if (!validationResult) return;
+    deployPromise = deploy(saleParams);
   };
 
   $: if (tier) {
@@ -247,12 +256,8 @@
     check();
   }
 
-  const deploy = async () => {
-    const { validationResult, saleParams } = await getSaleParams();
-
-    if (validationResult) {
-      return await saleDeploy($signer, $signerAddress, saleParams);
-    }
+  const deploy = async (saleParams) => {
+    return await saleDeploy($signer, $signerAddress, saleParams);
   };
 
   const getReserveErc20 = async () => {
@@ -313,28 +318,15 @@
           <span slot="label"> Recipient: </span>
         </Input>
 
-        <Input
-          type="address"
+        <Erc20Input
+          bind:contract={reserveErc20}
+          signer={$signer}
+          value={reserve}
+          placeholder="Token address"
           bind:this={fields.reserve}
-          bind:value={reserve}
-          validator={addressValidate}
         >
-          <span slot="label"> Reserve token: </span>
-          <span slot="description">
-            {#if reserveErc20}
-              <div class="flex flex-col gap-y-1">
-                <span>Name: {reserveErc20.erc20name}</span>
-                <span>Symbol: {reserveErc20.erc20symbol}</span>
-                <span>
-                  Your balance: {formatUnits(
-                    reserveErc20.erc20balance,
-                    reserveErc20.erc20decimals.toString()
-                  )}
-                </span>
-              </div>
-            {/if}
-          </span>
-        </Input>
+          <span slot="label">Reserve Token Address</span>
+        </Erc20Input>
 
         <span class="z-20 flex w-full flex-col gap-y-3">
           <span>Raise Start/End Time</span>

@@ -43,10 +43,7 @@
     deployVerifyTierPromise,
     verifyChild;
 
-  const deployVerify = async () => {
-    const { validationResult, fieldValues } = await validateFields(
-      verifyFields
-    );
+  const deployVerify = async (fieldValues) => {
     console.log(fieldValues);
     console.log({
       admin: fieldValues.adminAddress,
@@ -61,11 +58,17 @@
     return newVerify;
   };
 
-  const deployVerifyTier = async () => {
+  const handleClick = async (contract) => {
     const { validationResult, fieldValues } = await validateFields(
-      verifyTierFields
+      contract === "verify" ? verifyFields : verifyTierFields
     );
+    if (!validationResult) return;
+    if (contract === "verify") {
+      deployVerifyPromise = deployVerify(fieldValues);
+    } else deployVerifyTierPromise = deployVerifyTier(fieldValues);
+  };
 
+  const deployVerifyTier = async (fieldValues) => {
     const newVerifyTier = await VerifyTier.deploy(
       $signer,
       fieldValues.verifyAddress
@@ -110,7 +113,7 @@
       <Button
         shrink
         on:click={() => {
-          deployVerifyPromise = deployVerify();
+          handleClick("verify");
         }}>Deploy Verify</Button
       >
     {:else}
@@ -137,7 +140,7 @@
       <Button
         shrink
         on:click={() => {
-          deployVerifyTierPromise = deployVerifyTier();
+          handleClick("verifyTier");
         }}>Deploy VerifyTier</Button
       >
     {:else}

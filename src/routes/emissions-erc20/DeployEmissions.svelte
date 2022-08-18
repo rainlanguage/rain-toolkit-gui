@@ -86,93 +86,91 @@
     emissionsType,
   };
 
-  const deployEmissions = async () => {
-    const { validationResult, fieldValues } = await validateFields(fields);
+  const deployEmissions = async (fieldValues) => {
+    // const { validationResult, fieldValues } = await validateFields(fields);
 
     // GET THE SOURCE
 
     let newEmissionsERC20;
 
-    if (validationResult) {
-      let emissionsConfig: EmissionsConfig = emissionsType.value
-        ? {
-            tierAddress: fieldValues.tierAddress,
-            blockTime: fieldValues.blockTime,
-            period: fieldValues.period,
-            periodicRewards: {
-              tier1: fieldValues.tier1,
-              tier2: fieldValues.tier2,
-              tier3: fieldValues.tier3,
-              tier4: fieldValues.tier4,
-              tier5: fieldValues.tier6,
-              tier6: fieldValues.tier6,
-              tier7: fieldValues.tier7,
-              tier8: fieldValues.tier8,
-            },
-            maxPeriodicRewards: {
-              tier1: fieldValues.maxTier1,
-              tier2: fieldValues.maxTier2,
-              tier3: fieldValues.maxTier3,
-              tier4: fieldValues.maxTier4,
-              tier5: fieldValues.maxTier6,
-              tier6: fieldValues.maxTier6,
-              tier7: fieldValues.maxTier7,
-              tier8: fieldValues.maxTier8,
-            },
-            numberOfIncrements: fieldValues.numberOfIncrements,
-          }
-        : {
-            tierAddress: fieldValues.tierAddress,
-            blockTime: fieldValues.blockTime,
-            period: fieldValues.period,
-            periodicRewards: {
-              tier1: fieldValues.tier1,
-              tier2: fieldValues.tier2,
-              tier3: fieldValues.tier3,
-              tier4: fieldValues.tier4,
-              tier5: fieldValues.tier6,
-              tier6: fieldValues.tier6,
-              tier7: fieldValues.tier7,
-              tier8: fieldValues.tier8,
-            },
-          };
+    let emissionsConfig: EmissionsConfig = emissionsType.value
+      ? {
+          tierAddress: fieldValues.tierAddress,
+          blockTime: fieldValues.blockTime,
+          period: fieldValues.period,
+          periodicRewards: {
+            tier1: fieldValues.tier1,
+            tier2: fieldValues.tier2,
+            tier3: fieldValues.tier3,
+            tier4: fieldValues.tier4,
+            tier5: fieldValues.tier6,
+            tier6: fieldValues.tier6,
+            tier7: fieldValues.tier7,
+            tier8: fieldValues.tier8,
+          },
+          maxPeriodicRewards: {
+            tier1: fieldValues.maxTier1,
+            tier2: fieldValues.maxTier2,
+            tier3: fieldValues.maxTier3,
+            tier4: fieldValues.maxTier4,
+            tier5: fieldValues.maxTier6,
+            tier6: fieldValues.maxTier6,
+            tier7: fieldValues.maxTier7,
+            tier8: fieldValues.maxTier8,
+          },
+          numberOfIncrements: fieldValues.numberOfIncrements,
+        }
+      : {
+          tierAddress: fieldValues.tierAddress,
+          blockTime: fieldValues.blockTime,
+          period: fieldValues.period,
+          periodicRewards: {
+            tier1: fieldValues.tier1,
+            tier2: fieldValues.tier2,
+            tier3: fieldValues.tier3,
+            tier4: fieldValues.tier4,
+            tier5: fieldValues.tier6,
+            tier6: fieldValues.tier6,
+            tier7: fieldValues.tier7,
+            tier8: fieldValues.tier8,
+          },
+        };
 
-      let vmStateConfig: StateConfig;
-      if (emissionsType.value) {
-        vmStateConfig = new SequentialEmissions(emissionsConfig);
-      }
-      if (!emissionsType.value) {
-        vmStateConfig = new LinearEmissions(emissionsConfig);
-      }
-
-      let erc20Config: ERC20Config;
-      erc20Config = {
-        name: fieldValues.erc20name,
-        symbol: fieldValues.erc20symbol,
-        distributor: fieldValues.ownerAddress,
-        initialSupply: parseEther(fieldValues.initSupply.toString()),
-      };
-
-      let emissionsDeployArg: EmissionsERC20DeployArgs;
-      emissionsDeployArg = {
-        allowDelegatedClaims: false,
-        erc20Config,
-        vmStateConfig,
-      };
-
-      newEmissionsERC20 = await EmissionsERC20.deploy(
-        $signer,
-        emissionsDeployArg
-      );
-    } else {
-      return;
+    let vmStateConfig: StateConfig;
+    if (emissionsType.value) {
+      vmStateConfig = new SequentialEmissions(emissionsConfig);
     }
+    if (!emissionsType.value) {
+      vmStateConfig = new LinearEmissions(emissionsConfig);
+    }
+
+    let erc20Config: ERC20Config;
+    erc20Config = {
+      name: fieldValues.erc20name,
+      symbol: fieldValues.erc20symbol,
+      distributor: fieldValues.ownerAddress,
+      initialSupply: parseEther(fieldValues.initSupply.toString()),
+    };
+
+    let emissionsDeployArg: EmissionsERC20DeployArgs;
+    emissionsDeployArg = {
+      allowDelegatedClaims: false,
+      erc20Config,
+      vmStateConfig,
+    };
+
+    newEmissionsERC20 = await EmissionsERC20.deploy(
+      $signer,
+      emissionsDeployArg
+    );
 
     return newEmissionsERC20;
   };
 
-  const handleClick = () => {
-    deployPromise = deployEmissions();
+  const handleClick = async () => {
+    const { validationResult, fieldValues } = await validateFields(fields);
+    if (!validationResult) return;
+    deployPromise = deployEmissions(fieldValues);
   };
 </script>
 
