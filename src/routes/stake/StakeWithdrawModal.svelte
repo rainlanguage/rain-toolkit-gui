@@ -5,9 +5,14 @@
   import Ring from "$components/Ring.svelte";
   import { selectedNetwork } from "$src/stores";
   import { signer } from "svelte-ethers-store";
-  import { Logger, formatUnits, parseUnits } from "ethers/lib/utils";
+  import { formatUnits, parseUnits } from "ethers/lib/utils";
   import Input from "$components/Input.svelte";
   import { required } from "$src/validation";
+  import { writable } from "svelte/store";
+  import Modal, { bind } from "svelte-simple-modal/src/Modal.svelte";
+  import SimpleTransactionModal from "$components/SimpleTransactionModal.svelte";
+
+  const modal2 = writable(null);
 
   enum TxStatus {
     None,
@@ -48,36 +53,52 @@
     };
   };
 
-  const withdraw = async () => {
-    let tx;
-    txStatus = TxStatus.AwaitingSignature;
-    try {
-      tx = await stakeContract.withdraw(units);
+  const showModal = () =>
+    modal2.set(
+      bind(SimpleTransactionModal, {
+        method: stakeContract.withdraw,
+        args: [units],
+        confirmationMsg: "Withdraw confirmed!",
+        returnValue,
+      })
+    );
 
-      txStatus = TxStatus.AwaitingConfirmation;
-      txReceipt = await tx.wait();
-    } catch (error) {
-      if (error.code === Logger.errors.TRANSACTION_REPLACED) {
-        if (error.cancelled) {
-          errorMsg = "Transaction Cancelled";
-          txStatus = TxStatus.Error;
-          return;
-        } else {
-          txReceipt = await error.replacement.wait();
-        }
-      } else {
-        errorMsg =
-          error.error?.data?.message ||
-          error.error?.message ||
-          error.data?.message ||
-          error?.message;
-        txStatus = TxStatus.Error;
-        return;
-      }
-    }
+  const returnValue = (method, receipt) => {
     txStatus = TxStatus.None;
     activeStep = WithdrawSteps.Complete;
+    txReceipt = receipt;
   };
+
+  // const withdraw = async () => {
+  //   let tx;
+  //   txStatus = TxStatus.AwaitingSignature;
+  //   try {
+  //     tx = await stakeContract.withdraw(units);
+
+  //     txStatus = TxStatus.AwaitingConfirmation;
+  //     txReceipt = await tx.wait();
+  //   } catch (error) {
+  //     if (error.code === Logger.errors.TRANSACTION_REPLACED) {
+  //       if (error.cancelled) {
+  //         errorMsg = "Transaction Cancelled";
+  //         txStatus = TxStatus.Error;
+  //         return;
+  //       } else {
+  //         txReceipt = await error.replacement.wait();
+  //       }
+  //     } else {
+  //       errorMsg =
+  //         error.error?.data?.message ||
+  //         error.error?.message ||
+  //         error.data?.message ||
+  //         error?.message;
+  //       txStatus = TxStatus.Error;
+  //       return;
+  //     }
+  //   }
+  //   txStatus = TxStatus.None;
+  //   activeStep = WithdrawSteps.Complete;
+  // };
 </script>
 
 {#if txStatus == TxStatus.None}
@@ -118,10 +139,19 @@
           </div>
         {/if}
       </div>
-
-      <Button disabled={!priceConfirmed} on:click={withdraw}
-        >Withdraw Amount</Button
+      <Modal
+        show={$modal2}
+        styleContent={{ color: "rgba(249, 250, 251, 1)" }}
+        styleWindow={{
+          backgroundColor: "rgba(38,38,38, 1) !important",
+          width: "fit-content",
+        }}
+        closeButton={false}
       >
+        <Button disabled={!priceConfirmed} on:click={showModal}
+          >Withdraw Amount</Button
+        >
+      </Modal>
     {/if}
 
     {#if activeStep == WithdrawSteps.Complete}

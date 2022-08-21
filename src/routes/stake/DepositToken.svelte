@@ -8,6 +8,12 @@
   import { selectedNetwork } from "$src/stores";
   import { ERC20 } from "rain-sdk";
   import { addressValidate, required } from "$src/validation";
+  import SimpleTransactionModal from "$components/SimpleTransactionModal.svelte";
+  import { writable } from "svelte/store";
+  import Modal, { bind } from "svelte-simple-modal/src/Modal.svelte";
+
+  const modal2 = writable(null);
+  const modal3 = writable(null);
 
   enum TxStatus {
     None,
@@ -50,6 +56,7 @@
     priceConfirmed = PriceConfirmed.Pending,
     txReceipt,
     errorMsg,
+    rTKN,
     calcPricePromise;
 
   const calculatePrice = async (amount) => {
@@ -64,75 +71,111 @@
     };
   };
 
-  const approve = async () => {
-    const rTKN = new ERC20(_stake.token.id, $signer);
+  rTKN = new ERC20(_stake.token.id, $signer);
 
-    tokenDecimals = await rTKN.decimals();
-    tokenSymbol = await rTKN.symbol();
+  (async () => (tokenDecimals = await rTKN.decimals()))();
+  (async () => (tokenSymbol = await rTKN.symbol()))();
 
-    let tx;
-    txStatus = TxStatus.AwaitingSignature;
-    try {
-      tx = await rTKN.approve(stakeContract.address, units);
+  const showApproveModal = () =>
+    modal2.set(
+      bind(SimpleTransactionModal, {
+        method: rTKN.approve,
+        args: [stakeContract.address, units],
+        confirmationMsg: "Amount Approved",
+        func: "approve",
+        returnValue,
+      })
+    );
 
-      txStatus = TxStatus.AwaitingConfirmation;
-      const txReceipt = await tx.wait();
-    } catch (error) {
-      if (error.code === Logger.errors.TRANSACTION_REPLACED) {
-        if (error.cancelled) {
-          errorMsg = "Transaction Cancelled";
-          txStatus = TxStatus.Error;
-          return;
-        } else {
-          txReceipt = await error.replacement.wait();
-        }
-      } else {
-        errorMsg =
-          error.error?.data?.message ||
-          error.error?.message ||
-          error.data?.message ||
-          error?.message;
-        txStatus = TxStatus.Error;
-        return;
-      }
-    }
+  const showDepositModal = () =>
+    modal3.set(
+      bind(SimpleTransactionModal, {
+        method: stakeContract.deposit,
+        args: [units],
+        confirmationMsg: "Token Deposited",
+        returnValue,
+      })
+    );
 
+  const returnValue = (method, receipt) => {
     txStatus = TxStatus.None;
-    activeStep = DepositSteps.Confirm;
-
-    return txReceipt;
+    if (method == true) {
+      activeStep = DepositSteps.Confirm;
+    } else {
+      activeStep = DepositSteps.Complete;
+      txReceipt = receipt;
+    }
   };
 
-  const Deposit = async () => {
-    let tx;
-    txStatus = TxStatus.AwaitingSignature;
-    try {
-      tx = await stakeContract.deposit(units);
+  // const approve = async () => {
+  //   const rTKN = new ERC20(_stake.token.id, $signer);
 
-      txStatus = TxStatus.AwaitingConfirmation;
-      txReceipt = await tx.wait();
-    } catch (error) {
-      if (error.code === Logger.errors.TRANSACTION_REPLACED) {
-        if (error.cancelled) {
-          errorMsg = "Transaction Cancelled";
-          txStatus = TxStatus.Error;
-          return;
-        } else {
-          txReceipt = await error.replacement.wait();
-        }
-      } else {
-        errorMsg =
-          error.error?.data?.message ||
-          error.error?.message ||
-          error.data?.message ||
-          error?.message;
-        txStatus = TxStatus.Error;
-        return;
-      }
-    }
-    txStatus = TxStatus.None;
-    activeStep = DepositSteps.Complete;
-  };
+  //   tokenDecimals = await rTKN.decimals();
+  //   tokenSymbol = await rTKN.symbol();
+
+  //   let tx;
+  //   txStatus = TxStatus.AwaitingSignature;
+  //   try {
+  //     tx = await rTKN.approve(stakeContract.address, units);
+
+  //     txStatus = TxStatus.AwaitingConfirmation;
+  //     const txReceipt = await tx.wait();
+  //   } catch (error) {
+  //     if (error.code === Logger.errors.TRANSACTION_REPLACED) {
+  //       if (error.cancelled) {
+  //         errorMsg = "Transaction Cancelled";
+  //         txStatus = TxStatus.Error;
+  //         return;
+  //       } else {
+  //         txReceipt = await error.replacement.wait();
+  //       }
+  //     } else {
+  //       errorMsg =
+  //         error.error?.data?.message ||
+  //         error.error?.message ||
+  //         error.data?.message ||
+  //         error?.message;
+  //       txStatus = TxStatus.Error;
+  //       return;
+  //     }
+  //   }
+
+  //   txStatus = TxStatus.None;
+  //   activeStep = DepositSteps.Confirm;
+
+  //   return txReceipt;
+  // };
+
+  // const Deposit = async () => {
+  //   let tx;
+  //   txStatus = TxStatus.AwaitingSignature;
+  //   try {
+  //     tx = await stakeContract.deposit(units);
+
+  //     txStatus = TxStatus.AwaitingConfirmation;
+  //     txReceipt = await tx.wait();
+  //   } catch (error) {
+  //     if (error.code === Logger.errors.TRANSACTION_REPLACED) {
+  //       if (error.cancelled) {
+  //         errorMsg = "Transaction Cancelled";
+  //         txStatus = TxStatus.Error;
+  //         return;
+  //       } else {
+  //         txReceipt = await error.replacement.wait();
+  //       }
+  //     } else {
+  //       errorMsg =
+  //         error.error?.data?.message ||
+  //         error.error?.message ||
+  //         error.data?.message ||
+  //         error?.message;
+  //       txStatus = TxStatus.Error;
+  //       return;
+  //     }
+  //   }
+  //   txStatus = TxStatus.None;
+  //   activeStep = DepositSteps.Complete;
+  // };
 </script>
 
 {#if txStatus == TxStatus.None}
@@ -157,7 +200,17 @@
         <span slot="label">Enter the number of units to deposit:</span>
       </Input>
 
-      <Button on:click={approve}>Approve Amount</Button>
+      <Modal
+        show={$modal2}
+        styleContent={{ color: "rgba(249, 250, 251, 1)" }}
+        styleWindow={{
+          backgroundColor: "rgba(38,38,38, 1) !important",
+          width: "fit-content",
+        }}
+        closeButton={false}
+      >
+        <Button on:click={showApproveModal}>Approve Amount</Button>
+      </Modal>
     {/if}
     {#if activeStep == DepositSteps.Confirm}
       <span>Confirm your deposit.</span>
@@ -177,8 +230,19 @@
           </div>
         {/if}
       </div>
-
-      <Button disabled={!priceConfirmed} on:click={Deposit}>Deposit</Button>
+      <Modal
+        show={$modal3}
+        styleContent={{ color: "rgba(249, 250, 251, 1)" }}
+        styleWindow={{
+          backgroundColor: "rgba(38,38,38, 1) !important",
+          width: "fit-content",
+        }}
+        closeButton={false}
+      >
+        <Button disabled={!priceConfirmed} on:click={showDepositModal}
+          >Deposit</Button
+        >
+      </Modal>
     {/if}
 
     {#if activeStep == DepositSteps.Complete}
