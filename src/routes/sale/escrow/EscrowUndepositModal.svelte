@@ -7,6 +7,11 @@
   import Input from "$components/Input.svelte";
   import { RedeemableERC20ClaimEscrow } from "rain-sdk";
   import { signer } from "svelte-ethers-store";
+  import { writable } from "svelte/store";
+  import Modal, { bind } from "svelte-simple-modal/src/Modal.svelte";
+  import SimpleTransactionModal from "$components/SimpleTransactionModal.svelte";
+
+  const modal2 = writable(null);
 
   enum TxStatus {
     None,
@@ -33,6 +38,7 @@
 
   let priceConfirmed = PriceConfirmed.Pending,
     units,
+    redeemableEscrow,
     calcPricePromise;
 
   const calculatePrice = async (amount) => {
@@ -57,45 +63,27 @@
     }
   };
 
-  const unDeposit = async () => {
-    let tx;
-    txStatus = TxStatus.AwaitingSignature;
-
-    let redeemableEscrow = await RedeemableERC20ClaimEscrow.get(
+  (async () =>
+    (redeemableEscrow = await RedeemableERC20ClaimEscrow.get(
       salesContract.address,
       data.token.id,
       $signer
+    )))();
+
+  const showModal = () =>
+    modal2.set(
+      bind(SimpleTransactionModal, {
+        method: redeemableEscrow.undeposit,
+        args: [data.redeemableSupply, units],
+        confirmationMsg: "Undeposit confirmed!",
+        returnValue,
+      })
     );
 
-    try {
-      tx = await redeemableEscrow.undeposit(data.redeemableSupply, units);
-
-      txStatus = TxStatus.AwaitingConfirmation;
-      txReceipt = await tx.wait();
-    } catch (error) {
-      if (error.code === Logger.errors.TRANSACTION_REPLACED) {
-        if (error.cancelled) {
-          errorMsg = "Transaction Cancelled";
-          txStatus = TxStatus.Error;
-          return;
-        } else {
-          txReceipt = await error.replacement.wait();
-        }
-      } else {
-        errorMsg =
-          error.error?.data?.message ||
-          error.error?.message ||
-          error.data?.message ||
-          error?.message;
-        txStatus = TxStatus.Error;
-        return;
-      }
-    }
-
+  const returnValue = (method, receipt) => {
     txStatus = TxStatus.None;
     activeStep = UndepositSteps.Complete;
-
-    return txReceipt;
+    txReceipt = receipt;
   };
 </script>
 
@@ -145,7 +133,17 @@
         </div>
       {/if}
       <span>Confirm your Undeposit.</span>
-      <Button disabled={!priceConfirmed} on:click={unDeposit}>Confirm</Button>
+      <Modal
+        show={$modal2}
+        styleContent={{ color: "rgba(249, 250, 251, 1)" }}
+        styleWindow={{
+          backgroundColor: "rgba(38,38,38, 1) !important",
+          width: "fit-content",
+        }}
+        closeButton={false}
+      >
+        <Button disabled={!priceConfirmed} on:click={showModal}>Confirm</Button>
+      </Modal>
     {/if}
 
     {#if activeStep == UndepositSteps.Complete}

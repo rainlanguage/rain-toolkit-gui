@@ -17,8 +17,6 @@
   export let token: Contract;
   export let reserve: Contract;
 
-  console.log("sale in Buy", sale);
-
   let approved, checkApprovalPromise;
 
   const checkApproval = async () => {
