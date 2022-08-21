@@ -6,7 +6,11 @@
   import { selectedNetwork } from "$src/stores";
   import { signer } from "svelte-ethers-store";
   import { RedeemableERC20ClaimEscrow } from "rain-sdk";
-  import { Logger } from "ethers/lib/utils";
+  import { writable } from "svelte/store";
+  import Modal, { bind } from "svelte-simple-modal/src/Modal.svelte";
+  import SimpleTransactionModal from "$components/SimpleTransactionModal.svelte";
+
+  const modal2 = writable(null);
 
   enum TxStatus {
     None,
@@ -26,45 +30,29 @@
     activeStep = SweepingSteps.Confirm,
     txStatus = TxStatus.None,
     txReceipt;
+  let redeemableEscrow;
 
-  const sweep = async () => {
-    let tx;
-    txStatus = TxStatus.AwaitingSignature;
-
-    let redeemableEscrow = await RedeemableERC20ClaimEscrow.get(
+  (async () =>
+    (redeemableEscrow = await RedeemableERC20ClaimEscrow.get(
       salesContract.address,
-      data.token.id,
+      data.deposit.token.id,
       $signer
+    )))();
+
+  const showModal = () =>
+    modal2.set(
+      bind(SimpleTransactionModal, {
+        method: redeemableEscrow.sweepPending,
+        args: [data.depositorAddress],
+        confirmationMsg: "Withdraw confirmed!",
+        returnValue,
+      })
     );
 
-    try {
-      tx = await redeemableEscrow.sweepPending(data.depositorAddress);
-      txStatus = TxStatus.AwaitingConfirmation;
-      txReceipt = await tx.wait();
-    } catch (error) {
-      if (error.code === Logger.errors.TRANSACTION_REPLACED) {
-        if (error.cancelled) {
-          errorMsg = "Transaction Cancelled";
-          txStatus = TxStatus.Error;
-          return;
-        } else {
-          txReceipt = await error.replacement.wait();
-        }
-      } else {
-        errorMsg =
-          error.error?.data?.message ||
-          error.error?.message ||
-          error.data?.message ||
-          error?.message;
-        txStatus = TxStatus.Error;
-        return;
-      }
-    }
-
+  const returnValue = (method, receipt) => {
     txStatus = TxStatus.None;
     activeStep = SweepingSteps.Complete;
-
-    return txReceipt;
+    txReceipt = receipt;
   };
 </script>
 
@@ -91,7 +79,17 @@
 
     {#if activeStep == SweepingSteps.Confirm}
       <span>Confirm your Sweep Pending Deposit.</span>
-      <Button on:click={sweep}>Confirm</Button>
+      <Modal
+        show={$modal2}
+        styleContent={{ color: "rgba(249, 250, 251, 1)" }}
+        styleWindow={{
+          backgroundColor: "rgba(38,38,38, 1) !important",
+          width: "fit-content",
+        }}
+        closeButton={false}
+      >
+        <Button on:click={showModal}>Confirm</Button>
+      </Modal>
     {/if}
 
     {#if activeStep == SweepingSteps.Complete}

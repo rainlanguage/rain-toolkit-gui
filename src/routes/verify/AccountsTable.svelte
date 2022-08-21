@@ -1,6 +1,6 @@
 <script lang="ts">
   import { queryStore } from "@urql/svelte";
-  import { Contract } from "ethers";
+  import type { Contract } from "ethers";
   import FormPanel from "$components/FormPanel.svelte";
   import IconLibrary from "$components/IconLibrary.svelte";
   import OverflowMenu from "$components/overflow-menu/OverflowMenu.svelte";
