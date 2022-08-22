@@ -30,8 +30,12 @@
     class="rounded-lg border border-gray-700 bg-gray-800 flex flex-col gap-y-2 p-4"
   >
     <span>The max you can mint</span>
-    <span class="text-2xl font-semibold"
-      >{eCurrency.result.quantity.toString()}</span
-    >
+    <span class="text-2xl font-semibold">
+      {#if eCurrency.result.quantity.eq(ethers.constants.MaxUint256)}
+        n/a
+      {:else}
+        {eCurrency.result.quantity.toString()}
+      {/if}
+    </span>
   </div>
 </div>

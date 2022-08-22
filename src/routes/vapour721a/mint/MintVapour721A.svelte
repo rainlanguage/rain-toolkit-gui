@@ -11,6 +11,7 @@
   import { StorageOps, vapourOpMeta } from "$routes/vapour721a/opMeta";
   import { reviver } from "$src/utils";
   import RuleEval from "$routes/vapour721a/ruleEval/RuleEval.svelte";
+  import Switch from "$components/Switch.svelte";
 
   export let params: {
     wild: string;
@@ -46,23 +47,21 @@
   {#if $connected && $currencyInfo}
     <div class="col-span-4">
       <MintDialog />
-      {#if rules}
-        <div class="mt-8">
-          <RuleEval
-            {rules}
-            signer={$signer}
-            currencyInfo={$currencyInfo}
-            contract={$contractAddress}
-            opMeta={vapourOpMeta}
-            storageOpFn={StorageOps}
-          />
-        </div>
-      {/if}
-      <!-- {#if $contractInfo?.vmStateConfig}
-        <div class="mt-8">
-          <HumanReadableVapour vmStateConfig={$contractInfo.vmStateConfig} />
-        </div>
-      {/if} -->
+      <div>
+        {#if rules}
+          <div class="mt-8">
+            <RuleEval
+              {rules}
+              signer={$signer}
+              currencyInfo={$currencyInfo}
+              contract={$contractAddress}
+              opMeta={vapourOpMeta}
+              storageOpFn={StorageOps}
+              vmStateConfig={[$contractInfo.vmStateConfig]}
+            />
+          </div>
+        {/if}
+      </div>
     </div>
     <div class="col-span-3">
       <NextToken />
