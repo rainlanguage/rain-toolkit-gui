@@ -20,6 +20,7 @@
   import EscrowUndepositTable from "./escrow/EscrowUndepositTable.svelte";
   import { Sale, ERC20 } from "rain-sdk";
   import { client } from "src/stores";
+  import { Logger } from "ethers/lib/utils";
 
   export let params: {
     wild: string;
@@ -95,7 +96,15 @@
       const tx = await sale.start();
       await tx.wait();
     } catch (error) {
-      throw error;
+      if (error.code === Logger.errors.TRANSACTION_REPLACED) {
+        if (error.cancelled) {
+          throw error;
+        } else {
+          await error.replacement.wait();
+        }
+      } else {
+        throw error;
+      }
     }
   };
 
@@ -104,7 +113,15 @@
       const tx = await sale.end();
       await tx.wait();
     } catch (error) {
-      throw error;
+      if (error.code === Logger.errors.TRANSACTION_REPLACED) {
+        if (error.cancelled) {
+          throw error;
+        } else {
+          await error.replacement.wait();
+        }
+      } else {
+        throw error;
+      }
     }
   };
 

@@ -9,6 +9,10 @@
   import TokenInfo from "../sale/TokenInfo.svelte";
   import { EmissionsERC20 } from "rain-sdk";
   import { getERC20 } from "src/utils";
+  import { getContext } from "svelte";
+  import SimpleTransactionModal from "src/components/SimpleTransactionModal.svelte";
+
+  const { open } = getContext("simple-modal");
 
   export let params: {
     wild: string;
@@ -18,6 +22,7 @@
   let errorMsg, emissionsAddress;
   let showClaim;
   let initPromise, calcClaimPromise, claimPromise;
+  let claimed = false;
 
   $: if (params.wild) {
     initPromise = initContract();
@@ -38,12 +43,20 @@
     return claim;
   };
 
+  let returnValue = (method, receipt) => {};
+
   const claim = async () => {
-    const tx = await emissionsContract.claim(
-      $signerAddress,
-      ethers.constants.AddressZero
-    );
-    return await tx.wait();
+    await open(SimpleTransactionModal, {
+      method: emissionsContract.claim,
+      args: [$signerAddress, ethers.constants.AddressZero],
+      confirmationMsg: "Claim Completed",
+      returnValue,
+    });
+
+    returnValue = (method, receipt) => {
+      claimed = true;
+      return receipt;
+    };
   };
 </script>
 
@@ -129,9 +142,10 @@
             {#if claimPromise}
               {#await claimPromise}
                 Claiming...
-              {:then}
-                Claim complete! Refresh to see your new balance.
               {/await}
+              {#if claimed}
+                Claim complete! Refresh to see your new balance.
+              {/if}
             {/if}
           {/if}
         </FormPanel>

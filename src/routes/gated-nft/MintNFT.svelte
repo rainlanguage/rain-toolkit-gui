@@ -9,12 +9,19 @@
   import { GatedNFT } from "rain-sdk";
   import { Logger } from "ethers/lib/utils";
 
+  import SimpleTransactionModal from "src/components/SimpleTransactionModal.svelte";
+  import { getContext } from "svelte";
+
+  const { open } = getContext("simple-modal");
+
   let gatedMinter,
     mintPromise,
     errorMsg,
     gatedNFTaddress,
     recipientAddress,
-    mintError;
+    mintError,
+    minted = false,
+    txReceipt;
   export let params;
 
   $: if (params.wild) {
@@ -27,27 +34,40 @@
     }
   };
 
+  let returnValue = (method, receipt) => {};
+
   const mint = async () => {
     mintError = null;
     if (ethers.utils.isAddress(recipientAddress)) {
-      let receipt, tx;
-      try {
-        tx = await gatedMinter.mint(recipientAddress);
-        receipt = await tx.wait();
-        return receipt;
-      } catch (error) {
-        if (error.code === Logger.errors.TRANSACTION_REPLACED) {
-          if (error.cancelled) {
-            errorMsg = "Transaction Cancelled";
-            return;
-          } else {
-            receipt = await error.replacement.wait();
-          }
-        } else {
-          errorMsg = error.data?.message || error?.message;
-          return;
-        }
-      }
+      await open(SimpleTransactionModal, {
+        method: gatedMinter.mint,
+        args: [recipientAddress],
+        confirmationMsg: "NFT Minted!",
+        returnValue,
+      });
+
+      returnValue = (method, receipt) => {
+        minted = true;
+        txReceipt = receipt;
+      };
+      // let receipt, tx;
+      // try {
+      //   tx = await gatedMinter.mint(recipientAddress);
+      //   receipt = await tx.wait();
+      // } catch (error) {
+      //   if (error.code === Logger.errors.TRANSACTION_REPLACED) {
+      //     if (error.cancelled) {
+      //       errorMsg = "Transaction Cancelled";
+      //       return;
+      //     } else {
+      //       receipt = await error.replacement.wait();
+      //     }
+      //   } else {
+      //     errorMsg = error.data?.message || error?.message;
+      //     return;
+      //   }
+      // }
+      // return receipt;
     } else {
       mintError = "Not a valid Ethereum address.";
     }
@@ -97,17 +117,18 @@
         <div class="text-blue-400 flex flex-col gap-y-2">
           {#await mintPromise}
             <span>Minting...</span>
-          {:then receipt}
+          {/await}
+          {#if minted}
             <span> NFT minted! </span>
             <span>
               <a
                 target="_blank"
                 class="underline"
-                href={`${$selectedNetwork.blockExplorer}/tx/${receipt.transactionHash}`}
+                href={`${$selectedNetwork.blockExplorer}/tx/${txReceipt.transactionHash}`}
                 >See transaction.</a
               >
             </span>
-          {/await}
+          {/if}
         </div>
       {/if}
     </FormPanel>
@@ -117,7 +138,7 @@
     <FormPanel>
       <Input
         bind:value={gatedNFTaddress}
-        type="string"
+        type="address"
         placeholder="Contract address"
       />
       <Button
