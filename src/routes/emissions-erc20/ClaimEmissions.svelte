@@ -9,6 +9,7 @@
   import TokenInfo from "../sale/TokenInfo.svelte";
   import { EmissionsERC20 } from "rain-sdk";
   import { getERC20 } from "$src/utils";
+  import { addressValidate } from "$src/validation";
 
   export let params: {
     wild: string;
@@ -61,6 +62,7 @@
         bind:value={emissionsAddress}
         type="address"
         placeholder="Contract address"
+        validator={addressValidate}
       />
       <Button
         on:click={() => {

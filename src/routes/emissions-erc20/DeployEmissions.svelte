@@ -5,7 +5,7 @@
   import Input from "$components/Input.svelte";
   import Select from "$components/Select.svelte";
   import { validateFields } from "../../utils";
-  import { addressValidate } from "../../validation";
+  import { addressValidate, required } from "../../validation";
   import ContractDeploy from "$components/ContractDeploy.svelte";
   import HumanReadable from "$components/FriendlySource/HumanReadable.svelte";
   import {
@@ -60,11 +60,6 @@
     maxTier7 = 16000,
     maxTier8 = 32000;
 
-  // @TODO write validators
-  const defaultValidator = () => {
-    return true;
-  };
-
   $: FriendlySource = {
     tierAddress,
     blockTime,
@@ -91,93 +86,91 @@
     emissionsType,
   };
 
-  const deployEmissions = async () => {
-    const { validationResult, fieldValues } = await validateFields(fields);
+  const deployEmissions = async (fieldValues) => {
+    // const { validationResult, fieldValues } = await validateFields(fields);
 
     // GET THE SOURCE
 
     let newEmissionsERC20;
 
-    if (validationResult) {
-      let emissionsConfig: EmissionsConfig = emissionsType.value
-        ? {
-            tierAddress: fieldValues.tierAddress,
-            blockTime: fieldValues.blockTime,
-            period: fieldValues.period,
-            periodicRewards: {
-              tier1: fieldValues.tier1,
-              tier2: fieldValues.tier2,
-              tier3: fieldValues.tier3,
-              tier4: fieldValues.tier4,
-              tier5: fieldValues.tier6,
-              tier6: fieldValues.tier6,
-              tier7: fieldValues.tier7,
-              tier8: fieldValues.tier8,
-            },
-            maxPeriodicRewards: {
-              tier1: fieldValues.maxTier1,
-              tier2: fieldValues.maxTier2,
-              tier3: fieldValues.maxTier3,
-              tier4: fieldValues.maxTier4,
-              tier5: fieldValues.maxTier6,
-              tier6: fieldValues.maxTier6,
-              tier7: fieldValues.maxTier7,
-              tier8: fieldValues.maxTier8,
-            },
-            numberOfIncrements: fieldValues.numberOfIncrements,
-          }
-        : {
-            tierAddress: fieldValues.tierAddress,
-            blockTime: fieldValues.blockTime,
-            period: fieldValues.period,
-            periodicRewards: {
-              tier1: fieldValues.tier1,
-              tier2: fieldValues.tier2,
-              tier3: fieldValues.tier3,
-              tier4: fieldValues.tier4,
-              tier5: fieldValues.tier6,
-              tier6: fieldValues.tier6,
-              tier7: fieldValues.tier7,
-              tier8: fieldValues.tier8,
-            },
-          };
+    let emissionsConfig: EmissionsConfig = emissionsType.value
+      ? {
+          tierAddress: fieldValues.tierAddress,
+          blockTime: fieldValues.blockTime,
+          period: fieldValues.period,
+          periodicRewards: {
+            tier1: fieldValues.tier1,
+            tier2: fieldValues.tier2,
+            tier3: fieldValues.tier3,
+            tier4: fieldValues.tier4,
+            tier5: fieldValues.tier6,
+            tier6: fieldValues.tier6,
+            tier7: fieldValues.tier7,
+            tier8: fieldValues.tier8,
+          },
+          maxPeriodicRewards: {
+            tier1: fieldValues.maxTier1,
+            tier2: fieldValues.maxTier2,
+            tier3: fieldValues.maxTier3,
+            tier4: fieldValues.maxTier4,
+            tier5: fieldValues.maxTier6,
+            tier6: fieldValues.maxTier6,
+            tier7: fieldValues.maxTier7,
+            tier8: fieldValues.maxTier8,
+          },
+          numberOfIncrements: fieldValues.numberOfIncrements,
+        }
+      : {
+          tierAddress: fieldValues.tierAddress,
+          blockTime: fieldValues.blockTime,
+          period: fieldValues.period,
+          periodicRewards: {
+            tier1: fieldValues.tier1,
+            tier2: fieldValues.tier2,
+            tier3: fieldValues.tier3,
+            tier4: fieldValues.tier4,
+            tier5: fieldValues.tier6,
+            tier6: fieldValues.tier6,
+            tier7: fieldValues.tier7,
+            tier8: fieldValues.tier8,
+          },
+        };
 
-      let vmStateConfig: StateConfig;
-      if (emissionsType.value) {
-        vmStateConfig = new SequentialEmissions(emissionsConfig);
-      }
-      if (!emissionsType.value) {
-        vmStateConfig = new LinearEmissions(emissionsConfig);
-      }
-
-      let erc20Config: ERC20Config;
-      erc20Config = {
-        name: fieldValues.erc20name,
-        symbol: fieldValues.erc20symbol,
-        distributor: fieldValues.ownerAddress,
-        initialSupply: parseEther(fieldValues.initSupply.toString()),
-      };
-
-      let emissionsDeployArg: EmissionsERC20DeployArgs;
-      emissionsDeployArg = {
-        allowDelegatedClaims: false,
-        erc20Config,
-        vmStateConfig,
-      };
-
-      newEmissionsERC20 = await EmissionsERC20.deploy(
-        $signer,
-        emissionsDeployArg
-      );
-    } else {
-      return;
+    let vmStateConfig: StateConfig;
+    if (emissionsType.value) {
+      vmStateConfig = new SequentialEmissions(emissionsConfig);
     }
+    if (!emissionsType.value) {
+      vmStateConfig = new LinearEmissions(emissionsConfig);
+    }
+
+    let erc20Config: ERC20Config;
+    erc20Config = {
+      name: fieldValues.erc20name,
+      symbol: fieldValues.erc20symbol,
+      distributor: fieldValues.ownerAddress,
+      initialSupply: parseEther(fieldValues.initSupply.toString()),
+    };
+
+    let emissionsDeployArg: EmissionsERC20DeployArgs;
+    emissionsDeployArg = {
+      allowDelegatedClaims: false,
+      erc20Config,
+      vmStateConfig,
+    };
+
+    newEmissionsERC20 = await EmissionsERC20.deploy(
+      $signer,
+      emissionsDeployArg
+    );
 
     return newEmissionsERC20;
   };
 
-  const handleClick = () => {
-    deployPromise = deployEmissions();
+  const handleClick = async () => {
+    const { validationResult, fieldValues } = await validateFields(fields);
+    if (!validationResult) return;
+    deployPromise = deployEmissions(fieldValues);
   };
 </script>
 
@@ -216,7 +209,7 @@
           placeholder="Name"
           bind:this={fields.erc20name}
           bind:value={erc20name}
-          validator={defaultValidator}
+          validator={required}
         >
           <span slot="label">Name</span>
         </Input>
@@ -226,7 +219,7 @@
           placeholder="Symbol"
           bind:this={fields.erc20symbol}
           bind:value={erc20symbol}
-          validator={defaultValidator}
+          validator={required}
         >
           <span slot="label">Symbol</span>
         </Input>
@@ -234,7 +227,7 @@
           type="number"
           bind:this={fields.blockTime}
           bind:value={blockTime}
-          validator={defaultValidator}
+          validator={required}
         >
           <span slot="label">Block Time</span>
           <span slot="description"
@@ -246,7 +239,7 @@
           type="number"
           bind:this={fields.period}
           bind:value={period}
-          validator={defaultValidator}
+          validator={required}
         >
           <span slot="label">Claim Period</span>
           <span slot="description"
@@ -258,7 +251,7 @@
             type="number"
             bind:this={fields.numberOfIncrements}
             bind:value={numberOfIncrements}
-            validator={defaultValidator}
+            validator={required}
           >
             <span slot="label">Periods Length</span>
             <span slot="description"
@@ -279,7 +272,7 @@
           type="number"
           bind:this={fields.initSupply}
           bind:value={initSupply}
-          validator={defaultValidator}
+          validator={required}
         >
           <span slot="label">Amount of eTKN to mint</span>
         </Input>
@@ -303,7 +296,7 @@
           placeholder=""
           bind:this={fields.tier1}
           bind:value={tier1}
-          validator={defaultValidator}
+          validator={required}
         >
           <span slot="label">Tier 1</span>
         </Input>
@@ -312,7 +305,7 @@
           placeholder=""
           bind:this={fields.tier2}
           bind:value={tier2}
-          validator={defaultValidator}
+          validator={required}
         >
           <span slot="label">Tier 2</span>
         </Input>
@@ -321,7 +314,7 @@
           placeholder=""
           bind:this={fields.tier3}
           bind:value={tier3}
-          validator={defaultValidator}
+          validator={required}
         >
           <span slot="label">Tier 3</span>
         </Input>
@@ -330,7 +323,7 @@
           placeholder=""
           bind:this={fields.tier4}
           bind:value={tier4}
-          validator={defaultValidator}
+          validator={required}
         >
           <span slot="label">Tier 4</span>
         </Input>
@@ -339,7 +332,7 @@
           placeholder=""
           bind:this={fields.tier5}
           bind:value={tier5}
-          validator={defaultValidator}
+          validator={required}
         >
           <span slot="label">Tier 5</span>
         </Input>
@@ -348,7 +341,7 @@
           placeholder=""
           bind:this={fields.tier6}
           bind:value={tier6}
-          validator={defaultValidator}
+          validator={required}
         >
           <span slot="label">Tier 6</span>
         </Input>
@@ -357,7 +350,7 @@
           placeholder=""
           bind:this={fields.tier7}
           bind:value={tier7}
-          validator={defaultValidator}
+          validator={required}
         >
           <span slot="label">Tier 7</span>
         </Input>
@@ -366,7 +359,7 @@
           placeholder=""
           bind:this={fields.tier8}
           bind:value={tier8}
-          validator={defaultValidator}
+          validator={required}
         >
           <span slot="label">Tier 8</span>
         </Input>
@@ -379,7 +372,7 @@
             placeholder=""
             bind:this={fields.maxTier1}
             bind:value={maxTier1}
-            validator={defaultValidator}
+            validator={required}
           >
             <span slot="label">Tier 1</span>
           </Input>
@@ -388,7 +381,7 @@
             placeholder=""
             bind:this={fields.maxTier2}
             bind:value={maxTier2}
-            validator={defaultValidator}
+            validator={required}
           >
             <span slot="label">Tier 2</span>
           </Input>
@@ -397,7 +390,7 @@
             placeholder=""
             bind:this={fields.maxTier3}
             bind:value={maxTier3}
-            validator={defaultValidator}
+            validator={required}
           >
             <span slot="label">Tier 3</span>
           </Input>
@@ -406,7 +399,7 @@
             placeholder=""
             bind:this={fields.maxTier4}
             bind:value={maxTier4}
-            validator={defaultValidator}
+            validator={required}
           >
             <span slot="label">Tier 4</span>
           </Input>
@@ -415,7 +408,7 @@
             placeholder=""
             bind:this={fields.maxTier5}
             bind:value={maxTier5}
-            validator={defaultValidator}
+            validator={required}
           >
             <span slot="label">Tier 5</span>
           </Input>
@@ -424,7 +417,7 @@
             placeholder=""
             bind:this={fields.maxTier6}
             bind:value={maxTier6}
-            validator={defaultValidator}
+            validator={required}
           >
             <span slot="label">Tier 6</span>
           </Input>
@@ -433,7 +426,7 @@
             placeholder=""
             bind:this={fields.maxTier7}
             bind:value={maxTier7}
-            validator={defaultValidator}
+            validator={required}
           >
             <span slot="label">Tier 7</span>
           </Input>
@@ -442,7 +435,7 @@
             placeholder=""
             bind:this={fields.maxTier8}
             bind:value={maxTier8}
-            validator={defaultValidator}
+            validator={required}
           >
             <span slot="label">Tier 8</span>
           </Input>
