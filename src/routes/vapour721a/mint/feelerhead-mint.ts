@@ -6,12 +6,14 @@ import { contracts } from "svelte-ethers-store";
 import { ethers } from "ethers";
 import { formatUnits } from "ethers/lib/utils";
 
+const ipfs_gateway = import.meta.env.VITE_IPFS_GATEWAY;
+
 export const nextTokenMetadata: Readable<any> = derived(contractInfo, ($contractInfo, set) => {
     if ($contractInfo?.noOfNfts !== undefined) {
         const noOfNfts = $contractInfo?.noOfNfts % 9;
         const convertedGatewayUrl = new IPFSGatewayTools().convertToDesiredGateway(
             `${$contractInfo.baseURI}/${noOfNfts + 1}.json`,
-            "https://rain.mypinata.cloud"
+            ipfs_gateway
         );
         try {
             (async () => {
@@ -20,7 +22,7 @@ export const nextTokenMetadata: Readable<any> = derived(contractInfo, ($contract
                 if (imgURL.protocol == "ipfs:") {
                     metadata.image = new IPFSGatewayTools().convertToDesiredGateway(
                         metadata.image,
-                        "https://rain.mypinata.cloud"
+                        ipfs_gateway
                     )
                 }
                 const img = new Image();

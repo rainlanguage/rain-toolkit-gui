@@ -3,6 +3,8 @@ import { gql } from "@urql/svelte";
 import { derived, writable, type Readable } from "svelte/store";
 import IPFSGatewayTools from "@pinata/ipfs-gateway-tools/dist/browser";
 
+const ipfs_gateway = import.meta.env.VITE_IPFS_GATEWAY;
+
 const queryBody = `{
     id
     deployer
@@ -76,14 +78,14 @@ export const listVapour721As = { ..._listVapour721As, refresh: () => { tick.upda
 export const getMetadata = async (baseURI: string) => {
   const convertedGatewayUrl = new IPFSGatewayTools().convertToDesiredGateway(
     `${baseURI}/1.json`,
-    "https://rain.mypinata.cloud"
+    ipfs_gateway
   );
   const metadata = await (await fetch(convertedGatewayUrl)).json();
   const imgURL = new URL(metadata.image);
   if (imgURL.protocol == "ipfs:") {
     metadata.image = new IPFSGatewayTools().convertToDesiredGateway(
       metadata.image,
-      "https://rain.mypinata.cloud"
+      ipfs_gateway
     )
   }
   return metadata
