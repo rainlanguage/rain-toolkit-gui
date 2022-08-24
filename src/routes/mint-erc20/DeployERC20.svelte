@@ -4,7 +4,7 @@
   import FormPanel from "$components/FormPanel.svelte";
   import Input from "$components/Input.svelte";
   import { op, validateFields } from "../../utils";
-  import { addressValidate } from "../../validation";
+  import { addressValidate, required } from "../../validation";
   import ContractDeploy from "$components/ContractDeploy.svelte";
   import {
     EmissionsERC20,
@@ -32,58 +32,49 @@
   let initSupply = 0;
   let amount = 0;
 
-  // @TODO write validators
-  const defaultValidator = () => {
-    return true;
-  };
-
-  const deployEmissions = async () => {
-    const { validationResult, fieldValues } = await validateFields(fields);
-
+  const deployEmissions = async (fieldValues) => {
     // GET THE SOURCE
 
     let newEmissionsERC20, vmStateConfig: StateConfig;
 
-    if (validationResult) {
-      const Amount = fixedSupply ? amount : 0;
+    const Amount = fixedSupply ? amount : 0;
 
-      if (faucets) {
-        vmStateConfig = new CreateERC20(ownerAddress, Amount, {
-          blocks: blocks,
-          units: units,
-        });
-      } else {
-        vmStateConfig = new CreateERC20(ownerAddress, Amount);
-      }
-
-      let erc20Config: ERC20Config;
-      erc20Config = {
-        name: fieldValues.erc20name,
-        symbol: fieldValues.erc20symbol,
-        distributor: fieldValues.ownerAddress,
-        initialSupply: parseUnits(fieldValues.initSupply.toString()),
-      };
-
-      let emissionsDeployArg: EmissionsERC20DeployArgs;
-      emissionsDeployArg = {
-        allowDelegatedClaims: false,
-        erc20Config,
-        vmStateConfig,
-      };
-
-      newEmissionsERC20 = await EmissionsERC20.deploy(
-        $signer,
-        emissionsDeployArg
-      );
+    if (faucets) {
+      vmStateConfig = new CreateERC20(ownerAddress, Amount, {
+        blocks: blocks,
+        units: units,
+      });
     } else {
-      return;
+      vmStateConfig = new CreateERC20(ownerAddress, Amount);
     }
+
+    let erc20Config: ERC20Config;
+    erc20Config = {
+      name: fieldValues.erc20name,
+      symbol: fieldValues.erc20symbol,
+      distributor: fieldValues.ownerAddress,
+      initialSupply: parseUnits(fieldValues.initSupply.toString()),
+    };
+
+    let emissionsDeployArg: EmissionsERC20DeployArgs;
+    emissionsDeployArg = {
+      allowDelegatedClaims: false,
+      erc20Config,
+      vmStateConfig,
+    };
+
+    newEmissionsERC20 = await EmissionsERC20.deploy(
+      $signer,
+      emissionsDeployArg
+    );
 
     return newEmissionsERC20;
   };
 
-  const handleClick = () => {
-    deployPromise = deployEmissions();
+  const handleClick = async () => {
+    const { validationResult, fieldValues } = await validateFields(fields);
+    if (!validationResult) return;
+    deployPromise = deployEmissions(fieldValues);
   };
 </script>
 
@@ -100,7 +91,7 @@
         placeholder="Name"
         bind:this={fields.erc20name}
         bind:value={erc20name}
-        validator={defaultValidator}
+        validator={required}
       >
         <span slot="label">Name</span>
       </Input>
@@ -110,7 +101,7 @@
         placeholder="Symbol"
         bind:this={fields.erc20symbol}
         bind:value={erc20symbol}
-        validator={defaultValidator}
+        validator={required}
       >
         <span slot="label">Symbol</span>
       </Input>
@@ -128,7 +119,7 @@
           type="number"
           bind:this={fields.initSupply}
           bind:value={initSupply}
-          validator={defaultValidator}
+          validator={required}
         >
           <span slot="label">Initial Supply</span>
         </Input>
@@ -137,7 +128,7 @@
           type="number"
           bind:this={fields.initSupply}
           bind:value={initSupply}
-          validator={defaultValidator}
+          validator={required}
         >
           <span slot="label">Total Supply (Fixed)</span>
         </Input>
@@ -158,7 +149,7 @@
             type="number"
             bind:this={fields.amount}
             bind:value={amount}
-            validator={defaultValidator}
+            validator={required}
           >
             <span slot="label"
               >Amount of tokens to mint each time in future</span
@@ -183,7 +174,7 @@
           type="number"
           bind:this={fields.blocks}
           bind:value={blocks}
-          validator={defaultValidator}
+          validator={required}
         >
           <span slot="label"> Number of blocks </span>
           <span slot="description">
@@ -195,7 +186,7 @@
           type="text"
           bind:this={fields.units}
           bind:value={units}
-          validator={defaultValidator}
+          validator={required}
         >
           <span slot="label"> Number of token(units) </span>
           <span slot="description">

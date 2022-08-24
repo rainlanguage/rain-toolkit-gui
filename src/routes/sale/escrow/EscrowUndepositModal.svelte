@@ -7,6 +7,7 @@
   import Input from "$components/Input.svelte";
   import { RedeemableERC20ClaimEscrow } from "rain-sdk";
   import { signer } from "svelte-ethers-store";
+  import { required } from "$src/validation";
 
   enum TxStatus {
     None,
@@ -116,6 +117,7 @@
           calcPricePromise = calculatePrice(detail);
         }}
         debounce
+        validator={required}
       >
         <span slot="label">Enter the number of units to undeposit:</span>
       </Input>

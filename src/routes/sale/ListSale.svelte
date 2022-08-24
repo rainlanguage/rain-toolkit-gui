@@ -5,8 +5,6 @@
   import { queryStore } from "@urql/svelte";
   import { formatUnits } from "ethers/lib/utils";
   import { client } from "$src/stores";
-  import dayjs from "dayjs";
-  import IconLibrary from "$components/IconLibrary.svelte";
   import Pagination from "$components/Pagination.svelte";
 
   const skipLength = 100;

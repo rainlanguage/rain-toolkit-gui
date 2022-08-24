@@ -8,6 +8,7 @@
   import { selectedNetwork } from "$src/stores";
   import { saleStatuses } from "../sale";
   import { ERC20, RedeemableERC20ClaimEscrow } from "rain-sdk";
+  import { addressValidate, required } from "$src/validation";
 
   enum TxStatus {
     None,
@@ -192,7 +193,12 @@
     />
 
     {#if activeStep == DepositSteps.Approve}
-      <Input type="address" bind:value={tokenAddress} from="depositModal">
+      <Input
+        type="address"
+        bind:value={tokenAddress}
+        from="depositModal"
+        validator={addressValidate}
+      >
         <span slot="label">Enter token:</span>
       </Input>
       <Input
@@ -201,6 +207,7 @@
           calcPricePromise = calculatePrice(detail);
         }}
         debounce
+        validator={required}
       >
         <span slot="label">Enter the number of units to deposit:</span>
       </Input>

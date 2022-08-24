@@ -1,89 +1,120 @@
-<!-- <script lang="ts">
+<script lang="ts">
   import { signer, signerAddress } from "svelte-ethers-store";
   import { ethers } from "ethers";
+  import { hexlify } from "ethers/lib/utils";
   import FormPanel from "$components/FormPanel.svelte";
   import Input from "$components/Input.svelte";
   import Button from "$components/Button.svelte";
   import { tierReport } from "../../utils";
   import { push } from "svelte-spa-router";
   import { queryStore } from "@urql/svelte";
-  import { ERC20TransferTier, ERC20 } from "rain-sdk";
-  import SetTransferTier from "./SetTransferTier.svelte";
+  import { Stake, ERC20 } from "rain-sdk";
   import { getContext } from "svelte";
-  import TransferTierHistory from "./TransferTierHistory.svelte";
   import { client } from "$src/stores";
+  import DepositToken from "./DepositToken.svelte";
+  import StakeWithdrawTable from "./StakeWithdrawTable.svelte";
+  import StakeDepositTable from "./StakeDepositTable.svelte";
+  import StakeWithdrawModal from "./StakeWithdrawModal.svelte";
+  import Switch from "$components/Switch.svelte";
+  import Select from "$components/Select.svelte";
+  import { addressValidate, required } from "$src/validation";
 
   const { open } = getContext("simple-modal");
 
   export let params;
 
-  let transferTierContract,
+  let stakeContract,
     erc20Contract,
     errorMsg,
     addressToReport,
     parsedReport,
-    addressBalance,
-    currentTier;
+    addressBalance;
 
-  let transferTierAddress = params.wild ? params.wild.toLowerCase() : undefined;
+  let reportTier, parsedTiers;
+  let tierValue: { value: number; label: string } = null;
 
-  $: transferTier = queryStore({
+  const tierValues = [
+    { value: 0, label: "Tier 1" },
+    { value: 1, label: "Tier 2" },
+    { value: 2, label: "Tier 3" },
+    { value: 3, label: "Tier 4" },
+    { value: 4, label: "Tier 5" },
+    { value: 5, label: "Tier 6" },
+    { value: 6, label: "Tier 7" },
+    { value: 7, label: "Tier 8" },
+  ];
+
+  let timeForTierCheck = false;
+
+  let tiers = [];
+
+  let stakeAddress = params.wild ? params.wild.toLowerCase() : undefined;
+
+  $: stake = queryStore({
     client: $client,
     query: `
-      query ($transferTierAddress: Bytes!) {
-        erc20TransferTiers (where: {id: $transferTierAddress}) {
-          id
+      query ($stakeAddress: Bytes!) {
+        stakeERC20S (where: {id: $stakeAddress}) {
           address
-          deployBlock
-          deployTimestamp
           deployer
+          id
+          name
+          symbol
+          initialRatio
+          deployTimestamp
           token {
+            decimals
             id
             name
             symbol
-            decimals
           }
-          tierValues
-          tierLevels{
-            id
-            tierLevel
-            memberCount
-        }
+          decimals
+          totalSupply
+          tokenPoolSize
         }
       }`,
-    variables: { transferTierAddress },
+    variables: { stakeAddress },
     requestPolicy: "network-only",
     pause: params.wild ? false : true,
-    }
-  );
+  });
 
-  $: _transferTier = $transferTier.data?.erc20TransferTiers[0];
+  $: _stake = $stake.data?.stakeERC20S[0];
 
-  $: if (_transferTier || $signer) {
-    if (!$transferTier.fetching && _transferTier != undefined) {
+  $: if (_stake || $signer) {
+    if (!$stake.fetching && _stake != undefined) {
       initContracts();
-      reportMyAddress();
+      // reportMyAddress();
     }
   }
 
   const initContracts = async () => {
-    transferTierContract = new ERC20TransferTier(
-      _transferTier?.address,
-      $signer,
-      _transferTier?.token.id
-    );
+    stakeContract = new Stake(_stake?.address, $signer);
 
-    erc20Contract = new ERC20(_transferTier?.token.id, $signer);
-
-    currentTier = await transferTierContract.currentTier(
-      $signerAddress || (await this.signer.getAddress())
-    );
+    erc20Contract = new ERC20(_stake?.token.id, $signer);
   };
 
   const report = async () => {
     if (ethers.utils.isAddress(addressToReport)) {
-      const report = await transferTierContract.report(addressToReport);
-      parsedReport = tierReport(report);
+      parsedTiers = tiers.map((value) =>
+        value
+          ? ethers.utils.parseUnits(
+              value.toString(),
+              _stake?.token?.decimals ? _stake?.token?.decimals : 18
+            )
+          : ethers.constants.MaxInt256
+      );
+
+      if (!timeForTierCheck) {
+        reportTier = await stakeContract.report(addressToReport, parsedTiers);
+
+        parsedReport = tierReport(reportTier);
+      } else {
+        reportTier = await stakeContract.reportTimeForTier(
+          addressToReport,
+          tierValue.value,
+          parsedTiers
+        );
+      }
       addressBalance = await erc20Contract.balanceOf(addressToReport);
     } else {
       errorMsg = "Not a valid Ethereum address";
@@ -98,30 +129,103 @@
 
 <div class="flex w-full max-w-prose flex-col gap-y-4">
   <div class="mb-2 flex flex-col gap-y-2">
-    <span class="text-2xl"> Get a TransferTier report. </span>
+    <span class="text-2xl"> Get a Stake report. </span>
     <span class="text-gray-400">
-      TransferTier stores the time (block number) when an address joins a tier by locking up the required amount of tokens for that tier
+      Stake stores the time (block number) when an address joins a tier by
+      locking up the required amount of tokens for that tier
     </span>
     {#if !params.wild}
       <span class="text-gray-400">
-        Enter a TransferTier contract address below, or <span
+        Enter a Stake contract address below, or <span
           class="cursor-pointer underline"
           on:click={() => {
-            push("/erc20transfertier/list");
-          }}>browse all deployed TransferTier contracts.</span
+            push("/stake/list");
+          }}>browse all deployed Stake contracts.</span
         >
       </span>
     {/if}
   </div>
-  {#if !$transferTier.fetching && !$transferTier.error && $transferTier.data}
+  {#if !$stake.fetching && !$stake.error && $stake.data}
     <FormPanel heading="Get a report of an address">
       <Input
         bind:value={addressToReport}
         type="text"
         placeholder="Enter an Ethereum address"
+        validator={addressValidate}
       />
+      <div>
+        <span
+          >Report for {#if !timeForTierCheck}
+            all Tier{:else}Single Tier{/if}</span
+        >
+        <Switch bind:checked={timeForTierCheck} />
+      </div>
+      {#if timeForTierCheck}
+        <div>Select one of the tier for that you want to get the report</div>
+        <Select items={tierValues} bind:value={tierValue}>
+          <span slot="label"> Select The Tier Status: </span>
+        </Select>
+      {/if}
+      <div class="flex w-full flex-col gap-y-3">
+        <Input
+          type="number"
+          placeholder="Tier 1"
+          bind:value={tiers[0]}
+          validator={required}
+        >
+          <span slot="label"
+            >Enter the amount of token that must be used as threshold value for
+            each of the tiers.</span
+          >
+        </Input>
+        <Input
+          type="number"
+          placeholder="Tier 2"
+          bind:value={tiers[1]}
+          validator={required}
+        />
+        <Input
+          type="number"
+          placeholder="Tier 3"
+          bind:value={tiers[2]}
+          validator={required}
+        />
+        <Input
+          type="number"
+          placeholder="Tier 4"
+          bind:value={tiers[3]}
+          validator={required}
+        />
+        <Input
+          type="number"
+          placeholder="Tier 5"
+          bind:value={tiers[4]}
+          validator={required}
+        />
+        <Input
+          type="number"
+          placeholder="Tier 6"
+          bind:value={tiers[5]}
+          validator={required}
+        />
+        <Input
+          type="number"
+          placeholder="Tier 7"
+          bind:value={tiers[6]}
+          validator={required}
+        />
+        <Input
+          type="number"
+          placeholder="Tier 8"
+          bind:value={tiers[7]}
+          validator={required}
+        />
+      </div>
+
       <div class="flex flex-row gap-x-2">
-        <Button shrink on:click={report}>Get report</Button>
+        <Button shrink disabled={!addressToReport} on:click={report}
+          >Get report</Button
+        >
         <Button shrink on:click={reportMyAddress}>Get my report</Button>
       </div>
       <div class="flex flex-col gap-y-2">
@@ -129,101 +233,54 @@
           <span
             >{addressToReport} Balance: {ethers.utils.formatUnits(
               addressBalance,
-              _transferTier?.token.decimals
+              _stake?.token.decimals
             )}
-            {_transferTier?.token.symbol}</span
+            {_stake?.token.symbol}</span
           >
         {/if}
-        <span class="gap-y-1">
-          TransferTier Report:
-        </span>
-        {#if _transferTier && _transferTier?.tierValues.length}
-          {#each _transferTier.tierValues as value, i}
-            <span class="text-gray-400">
-              Tier {i + 1} :
-              {#if parsedReport?.[i] != "0xffffffff"}
-                ✅
-              {:else if parsedReport?.[i] == "0xffffffff"}
-                ❌
-              {/if}
-            </span>
+        <span class="gap-y-1"> Stake Report: </span>
+        {#if _stake}
+          {#each tiers as value, i}
+            {#if timeForTierCheck}
+              <span class="text-gray-400">
+                Tier {i + 1} : {value}
+                {#if value == tierValue?.value + 1 && reportTier?.toHexString() != "0xffffffff" && reportTier != undefined}
+                  ✅
+                {:else}
+                  ❌
+                {/if}
+              </span>
+            {:else}
+              <span class="text-gray-400">
+                Tier {i + 1} : {value}
+                {#if parsedReport ? hexlify(parsedReport?.[i]) != "0xffffffff" : "" && parsedReport != undefined}
+                  ✅
+                {:else if parsedReport ? hexlify(parsedReport?.[i]) == "0xffffffff" : ""}
+                  ❌
+                {/if}
+              </span>
+            {/if}
           {/each}
         {/if}
       </div>
-    </FormPanel>
-    <FormPanel heading="TransferTier Details">
-      <div class="mb-4 flex flex-col gap-y-2">
-        <div class="flex flex-col text-gray-400">
-          <span>Name: {_transferTier?.token.name}</span>
-          <span>Symbol: {_transferTier?.token.symbol}</span>
-          <span>Address: {_transferTier?.token.id}</span>
-        </div>
-      </div>
-      <div class="flex w-full gap-x-2 self-stretch">
-        <div class="w-1/2">
-          <span class="gap-y-1">
-            Token values of each tier:
-          </span>
-          {#if _transferTier && _transferTier?.tierValues.length}
-            {#each _transferTier.tierValues as value, i}
-              <div class="text-gray-400">
-                Tier {i + 1} : {ethers.utils.formatUnits(
-                  value,
-                  _transferTier?.token.decimals
-                )
-                } {_transferTier?.token.symbol}
-              </div>
-            {/each}
-          {/if}
-        </div>
-        <div class="w-1/2">
-          <div class="gap-y-1">Total members in each tier:</div>
-          {#if _transferTier && _transferTier?.tierLevels.length}
-            {#each _transferTier.tierLevels as value}
-              <div class="text-gray-400">
-                {#if value.tierLevel !== "0"}
-                  Tier {value.tierLevel} : {value.memberCount === "1"
-                    ? value.memberCount + " member"
-                    : value.memberCount + " members"}
-                {/if}
-              </div>
-            {/each}
-          {/if}
-        </div>
-      </div>
-    </FormPanel>
-
-    <FormPanel heading="Change Tier">
-      <Button
-        on:click={() => {
-          open(SetTransferTier, {
-            transferTierContract,
-            erc20Contract,
-            currentTier,
-          });
-        }}>Change Tier Status</Button
-      >
-    </FormPanel>
-
-    <FormPanel>
-      <TransferTierHistory tierAddress={transferTierContract?.address} reportingAddress={addressToReport} />
     </FormPanel>
   {:else if errorMsg}
     <span class="text-red-400">{errorMsg}</span>
   {:else if !params.wild}
     <FormPanel>
       <Input
-        bind:value={transferTierAddress}
+        bind:value={stakeAddress}
         type="address"
         placeholder="Contract address"
+        validator={addressValidate}
       />
       <Button
         on:click={() => {
-          push(`/erc20transfertier/report/${transferTierAddress}`);
+          push(`/stake/report/${stakeAddress}`);
         }}
       >
         Load
       </Button>
     </FormPanel>
   {/if}
-</div> -->
+</div>

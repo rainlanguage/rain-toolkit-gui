@@ -10,6 +10,7 @@
   import AccountsTable from "./AccountsTable.svelte";
   import ApproveAddress from "./ApproveAddress.svelte";
   import { Verify } from "rain-sdk";
+  import { addressValidate } from "$src/validation";
 
   export let params: {
     wild: string;
@@ -40,6 +41,7 @@
         bind:value={verifyAddressInput}
         type="address"
         placeholder="Contract address"
+        validator={addressValidate}
       />
       <Button
         on:click={() => {
