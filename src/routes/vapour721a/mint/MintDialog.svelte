@@ -12,6 +12,7 @@
   import Ring from "$components/Ring.svelte";
   import Quote from "./Quote.svelte";
   import { ConfettiExplosion } from "svelte-confetti-explosion";
+  import { ethers } from "ethers";
 
   enum MintingSteps {
     SelectAmount,
@@ -128,7 +129,11 @@
         <Button
           disabled={!$quote?.totalPrice && !$quote?.finalUnits?.isZero()}
           on:click={() => {
-            step++;
+            if ($currencyInfo.address == ethers.constants.AddressZero) {
+              step = step + 2
+            } else {
+              step++
+            }
           }}>Next</Button
         >
       {:else if step == MintingSteps.ApproveReserve}
