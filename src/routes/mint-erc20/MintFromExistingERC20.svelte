@@ -89,11 +89,7 @@
       Number(emission?.calculateClaimStateConfig.constants[2]);
   };
 
-<<<<<<< HEAD
-  $: if (emission && parsedReport) {
-=======
   $: if (emission) {
->>>>>>> 82c409a8259996353d2695dc83b963d1eab322e4
     faucetData();
   }
 

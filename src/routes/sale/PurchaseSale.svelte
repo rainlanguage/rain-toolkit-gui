@@ -94,6 +94,10 @@
       initPromise = initContracts();
     }
   }
+  $: if ($signer) {
+    defineSigner = false;
+    initPromise = initContracts();
+  }
 
   const startSale = async () => {
     try {
@@ -114,7 +118,7 @@
   };
 
   onMount(async () => {
-    latestBlock = await $signer.provider.getBlockNumber();
+    latestBlock = await $signer?.provider?.getBlockNumber();
   });
   const connectWallet = () => {
     defineSigner = false;
@@ -166,7 +170,7 @@
           <div class="flex flex-col gap-y-2">
             <Button
               on:click={() => {
-                startPromise = startSale();
+                $signer ? (startPromise = startSale()) : connectWallet();
               }}
             >
               Start sale
@@ -189,7 +193,7 @@
           <div class="flex flex-col gap-y-2">
             <Button
               on:click={() => {
-                endPromise = endSale();
+                $signer ? (endPromise = endSale()) : connectWallet();
               }}
             >
               End sale
@@ -226,18 +230,23 @@
           againstBlock={latestBlock}
         />
       </FormPanel>
-      <div class="grid grid-cols-2 gap-4">
-        <FormPanel heading="Raise Token">
-          <TokenInfo tokenData={saleData?.token} {signer} />
-        </FormPanel>
-        <FormPanel heading="Reserve Token">
-          <TokenInfo tokenData={saleData?.reserve} {signer} />
-        </FormPanel>
-      </div>
-      <Buy {saleData} {sale} {token} {reserve} />
+      {#if !defineSigner && $signer}
+        <div class="grid grid-cols-2 gap-4">
+          <FormPanel heading="Raise Token">
+            <TokenInfo tokenData={saleData?.token} {signer} />
+          </FormPanel>
+          <FormPanel heading="Reserve Token">
+            <TokenInfo tokenData={saleData?.reserve} {signer} />
+          </FormPanel>
+        </div>
+
+        <Buy {saleData} {sale} {token} {reserve} />
+      {/if}
+
       <FormPanel>
         <TransactionsTable saleContract={sale} />
       </FormPanel>
+
       <EscrowDeposit {saleData} {sale} />
       {#if saleStatus != undefined && saleStatus == "Success"}
         <FormPanel>

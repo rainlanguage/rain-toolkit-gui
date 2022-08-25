@@ -2,24 +2,30 @@
   import { formatAddress } from "$src/utils";
   import { queryStore } from "@urql/svelte";
   import { formatUnits } from "ethers/lib/utils";
-  import { signerAddress } from "svelte-ethers-store";
+  import { signerAddress, signer } from "svelte-ethers-store";
   import { getContext } from "svelte";
   import IconLibrary from "$components/IconLibrary.svelte";
   import Switch from "$components/Switch.svelte";
   import EscrowWithdrawModal from "./EscrowWithdrawModal.svelte";
   import { onMount } from "svelte/internal";
   import { client } from "$src/stores";
+  import WalletConnect from "$components/wallet-connect/WalletConnect.svelte";
 
   const { open } = getContext("simple-modal");
   export let salesContract, saleData, token;
 
   let checked = true;
-  let signerBalance, decimals, symbol, temp;
+  let signerBalance,
+    decimals = saleData?.token?.decimals,
+    symbol = saleData?.token?.symbol,
+    temp;
+  let defineSigner = true,
+    txQuery;
 
   let saleAddress = salesContract
     ? salesContract.address.toLowerCase()
     : undefined;
-  let depositor = $signerAddress.toLowerCase();
+  $: depositor = $signerAddress?.toLowerCase();
 
   $: allClaimQuery = queryStore({
     client: $client,
@@ -77,7 +83,11 @@
     pause: !checked ? false : true,
   });
 
-  $: txQuery = checked ? allClaimQuery : myClaimQuery;
+  $: if ($signer) {
+    txQuery = checked ? allClaimQuery : myClaimQuery;
+  } else {
+    txQuery = allClaimQuery;
+  }
 
   // handling table refresh
   const refresh = async () => {
@@ -91,15 +101,25 @@
   };
 
   const tokenDetails = async () => {
-    signerBalance = await token.balanceOf($signerAddress.toLowerCase());
-    decimals = await token.decimals();
-    symbol = await token.symbol();
+    if ($signer) {
+      decimals = await token.decimals();
+      symbol = await token.symbol();
+
+      signerBalance = await token.balanceOf($signerAddress?.toLowerCase());
+    }
   };
 
-  onMount(() => {
+  onMount(async () => {
     tokenDetails();
   });
+  const connectWallet = () => {
+    defineSigner = false;
+  };
 </script>
+
+{#if !defineSigner && !$signer}
+  <WalletConnect isSigner={false} />
+{/if}
 
 <div class="flex w-full flex-col gap-y-4">
   <div class="flex flex-row justify-between">
@@ -175,11 +195,13 @@
                 <span
                   class="underline cursor-pointer text-gray-400 mr-4"
                   on:click={() => {
-                    open(EscrowWithdrawModal, {
-                      data,
-                      salesContract,
-                      saleData,
-                    });
+                    $signer
+                      ? open(EscrowWithdrawModal, {
+                          data,
+                          salesContract,
+                          saleData,
+                        })
+                      : connectWallet();
                   }}
                 >
                   Withdraw

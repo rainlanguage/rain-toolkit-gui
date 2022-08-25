@@ -82,9 +82,9 @@
         <div class="flex flex-row gap-x-2">
           <Button
             on:click={() => {
-              $signer
-                ? push(`/sale/purchase/${sale.address}`)
-                : connectWallet();
+              // $signer?
+              push(`/sale/purchase/${sale.address}`);
+              // : connectWallet();
             }}>Purchase</Button
           >
         </div>
