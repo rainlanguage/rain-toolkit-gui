@@ -4,6 +4,7 @@
   import Input from "$components/Input.svelte";
   import Select from "$components/Select.svelte";
   import SimpleTransactionModal from "$components/SimpleTransactionModal.svelte";
+  import { addressValidate } from "$src/validation";
   import { getContext } from "svelte";
   import { roles } from "./verify";
 
@@ -23,7 +24,7 @@
 </script>
 
 <FormPanel heading="Grant a role">
-  <Input type="address" bind:value={roleAddress}>
+  <Input type="address" bind:value={roleAddress} validator={addressValidate}>
     <span slot="label">Address to grant the role to:</span>
   </Input>
   <Select items={roles} bind:value={selectedRole}>

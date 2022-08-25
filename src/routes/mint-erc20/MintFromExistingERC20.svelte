@@ -14,6 +14,7 @@
   import { client } from "$src/stores";
   import { selectedNetwork } from "$src/stores";
   import WalletConnect from "$components/wallet-connect/WalletConnect.svelte";
+  import { addressValidate } from "$src/validation";
 
   export let params: {
     wild: string;
@@ -88,7 +89,11 @@
       Number(emission?.calculateClaimStateConfig.constants[2]);
   };
 
+<<<<<<< HEAD
   $: if (emission && parsedReport) {
+=======
+  $: if (emission) {
+>>>>>>> 82c409a8259996353d2695dc83b963d1eab322e4
     faucetData();
   }
 
@@ -160,6 +165,7 @@
         bind:value={erc20Address}
         type="address"
         placeholder="Contract address"
+        validator={addressValidate}
       >
         <span slot="description">Only the owner of the token can mint</span>
       </Input>
@@ -249,6 +255,7 @@
                 type="address"
                 placeholder="Name"
                 bind:value={claimantAddress}
+                validator={addressValidate}
               >
                 <span slot="label">Claimant Address</span>
               </Input>

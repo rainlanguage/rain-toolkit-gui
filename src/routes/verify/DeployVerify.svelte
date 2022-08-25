@@ -5,7 +5,7 @@
   import FormPanel from "$components/FormPanel.svelte";
   import Input from "$components/Input.svelte";
   import { validateFields } from "$src/utils";
-  import { defaultValidator } from "../../validation";
+  import { required } from "../../validation";
   import { ethers } from "ethers";
   import ContractDeploy from "$components/ContractDeploy.svelte";
   import { Verify, VerifyTier } from "rain-sdk";
@@ -45,10 +45,7 @@
     verifyChild;
   let defineSigner = true;
 
-  const deployVerify = async () => {
-    const { validationResult, fieldValues } = await validateFields(
-      verifyFields
-    );
+  const deployVerify = async (fieldValues) => {
     console.log(fieldValues);
     console.log({
       admin: fieldValues.adminAddress,
@@ -63,11 +60,17 @@
     return newVerify;
   };
 
-  const deployVerifyTier = async () => {
+  const handleClick = async (contract) => {
     const { validationResult, fieldValues } = await validateFields(
-      verifyTierFields
+      contract === "verify" ? verifyFields : verifyTierFields
     );
+    if (!validationResult) return;
+    if (contract === "verify") {
+      deployVerifyPromise = deployVerify(fieldValues);
+    } else deployVerifyTierPromise = deployVerifyTier(fieldValues);
+  };
 
+  const deployVerifyTier = async (fieldValues) => {
     const newVerifyTier = await VerifyTier.deploy(
       $signer,
       fieldValues.verifyAddress
@@ -104,7 +107,7 @@
     <Input
       type="text"
       bind:this={verifyFields.adminAddress}
-      validator={defaultValidator}
+      validator={required}
       value={$signerAddress}
     >
       <span slot="label">Admin address: </span>
@@ -119,7 +122,9 @@
       <Button
         shrink
         on:click={() => {
-          $signer ? (deployVerifyPromise = deployVerify()) : connectWallet();
+          $signer
+            ? (deployVerifyPromise = handleClick("verify"))
+            : connectWallet();
         }}
       >
         Deploy Verify</Button
@@ -133,7 +138,7 @@
     <Input
       type="text"
       bind:this={verifyTierFields.verifyAddress}
-      validator={defaultValidator}
+      validator={required}
       value={verifyChild}
     >
       <span slot="label">Verify address: </span>
@@ -149,7 +154,7 @@
         shrink
         on:click={() => {
           $signer
-            ? (deployVerifyTierPromise = deployVerifyTier())
+            ? (deployVerifyTierPromise = handleClick("verifyTier"))
             : connectWallet();
         }}>Deploy VerifyTier</Button
       >

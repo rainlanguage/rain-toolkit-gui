@@ -7,7 +7,7 @@
   import Select from "$components/Select.svelte";
   import ContractDeploy from "$components/ContractDeploy.svelte";
   import { CombineTier, CombineTierGenerator, VM } from "rain-sdk";
-  import { selectLteLogic, selectLteMode } from "../../utils";
+  import { selectLteLogic, selectLteMode, validateFields } from "../../utils";
   import HumanReadable from "$components/FriendlySource/HumanReadable.svelte";
   import WalletConnect from "$components/wallet-connect/WalletConnect.svelte";
 
@@ -15,6 +15,8 @@
     tierContractTwo: string = "0x12e418D854E8250c8e3778d5Cb00453FA1475B8f",
     deployPromise: any,
     defineSigner = true;
+
+  let fields: any = {};
 
   const logicOptions = [
     { value: selectLteLogic.every, label: "Every" },
@@ -57,7 +59,9 @@
     return newCombineTier;
   };
 
-  const handleClick = () => {
+  const handleClick = async () => {
+    const { validationResult } = await validateFields(fields);
+    if (!validationResult) return;
     deployPromise = deployCombineTier();
   };
   const connectWallet = () => {
@@ -84,6 +88,7 @@
         placeholder="Tier address"
         bind:value={tierContractOne}
         validator={addressValidate}
+        bind:this={fields.tierContractOne}
       >
         <span slot="label">Tier contract #1</span>
       </Input>
@@ -93,6 +98,7 @@
         placeholder="Tier address"
         bind:value={tierContractTwo}
         validator={addressValidate}
+        bind:this={fields.tierContractTwo}
       >
         <span slot="label">Tier contract #2</span>
       </Input>

@@ -48,6 +48,7 @@
   import DeployERC20 from "./routes/mint-erc20/DeployERC20.svelte";
   import MintFromExistingERC20 from "./routes/mint-erc20/MintFromExistingERC20.svelte";
   import ListErc20s from "./routes/mint-erc20/ListERC20s.svelte";
+  import StakeTokens from "$routes/stake/StakeTokens.svelte";
 
   let routes = {};
 
@@ -66,6 +67,7 @@
     "/combinetier/list": ListCombineTier,
 
     "/stake/deploy": DeployStake,
+    "/stake/stake/*": StakeTokens,
     "/stake/report/*": StakeReport,
     "/stake/list": ListStake,
 

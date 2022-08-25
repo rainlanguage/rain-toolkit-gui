@@ -11,6 +11,7 @@
   import HumanReadable from "$components/FriendlySource/HumanReadable.svelte";
   import { queryStore } from "@urql/svelte";
   import WalletConnect from "$components/wallet-connect/WalletConnect.svelte";
+  import { addressValidate, required } from "$src/validation";
 
   export let params: { wild: string },
     errorMsg: string,
@@ -106,6 +107,7 @@
           bind:value={addressToReport}
           type="text"
           placeholder="Enter an Ethereum address"
+          validator={required}
         />
         <div class="flex flex-row gap-x-2">
           <Button shrink on:click={report}>Get a report</Button>
@@ -135,6 +137,7 @@
           bind:value={combineTierAddress}
           type="address"
           placeholder="Contract address"
+          validator={addressValidate}
         />
         <Button
           on:click={() => {

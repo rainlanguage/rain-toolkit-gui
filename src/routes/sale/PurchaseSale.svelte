@@ -21,6 +21,7 @@
   import { Sale, ERC20 } from "rain-sdk";
   import { client } from "$src/stores";
   import WalletConnect from "$components/wallet-connect/WalletConnect.svelte";
+  import { addressValidate } from "$src/validation";
 
   export let params: {
     wild: string;
@@ -135,6 +136,7 @@
         bind:value={saleAddressInput}
         type="address"
         placeholder="Contract address"
+        validator={addressValidate}
       />
       <Button
         on:click={() => {
