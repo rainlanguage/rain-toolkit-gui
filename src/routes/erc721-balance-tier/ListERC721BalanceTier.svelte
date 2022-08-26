@@ -5,6 +5,10 @@
   import FormPanel from "$components/FormPanel.svelte";
   import { queryStore } from "@urql/svelte";
   import { client } from "$src/stores";
+  import { signer } from "svelte-ethers-store";
+  import WalletConnect from "$components/wallet-connect/WalletConnect.svelte";
+
+  let defineSigner = true;
 
   $: balanceTiers = queryStore({
     client: $client,
@@ -25,8 +29,14 @@
       }`,
   });
 
-  //query(balanceTiers);
+  const connectWallet = () => {
+    defineSigner = false;
+  };
 </script>
+
+{#if !defineSigner && !$signer}
+  <WalletConnect isSigner={false} />
+{/if}
 
 {#if $balanceTiers.fetching}
   Loading...
@@ -68,8 +78,11 @@
         </div>
         <div class="flex flex-row gap-x-2">
           <Button
-            on:click={push(`/erc721balancetier/report/${balanceTier.address}`)}
-            >Report</Button
+            on:click={() => {
+              $signer
+                ? push(`/erc721balancetier/report/${balanceTier.address}`)
+                : connectWallet();
+            }}>Report</Button
           >
         </div>
       </FormPanel>

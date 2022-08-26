@@ -20,13 +20,17 @@
   import EscrowUndepositTable from "./escrow/EscrowUndepositTable.svelte";
   import { Sale, ERC20 } from "rain-sdk";
   import { client } from "$src/stores";
+  import WalletConnect from "$components/wallet-connect/WalletConnect.svelte";
   import { addressValidate } from "$src/validation";
 
   export let params: {
     wild: string;
   };
 
-  let sale, reserve, token;
+  let sale,
+    reserve,
+    token,
+    defineSigner = true;
   let errorMsg, saleAddress, saleAddressInput, latestBlock;
   let startPromise, endPromise, initPromise;
 
@@ -90,6 +94,10 @@
       initPromise = initContracts();
     }
   }
+  $: if ($signer) {
+    defineSigner = false;
+    initPromise = initContracts();
+  }
 
   const startSale = async () => {
     try {
@@ -110,9 +118,16 @@
   };
 
   onMount(async () => {
-    latestBlock = await $signer.provider.getBlockNumber();
+    latestBlock = await $signer?.provider?.getBlockNumber();
   });
+  const connectWallet = () => {
+    defineSigner = false;
+  };
 </script>
+
+{#if !defineSigner && !$signer}
+  <WalletConnect isSigner={false} />
+{/if}
 
 <div class="flex w-900 flex-col gap-y-4">
   <div class="mb-2 flex flex-col gap-y-2">
@@ -129,7 +144,9 @@
       />
       <Button
         on:click={() => {
-          push(`/sale/purchase/${saleAddressInput}`);
+          $signer
+            ? push(`/sale/purchase/${saleAddressInput}`)
+            : connectWallet();
         }}
       >
         Load
@@ -153,7 +170,7 @@
           <div class="flex flex-col gap-y-2">
             <Button
               on:click={() => {
-                startPromise = startSale();
+                $signer ? (startPromise = startSale()) : connectWallet();
               }}
             >
               Start sale
@@ -176,7 +193,7 @@
           <div class="flex flex-col gap-y-2">
             <Button
               on:click={() => {
-                endPromise = endSale();
+                $signer ? (endPromise = endSale()) : connectWallet();
               }}
             >
               End sale
@@ -213,18 +230,23 @@
           againstBlock={latestBlock}
         />
       </FormPanel>
-      <div class="grid grid-cols-2 gap-4">
-        <FormPanel heading="Raise Token">
-          <TokenInfo tokenData={saleData?.token} {signer} />
-        </FormPanel>
-        <FormPanel heading="Reserve Token">
-          <TokenInfo tokenData={saleData?.reserve} {signer} />
-        </FormPanel>
-      </div>
-      <Buy {saleData} {sale} {token} {reserve} />
+      {#if !defineSigner && $signer}
+        <div class="grid grid-cols-2 gap-4">
+          <FormPanel heading="Raise Token">
+            <TokenInfo tokenData={saleData?.token} {signer} />
+          </FormPanel>
+          <FormPanel heading="Reserve Token">
+            <TokenInfo tokenData={saleData?.reserve} {signer} />
+          </FormPanel>
+        </div>
+
+        <Buy {saleData} {sale} {token} {reserve} />
+      {/if}
+
       <FormPanel>
         <TransactionsTable saleContract={sale} />
       </FormPanel>
+
       <EscrowDeposit {saleData} {sale} />
       {#if saleStatus != undefined && saleStatus == "Success"}
         <FormPanel>

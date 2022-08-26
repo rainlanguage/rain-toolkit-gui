@@ -3,24 +3,27 @@
   import RefundModal from "./RefundModal.svelte";
   import { queryStore } from "@urql/svelte";
   import { formatUnits } from "ethers/lib/utils";
-  import { signerAddress } from "svelte-ethers-store";
+  import { signerAddress, signer } from "svelte-ethers-store";
   import { getContext } from "svelte";
   import IconLibrary from "$components/IconLibrary.svelte";
   import dayjs from "dayjs";
   import { selectedNetwork } from "$src/stores";
   import Switch from "$components/Switch.svelte";
   import { client } from "$src/stores";
+  import WalletConnect from "$components/wallet-connect/WalletConnect.svelte";
 
   const { open } = getContext("simple-modal");
   export let saleContract;
 
   let checked = true;
   let temp;
+  let defineSigner = true,
+    txQuery;
 
   let saleContractAddress = saleContract
     ? saleContract.address.toLowerCase()
     : undefined;
-  let sender = $signerAddress.toLowerCase();
+  $: sender = $signerAddress?.toLowerCase();
 
   $: allTxQuery = queryStore({
     client: $client,
@@ -118,7 +121,11 @@
     pause: !checked ? false : true,
   });
 
-  $: txQuery = checked ? allTxQuery : myTxQuery;
+  $: if ($signer) {
+    txQuery = checked ? allTxQuery : myTxQuery;
+  } else {
+    txQuery = allTxQuery;
+  }
 
   // handling table refresh
   const refresh = async () => {
@@ -139,7 +146,15 @@
     ["SaleBuy", "Buy"],
     ["SaleRefund", "Refund"],
   ]);
+
+  const connectWallet = () => {
+    defineSigner = false;
+  };
 </script>
+
+{#if !defineSigner && !$signer}
+  <WalletConnect isSigner={false} />
+{/if}
 
 <div class="flex w-full flex-col gap-y-4">
   <div class="flex flex-row justify-between">
@@ -229,13 +244,15 @@
                 <span
                   class="underline cursor-pointer text-gray-400 mr-4"
                   on:click={() => {
-                    open(RefundModal, {
-                      saleContract,
-                      token,
-                      reserve,
-                      transaction,
-                      sale,
-                    });
+                    $signer
+                      ? open(RefundModal, {
+                          saleContract,
+                          token,
+                          reserve,
+                          transaction,
+                          sale,
+                        })
+                      : connectWallet();
                   }}
                 >
                   Refund

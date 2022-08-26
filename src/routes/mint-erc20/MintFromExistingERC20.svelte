@@ -1,7 +1,7 @@
 <script lang="ts">
   import { BigNumber, ethers, providers, Signer } from "ethers";
   import { formatUnits, hexlify } from "ethers/lib/utils";
-  import { signer, signerAddress, provider } from "svelte-ethers-store";
+  import { signer, signerAddress } from "svelte-ethers-store";
   import { push } from "svelte-spa-router";
   import Button from "$components/Button.svelte";
   import FormPanel from "$components/FormPanel.svelte";
@@ -13,13 +13,16 @@
   import { queryStore } from "@urql/svelte";
   import { client } from "$src/stores";
   import { selectedNetwork } from "$src/stores";
+  import WalletConnect from "$components/wallet-connect/WalletConnect.svelte";
   import { addressValidate } from "$src/validation";
 
   export let params: {
     wild: string;
   };
 
-  let erc20Contract, token;
+  let erc20Contract,
+    token,
+    defineSigner = true;
   let errorMsg, erc20Address;
   let showMint, showClaim, isFaucet;
   let initPromise,
@@ -137,8 +140,15 @@
     );
     return await tx.wait();
   };
+
+  const connectWallet = () => {
+    defineSigner = false;
+  };
 </script>
 
+{#if !defineSigner && !$signer}
+  <WalletConnect isSigner={false} />
+{/if}
 <div class="flex w-full max-w-prose flex-col gap-y-4">
   <div class="mb-2 flex flex-col gap-y-2">
     <span class="text-2xl">Mint from an already deployed ERC20 token</span>
@@ -157,7 +167,7 @@
       </Input>
       <Button
         on:click={() => {
-          push(`/erc20/mint/${erc20Address}`);
+          $signer ? push(`/erc20/mint/${erc20Address}`) : connectWallet();
         }}
       >
         Load

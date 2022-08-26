@@ -18,8 +18,10 @@
     SequentialEmissions,
   } from "rain-sdk";
   import { parseEther, parseUnits } from "ethers/lib/utils";
+  import WalletConnect from "$components/wallet-connect/WalletConnect.svelte";
 
-  let deployPromise;
+  let deployPromise,
+    defineSigner = true;
 
   let fields: any = {};
 
@@ -39,7 +41,8 @@
   let blockTime = 2.3;
   let period = 60 * 60 * 24 * 30; // one month in seconds
   let numberOfIncrements = 12;
-  let ownerAddress = $signerAddress;
+  let ownerAddress = "";
+  $: if ($signer) ownerAddress = $signerAddress;
   let initSupply = 0;
 
   let tier1 = 100,
@@ -172,7 +175,14 @@
     if (!validationResult) return;
     deployPromise = deployEmissions(fieldValues);
   };
+  const connectWallet = () => {
+    defineSigner = false;
+  };
 </script>
+
+{#if !defineSigner && !$signer}
+  <WalletConnect isSigner={false} />
+{/if}
 
 <div class="flex w-full gap-x-3">
   <div class="flex w-3/5 flex-col gap-y-4">
@@ -444,7 +454,13 @@
 
       <FormPanel>
         {#if !deployPromise}
-          <Button shrink on:click={handleClick}>Deploy EmissionsERC20</Button>
+          <Button shrink on:click={$signer ? handleClick : connectWallet}>
+            {#if !$signer}
+              Connect Wallet
+            {:else}
+              Deploy EmissionsERC20
+            {/if}</Button
+          >
         {:else}
           <ContractDeploy {deployPromise} type="EmissionsERC20" />
         {/if}

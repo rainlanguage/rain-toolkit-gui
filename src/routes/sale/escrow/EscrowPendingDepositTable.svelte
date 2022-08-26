@@ -2,13 +2,14 @@
   import { formatAddress } from "$src/utils";
   import { queryStore } from "@urql/svelte";
   import { formatUnits } from "ethers/lib/utils";
-  import { signerAddress } from "svelte-ethers-store";
+  import { signerAddress, signer } from "svelte-ethers-store";
   import { getContext } from "svelte";
   import IconLibrary from "$components/IconLibrary.svelte";
   import Switch from "$components/Switch.svelte";
   import { saleStatuses } from "../sale";
   import EscrowSweepPendingModal from "./EscrowSweepPendingModal.svelte";
   import { client } from "$src/stores";
+  import WalletConnect from "$components/wallet-connect/WalletConnect.svelte";
 
   const { open } = getContext("simple-modal");
 
@@ -16,11 +17,13 @@
 
   let checked = true;
   let temp;
+  let defineSigner = true,
+    txQuery;
 
   let saleAddress = salesContract
     ? salesContract.address.toLowerCase()
     : undefined;
-  let depositor = $signerAddress.toLowerCase();
+  $: depositor = $signerAddress?.toLowerCase();
 
   $: allPendingDepositQuery = queryStore({
     client: $client,
@@ -76,7 +79,11 @@
     pause: !checked ? false : true,
   });
 
-  $: txQuery = checked ? allPendingDepositQuery : myPendingDepositQuery;
+  $: if ($signer) {
+    txQuery = checked ? allPendingDepositQuery : myPendingDepositQuery;
+  } else {
+    txQuery = allPendingDepositQuery;
+  }
 
   // handling table refresh
   const refresh = async () => {
@@ -93,8 +100,15 @@
       $txQuery?.data?.redeemableEscrowPendingDepositorTokens[0]?.iSale
         ?.saleStatus
     ];
-  $: token = $txQuery?.data?.redeemableEscrowPendingDepositorTokens[0]?.token;
+
+  const connectWallet = () => {
+    defineSigner = false;
+  };
 </script>
+
+{#if !defineSigner && !$signer}
+  <WalletConnect isSigner={false} />
+{/if}
 
 <div class="flex w-full flex-col gap-y-4">
   <div class="flex flex-row justify-between">
@@ -146,10 +160,12 @@
               <span
                 class="underline cursor-pointer text-gray-400 mr-4"
                 on:click={() => {
-                  open(EscrowSweepPendingModal, {
-                    data,
-                    salesContract,
-                  });
+                  $signer
+                    ? open(EscrowSweepPendingModal, {
+                        data,
+                        salesContract,
+                      })
+                    : connectWallet();
                 }}
               >
                 Sweep

@@ -2,23 +2,26 @@
   import { formatAddress } from "$src/utils";
   import { queryStore } from "@urql/svelte";
   import { formatUnits } from "ethers/lib/utils";
-  import { signerAddress } from "svelte-ethers-store";
+  import { signerAddress, signer } from "svelte-ethers-store";
   import { getContext } from "svelte";
   import IconLibrary from "$components/IconLibrary.svelte";
   import Switch from "$components/Switch.svelte";
   import EscrowUndepositModal from "./EscrowUndepositModal.svelte";
   import { client } from "$src/stores";
+  import WalletConnect from "$components/wallet-connect/WalletConnect.svelte";
 
   const { open } = getContext("simple-modal");
   export let salesContract, saleData;
 
   let checked = true;
   let temp;
+  let defineSigner = true,
+    txQuery;
 
   let saleAddress = salesContract
     ? salesContract.address.toLowerCase()
     : undefined;
-  let depositor = $signerAddress.toLowerCase();
+  $: depositor = $signerAddress?.toLowerCase();
 
   $: allUndepositQuery = queryStore({
     client: $client,
@@ -76,7 +79,11 @@
     pause: !checked ? false : true,
   });
 
-  $: txQuery = checked ? allUndepositQuery : myUndepositQuery;
+  $: if ($signer) {
+    txQuery = checked ? allUndepositQuery : myUndepositQuery;
+  } else {
+    txQuery = allUndepositQuery;
+  }
 
   // handling table refresh
   const refresh = async () => {
@@ -86,7 +93,14 @@
       saleAddress = temp;
     }
   };
+  const connectWallet = () => {
+    defineSigner = false;
+  };
 </script>
+
+{#if !defineSigner && !$signer}
+  <WalletConnect isSigner={false} />
+{/if}
 
 <div class="flex w-full flex-col gap-y-4">
   <div class="flex flex-row justify-between">
@@ -148,11 +162,13 @@
               <span
                 class="underline cursor-pointer text-gray-400 mr-4"
                 on:click={() => {
-                  open(EscrowUndepositModal, {
-                    data,
-                    salesContract,
-                    saleData,
-                  });
+                  $signer
+                    ? open(EscrowUndepositModal, {
+                        data,
+                        salesContract,
+                        saleData,
+                      })
+                    : connectWallet();
                 }}
               >
                 Undeposit

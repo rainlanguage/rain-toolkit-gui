@@ -107,11 +107,11 @@
   <main class="relative flex font-light text-gray-50">
     <Sidebar />
     <div class="w-full py-5 px-8">
-      {#if $signer}
-        <Router {routes} />
-      {:else}
+      <!-- {#if $signer} -->
+      <Router {routes} />
+      <!-- {:else}
         Connect your wallet to get started.
-      {/if}
+      {/if} -->
     </div>
   </main>
   <Footer />

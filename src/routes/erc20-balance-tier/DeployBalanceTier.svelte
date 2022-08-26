@@ -7,6 +7,7 @@
   import ContractDeploy from "$components/ContractDeploy.svelte";
   import { ERC20BalanceTier, ERC20 } from "rain-sdk";
   import { formatUnits } from "ethers/lib/utils";
+  import WalletConnect from "$components/wallet-connect/WalletConnect.svelte";
   import Erc20Input from "$components/Erc20Input.svelte";
   import { validateFields } from "$src/utils";
   import { required } from "$src/validation";
@@ -18,13 +19,16 @@
     erc20symbol,
     erc20balance,
     erc20decimals;
-  let deployPromise;
+  let deployPromise,
+    defineSigner = true;
   let tiers = [];
 
   let fields: any = {};
 
   $: if (erc20Address) {
     getERC20();
+  } else if (erc20Address && !$signer) {
+    defineSigner = false;
   }
 
   const getERC20 = async () => {
@@ -70,7 +74,14 @@
 
     deployPromise = deployBalanceTier();
   };
+  const connectWallet = () => {
+    defineSigner = false;
+  };
 </script>
+
+{#if !defineSigner && !$signer}
+  <WalletConnect isSigner={false} />
+{/if}
 
 <div class="flex max-w-prose flex-col gap-y-4">
   <div class="mb-2 flex flex-col gap-y-2">
@@ -156,7 +167,13 @@
   <FormPanel>
     <div class="mt-1 flex flex-col gap-y-2">
       {#if !deployPromise}
-        <Button shrink on:click={handleClick}>Deploy BalanceTier</Button>
+        <Button shrink on:click={$signer ? handleClick : connectWallet}>
+          {#if !$signer}
+            Connect Wallet
+          {:else}
+            Deploy BalanceTier
+          {/if}
+        </Button>
       {:else}
         <ContractDeploy {deployPromise} type="ERC20BalanceTier" />
       {/if}

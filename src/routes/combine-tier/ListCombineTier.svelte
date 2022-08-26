@@ -4,7 +4,11 @@
   import FormPanel from "$components/FormPanel.svelte";
   import { queryStore } from "@urql/svelte";
   import { client } from "$src/stores";
-  import dayjs, { unix } from "dayjs";
+  import dayjs from "dayjs";
+  import { signer } from "svelte-ethers-store";
+  import WalletConnect from "$components/wallet-connect/WalletConnect.svelte";
+
+  let defineSigner = true;
 
   $: combineTiers = queryStore({
     client: $client,
@@ -19,8 +23,14 @@
       }`,
   });
 
-  //query(combineTiers);
+  const connectWallet = () => {
+    defineSigner = false;
+  };
 </script>
+
+{#if !defineSigner && !$signer}
+  <WalletConnect isSigner={false} />
+{/if}
 
 {#if $combineTiers.fetching}
   Loading...
@@ -45,8 +55,12 @@
           </div>
         </div>
         <div class="flex flex-row gap-x-2">
-          <Button on:click={push(`/combinetier/report/${combineTier.address}`)}
-            >Report</Button
+          <Button
+            on:click={() => {
+              $signer
+                ? push(`/combinetier/report/${combineTier.address}`)
+                : connectWallet();
+            }}>Report</Button
           >
         </div>
       </FormPanel>

@@ -6,10 +6,12 @@
   import Button from "$components/Button.svelte";
   import ContractDeploy from "$components/ContractDeploy.svelte";
   import { ERC721BalanceTier, ERC721 } from "rain-sdk";
+  import WalletConnect from "$components/wallet-connect/WalletConnect.svelte";
   import { addressValidate, required } from "$src/validation";
   import { validateFields } from "$src/utils";
 
-  let deployPromise;
+  let deployPromise,
+    defineSigner = true;
   let erc721Address: string | undefined,
     erc721Contract,
     erc721AddressError: string | null,
@@ -22,6 +24,8 @@
 
   $: if (erc721Address) {
     getERC721();
+  } else if (erc721Address && !$signer) {
+    defineSigner = false;
   }
 
   const getERC721 = async () => {
@@ -65,7 +69,14 @@
 
     deployPromise = deployBalanceTier();
   };
+  const connectWallet = () => {
+    defineSigner = false;
+  };
 </script>
+
+{#if !defineSigner && !$signer}
+  <WalletConnect isSigner={false} />
+{/if}
 
 <div class="flex max-w-prose flex-col gap-y-4">
   <div class="mb-2 flex flex-col gap-y-2">
@@ -160,7 +171,13 @@
   </FormPanel>
   <FormPanel>
     {#if !deployPromise}
-      <Button shrink on:click={handleClick}>Deploy BalanceTier</Button>
+      <Button shrink on:click={$signer ? handleClick : connectWallet}>
+        {#if !$signer}
+          Connect Wallet
+        {:else}
+          Deploy BalanceTier
+        {/if}</Button
+      >
     {:else}
       <ContractDeploy {deployPromise} type="ERC721BalanceTier" />
     {/if}

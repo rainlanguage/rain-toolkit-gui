@@ -6,8 +6,11 @@
   import { queryStore } from "@urql/svelte";
   import { formatUnits } from "ethers/lib/utils";
   import { client } from "$src/stores";
+  import { signer } from "svelte-ethers-store";
+  import WalletConnect from "$components/wallet-connect/WalletConnect.svelte";
 
-  let checked = true;
+  let checked = true,
+    defineSigner = true;
 
   $: allTokens = queryStore({
     client: $client,
@@ -73,8 +76,15 @@
   });
 
   $: txQuery = checked ? allTokens : allFaucets;
+
+  const connectWallet = () => {
+    defineSigner = false;
+  };
 </script>
 
+{#if !defineSigner && !$signer}
+  <WalletConnect isSigner={false} />
+{/if}
 <div class="flex flex-col py-4">
   <div class="flex flex-row justify-between ">
     <span class="text-white text-2xl">ERC20 Token List</span>
@@ -118,9 +128,15 @@
           </div>
         </div>
         <div class="flex flex-row gap-x-2">
-          <Button on:click={push(`/erc20/mint/${emission.address}`)}
-            >Mint</Button
+          <Button
+            on:click={() => {
+              $signer
+                ? push(`/erc20/mint/${emission.address}`)
+                : connectWallet();
+            }}
           >
+            Mint
+          </Button>
         </div>
       </FormPanel>
       <!-- {/if} -->
