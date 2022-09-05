@@ -4,13 +4,14 @@
   import FormPanel from "$components/FormPanel.svelte";
   import Input from "$components/Input.svelte";
   import { op, validateFields } from "../../utils";
-  import { addressValidate } from "../../validation";
+  import { addressValidate, required } from "../../validation";
   import ContractDeploy from "$components/ContractDeploy.svelte";
   import {
     EmissionsERC20,
     type ERC20Config,
     type StateConfig,
     type EmissionsERC20DeployArgs,
+    CreateERC20,
   } from "rain-sdk";
   import { concat, parseUnits } from "ethers/lib/utils";
   import Switch from "$components/Switch.svelte";
@@ -19,7 +20,10 @@
 
   let fields: any = {};
 
-  let fixedSupply = false;
+  let fixedSupply = false,
+    faucets = false;
+  let blocks = 100,
+    units = 0;
 
   let erc20name = "MyToken";
   let erc20symbol = "MyTKN";
@@ -28,64 +32,49 @@
   let initSupply = 0;
   let amount = 0;
 
-  // @TODO write validators
-  const defaultValidator = () => {
-    return true;
-  };
-
-  const deployEmissions = async () => {
-    const { validationResult, fieldValues } = validateFields(fields);
-
+  const deployEmissions = async (fieldValues) => {
     // GET THE SOURCE
 
-    let newEmissionsERC20;
+    let newEmissionsERC20, vmStateConfig: StateConfig;
 
-    if (validationResult) {
-      const Amount = fixedSupply ? parseUnits(amount.toString()) : 0;
-      let vmStateConfig: StateConfig = {
-        constants: [ownerAddress, Amount, 0],
-        sources: [
-          concat([
-            op(EmissionsERC20.Opcodes.VAL, 0),
-            op(EmissionsERC20.Opcodes.CLAIMANT_ACCOUNT),
-            op(EmissionsERC20.Opcodes.EQUAL_TO),
-            op(EmissionsERC20.Opcodes.VAL, 1),
-            op(EmissionsERC20.Opcodes.VAL, 2),
-            op(EmissionsERC20.Opcodes.EAGER_IF),
-          ]),
-        ],
-        stackLength: 6,
-        argumentsLength: 0,
-      };
+    const Amount = fixedSupply ? amount : 0;
 
-      let erc20Config: ERC20Config;
-      erc20Config = {
-        name: fieldValues.erc20name,
-        symbol: fieldValues.erc20symbol,
-        distributor: fieldValues.ownerAddress,
-        initialSupply: parseUnits(fieldValues.initSupply.toString()),
-      };
-
-      let emissionsDeployArg: EmissionsERC20DeployArgs;
-      emissionsDeployArg = {
-        allowDelegatedClaims: false,
-        erc20Config,
-        vmStateConfig,
-      };
-
-      newEmissionsERC20 = await EmissionsERC20.deploy(
-        $signer,
-        emissionsDeployArg
-      );
+    if (faucets) {
+      vmStateConfig = new CreateERC20(ownerAddress, Amount, {
+        blocks: blocks,
+        units: units,
+      });
     } else {
-      return;
+      vmStateConfig = new CreateERC20(ownerAddress, Amount);
     }
+
+    let erc20Config: ERC20Config;
+    erc20Config = {
+      name: fieldValues.erc20name,
+      symbol: fieldValues.erc20symbol,
+      distributor: fieldValues.ownerAddress,
+      initialSupply: parseUnits(fieldValues.initSupply.toString()),
+    };
+
+    let emissionsDeployArg: EmissionsERC20DeployArgs;
+    emissionsDeployArg = {
+      allowDelegatedClaims: false,
+      erc20Config,
+      vmStateConfig,
+    };
+
+    newEmissionsERC20 = await EmissionsERC20.deploy(
+      $signer,
+      emissionsDeployArg
+    );
 
     return newEmissionsERC20;
   };
 
-  const handleClick = () => {
-    deployPromise = deployEmissions();
+  const handleClick = async () => {
+    const { validationResult, fieldValues } = await validateFields(fields);
+    if (!validationResult) return;
+    deployPromise = deployEmissions(fieldValues);
   };
 </script>
 
@@ -102,7 +91,7 @@
         placeholder="Name"
         bind:this={fields.erc20name}
         bind:value={erc20name}
-        validator={defaultValidator}
+        validator={required}
       >
         <span slot="label">Name</span>
       </Input>
@@ -112,7 +101,7 @@
         placeholder="Symbol"
         bind:this={fields.erc20symbol}
         bind:value={erc20symbol}
-        validator={defaultValidator}
+        validator={required}
       >
         <span slot="label">Symbol</span>
       </Input>
@@ -130,7 +119,7 @@
           type="number"
           bind:this={fields.initSupply}
           bind:value={initSupply}
-          validator={defaultValidator}
+          validator={required}
         >
           <span slot="label">Initial Supply</span>
         </Input>
@@ -139,7 +128,7 @@
           type="number"
           bind:this={fields.initSupply}
           bind:value={initSupply}
-          validator={defaultValidator}
+          validator={required}
         >
           <span slot="label">Total Supply (Fixed)</span>
         </Input>
@@ -160,7 +149,7 @@
             type="number"
             bind:this={fields.amount}
             bind:value={amount}
-            validator={defaultValidator}
+            validator={required}
           >
             <span slot="label"
               >Amount of tokens to mint each time in future</span
@@ -168,6 +157,44 @@
           </Input>
         {/if}
       </div>
+    </FormPanel>
+
+    <FormPanel>
+      <div>
+        <span class="font-bold">Faucets</span>
+        <Switch bind:checked={faucets} />
+        <br />
+        <span class="text-gray-400"
+          >ERC20 token will be worked as faucets with ability to mint x number
+          of tokens each x number of blocks passed</span
+        >
+      </div>
+      {#if faucets}
+        <Input
+          type="number"
+          bind:this={fields.blocks}
+          bind:value={blocks}
+          validator={required}
+        >
+          <span slot="label"> Number of blocks </span>
+          <span slot="description">
+            Number of blocks needs to pass before being able to do another
+            faucet claim
+          </span>
+        </Input>
+        <Input
+          type="text"
+          bind:this={fields.units}
+          bind:value={units}
+          validator={required}
+        >
+          <span slot="label"> Number of token(units) </span>
+          <span slot="description">
+            Number of token to be transfered by the fuacet each time it is
+            triggered (at each claim)
+          </span>
+        </Input>
+      {/if}
     </FormPanel>
 
     <FormPanel>

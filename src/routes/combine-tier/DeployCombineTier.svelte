@@ -6,13 +6,14 @@
   import { addressValidate } from "../../validation";
   import Select from "$components/Select.svelte";
   import ContractDeploy from "$components/ContractDeploy.svelte";
-  import { CombineTier, CombineTierGenerator } from "rain-sdk";
-  import { selectLteLogic, selectLteMode } from "../../utils";
+  import { CombineTier, CombineTierGenerator, VM } from "rain-sdk";
+  import { selectLteLogic, selectLteMode, validateFields } from "../../utils";
   import HumanReadable from "$components/FriendlySource/HumanReadable.svelte";
 
-  let tierContractOne: string = "0x6ba1fadb694e806c316337143241dd6cfebd5033",
-    tierContractTwo: string = "0xb2b600aeae9bc1efd68ae209e621b7546393ef28",
+  let tierContractOne: string = "0x43F76B029c9BD72A37367DA5c0323f078A86f0b2",
+    tierContractTwo: string = "0x12e418D854E8250c8e3778d5Cb00453FA1475B8f",
     deployPromise: any;
+  let fields: any = {};
 
   const logicOptions = [
     { value: selectLteLogic.every, label: "Every" },
@@ -36,15 +37,28 @@
   };
 
   const deployCombineTier = async () => {
-    const combineTierConfig = new CombineTierGenerator(
-      tierContractOne
-    ).combineWith(tierContractTwo, logicValue.value, modeValue.value);
-    const newCombineTier = await CombineTier.deploy($signer, combineTierConfig);
+    const combineTierConfig = new CombineTierGenerator(tierContractOne, {
+      delegatedReport: true,
+      hasReportForSingleTier: true,
+    }).combineWith(
+      tierContractTwo,
+      logicValue.value,
+      modeValue.value,
+      true,
+      true
+    );
+    console.log(combineTierConfig);
+    const newCombineTier = await CombineTier.deploy($signer, {
+      combinedTiersLength: 0,
+      sourceConfig: combineTierConfig,
+    });
 
     return newCombineTier;
   };
 
-  const handleClick = () => {
+  const handleClick = async () => {
+    const { validationResult } = await validateFields(fields);
+    if (!validationResult) return;
     deployPromise = deployCombineTier();
   };
 </script>
@@ -64,6 +78,7 @@
         placeholder="Tier address"
         bind:value={tierContractOne}
         validator={addressValidate}
+        bind:this={fields.tierContractOne}
       >
         <span slot="label">Tier contract #1</span>
       </Input>
@@ -73,6 +88,7 @@
         placeholder="Tier address"
         bind:value={tierContractTwo}
         validator={addressValidate}
+        bind:this={fields.tierContractTwo}
       >
         <span slot="label">Tier contract #2</span>
       </Input>

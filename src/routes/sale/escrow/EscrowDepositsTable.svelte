@@ -4,7 +4,7 @@
   import { formatUnits } from "ethers/lib/utils";
   import { signerAddress } from "svelte-ethers-store";
   import { getContext } from "svelte";
-  import IconLibrary from "../$components/IconLibrary.svelte";
+  import IconLibrary from "$components/IconLibrary.svelte";
   import Switch from "$components/Switch.svelte";
   import EscrowWithdrawModal from "./EscrowWithdrawModal.svelte";
   import { onMount } from "svelte/internal";
@@ -21,7 +21,7 @@
     : undefined;
   let depositor = $signerAddress.toLowerCase();
 
-  $: allDepositQuery = queryStore({
+  $: allClaimQuery = queryStore({
     client: $client,
     query: `
         query ($saleAddress: Bytes!) {
@@ -49,7 +49,7 @@
     pause: checked ? false : true,
   });
 
-  $: myDepositQuery = queryStore({
+  $: myClaimQuery = queryStore({
     client: $client,
     query: `
         query ($saleAddress: Bytes!, $depositor: Bytes!) {
@@ -77,7 +77,7 @@
     pause: !checked ? false : true,
   });
 
-  $: txQuery = checked ? allDepositQuery : myDepositQuery;
+  $: txQuery = checked ? allClaimQuery : myClaimQuery;
 
   // handling table refresh
   const refresh = async () => {
@@ -103,11 +103,13 @@
 
 <div class="flex w-full flex-col gap-y-4">
   <div class="flex flex-row justify-between">
-    <span class="text-lg font-semibold">Escrow Deposit History</span>
+    <span class="text-lg font-semibold"
+      >Escrow deposits claimable by rTKN holders</span
+    >
 
     <div class="flex flex-row items-center gap-x-4">
       <span class="text-sm"
-        >Showing {#if !checked}only mine{:else}all transactions{/if}</span
+        >Showing {#if !checked}only my claims{:else}all claims{/if}</span
       >
       <Switch bind:checked />
       <span
@@ -124,7 +126,7 @@
   {:else if $txQuery?.data?.redeemableEscrowSupplyTokenWithdrawers.length}
     <table class="table-auto w-full space-y-2 text-sm">
       <tr class="border-b border-gray-600 uppercase text-sm">
-        <th class="text-gray-400 text-left pb-2 font-light">Withdrawer</th>
+        <th class="text-gray-400 text-left pb-2 font-light">Holder Address</th>
         <th class="text-gray-400 text-left pb-2 font-light">Token Address</th>
         <th class="text-gray-400 text-left pb-2 font-light"
           >Claimable Balance</th

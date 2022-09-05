@@ -4,6 +4,7 @@
   import FormPanel from "$components/FormPanel.svelte";
   import { queryStore } from "@urql/svelte";
   import { client } from "$src/stores";
+  import dayjs from "dayjs";
 
   $: combineTiers = queryStore({
     client: $client,
@@ -37,9 +38,9 @@
             <span>Contract Address: {combineTier.id}</span>
             <span>Deployer: {combineTier.deployer}</span>
             <span
-              >Deployed: {Date(
-                combineTier.deployTimestamp
-              ).toLocaleString()}</span
+              >Deployed: {dayjs
+                .unix(combineTier.deployTimestamp)
+                .toString()}</span
             >
           </div>
         </div>

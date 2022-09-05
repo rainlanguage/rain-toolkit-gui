@@ -1,12 +1,13 @@
 <script lang="ts">
   import { formatUnits, Logger, parseUnits } from "ethers/lib/utils";
-  import Button from "../$components/Button.svelte";
-  import Steps from "../$components/steps/Steps.svelte";
-  import Ring from "../$components/Ring.svelte";
+  import Button from "$components/Button.svelte";
+  import Steps from "$components/steps/Steps.svelte";
+  import Ring from "$components/Ring.svelte";
   import { selectedNetwork } from "$src/stores";
   import Input from "$components/Input.svelte";
   import { RedeemableERC20ClaimEscrow } from "rain-sdk";
   import { signer } from "svelte-ethers-store";
+  import { required } from "$src/validation";
 
   enum TxStatus {
     None,
@@ -82,7 +83,11 @@
           txReceipt = await error.replacement.wait();
         }
       } else {
-        errorMsg = error.data?.message || error?.message;
+        errorMsg =
+          error.error?.data?.message ||
+          error.error?.message ||
+          error.data?.message ||
+          error?.message;
         txStatus = TxStatus.Error;
         return;
       }
@@ -112,6 +117,7 @@
           calcPricePromise = calculatePrice(detail);
         }}
         debounce
+        validator={required}
       >
         <span slot="label">Enter the number of units to undeposit:</span>
       </Input>

@@ -2,7 +2,7 @@ let
  pkgs = import <nixpkgs> {};
 
  dev = pkgs.writeShellScriptBin "dev" ''
-  npm run dev
+  yarn dev
  '';
 
  mnemonic = pkgs.writeShellScriptBin "mnemonic" ''
@@ -13,6 +13,8 @@ in
 pkgs.stdenv.mkDerivation {
  name = "shell";
  buildInputs = [
+  pkgs.yarn
+  pkgs.nodePackages.npm
   pkgs.nodejs-16_x
   dev
   mnemonic
@@ -23,6 +25,6 @@ pkgs.stdenv.mkDerivation {
   export PATH=$( npm bin ):$PATH
   git submodule update --init
   # keep it fresh
-  npm install
+  yarn
  '';
 }

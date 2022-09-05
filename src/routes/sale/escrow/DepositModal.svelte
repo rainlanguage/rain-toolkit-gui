@@ -1,13 +1,14 @@
 <script lang="ts">
   import { signer } from "svelte-ethers-store";
   import { formatUnits, Logger, parseUnits } from "ethers/lib/utils";
-  import Button from "../$components/Button.svelte";
-  import Steps from "../$components/steps/Steps.svelte";
-  import Ring from "../$components/Ring.svelte";
+  import Button from "$components/Button.svelte";
+  import Steps from "$components/steps/Steps.svelte";
+  import Ring from "$components/Ring.svelte";
   import Input from "$components/Input.svelte";
   import { selectedNetwork } from "$src/stores";
   import { saleStatuses } from "../sale";
   import { ERC20, RedeemableERC20ClaimEscrow } from "rain-sdk";
+  import { addressValidate, required } from "$src/validation";
 
   enum TxStatus {
     None,
@@ -100,7 +101,11 @@
           txReceipt = await error.replacement.wait();
         }
       } else {
-        errorMsg = error.data?.message || error?.message;
+        errorMsg =
+          error.error?.data?.message ||
+          error.error?.message ||
+          error.data?.message ||
+          error?.message;
         txStatus = TxStatus.Error;
         return;
       }
@@ -130,7 +135,11 @@
           txReceipt = await error.replacement.wait();
         }
       } else {
-        errorMsg = error.data?.message || error?.message;
+        errorMsg =
+          error.error?.data?.message ||
+          error.error?.message ||
+          error.data?.message ||
+          error?.message;
         txStatus = TxStatus.Error;
         return;
       }
@@ -158,7 +167,11 @@
           txReceipt = await error.replacement.wait();
         }
       } else {
-        errorMsg = error.data?.message || error?.message;
+        errorMsg =
+          error.error?.data?.message ||
+          error.error?.message ||
+          error.data?.message ||
+          error?.message;
         txStatus = TxStatus.Error;
         return;
       }
@@ -180,7 +193,12 @@
     />
 
     {#if activeStep == DepositSteps.Approve}
-      <Input type="address" bind:value={tokenAddress} from="depositModal">
+      <Input
+        type="address"
+        bind:value={tokenAddress}
+        from="depositModal"
+        validator={addressValidate}
+      >
         <span slot="label">Enter token:</span>
       </Input>
       <Input
@@ -189,6 +207,7 @@
           calcPricePromise = calculatePrice(detail);
         }}
         debounce
+        validator={required}
       >
         <span slot="label">Enter the number of units to deposit:</span>
       </Input>

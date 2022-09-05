@@ -7,8 +7,11 @@
   import ContractDeploy from "$components/ContractDeploy.svelte";
   import { ERC20BalanceTier, ERC20, CombineTier } from "rain-sdk";
   import { formatUnits } from "ethers/lib/utils";
+  import Erc20Input from "$components/Erc20Input.svelte";
+  import { validateFields } from "$src/utils";
+  import { required } from "$src/validation";
 
-  let erc20Address,
+  let erc20Address = "0x25a4Dd4cd97ED462EB5228de47822e636ec3E31A",
     erc20AddressError,
     erc20Contract,
     erc20name,
@@ -18,11 +21,14 @@
   let deployPromise;
   let tiers = [];
 
+  let fields: any = {};
+
   $: if (erc20Address) {
     getERC20();
   }
 
   const getERC20 = async () => {
+    erc20Address = erc20Address.toLowerCase();
     if (ethers.utils.isAddress(erc20Address)) {
       erc20AddressError = null;
 
@@ -57,7 +63,10 @@
     return newBalanceTier;
   };
 
-  const handleClick = () => {
+  const handleClick = async () => {
+    const { validationResult } = await validateFields(fields);
+    if (!validationResult) return;
+
     deployPromise = deployBalanceTier();
   };
 </script>
@@ -71,36 +80,76 @@
     </span>
   </div>
   <FormPanel heading="BalanceTier settings">
-    <Input type="address" placeholder="Token address" bind:value={erc20Address}>
-      <span slot="label">Choose an ERC20 token to check the balance of.</span>
-      <span slot="description">
-        {#if erc20AddressError}
-          <span class="text-red-500">
-            {erc20AddressError}
-          </span>
-        {:else if erc20name && erc20balance}
-          <div class="flex flex-col gap-y-2 font-light text-gray-300">
-            <span>Token name: {erc20name}</span>
-            <span>Token symbol: {erc20symbol}</span>
-            <span>Your balance: {formatUnits(erc20balance, erc20decimals)}</span
-            >
-          </div>
-        {/if}
-      </span>
-    </Input>
+    <Erc20Input
+      bind:contract={erc20Contract}
+      signer={$signer}
+      value={erc20Address}
+      placeholder="Token address"
+      bind:this={fields.token}
+    >
+      <span slot="label">Reserve Token Address</span>
+    </Erc20Input>
     <div class="flex w-full flex-col gap-y-3">
-      <Input type="number" placeholder="Tier 1" bind:value={tiers[0]}>
+      <Input
+        type="number"
+        placeholder="Tier 1"
+        bind:value={tiers[0]}
+        bind:this={fields.tiers1}
+        validator={required}
+      >
         <span slot="label"
           >Set the amount of token that must be held for each of the tiers.</span
         >
       </Input>
-      <Input type="number" placeholder="Tier 2" bind:value={tiers[1]} />
-      <Input type="number" placeholder="Tier 3" bind:value={tiers[2]} />
-      <Input type="number" placeholder="Tier 4" bind:value={tiers[3]} />
-      <Input type="number" placeholder="Tier 5" bind:value={tiers[4]} />
-      <Input type="number" placeholder="Tier 6" bind:value={tiers[5]} />
-      <Input type="number" placeholder="Tier 7" bind:value={tiers[6]} />
-      <Input type="number" placeholder="Tier 8" bind:value={tiers[7]} />
+      <Input
+        type="number"
+        placeholder="Tier 2"
+        bind:value={tiers[1]}
+        bind:this={fields.tiers2}
+        validator={required}
+      />
+      <Input
+        type="number"
+        placeholder="Tier 3"
+        bind:value={tiers[2]}
+        bind:this={fields.tiers3}
+        validator={required}
+      />
+      <Input
+        type="number"
+        placeholder="Tier 4"
+        bind:value={tiers[3]}
+        bind:this={fields.tiers4}
+        validator={required}
+      />
+      <Input
+        type="number"
+        placeholder="Tier 5"
+        bind:value={tiers[4]}
+        bind:this={fields.tiers5}
+        validator={required}
+      />
+      <Input
+        type="number"
+        placeholder="Tier 6"
+        bind:value={tiers[5]}
+        bind:this={fields.tiers6}
+        validator={required}
+      />
+      <Input
+        type="number"
+        placeholder="Tier 7"
+        bind:value={tiers[6]}
+        bind:this={fields.tiers7}
+        validator={required}
+      />
+      <Input
+        type="number"
+        placeholder="Tier 8"
+        bind:value={tiers[7]}
+        bind:this={fields.tiers8}
+        validator={required}
+      />
     </div>
   </FormPanel>
   <FormPanel>
