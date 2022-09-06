@@ -5,7 +5,7 @@
   import FormPanel from "$components/FormPanel.svelte";
   import Button from "$components/Button.svelte";
   import ContractDeploy from "$components/ContractDeploy.svelte";
-  import { ERC20BalanceTier, ERC20 } from "rain-sdk";
+  import { ERC20, CombineTier } from "rain-sdk";
   import { formatUnits } from "ethers/lib/utils";
   import Erc20Input from "$components/Erc20Input.svelte";
   import { validateFields } from "$src/utils";
@@ -52,14 +52,11 @@
 
     const parsedTiers = tiers.map((value) =>
       value
-        ? ethers.utils.parseUnits(value.toString(), erc20decimals)
-        : ethers.constants.MaxInt256
+        ? ethers.utils.parseUnits(value.toString(), erc20decimals).toHexString()
+        : ethers.constants.MaxInt256.toHexString()
     );
 
-    let newBalanceTier = await ERC20BalanceTier.deploy($signer, {
-      erc20: erc20Contract.address,
-      tierValues: parsedTiers,
-    });
+    let newBalanceTier = await CombineTier.deployBalanceTier(erc20Contract.address, "erc20", parsedTiers, $signer);
 
     return newBalanceTier;
   };
@@ -158,7 +155,7 @@
       {#if !deployPromise}
         <Button shrink on:click={handleClick}>Deploy BalanceTier</Button>
       {:else}
-        <ContractDeploy {deployPromise} type="ERC20BalanceTier" />
+        <ContractDeploy {deployPromise} type="CombineTier" />
       {/if}
     </div>
   </FormPanel>

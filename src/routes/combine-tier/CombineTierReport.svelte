@@ -31,7 +31,7 @@
 
       combineTierContract = new CombineTier(params.wild, $signer);
     } else if (params.wild) {
-      errorMsg = "Not a valid BalanceTier address";
+      errorMsg = "Not a valid CombineTier address";
     }
   };
 
