@@ -224,6 +224,10 @@
     parsedReport: number[],
     combineTierContract,
     erc20,
+    // erc20name,
+    // erc20symbol,
+    // erc20decimals,
+    // erc20address,
     tierLevels;
 
   const tierValues = new Array(8);
@@ -248,16 +252,27 @@
       // setting up the combine tier contract
 
       combineTierContract = new CombineTier(params.wild, $signer);
-      erc20 = await getERC20($combineTier?.data?.combineTier?.address, $signer, $signerAddress)
+      //erc20 = await getERC20($combineTier?.data?.combineTier?.address.toString(), $signer, $signerAddress)
     } else if (params.wild) {
       errorMsg = "Not a valid CombineTier address";
     }
   };
 
+  $: erc20address = $combineTier?.data?.combineTier?.state?.constants[0] ? "0x" + BigInt($combineTier?.data?.combineTier?.state?.constants[0]).toString(16) : undefined;
+
+  $: {
+    (async() => {
+      erc20 = await getERC20(erc20address, $signer, $signerAddress)
+    })()
+  }
+
   const report = async () => {
     if (ethers.utils.isAddress(addressToReport)) {
       const report = await combineTierContract.report(addressToReport, []);
       parsedReport = tierReport(report.toHexString());
+      console.log($combineTier?.data?.combineTier?.state?.constants[1].toString())
+      console.log(erc20)
+      console.log($combineTier?.data?.combineTier?.address)
       // addressBalance = await erc20C.balanceOf(addressToReport);
     } else {
       errorMsg = "Not a valid Ethereum address";
@@ -284,7 +299,7 @@
           }
         }
       }`,
-    variables: { address: combineTierContract?.address },
+    variables: { address: combineTierContract?.address.toLowerCase() },
   });
 
   $: FriendlySource = $combineTier?.data?.combineTier?.state;
@@ -310,7 +325,7 @@
 </div>
 <div class="flex w-full gap-x-3">
   <div class="flex w-3/5 flex-col gap-y-4">
-    {#if ethers.utils.isAddress(params.wild) && params.wild && !errorMsg}
+    {#if erc20 && ethers.utils.isAddress(params.wild) && params.wild && !errorMsg}
       <!-- <FormPanel heading="Get a report on an address">
         <Input
           bind:value={addressToReport}
@@ -341,9 +356,9 @@
       <FormPanel heading="ERC20 used for this BalanceTier">
         <div class="mb-4 flex flex-col gap-y-2">
           <div class="flex flex-col text-gray-400">
-            <span>Name: {erc20.erc20name}</span>
-            <span>Symbol: {erc20.erc20symbol}</span>
-            <span>Address: {erc20.erc20Contract.address}</span>
+            <span>Name: {erc20?.erc20name}</span>
+            <span>Symbol: {erc20?.erc20symbol}</span>
+            <span>Address: {erc20address}</span>
           </div>
         </div>
       </FormPanel>
@@ -360,7 +375,7 @@
         </div>
         <div class="flex flex-col gap-y-2">
           <span class="text-lg">Token values for this BalanceTier:</span>
-          {#if $combineTier?.data?.combineTier && tierLevels.length}
+          {#if erc20 && $combineTier?.data?.combineTier && tierLevels.length}
             {#each tierLevels as value, i}
               <span class="text-gray-400">
                 Tier {i + 1}: {ethers.utils.formatUnits(
@@ -398,7 +413,7 @@
         />
         <Button
           on:click={() => {
-            push(`/combinetier/report/${combineTierAddress}`);
+            push(`/erc20balancetier/report/${combineTierAddress}`);
           }}
         >
           Load

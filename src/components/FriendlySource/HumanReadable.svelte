@@ -4,7 +4,7 @@
     getSaleDuration,
     getBuyWalletCap,
   } from "../../routes/sale/sale";
-  import { ethers } from "ethers";
+  import { BigNumber, ethers } from "ethers";
   import { arrayify, hexlify } from "ethers/lib/utils";
 
   import {
@@ -126,26 +126,6 @@
         console.log(error);
         saleDurationConfig = error;
       }
-      if (contractType.toLowerCase() === "any") {
-        if (ethers.utils.isHexString(FriendlySource.sources[0])) {
-          FriendlySource.sources = FriendlySource.sources.map((source) =>
-            arrayify(source)
-          );
-          for (let i = 0; i < FriendlySource.constants.length; i++) {
-            FriendlySource.constants[i] = hexlify(
-              BigInt(FriendlySource.constants[i])
-            );
-          }
-        }
-        try {
-          anySource = HumanFriendlyRead.prettify(
-            HumanFriendlyRead.get(FriendlySource)
-          );
-        } catch (error) {
-          errorMsg = error;
-          err = true;
-        }
-      }
 
       try {
         buyCapConfig = HumanFriendlyRead.prettify(
@@ -168,6 +148,29 @@
         priceConfig = error;
       }
     }
+    if (contractType.toLowerCase() === "any") {
+      if (ethers.utils.isHexString(FriendlySource.sources[0])) {
+        FriendlySource.sources = FriendlySource.sources.map((source) =>
+          arrayify(source, {allowMissingPrefix: true})
+        );
+        for (let i = 0; i < FriendlySource.constants.length; i++) {
+          FriendlySource.constants[i] = BigNumber.from(FriendlySource.constants[i]);
+        }
+      }
+      try {
+        anySource = HumanFriendlyRead.prettify(
+          HumanFriendlyRead.get(FriendlySource, {
+            contextEnums: ["User-Address"],
+            tags: ["User-Balance", "Report-Formula"],
+            enableTagging: true,
+          })
+        );
+      } catch (error) {
+        errorMsg = error;
+        err = true;
+      }
+    }
+
   }
 </script>
 
