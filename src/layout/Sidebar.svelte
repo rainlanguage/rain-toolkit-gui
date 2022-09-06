@@ -8,6 +8,8 @@
     <SidebarLinkGroup label="Stake" url="/stake/*">
       <SidebarLink url="/stake/deploy">Deploy a Stake</SidebarLink>
 
+      <SidebarLink url="/stake/stake/">Stake tokens</SidebarLink>
+
       <SidebarLink url="/stake/report/">Check a Stake Report</SidebarLink>
 
       <SidebarLink url="/stake/list">Browse deployed Stakes</SidebarLink>

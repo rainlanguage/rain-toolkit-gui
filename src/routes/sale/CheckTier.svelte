@@ -1,8 +1,8 @@
 <script lang="ts">
-  import { Signer } from "ethers";
-  import { Writable } from "svelte/store";
+  import type { Signer } from "ethers";
+  import type { Writable } from "svelte/store";
   import { tierReport } from "$src/utils";
-  import { ITier } from "rain-sdk";
+  import { ITierV2 } from "rain-sdk";
 
   interface TierData {
     __typename: string;
@@ -26,7 +26,7 @@
   let eligibleStatus;
 
   const checkTier = async (tier, minimumStatus: number) => {
-    const report = await tier.report($signer.getAddress());
+    const report = await tier.report($signer.getAddress(), []);
     const parsedReport = tierReport(report);
 
     if (minimumStatus !== 0) {
@@ -41,7 +41,7 @@
   };
 
   $: if ($signer && minimumStatus !== undefined && tierData?.id) {
-    const tier = new ITier(tierData.id, $signer);
+    const tier = new ITierV2(tierData.id, $signer);
 
     checkTier(tier, minimumStatus);
   }

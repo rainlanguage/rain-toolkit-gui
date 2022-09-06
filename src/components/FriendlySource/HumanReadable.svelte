@@ -1,14 +1,17 @@
 <script lang="ts">
-  // import {
-  //   calculatePriceConfig,
-  //   getSaleDuration,
-  //   getBuyWalletCap,
-  // } from "../../routes/sale/sale";
   import {
-    HumanFriendlySource,
+    calculatePriceConfig,
+    getSaleDuration,
+    getBuyWalletCap,
+  } from "../../routes/sale/sale";
+  import { BigNumber, ethers } from "ethers";
+  import { arrayify, hexlify } from "ethers/lib/utils";
+
+  import {
+    HumanFriendlyRead,
     CombineTierGenerator,
-    EmissionsConfig,
-    StateConfig,
+    type EmissionsConfig,
+    type StateConfig,
     LinearEmissions,
     SequentialEmissions,
   } from "rain-sdk";
@@ -21,85 +24,89 @@
     combineTierSource,
     emissionsSource,
     emissionsType,
+    anySource,
     errorMsg,
     err = false;
 
   $: {
-    // if (contractType.toLowerCase() === "emissions") {
-    //   try {
-    //     emissionsType = FriendlySource.emissionsType;
+    if (contractType.toLowerCase() === "emissions") {
+      try {
+        emissionsType = FriendlySource.emissionsType;
 
-    //     let emissionsConfig: EmissionsConfig = emissionsType.value
-    //       ? {
-    //           tierAddress: FriendlySource.tierAddress,
-    //           blockTime: FriendlySource.blockTime,
-    //           period: FriendlySource.period,
-    //           periodicRewards: {
-    //             tier1: FriendlySource.tier1,
-    //             tier2: FriendlySource.tier2,
-    //             tier3: FriendlySource.tier3,
-    //             tier4: FriendlySource.tier4,
-    //             tier5: FriendlySource.tier6,
-    //             tier6: FriendlySource.tier6,
-    //             tier7: FriendlySource.tier7,
-    //             tier8: FriendlySource.tier8,
-    //           },
-    //           maxPeriodicRewards: {
-    //             tier1: FriendlySource.maxTier1,
-    //             tier2: FriendlySource.maxTier2,
-    //             tier3: FriendlySource.maxTier3,
-    //             tier4: FriendlySource.maxTier4,
-    //             tier5: FriendlySource.maxTier6,
-    //             tier6: FriendlySource.maxTier6,
-    //             tier7: FriendlySource.maxTier7,
-    //             tier8: FriendlySource.maxTier8,
-    //           },
-    //           numberOfIncrements: FriendlySource.numberOfIncrements,
-    //         }
-    //       : {
-    //           tierAddress: FriendlySource.tierAddress,
-    //           blockTime: FriendlySource.blockTime,
-    //           period: FriendlySource.period,
-    //           periodicRewards: {
-    //             tier1: FriendlySource.tier1,
-    //             tier2: FriendlySource.tier2,
-    //             tier3: FriendlySource.tier3,
-    //             tier4: FriendlySource.tier4,
-    //             tier5: FriendlySource.tier6,
-    //             tier6: FriendlySource.tier6,
-    //             tier7: FriendlySource.tier7,
-    //             tier8: FriendlySource.tier8,
-    //           },
-    //         };
-    //     let vmStateConfig: StateConfig;
-    //     if (emissionsType.value) {
-    //       vmStateConfig = new SequentialEmissions(emissionsConfig);
-    //     }
-    //     if (!emissionsType.value) {
-    //       vmStateConfig = new LinearEmissions(emissionsConfig);
-    //     }
+        let emissionsConfig: EmissionsConfig = emissionsType.value
+          ? {
+              tierAddress: FriendlySource.tierAddress,
+              blockTime: FriendlySource.blockTime,
+              period: FriendlySource.period,
+              periodicRewards: {
+                tier1: FriendlySource.tier1,
+                tier2: FriendlySource.tier2,
+                tier3: FriendlySource.tier3,
+                tier4: FriendlySource.tier4,
+                tier5: FriendlySource.tier6,
+                tier6: FriendlySource.tier6,
+                tier7: FriendlySource.tier7,
+                tier8: FriendlySource.tier8,
+              },
+              maxPeriodicRewards: {
+                tier1: FriendlySource.maxTier1,
+                tier2: FriendlySource.maxTier2,
+                tier3: FriendlySource.maxTier3,
+                tier4: FriendlySource.maxTier4,
+                tier5: FriendlySource.maxTier6,
+                tier6: FriendlySource.maxTier6,
+                tier7: FriendlySource.maxTier7,
+                tier8: FriendlySource.maxTier8,
+              },
+              numberOfIncrements: FriendlySource.numberOfIncrements,
+            }
+          : {
+              tierAddress: FriendlySource.tierAddress,
+              blockTime: FriendlySource.blockTime,
+              period: FriendlySource.period,
+              periodicRewards: {
+                tier1: FriendlySource.tier1,
+                tier2: FriendlySource.tier2,
+                tier3: FriendlySource.tier3,
+                tier4: FriendlySource.tier4,
+                tier5: FriendlySource.tier6,
+                tier6: FriendlySource.tier6,
+                tier7: FriendlySource.tier7,
+                tier8: FriendlySource.tier8,
+              },
+            };
+        let vmStateConfig: StateConfig;
+        if (emissionsType.value) {
+          vmStateConfig = new SequentialEmissions(emissionsConfig);
+        }
+        if (!emissionsType.value) {
+          vmStateConfig = new LinearEmissions(emissionsConfig);
+        }
 
-    //     emissionsSource = HumanFriendlySource.get(vmStateConfig, {
-    //       contract: "emissions",
-    //       pretty: true,
-    //     });
-    //   } catch (error) {
-    //     console.log(error);
+        emissionsSource = HumanFriendlyRead.get(vmStateConfig, {
+          contract: "emissions",
+          pretty: true,
+        });
+      } catch (error) {
+        console.log(error);
 
-    //     errorMsg = error;
-    //     err = true;
-    //   }
-    // }
+        errorMsg = error;
+        err = true;
+      }
+    }
     if (contractType.toLowerCase() === "combinetier") {
       try {
-        combineTierSource = HumanFriendlySource.prettify(
-          HumanFriendlySource.get(
-            new CombineTierGenerator(
-              FriendlySource.tierContractOne
-            ).combineWith(
+        combineTierSource = HumanFriendlyRead.prettify(
+          HumanFriendlyRead.get(
+            new CombineTierGenerator(FriendlySource.tierContractOne, {
+              delegatedReport: true,
+              hasReportForSingleTier: true,
+            }).combineWith(
               FriendlySource.tierContractTwo,
               FriendlySource.logicValue,
-              FriendlySource.modeValue
+              FriendlySource.modeValue,
+              true,
+              true
             )
           )
         );
@@ -108,39 +115,62 @@
         err = true;
       }
     }
-    // if (contractType.toLowerCase() === "sale") {
-    //   try {
-    //     saleDurationConfig = HumanFriendlySource.prettify(
-    //       HumanFriendlySource.get(
-    //         getSaleDuration(FriendlySource.saleParam, signer)
-    //       )
-    //     );
-    //   } catch (error) {
-    //     console.log(error);
-    //     saleDurationConfig = error;
-    //   }
+    if (contractType.toLowerCase() === "sale") {
+      try {
+        saleDurationConfig = HumanFriendlyRead.prettify(
+          HumanFriendlyRead.get(
+            getSaleDuration(FriendlySource.saleParam, signer)
+          )
+        );
+      } catch (error) {
+        console.log(error);
+        saleDurationConfig = error;
+      }
 
-    //   try {
-    //     buyCapConfig = HumanFriendlySource.prettify(
-    //       HumanFriendlySource.get(getBuyWalletCap(FriendlySource.saleParam))
-    //     );
-    //   } catch (error) {
-    //     buyCapConfig = error;
-    //   }
+      try {
+        buyCapConfig = HumanFriendlyRead.prettify(
+          HumanFriendlyRead.get(getBuyWalletCap(FriendlySource.saleParam))
+        );
+      } catch (error) {
+        buyCapConfig = error;
+      }
 
-    //   try {
-    //     priceConfig =
-    //       FriendlySource.startTimestamp && FriendlySource.endTimestamp
-    //         ? HumanFriendlySource.prettify(
-    //             HumanFriendlySource.get(
-    //               calculatePriceConfig(FriendlySource.saleParam)
-    //             )
-    //           )
-    //         : "Select Sale's Start & End Date/Time To Show Price Script";
-    //   } catch (error) {
-    //     priceConfig = error;
-    //   }
-    // }
+      try {
+        priceConfig =
+          FriendlySource.startTimestamp && FriendlySource.endTimestamp
+            ? HumanFriendlyRead.prettify(
+                HumanFriendlyRead.get(
+                  calculatePriceConfig(FriendlySource.saleParam)
+                )
+              )
+            : "Select Sale's Start & End Date/Time To Show Price Script";
+      } catch (error) {
+        priceConfig = error;
+      }
+    }
+    if (contractType.toLowerCase() === "any") {
+      if (ethers.utils.isHexString(FriendlySource.sources[0])) {
+        FriendlySource.sources = FriendlySource.sources.map((source) =>
+          arrayify(source, {allowMissingPrefix: true})
+        );
+        for (let i = 0; i < FriendlySource.constants.length; i++) {
+          FriendlySource.constants[i] = BigNumber.from(FriendlySource.constants[i]);
+        }
+      }
+      try {
+        anySource = HumanFriendlyRead.prettify(
+          HumanFriendlyRead.get(FriendlySource, {
+            contextEnums: ["User-Address"],
+            tags: ["User-Balance", "Report-Formula"],
+            enableTagging: true,
+          })
+        );
+      } catch (error) {
+        errorMsg = error;
+        err = true;
+      }
+    }
+
   }
 </script>
 
@@ -168,6 +198,11 @@
     {#if contractType.toLowerCase() === "emissions" && !err}
       <span class="break-words pt-2 pb-2 whitespace-pre text">
         {emissionsSource}
+      </span>
+    {/if}
+    {#if contractType.toLowerCase() === "any" && !err}
+      <span class="break-words pt-2 pb-2 whitespace-pre text">
+        {anySource}
       </span>
     {/if}
     {#if err}

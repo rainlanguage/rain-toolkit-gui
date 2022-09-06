@@ -20,6 +20,7 @@
   import EscrowUndepositTable from "./escrow/EscrowUndepositTable.svelte";
   import { Sale, ERC20 } from "rain-sdk";
   import { client } from "$src/stores";
+  import { addressValidate } from "$src/validation";
 
   export let params: {
     wild: string;
@@ -124,6 +125,7 @@
         bind:value={saleAddressInput}
         type="address"
         placeholder="Contract address"
+        validator={addressValidate}
       />
       <Button
         on:click={() => {
@@ -162,7 +164,12 @@
               {:then}
                 <span class="text-blue-400">Started!</span>
               {:catch error}
-                <span class="text-red-400">{error.data.message}</span>
+                <span class="text-red-400"
+                  >{error.error?.data?.message ||
+                    error.error?.message ||
+                    error.data?.message ||
+                    error?.message}</span
+                >
               {/await}
             {/if}
           </div>
@@ -180,7 +187,12 @@
               {:then}
                 <span class="text-blue-400">Ended!</span>
               {:catch error}
-                <span class="text-red-400">{error.data.message}</span>
+                <span class="text-red-400"
+                  >{error.error?.data?.message ||
+                    error.error?.message ||
+                    error.data?.message ||
+                    error?.message}</span
+                >
               {/await}
             {/if}
           </div>

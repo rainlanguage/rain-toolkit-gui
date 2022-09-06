@@ -9,6 +9,7 @@
   import { queryStore } from "@urql/svelte";
   import { client } from "$src/stores";
   import { ERC721BalanceTier, ERC721, CombineTier } from "rain-sdk";
+  import { addressValidate, required } from "$src/validation";
 
   export let params;
 
@@ -138,6 +139,7 @@
         bind:value={addressToReport}
         type="text"
         placeholder="Enter an Ethereum address"
+        validator={required}
       />
       <div class="flex flex-row gap-x-2">
         <Button shrink on:click={report}>Get a report</Button>
@@ -177,6 +179,7 @@
         bind:value={balanceTierAddress}
         type="address"
         placeholder="Contract address"
+        validator={addressValidate}
       />
       <Button
         on:click={() => {
