@@ -14,16 +14,20 @@
   let erc20Address = "0x25a4Dd4cd97ED462EB5228de47822e636ec3E31A",
     erc20AddressError,
     erc20Contract,
-    erc20name,
-    erc20symbol,
-    erc20balance,
-    erc20decimals,
     initialRatio = 1;
   let deployPromise;
   let stTokenName = "Stake Token";
   let stTokenSymbol = "stTKN";
 
   let fields: any = {};
+
+  let erc20Info = {
+    ready: false,
+    name: null,
+    symbol: null,
+    decimals: null,
+    balance: null,
+  };
 
   const deployStake = async () => {
     let InitialRatio;
@@ -32,7 +36,7 @@
     if (initialRatio) {
       InitialRatio = BigNumber.from("1".padEnd(36, "0"))
         .mul(initialRatio)
-        .div(BigNumber.from("1".padEnd(erc20decimals, "0")));
+        .div(BigNumber.from("1".padEnd(erc20Info.decimals, "0")));
     }
     
     const stakeArgs: StakeDeployArgs = {
@@ -72,6 +76,7 @@
       bind:contract={erc20Contract}
       signer={$signer}
       bind:value={erc20Address}
+      bind:erc20Info = {erc20Info}
       placeholder="Token address"
       bind:this={fields.token}
     >
