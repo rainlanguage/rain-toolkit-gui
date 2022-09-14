@@ -25,40 +25,16 @@
 
   let fields: any = {};
 
-  $: if (erc20Address) {
-    getERC20();
-  }
-
-  const getERC20 = async () => {
-    erc20Address = erc20Address.toLowerCase();
-    if (ethers.utils.isAddress(erc20Address)) {
-      erc20AddressError = null;
-
-      erc20Contract = new ERC20(erc20Address, $signer);
-
-      try {
-        erc20name = await erc20Contract.name();
-        erc20balance = await erc20Contract.balanceOf($signerAddress);
-        erc20decimals = await erc20Contract.decimals();
-        erc20symbol = await erc20Contract.symbol();
-      } catch {
-        erc20AddressError = "not a valid ERC20 token address";
-      }
-    } else {
-      erc20AddressError = "not a valid address";
-    }
-  };
-
   const deployStake = async () => {
     let InitialRatio;
-    erc20Address = erc20Address.toLowerCase();
+    erc20Address = erc20Address.toLowerCase()
 
     if (initialRatio) {
       InitialRatio = BigNumber.from("1".padEnd(36, "0"))
         .mul(initialRatio)
         .div(BigNumber.from("1".padEnd(erc20decimals, "0")));
     }
-
+    
     const stakeArgs: StakeDeployArgs = {
       token: erc20Address,
       initialRatio: InitialRatio,
@@ -74,6 +50,7 @@
   const handleClick = async () => {
     // validate all fields before proceeding
     const { validationResult } = await validateFields(fields);
+    
     if (!validationResult) return;
 
     deployPromise = deployStake();
@@ -94,7 +71,7 @@
     <Erc20Input
       bind:contract={erc20Contract}
       signer={$signer}
-      value={erc20Address}
+      bind:value={erc20Address}
       placeholder="Token address"
       bind:this={fields.token}
     >

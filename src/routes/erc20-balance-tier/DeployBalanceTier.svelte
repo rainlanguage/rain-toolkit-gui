@@ -81,7 +81,7 @@
     <Erc20Input
       bind:contract={erc20Contract}
       signer={$signer}
-      value={erc20Address}
+      bind:value={erc20Address}
       placeholder="Token address"
       bind:this={fields.token}
     >

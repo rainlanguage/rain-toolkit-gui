@@ -321,7 +321,7 @@
         <Erc20Input
           bind:contract={reserveErc20}
           signer={$signer}
-          value={reserve}
+          bind:value={reserve}
           placeholder="Token address"
           bind:this={fields.reserve}
         >
