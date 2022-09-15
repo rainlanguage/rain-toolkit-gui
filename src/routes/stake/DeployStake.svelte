@@ -39,6 +39,8 @@
         .div(BigNumber.from("1".padEnd(erc20Info.decimals, "0")));
     }
     
+    console.log("stakeArgs", erc20Address, erc20Info.decimals, InitialRatio.toString());
+    
     const stakeArgs: StakeDeployArgs = {
       token: erc20Address,
       initialRatio: InitialRatio,
