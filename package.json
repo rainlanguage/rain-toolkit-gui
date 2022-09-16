@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "check": "svelte-check --tsconfig ./tsconfig.json"
+    "check": "svelte-check --tsconfig ./tsconfig.json",
+    "sy:run": "env-cmd -f .env synpress run -cf synpress.config.js",
+    "sy:open": "env-cmd -f .env synpress open -cf synpress.config.js"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^1.0.1",
@@ -28,13 +30,20 @@
   "dependencies": {
     "@formkit/auto-animate": "^1.0.0-beta.1",
     "@metamask/jazzicon": "^2.0.0",
+    "@synthetixio/synpress": "^2.3.2",
+    "@testing-library/cypress": "^8.0.3",
     "@urql/svelte": "^2.0.2",
     "@walletconnect/web3-provider": "^1.7.8",
     "authereum": "^0.1.14",
     "autoprefixer": "^9.8.8",
+    "cypress": "^10.7.0",
     "d3-quadtree": "^3.0.1",
     "d3-shape": "^3.1.0",
     "dayjs": "^1.11.4",
+    "env-cmd": "^10.1.0",
+    "eslint": "^8.23.0",
+    "eslint-plugin-cypress": "^2.12.1",
+    "eslint-plugin-testing-library": "^5.6.2",
     "ethers": "^5.5.2",
     "fortmatic": "^2.4.0",
     "graphql": "^16.5.0",

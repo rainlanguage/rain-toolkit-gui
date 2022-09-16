@@ -16,13 +16,33 @@
     "checkJs": true,
     "isolatedModules": true,
     "paths": {
-			"$components/*": ["src/components/*"],
-      "$src/stores/*": ["src/stores/*"],
-			"$routes/*": ["src/routes/*"],
-      "$abi/*": ["src/abi/*"],
-      "$src/*": ["src/*"],
-		}
+      "$components/*": [
+        "src/components/*"
+      ],
+      "$src/stores/*": [
+        "src/stores/*"
+      ],
+      "$routes/*": [
+        "src/routes/*"
+      ],
+      "$abi/*": [
+        "src/abi/*"
+      ],
+      "$src/*": [
+        "src/*"
+      ],
+    }
   },
-  "include": ["src/**/*.d.ts", "src/**/*.ts", "src/**/*.js", "src/**/*.svelte"],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  "include": [
+    "src/**/*.d.ts",
+    "src/**/*.ts",
+    "src/**/*.js",
+    "src/**/*.svelte",
+    "cypress/**/*.ts"
+  ],
+  "references": [
+    {
+      "path": "./tsconfig.node.json"
+    }
+  ]
 }

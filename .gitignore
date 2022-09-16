@@ -1,6 +1,8 @@
 /node_modules/
 /public/build/
 /build
+/tests/e2e/screenshots
+/tests/e2e/videos
 
 .DS_Store
 .env
