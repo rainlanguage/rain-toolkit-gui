@@ -1,4 +1,3 @@
-
 describe('Rain Protocol Toolkit', () => {
 
     before(() => {
@@ -13,7 +12,6 @@ describe('Rain Protocol Toolkit', () => {
 
     // after(() => {
     //     cy.disconnectMetamaskWalletFromDapp()
-    //     // cy.clear()
     // })
 
     it(`Home Page`, () => {
