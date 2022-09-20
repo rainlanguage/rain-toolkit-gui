@@ -33,17 +33,35 @@ describe('Sale : Rain Protocol Toolkit', () => {
     it(`Sale : Start Sale Check`, () => {
         cy.contains("Start sale").click()
         cy.wait(1000)
-        cy.contains("execution reverted: NOT_PENDING")
+        cy.get('body > main > div.w-full.py-5.px-8.s-XsEmFtvddWTw > div > div:nth-child(2) > div.grid.w-full.grid-cols-2.items-start > table.table-auto > tr:nth-child(1) > td:nth-child(2)').invoke('text').then(text => {
+            if (text == 'Active')
+                cy.contains("execution reverted: NOT_PENDING")
+            else {
+                cy.confirmMetamaskTransaction()
+                cy.wait(15000)
+                cy.contains("Started!")
+            }
+        })
     })
 
     it(`Sale : End Sale Check`, () => {
         cy.contains("End sale").click()
         cy.wait(1000)
-        cy.confirmMetamaskTransaction()
-        cy.wait(15000)
-        cy.contains("Ended!")
-        // cy.contains('execution reverted: LIVE')
-        // cy.contains("execution reverted: NOT_ACTIVE")
+        cy.get('body > main > div.w-full.py-5.px-8.s-XsEmFtvddWTw > div > div:nth-child(2) > div.grid.w-full.grid-cols-2.items-start > table.table-auto > tr:nth-child(1) > td:nth-child(2)').invoke('text').then(text => {
+            if (text == 'Sucess' || text == 'Fail')
+                cy.contains("execution reverted: NOT_ACTIVE")
+            else {
+                // change according to the sale ending date
+                cy.confirmMetamaskTransaction()
+                cy.wait(15000)
+                cy.contains("Ended!")
+                // -----------------------
+
+                // cy.contains('execution reverted: LIVE')
+            }
+        })
+
+
     })
 
     it.only(`Sale : Buy reserve token`, () => {
@@ -63,13 +81,15 @@ describe('Sale : Rain Protocol Toolkit', () => {
                 cy.get('body > div.fixed.top-0.left-0.w-screen.h-screen.flex.flex-col.justify-center.bg-gray-900.bg-opacity-75.z-50.backdrop-blur.s-_bRanQFElcIc > div > div > div > div > div.flex.w-full.flex-col.gap-y-2 > div.flex.w-full.flex-row.items-center.gap-x-2.self-stretch > input').type('1')
                 cy.wait(1500)
                 cy.contains('button', 'Buy').click()
-                if (cy.contains('td', 'Active')) {
-                    cy.confirmMetamaskTransaction()
-                    cy.wait(25000)
-                    cy.contains('Purchase confirmed!')
-                } else {
-                    cy.contains('execution reverted: NOT_ACTIVE')
-                }
+                cy.get('body > main > div.w-full.py-5.px-8.s-XsEmFtvddWTw > div > div:nth-child(2) > div.grid.w-full.grid-cols-2.items-start > table.table-auto > tr:nth-child(1) > td:nth-child(2)').invoke('text').then(text => {
+                    if (text == 'Active') {
+                        cy.confirmMetamaskTransaction()
+                        cy.wait(25000)
+                        cy.contains('Purchase confirmed!')
+                    } else {
+                        cy.contains('execution reverted: NOT_ACTIVE')
+                    }
+                })
             }
         })
 
