@@ -11,7 +11,7 @@ const inputAction = (node: HTMLDivElement) => {
     const editorFocus = () => {
         if (node.innerHTML == placeholderText) node.innerHTML = ""
     }
-
+ 
     const getTextSegments = (element: ChildNode) => {
         const textSegments = [];
         Array.from(element.childNodes).forEach((node) => {
