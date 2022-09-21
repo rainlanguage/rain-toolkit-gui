@@ -7,7 +7,7 @@
   import { validateFields } from "../../utils";
   import { addressValidate, required } from "../../validation";
   import ContractDeploy from "$components/ContractDeploy.svelte";
-  import HumanReadable from "$components/FriendlySource/HumanReadable.svelte";
+  // import HumanReadable from "$components/FriendlySource/HumanReadable.svelte";
   import {
     EmissionsERC20,
     type ERC20Config,
@@ -18,6 +18,7 @@
     SequentialEmissions,
   } from "rain-sdk";
   import { parseEther, parseUnits } from "ethers/lib/utils";
+    import Parser from "$components/parser/Parser.svelte";
 
   let deployPromise;
 
@@ -26,6 +27,7 @@
   const emissionsOptions = [
     { value: 0, label: "Linear" },
     { value: 1, label: "Sequential" },
+    { value: 2, label: "Write Expression" },
   ];
 
   // some default values for testing
@@ -41,6 +43,8 @@
   let numberOfIncrements = 12;
   let ownerAddress = $signerAddress;
   let initSupply = 0;
+
+  let parserVmStateConfig: StateConfig
 
   let tier1 = 100,
     tier2 = 200,
@@ -137,11 +141,16 @@
         };
 
     let vmStateConfig: StateConfig;
-    if (emissionsType.value) {
+    if (emissionsType.value == 0) {
+      vmStateConfig = new LinearEmissions(emissionsConfig);
+    }
+
+    if (emissionsType.value == 1) {
       vmStateConfig = new SequentialEmissions(emissionsConfig);
     }
-    if (!emissionsType.value) {
-      vmStateConfig = new LinearEmissions(emissionsConfig);
+
+    if (emissionsType.value == 2) {
+      vmStateConfig = parserVmStateConfig;
     }
 
     let erc20Config: ERC20Config;
@@ -223,6 +232,7 @@
         >
           <span slot="label">Symbol</span>
         </Input>
+        {#if emissionsType.value < 2}
         <Input
           type="number"
           bind:this={fields.blockTime}
@@ -259,6 +269,7 @@
             >
           </Input>
         </div>
+        {/if}
         <Input
           type="address"
           placeholder="Name"
@@ -278,6 +289,7 @@
         </Input>
       </FormPanel>
 
+      {#if emissionsType.value < 2}
       <FormPanel heading="Tier">
         <Input
           type="address"
@@ -441,7 +453,12 @@
           </Input>
         </FormPanel>
       </div>
-
+      {:else if emissionsType.value == 2}
+      <FormPanel heading="Claimable amount">
+        <div>This expression will be evaluated everytime the claim function is called.</div>
+        <Parser bind:vmStateConfig={parserVmStateConfig} />
+      </FormPanel>
+      {/if}
       <FormPanel>
         {#if !deployPromise}
           <Button shrink on:click={handleClick}>Deploy EmissionsERC20</Button>
@@ -466,11 +483,11 @@
     {#if FriendlySource && emissionsType}
       <span class="sticky">
         <FormPanel heading="Human Readable Source">
-          <HumanReadable
+          <!-- <HumanReadable
             signer={$signerAddress}
             contractType="emissions"
             {FriendlySource}
-          />
+          /> -->
         </FormPanel>
       </span>
     {/if}

@@ -8,7 +8,7 @@
   import { arrayify, hexlify } from "ethers/lib/utils";
 
   import {
-    HumanFriendlyRead,
+    Formatter,
     CombineTierGenerator,
     type EmissionsConfig,
     type StateConfig,
@@ -83,7 +83,7 @@
           vmStateConfig = new LinearEmissions(emissionsConfig);
         }
 
-        emissionsSource = HumanFriendlyRead.get(vmStateConfig, {
+        emissionsSource = Formatter.get(vmStateConfig, {
           contract: "emissions",
           pretty: true,
         });
