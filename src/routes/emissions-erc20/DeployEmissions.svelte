@@ -456,6 +456,7 @@
       {:else if emissionsType.value == 2}
       <FormPanel heading="Claimable amount">
         <div>This expression will be evaluated everytime the claim function is called.</div>
+        <div>The claimant's address is CONTEXT(0)</div>
         <Parser bind:vmStateConfig={parserVmStateConfig} />
       </FormPanel>
       {/if}

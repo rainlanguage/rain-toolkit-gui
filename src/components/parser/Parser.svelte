@@ -112,6 +112,7 @@ const inputAction = (node: HTMLDivElement) => {
         
         tree.forEach(explode)
         textSegments.push({text: text.slice(lastIndex), node: null, type: 'ignored'})
+        console.log(textSegments)
 
         return textSegments.map(segment => {
             if (segment.type == 'ignored') {
