@@ -198,10 +198,10 @@
         items={emissionsOptions}
         bind:value={emissionsType}
         on:change={() => {
-          if (emissionsType.value) {
+          if (emissionsType.value == 1) {
             document.getElementById("maxReward").style.display = "block";
             document.getElementById("inc").style.display = "block";
-          } else {
+          } else if (emissionsType.value == 0) {
             document.getElementById("maxReward").style.display = "none";
             document.getElementById("inc").style.display = "none";
           }
