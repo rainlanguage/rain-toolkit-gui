@@ -83,7 +83,6 @@ const inputAction = (node: HTMLDivElement) => {
         console.log('tree', Parser.getParseTree(text))
         const parsedResult = Parser.getParseTree(text)
         vmStateConfig = Parser.getStateConfig(text)
-        console.log(Parser.get("ADD(2, 3)"))
         const tree = parsedResult[0].tree
 
         if (!tree.length) return text
@@ -127,6 +126,14 @@ const inputAction = (node: HTMLDivElement) => {
         }).join('')
     }
 
+    const onPaste = (event) => {
+        event.preventDefault();
+        let paste = (event.clipboardData || window.clipboardData).getData('text');
+        node.innerHTML = paste
+        updateEditor();
+    };
+
+    node.addEventListener('paste', onPaste)
     node.addEventListener('input', updateEditor);
     node.addEventListener('focus', editorFocus)
 }
