@@ -1,15 +1,35 @@
 <script lang="ts">
+import AutocompleteList from '$components/parser/AutocompleteList.svelte';
+import { OpMeta } from '$components/parser/opmeta';
 import { Parser, type StateConfig} from 'rain-sdk'
+import { tick } from 'svelte';
 
 export let vmStateConfig: StateConfig
-let parserInput: HTMLDivElement
 
 const placeholderText = "Write your expression"
 
+let autocompleteSelection: Selection
+
 const inputAction = (node: HTMLDivElement) => {
+
+    let _textSegments
 
     const editorFocus = () => {
         if (node.innerHTML == placeholderText) node.innerHTML = ""
+    }
+
+    const autocomplete = async () => {
+        autocompleteSelection = null
+        await tick()
+        var selectedNode = document.getSelection();
+        // console.log(selectedNode)
+        const type = selectedNode.anchorNode.parentElement.attributes?.['data-type']?.nodeValue
+        if (type == 'unknown-op' && selectedNode.anchorOffset == selectedNode.anchorNode.length) {
+            // console.log(selectedNode.anchorNode.textContent)
+            // console.log(selectedNode.anchorNode.parentElement.attributes['data-index'].nodeValue)
+            autocompleteSelection = selectedNode
+        }
+        
     }
  
     const getTextSegments = (element: ChildNode) => {
@@ -51,7 +71,9 @@ const inputAction = (node: HTMLDivElement) => {
         node.innerHTML = renderText(textContent);
         
         restoreSelection(anchorIndex, focusIndex);
+        autocomplete();
     }
+
 
     const restoreSelection = (absoluteAnchorIndex, absoluteFocusIndex) => {
         const sel = window.getSelection();
@@ -79,10 +101,10 @@ const inputAction = (node: HTMLDivElement) => {
     }
 
     const renderText = (text: string) => {
-        console.log(text)
-        console.log('tree', Parser.getParseTree(text))
-        const parsedResult = Parser.getParseTree(text)
-        vmStateConfig = Parser.getStateConfig(text)
+        // console.log(text)
+        // console.log('tree', Parser.getParseTree(text, OpMeta))
+        const parsedResult = Parser.getParseTree(text, OpMeta)
+        vmStateConfig = Parser.getStateConfig(text, OpMeta)
         const tree = parsedResult[0].tree
 
         if (!tree.length) return text
@@ -92,13 +114,16 @@ const inputAction = (node: HTMLDivElement) => {
 
         const explode = (el) => {
             if (el?.opcode) {
-                console.log('pushing opcode')
                 textSegments.push({text: text.slice(lastIndex, el?.opcode.position[0]), node: null, type: 'ignored'})
                 textSegments.push({text: text.slice(el?.opcode.position[0], el?.opcode.position[1] + 1), node: el, type: 'op'})
                 lastIndex = el?.opcode.position[1] + 1
             } else if (el.value) {
                 textSegments.push({text: text.slice(lastIndex, el?.position[0]), node: null, type: 'ignored'})
                 textSegments.push({text: text.slice(el?.position[0], el?.position[1] + 1), node: el, type: 'param'})
+                lastIndex = el?.position[1] + 1
+            } else if (el?.error && el.error.startsWith('unknown')) {
+                textSegments.push({text: text.slice(lastIndex, el?.position[0]), node: null, type: 'ignored'})
+                textSegments.push({text: text.slice(el?.position[0], el?.position[1] + 1), node: el, type: 'unknown-op'})
                 lastIndex = el?.position[1] + 1
             } else {
                 textSegments.push({text: text.slice(lastIndex, el?.position[1] + 1), node: null, type: 'ignored'})
@@ -111,17 +136,22 @@ const inputAction = (node: HTMLDivElement) => {
         
         tree.forEach(explode)
         textSegments.push({text: text.slice(lastIndex), node: null, type: 'ignored'})
-        console.log(textSegments)
+        _textSegments = textSegments
 
-        return textSegments.map(segment => {
+        // console.log(textSegments)
+
+        return textSegments.map((segment, i) => {
             if (segment.type == 'ignored') {
-                return segment.text
+                return `<span data-type="ignored" data-index=${i}>${segment.text}</span>`
             }
             if (segment.type == 'op') {
-                return `<span style="color:pink">${segment.text}</span>`
+                return `<span style="color:pink" data-type="op" data-index=${i}>${segment.text}</span>`
+            }
+            if (segment.type == 'unknown-op') {
+                return `<span style="color:pink" data-type="unknown-op" data-index=${i}>${segment.text}</span>`
             }
             if (segment.type == 'param') {
-                return `<span style="color:lightBlue">${segment.text}</span>`
+                return `<span style="color:lightBlue" data-type="param" data-index=${i}>${segment.text}</span>`
             }
         }).join('')
     }
@@ -139,6 +169,11 @@ const inputAction = (node: HTMLDivElement) => {
 }
 </script>
 
-<div class="border-2 rounded-lg border-gray-700 p-4 w-full" use:inputAction contenteditable="true" bind:this={parserInput}>
+<div class="border-2 rounded-lg border-gray-700 p-4 w-full" use:inputAction contenteditable="true">
     {placeholderText}
 </div>
+
+
+{#if autocompleteSelection}
+<AutocompleteList bind:autocompleteSelection {OpMeta} />
+{/if}
