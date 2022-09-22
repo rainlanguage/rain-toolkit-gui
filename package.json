@@ -41,7 +41,7 @@
     "js-sha3": "^0.8.0",
     "luxon": "^3.0.1",
     "process": "^0.11.10",
-    "rain-sdk": "git+https://github.com/beehive-innovation/rain-sdk.git#dd4ad79132c11ca0efe1e147b947cdf857297219",
+    "rain-sdk": "git+https://github.com/beehive-innovation/rain-sdk.git#469c6bd6ec27087c91f45229e36667d0ea2c8b24",
     "svelte-ethers-store": "^0.6.3",
     "svelte-flatpickr": "^3.2.6",
     "svelte-spa-router": "^3.2.0",
