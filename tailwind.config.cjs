@@ -5,6 +5,9 @@ const config = {
 
   theme: {
     extend: {
+      fontFamily: {
+        'mono': ['DM Mono', 'mono']
+      },
       colors: {
         gray: colors.neutral,
       },
