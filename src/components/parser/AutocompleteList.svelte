@@ -6,16 +6,23 @@ const parentElement = autocompleteSelection.anchorNode.parentElement
 const selection = autocompleteSelection
 
 let active = 0
-let popup
+let popup, resultsBox
 let initialScroll = window.scrollY
 let liveScroll
+let mouseY, mouseX
+let offsetY
 
 $: text = parentElement.textContent
-$: position = parentElement.getBoundingClientRect()
-$: top = position.bottom + initialScroll - liveScroll
-$: left = position.right
+$: opRect = parentElement.getBoundingClientRect()
+$: resultsBoxHeight = resultsBox ? resultsBox.getBoundingClientRect().height : 0
+$: popupHeight = popup ? popup.getBoundingClientRect().height : 0
+$: showAbove = resultsBoxHeight > window.innerHeight - opRect.bottom || popupHeight > window.innerHeight - opRect.bottom
+$: bottom = window.innerHeight - opRect.top + liveScroll - initialScroll
+$: top = opRect.bottom + initialScroll - liveScroll
+$: left = opRect.right
 $: results = Array.from(OpMeta).filter(entry => entry[1].name.startsWith(text))
 
+$: console.log(top)
 const select = (i) => {
     const selection = window.getSelection();
     parentElement.innerHTML = results[i][1].name
@@ -48,30 +55,70 @@ const onKeyDown = (e) => {
     }
 }
 
+ const onHover = (node) => {
+    node.addEventListener('mouseover', (e)=>{
+        if (e.clientX !== mouseX || e.clientY !== mouseY) {
+            active = node.getAttribute('data-index')
+            mouseX = e.clientX
+            mouseY = e.clientY
+        }
+    })
+ }
+
+ const onclick = (e) => {
+    if (!popup.contains(e.target)) {
+        autocompleteSelection = null
+	}
+ }
+
 onMount(()=>{
         // moving the autocomplete list to the body to escape any other styling etc
 		document.body.appendChild(popup)
         document.addEventListener('keydown', onKeyDown)
+        document.body.addEventListener('click', onclick);
+        console.log(popup.getBoundingClientRect())
 	})
 
 onDestroy(()=>{
     document.removeEventListener('keydown', onKeyDown)
+    document.body.removeEventListener('click', onclick)
 })
+
+$: console.log(results[active])
 </script>
 
 <div 
     bind:this={popup} 
-    class="fixed bg-gray-800 border border-gray-600 text-sm text-gray-200 rounded-sm z-20 font-mono"
-    style={`top: ${top}px; left: ${left}px`}
+    class="fixed text-sm text-gray-200 rounded-sm z-20 flex flex-row"
+    class:showAbove
+    class:showBelow={!showAbove}
+    style={showAbove ? `bottom: ${bottom}px; left: ${left}px`: `top: ${top}px; left: ${left}px`}
     >
-    {#each results as result, i}
-        <div 
-            on:click={()=>{select(i)}} class:inactive={i !== active} class:active={i == active}
-            class="p-1 cursor-pointer"
-            >
-            {result[1].name}
-        </div>
-    {/each}
+    <div bind:this={resultsBox} class="bg-gray-800 border border-gray-600">
+        {#each results as result, i}
+        {@const activeRes = i == active}
+            <div 
+                on:click={()=>{select(i)}} class:inactive={!activeRes} class:active={activeRes}
+                class="p-1 cursor-pointer flex flex-col w-80"
+                use:onHover
+                data-index={i}
+                >
+                <span class="font-mono">{result[1].name}</span>
+            </div>
+        {/each}
+    </div>
+    {#if autocompleteSelection && results.length}
+    <div class="bg-gray-800 border border-gray-600 w-80 p-2 flex flex-col gap-y-2">
+        <span>{results[active][1].description}</span>
+        <span class="text-gray-400 text-xs">EXAMPLE</span>
+        <span class="font-mono">{results[active][1].data.example}</span>
+        <span class="text-gray-400 text-xs">PARAMETERS</span>
+        {#each results[active][1].data.parameters as parameter}
+        <span class="font-mono">{parameter.name}</span>
+        <span class="text-gray-400">{parameter.description}</span>
+        {/each}
+    </div>
+    {/if}
 </div>
 
 <svelte:window bind:scrollY={liveScroll} />
@@ -82,6 +129,14 @@ onDestroy(()=>{
     }
 
     .inactive {
-        @apply bg-gray-800 hover:bg-gray-700
+        @apply bg-gray-800
+    }
+
+    .showAbove {
+        @apply items-end
+    }
+
+    .showBelow {
+        @apply items-start
     }
 </style>

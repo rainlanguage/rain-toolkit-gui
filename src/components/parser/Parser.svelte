@@ -102,7 +102,7 @@ const inputAction = (node: HTMLDivElement) => {
 
     const renderText = (text: string) => {
         // console.log(text)
-        // console.log('tree', Parser.getParseTree(text, OpMeta))
+        console.log('tree', Parser.getParseTree(text, OpMeta))
         const parsedResult = Parser.getParseTree(text, OpMeta)
         vmStateConfig = Parser.getStateConfig(text, OpMeta)
         const tree = parsedResult[0].tree
