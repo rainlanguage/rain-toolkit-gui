@@ -33,6 +33,10 @@ export default defineConfig({
         baseUrl: "http://127.0.0.1:5173",
         specPattern: "tests/e2e/**/**/*.{js,jsx,ts,tsx}",
         supportFile,
+        env: {
+            // https://github.com/bahmutov/cypress-slow-down
+            commandDelay: 1000,
+        },
     },
 
     component: {

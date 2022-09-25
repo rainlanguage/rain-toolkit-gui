@@ -37,6 +37,7 @@
     "authereum": "^0.1.14",
     "autoprefixer": "^9.8.8",
     "cypress": "^10.7.0",
+    "cypress-slow-down": "^1.2.1",
     "d3-quadtree": "^3.0.1",
     "d3-shape": "^3.1.0",
     "dayjs": "^1.11.4",

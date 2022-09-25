@@ -4644,6 +4644,18 @@ currently-unhandled@^0.4.1:
   dependencies:
     array-find-index "^1.0.1"
 
+cypress-plugin-config@^1.0.0:
+  version "1.2.0"
+  resolved "https://registry.npmmirror.com/cypress-plugin-config/-/cypress-plugin-config-1.2.0.tgz#814671e75b802d5b1e17229621996114e3cd2ce1"
+  integrity sha512-vgMMwjeI/L+2xptqkyhJ20LRuZrrsdbPaGMNNLVq+Cwox5+9dm0E312gpMXgXRs05uyUAzL/nCm/tdTckSAgoQ==
+
+cypress-slow-down@^1.2.1:
+  version "1.2.1"
+  resolved "https://registry.npmmirror.com/cypress-slow-down/-/cypress-slow-down-1.2.1.tgz#d10c75c2f79240812f4e58824e09d057a2d0e24d"
+  integrity sha512-Pd+nESR+Ca8I+mLGbBrPVMEFvJBWxkJcEdcIUDxSBnMoWI00hiIKxzEgVqCv5c6Oap2OPpnrPLbJBwveCNKLig==
+  dependencies:
+    cypress-plugin-config "^1.0.0"
+
 cypress-wait-until@^1.7.2:
   version "1.7.2"
   resolved "https://registry.npmmirror.com/cypress-wait-until/-/cypress-wait-until-1.7.2.tgz#7f534dd5a11c89b65359e7a0210f20d3dfc22107"
