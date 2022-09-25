@@ -1,10 +1,12 @@
 <script lang="ts">
+import type { Writable } from 'svelte/store';
 import AutocompleteList from '$components/parser/AutocompleteList.svelte';
 import { OpMeta } from '$components/parser/opmeta';
 import { Parser, type StateConfig} from 'rain-sdk'
 import { tick } from 'svelte';
+    import { insert } from 'svelte/internal';
 
-export let vmStateConfig: StateConfig
+export let vmStateConfig: Writable<StateConfig>
 
 const placeholderText = "Write your expression"
 
@@ -103,7 +105,7 @@ const inputAction = (node: HTMLDivElement) => {
     const renderText = (text: string) => {
         console.log('tree', Parser.getParseTree(text, OpMeta))
         const parsedResult = Parser.getParseTree(text, OpMeta)
-        vmStateConfig = Parser.getStateConfig(text, OpMeta)
+        $vmStateConfig = Parser.getStateConfig(text, OpMeta)
         const tree = parsedResult[0].tree
 
         if (!tree.length) return text
@@ -158,9 +160,23 @@ const inputAction = (node: HTMLDivElement) => {
     const onPaste = (event) => {
         event.preventDefault();
         let paste = (event.clipboardData || window.clipboardData).getData('text');
-        node.innerHTML = paste
+        insertTextAtCaret(paste)
         updateEditor();
     };
+
+    const insertTextAtCaret = (text) => {
+    var sel, range;
+    if (window.getSelection) {
+        sel = window.getSelection();
+        if (sel.getRangeAt && sel.rangeCount) {
+            range = sel.getRangeAt(0);
+            range.deleteContents();
+            const node = document.createTextNode(text)
+            range.insertNode(node);
+            sel.setBaseAndExtent(node,text.length,node,text.length);
+        }
+    }
+}
 
     node.addEventListener('paste', onPaste)
     node.addEventListener('input', updateEditor);
@@ -168,7 +184,7 @@ const inputAction = (node: HTMLDivElement) => {
 }
 </script>
 
-<div class="border-2 rounded-lg border-gray-700 p-4 w-full font-mono" use:inputAction contenteditable="true">
+<div class="border-2 rounded-lg border-gray-700 p-4 w-full font-mono h-full" use:inputAction contenteditable="true">
     {placeholderText}
 </div>
 

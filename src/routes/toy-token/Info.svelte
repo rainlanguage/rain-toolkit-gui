@@ -1,1 +1,1 @@
-<span class="text-gray-100 max-w-prose mb-3"><slot /></span>
+<span class="text-gray-100 max-w-prose"><slot /></span>

@@ -38,11 +38,12 @@ onMount(()=>{
 $: console.log(ops)
 </script>
 
-<div class="gap-y-2 flex flex-col h-full">
+<div class="flex flex-col h-full">
+    <span class="text-lg p-2">Available words</span>
     <div>
-        <input bind:value={searchStr} class="bg-transparent p-2 border border-gray-400 rounded-lg w-full" type="text" placeholder="Search"/>
+        <input bind:value={searchStr} class="bg-transparent p-2 border-y border-gray-600 w-full" type="text" placeholder="Search"/>
     </div>
-    <div class="flex flex-col text-sm bg-gray-800 overflow-auto">
+    <div class="flex flex-col text-sm overflow-scroll h-full cursor-pointer">
         {#each categories as category}
             <span class="bg-gray-600 p-2">
                 {category}
@@ -84,6 +85,6 @@ $: console.log(ops)
 
 <style lang="postcss">
     .active {
-        @apply bg-gray-700
+        @apply bg-gray-800
     }
 </style>

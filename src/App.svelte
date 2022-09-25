@@ -107,7 +107,7 @@
   <Header />
   <main class="relative flex font-light text-gray-50">
     <!-- <Sidebar /> -->
-    <div class="w-full py-5 px-8">
+    <div class="w-full">
         <Router {routes} />
     </div>
   </main>

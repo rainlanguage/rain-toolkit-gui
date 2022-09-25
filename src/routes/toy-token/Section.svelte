@@ -1,3 +1,3 @@
-<div class="my-6 flex flex-col items-stretch">
+<div class="flex flex-col items-stretch border border-gray-500 rounded-lg">
     <slot />
 </div>
