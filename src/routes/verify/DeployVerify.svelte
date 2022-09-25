@@ -100,6 +100,7 @@
       bind:this={verifyFields.adminAddress}
       validator={required}
       value={$signerAddress}
+      placeholder="Signer address"
     >
       <span slot="label">Admin address: </span>
       <span slot="description"
@@ -127,6 +128,7 @@
       bind:this={verifyTierFields.verifyAddress}
       validator={required}
       value={verifyChild}
+      placeholder="Verify contract address"
     >
       <span slot="label">Verify address: </span>
       <span slot="description"
