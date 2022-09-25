@@ -19,6 +19,8 @@
   } from "rain-sdk";
   import { parseEther, parseUnits } from "ethers/lib/utils";
     import Parser from "$components/parser/Parser.svelte";
+    import OpDocs from "$components/parser/OpDocs.svelte";
+    import { OpMeta } from "$components/parser/opmeta";
 
   let deployPromise;
 
@@ -490,6 +492,9 @@
             {FriendlySource}
           /> -->
         </FormPanel>
+        <div class="h-96">
+          <OpDocs {OpMeta} />
+        </div>
       </span>
     {/if}
   </div>

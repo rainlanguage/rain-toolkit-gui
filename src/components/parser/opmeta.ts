@@ -1037,7 +1037,7 @@ export const OpMeta: Map<number, IOpMeta> = new Map([
             isZeroOperand: false,
             jsvmfn: OpITierV2Report,
             data: {
-                category: "math",
+                category: "tier",
                 example: "",
                 parameters: []
             }
@@ -1054,7 +1054,7 @@ export const OpMeta: Map<number, IOpMeta> = new Map([
             isZeroOperand: false,
             jsvmfn: OpITierV2ReportTimesForTier,
             data: {
-                category: "math",
+                category: "tier",
                 example: "",
                 parameters: []
             }
@@ -1071,7 +1071,7 @@ export const OpMeta: Map<number, IOpMeta> = new Map([
             isZeroOperand: true,
             jsvmfn: OpSaturatingDiff,
             data: {
-                category: "math",
+                category: "tier",
                 example: "",
                 parameters: []
             }
@@ -1088,7 +1088,7 @@ export const OpMeta: Map<number, IOpMeta> = new Map([
             isZeroOperand: false,
             jsvmfn: OpSelectLte,
             data: {
-                category: "math",
+                category: "tier",
                 example: "",
                 parameters: []
             }
@@ -1105,7 +1105,7 @@ export const OpMeta: Map<number, IOpMeta> = new Map([
             isZeroOperand: false,
             jsvmfn: OpUpdateTimesForTierRange,
             data: {
-                category: "math",
+                category: "tier",
                 example: "",
                 parameters: []
             }

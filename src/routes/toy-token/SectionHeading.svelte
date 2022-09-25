@@ -1,0 +1,1 @@
+<span class="text-2xl font-semibold mb-4 border-b border-gray-600 pb-2"><slot /></span>

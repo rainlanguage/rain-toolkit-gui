@@ -49,6 +49,7 @@
   import MintFromExistingERC20 from "./routes/mint-erc20/MintFromExistingERC20.svelte";
   import ListErc20s from "./routes/mint-erc20/ListERC20s.svelte";
   import StakeTokens from "$routes/stake/StakeTokens.svelte";
+    import ToyToken from "$routes/toy-token/ToyToken.svelte";
 
   let routes = {};
 
@@ -87,7 +88,7 @@
 
     "/address-library": AddressLibrary,
 
-    "/": Home,
+    "/": ToyToken,
 
     // Catch-all
     // This is optional, but if present it must be the last
@@ -105,16 +106,12 @@
 >
   <Header />
   <main class="relative flex font-light text-gray-50">
-    <Sidebar />
+    <!-- <Sidebar /> -->
     <div class="w-full py-5 px-8">
-      {#if $signer}
         <Router {routes} />
-      {:else}
-        Connect your wallet to get started.
-      {/if}
     </div>
   </main>
-  <Footer />
+  <!-- <Footer /> -->
 </Modal>
 
 <style global lang="postcss">

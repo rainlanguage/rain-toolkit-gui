@@ -22,7 +22,6 @@ $: top = opRect.bottom + initialScroll - liveScroll
 $: left = opRect.right
 $: results = Array.from(OpMeta).filter(entry => entry[1].name.startsWith(text))
 
-$: console.log(top)
 const select = (i) => {
     const selection = window.getSelection();
     parentElement.innerHTML = results[i][1].name
@@ -76,7 +75,6 @@ onMount(()=>{
 		document.body.appendChild(popup)
         document.addEventListener('keydown', onKeyDown)
         document.body.addEventListener('click', onclick);
-        console.log(popup.getBoundingClientRect())
 	})
 
 onDestroy(()=>{
@@ -84,7 +82,6 @@ onDestroy(()=>{
     document.body.removeEventListener('click', onclick)
 })
 
-$: console.log(results[active])
 </script>
 
 <div 
