@@ -105,7 +105,7 @@
   classContent="p-6"
 >
   <Header />
-  <main class="relative flex font-light text-gray-50">
+  <main class="relative flex">
     <!-- <Sidebar /> -->
     <div class="w-full">
         <Router {routes} />

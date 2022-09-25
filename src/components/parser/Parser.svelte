@@ -146,13 +146,13 @@ const inputAction = (node: HTMLDivElement) => {
                 return `<span data-type="ignored" data-index=${i}>${segment.text}</span>`
             }
             if (segment.type == 'op') {
-                return `<span style="color:pink" data-type="op" data-index=${i}>${segment.text}</span>`
+                return `<span style="color:darkMagenta" data-type="op" data-index=${i}>${segment.text}</span>`
             }
             if (segment.type == 'unknown-op') {
-                return `<span style="color:pink" data-type="unknown-op" data-index=${i}>${segment.text}</span>`
+                return `<span style="color:darkMagenta" data-type="unknown-op" data-index=${i}>${segment.text}</span>`
             }
             if (segment.type == 'param') {
-                return `<span style="color:lightBlue" data-type="param" data-index=${i}>${segment.text}</span>`
+                return `<span style="color:green" data-type="param" data-index=${i}>${segment.text}</span>`
             }
         }).join('')
     }
@@ -184,7 +184,7 @@ const inputAction = (node: HTMLDivElement) => {
 }
 </script>
 
-<div class="border-2 rounded-lg border-gray-700 p-4 w-full font-mono h-full" use:inputAction contenteditable="true" spellcheck="false">
+<div class="rounded-lg border-gray-400 bg-gray-200 p-4 w-full font-mono h-full" use:inputAction contenteditable="true" spellcheck="false">
     {placeholderText}
 </div>
 

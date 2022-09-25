@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { op } from "$src/utils";
 import { onMount } from "svelte";
 
 
@@ -39,39 +38,39 @@ $: console.log(ops)
 </script>
 
 <div class="flex flex-col h-full">
-    <span class="text-lg p-2">Available words</span>
+    <span class="text-lg p-2 font-semibold">Available words</span>
     <div>
-        <input bind:value={searchStr} class="bg-transparent p-2 border-y border-gray-600 w-full" type="text" placeholder="Search"/>
+        <input bind:value={searchStr} class="bg-transparent p-2 border-y border-gray-400 w-full" type="text" placeholder="Search"/>
     </div>
     <div class="flex flex-col text-sm overflow-scroll h-full cursor-pointer">
         {#each categories as category}
-            <span class="bg-gray-600 p-2">
+            <span class="bg-gray-300 p-2">
                 {category}
             </span>
             <div class="flex flex-col">
                 {#each opsSearch.filter(op => category == op.data.category) as op}
                 <div 
-                    class:active={op.enum == active}
+                    class:activeOp={op.enum == active}
                     class="flex flex-col p-2"
                     on:click={()=>{active = op.enum}}
                     >
                     <span class="font-mono">
                         {op.name}
                     </span>
-                    <span class="">
+                    <span class="text-gray-700">
                         {op.description}
                     </span>
                     {#if op.enum == active}
                     <div class="py-2 flex flex-col gap-y-1">
-                        <span class="text-gray-400 text-xs">EXAMPLE</span>
+                        <span class="text-xs">EXAMPLE</span>
                         <div class="pl-2">
                             <span class="font-mono">{op.data.example}</span>
                         </div>
-                        <span class="text-gray-400 text-xs">PARAMETERS</span>
+                        <span class="text-xs">PARAMETERS</span>
                         {#each op.data.parameters as parameter}
                         <div class="pl-2 flex flex-col items-start">
-                            <span class="font-mono bg-gray-800 inline">{parameter.name}</span>
-                            <span class="text-gray-400">{parameter.description}</span>
+                            <span class="font-mono bg-amber-200 inline">{parameter.name}</span>
+                            <span class="">{parameter.description}</span>
                         </div>
                         {/each}
                     </div>
@@ -84,7 +83,7 @@ $: console.log(ops)
 </div>
 
 <style lang="postcss">
-    .active {
-        @apply bg-gray-800
+    .activeOp {
+        @apply bg-gray-200
     }
 </style>

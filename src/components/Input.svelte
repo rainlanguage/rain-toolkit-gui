@@ -86,7 +86,7 @@
 
 <div use:autoAnimate class="flex w-full flex-col gap-y-2">
   {#if $$slots.label}
-    <div class="font-light text-gray-100 text-sm">
+    <div class=" text-gray-500 text-sm font-medium">
       <slot name="label" />
     </div>
   {/if}
@@ -108,7 +108,7 @@
       {disabled}
       {min}
       {max}
-      class="w-full rounded-md border bg-transparent p-2 font-light text-gray-200 {borderColor}"
+      class="w-full rounded-md bg-gray-200 p-2 font-light  {borderColor}"
     />
     {#if validating}
       <div

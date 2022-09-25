@@ -120,7 +120,7 @@
         <span class="text-xl font-semibold">Claimable amount expression</span>
           <div class="max-w-prose">This expression will be evaluated every time the claim function is called to determine how much of this ERC20 the wallet can mint (if anything).</div>
           
-          <div class="flex flex-row gap-x-2 items-center text-white bg-gray-700 rounded-lg self-start p-3 max-w-prose">
+          <div class="flex flex-row gap-x-2 items-center  bg-violet-200 rounded-lg self-start p-3 max-w-prose">
             <IconLibrary width={30} icon="tip" />
             <div class="max-w-prose">Remember - this is totally unique to your copy of Toy Token and gets evaluated as part of the claim function.</div>
           </div>
@@ -130,7 +130,7 @@
               <Parser vmStateConfig={parserVmStateConfig} />
             </div>
             <div class="col-span-3">
-              <div class="bg-yellow-200 rounded-lg p-4 h-full">
+              <div class="bg-amber-200 rounded-lg p-4 h-full">
 
                 <div class="font-mono text-black text-sm">
                   <span>Simulated output: </span>
@@ -204,7 +204,7 @@
       {/if}
     </div>
   </div>
-  <div class="w-1/3 gap-y-4 fixed bottom-0 top-16 right-0 border-l border-gray-600 grid grid-rows-2">
+  <div class="w-1/3 gap-y-4 fixed bottom-0 top-16 right-0 border-l border-gray-400 grid grid-rows-2">
     <OpDocs {OpMeta} />
     <OtherTokens />
   </div>
