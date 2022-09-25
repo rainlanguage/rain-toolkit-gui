@@ -1,10 +1,8 @@
 <script lang="ts">
 import { onMount } from "svelte";
 
-
 export let OpMeta
 
-console.log(OpMeta)
 
 let ops = []
 let opsSearch = []
@@ -33,8 +31,6 @@ onMount(()=>{
     opsSearch = ops
     getCategories()
 })
-
-$: console.log(ops)
 </script>
 
 <div class="flex flex-col h-full">
@@ -51,7 +47,7 @@ $: console.log(ops)
                 {#each opsSearch.filter(op => category == op.data.category) as op}
                 <div 
                     class:activeOp={op.enum == active}
-                    class="flex flex-col p-2"
+                    class="flex flex-col p-2 hover:bg-gray-200"
                     on:click={()=>{active = op.enum}}
                     >
                     <span class="font-mono">
@@ -66,13 +62,15 @@ $: console.log(ops)
                         <div class="pl-2">
                             <span class="font-mono">{op.data.example}</span>
                         </div>
+                        {#if op.data.parameters.length}
                         <span class="text-xs">PARAMETERS</span>
                         {#each op.data.parameters as parameter}
                         <div class="pl-2 flex flex-col items-start">
-                            <span class="font-mono bg-amber-200 inline">{parameter.name}</span>
+                            <span class="font-mono bg-green-200 inline">{parameter.name}</span>
                             <span class="">{parameter.description}</span>
                         </div>
                         {/each}
+                        {/if}
                     </div>
                     {/if}
                 </div>

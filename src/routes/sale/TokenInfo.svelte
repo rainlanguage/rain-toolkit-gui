@@ -18,13 +18,16 @@
     totalSupply: string;
   }
 
+  
   export let tokenData;
   export let signer: Writable<Signer> | undefined = undefined;
   export let token: ERC20 | undefined = undefined;
-
+    
   let balancePromise: Promise<BigNumberish>;
   let tooltip: SvelteComponent;
-
+      
+  console.log(tokenData)
+  
   const checkBalance = async (token: ERC20): Promise<BigNumberish> => {
     return await token.balanceOf(await $signer.getAddress());
   };

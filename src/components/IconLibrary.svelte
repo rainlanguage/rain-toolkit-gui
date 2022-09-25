@@ -19,7 +19,8 @@
     | "back"
     | "add"
     | "down-arrow"
-    | "tip";
+    | "tip"
+    | "share";
   export let inline = true;
 
   $: if (!height) {
@@ -206,6 +207,7 @@
       stroke-width="2"
       stroke-linecap="round"
       stroke-linejoin="round"
+      fill="transparent"
     />
     <path
       d="M14 7C13.4477 7 13 7.44772 13 8C13 8.55228 13.4477 9 14 9V7ZM19 8V9C19.5523 9 20 8.55228 20 8H19ZM20 3C20 2.44772 19.5523 2 19 2C18.4477 2 18 2.44772 18 3H20ZM14 9H19V7H14V9ZM20 8V3H18V8H20Z"
@@ -214,6 +216,7 @@
     <path
       d="M4.58253 9.00315C5.14321 7.61541 6.08196 6.41278 7.29207 5.53197C8.50218 4.65116 9.93512 4.12749 11.428 4.02048C12.9209 3.91346 14.4139 4.2274 15.7373 4.92661C17.0606 5.62582 18.1613 6.68226 18.9142 7.97584"
       class="stroke-current"
+      fill="transparent"
       stroke-width="2"
       stroke-linecap="round"
       stroke-linejoin="round"
@@ -309,16 +312,25 @@
     <path d="M0 0 L12 10 L24 0" />
   </svg>
 {:else if icon == "tip"}
-<svg 
-class:inline
-class="stroke-current {color}"
-{width}
-{height}
-viewBox="0 0 33 33" 
-xmlns="http://www.w3.org/2000/svg">
-<path fill="transparent" d="M12.6107 24.8349H20.3989M16.5047 1.50159V3.16825M27.1114 5.89499L25.9329 7.0735M31.5049 16.5014H29.8382M3.17155 16.5014H1.50488M7.0767 7.0735L5.8982 5.89499M10.6122 22.3943C7.35787 19.1398 7.35787 13.8634 10.6122 10.6091C13.8665 7.3547 19.143 7.3547 22.3974 10.6091C25.6517 13.8634 25.6517 19.1398 22.3974 22.3943L21.4855 23.3061C20.4307 24.3608 19.838 25.7914 19.838 27.2833V28.1683C19.838 30.0093 18.3457 31.5016 16.5047 31.5016C14.6639 31.5016 13.1715 30.0093 13.1715 28.1683V27.2833C13.1715 25.7914 12.5789 24.3608 11.5241 23.3061L10.6122 22.3943Z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <svg 
+  class:inline
+  class="stroke-current {color}"
+  {width}
+  {height}
+  viewBox="0 0 33 33" 
+  xmlns="http://www.w3.org/2000/svg">
+    <path fill="transparent" d="M12.6107 24.8349H20.3989M16.5047 1.50159V3.16825M27.1114 5.89499L25.9329 7.0735M31.5049 16.5014H29.8382M3.17155 16.5014H1.50488M7.0767 7.0735L5.8982 5.89499M10.6122 22.3943C7.35787 19.1398 7.35787 13.8634 10.6122 10.6091C13.8665 7.3547 19.143 7.3547 22.3974 10.6091C25.6517 13.8634 25.6517 19.1398 22.3974 22.3943L21.4855 23.3061C20.4307 24.3608 19.838 25.7914 19.838 27.2833V28.1683C19.838 30.0093 18.3457 31.5016 16.5047 31.5016C14.6639 31.5016 13.1715 30.0093 13.1715 28.1683V27.2833C13.1715 25.7914 12.5789 24.3608 11.5241 23.3061L10.6122 22.3943Z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
   </svg>
-  
+{:else if icon == "share"}
+  <svg 
+  class:inline
+  class="stroke-current {color}"
+  {width}
+  {height}
+  viewBox="0 0 45 45" 
+  xmlns="http://www.w3.org/2000/svg">
+    <path fill="transparent" d="M18.737 26.6558L29.7364 43.9406L43.8786 1.51419L1.45215 15.6563L18.737 26.6558ZM18.737 26.6558L31.3078 14.085" stroke="#374151" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
 {/if}
 
 <style>

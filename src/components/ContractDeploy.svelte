@@ -1,27 +1,59 @@
 <script lang="ts">
-  import { Contract } from "ethers";
+	import { client } from './../stores';
+  import type { Contract, ContractReceipt } from "ethers";
   import { Logger } from "ethers/lib/utils";
   import { selectedNetwork } from "$src/stores";
   import NewAddress from "./NewAddress.svelte";
   import Ring from "./Ring.svelte";
   import { AddressBook } from "rain-sdk";
+  import { gql } from '@urql/svelte';
+  import { getContext, onDestroy } from 'svelte';
+
+  const { close } = getContext('simple-modal') 
 
   const addresses = AddressBook.getAddressesForChainId(
     parseInt($selectedNetwork.config.chainId)
   );
 
   export let deployPromise: Promise<Contract>;
+  export let confirmedCallback:(any)=>any = ()=>{}
   export let type: string;
+  export let contractKey: string
   let errorMsg,
     err = false,
-    isReceipt = false;
+    isReceipt = false,
+    indexed = false,
+    interval
 
   let contractAddress;
+
+  const checkForIndexing = (contractAddress: string) => {
+    const query = gql(`
+        query ($contractAddress: Bytes!) {
+          ${contractKey} (id:$contractAddress) {
+            id
+          }
+        }
+      `)
+
+    interval = setInterval(()=>{
+      $client.query(query, {contractAddress: contractAddress.toLowerCase()}, {requestPolicy: 'network-only'}).toPromise().then(res => {
+        if(res.data?.[contractKey]) {
+          indexed = true
+          clearInterval(interval)
+          confirmedCallback(contractAddress)
+          close();
+        }
+      })
+    }, 2000)
+  }
 
   deployPromise
     .then((receipt) => {
       isReceipt = true;
       contractAddress = receipt.address;
+      console.log('the receipt', receipt)
+      checkForIndexing(contractAddress)
     })
     .catch(async (error) => {
       if (error.code === Logger.errors.TRANSACTION_REPLACED) {
@@ -63,9 +95,14 @@
         return;
       }
     });
+
+    onDestroy(()=>{
+      clearInterval(interval)
+    })
 </script>
 
 <div class="flex flex-col gap-y-2">
+  {#if !indexed}
   {#await deployPromise}
     <div class="flex flex-row gap-x-4 items-center">
       <Ring color="#FFFFFF" />
@@ -73,8 +110,16 @@
         Deploying new {type}...
       </span>
     </div>
+  {:then}
+  <div class="flex flex-row gap-x-4 items-center">
+    <Ring color="#FFFFFF" />
+    <span class="text-lg">
+      Waiting on indexer...
+    </span>
+  </div>
   {/await}
-  {#if isReceipt}
+  {/if}
+  {#if indexed}
     <span class="text-lg font-semibold">New {type} deployed!</span>
     <div class="flex flex-row items-center gap-x-2">
       <span>Save to library: </span><NewAddress

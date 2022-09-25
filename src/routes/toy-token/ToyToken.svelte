@@ -27,6 +27,12 @@
     import { writable, type Writable } from "svelte/store";
     import IconLibrary from "$components/IconLibrary.svelte";
     import OtherTokens from "$routes/toy-token/OtherTokens.svelte";
+    import { getContext } from "svelte";
+    import Connect from "$components/Connect.svelte";
+    import WalletConnect from "$components/wallet-connect/WalletConnect.svelte";
+    import { push } from "svelte-spa-router";
+
+  const { open } = getContext('simple-modal')
 
   let deployPromise;
 
@@ -34,8 +40,8 @@
 
   let erc20name = "EmissionsTKN";
   let erc20symbol = "eTKN";
-  let initSupply
-  let ownerAddress
+  let initSupply = 0
+  let ownerAddress = "0xf6CF014a3e92f214a3332F0d379aD32bf0Fae929"
 
   let parserVmStateConfig: Writable<StateConfig> = writable(null)
   let newEmissionsERC20
@@ -44,7 +50,6 @@
   $: if ($parserVmStateConfig && $signer) simulate()
 
   const simulate = async () => {
-    console.log($parserVmStateConfig)
     simulatedResult = null
     if ($parserVmStateConfig?.sources[0].length) {
       const simulator = new EmissionsERC20JSVM($parserVmStateConfig, {signer: $signer})
@@ -81,13 +86,23 @@
   const handleClick = async () => {
     const { validationResult, fieldValues } = await validateFields(fields);
     if (!validationResult) return;
-    deployPromise = deployEmissions(fieldValues);
+
+    open(ContractDeploy, { deployPromise:deployEmissions(fieldValues), type: "Toy Token", contractKey: "emissionsERC20", confirmedCallback })
+    // deployPromise = deployEmissions(fieldValues);
   };
+
+  const confirmedCallback = (contractAddress: string) => {
+    console.log('in callback', contractAddress)
+    push(`/token/${contractAddress}`)
+  }
 </script>
 
 <div class="flex gap-x-3 relative">
+
   <div class="flex w-2/3 flex-col gap-y-6 p-8">
-    <span class="text-3xl font-semibold mb-3">Create a Toy Token</span>
+
+    <span class="text-3xl font-semibold">Create a Toy Token</span>
+    
     <div class="mb-2 flex flex-col w-full">
       <Info>Create a token and your friends and can come and mint it. You set the rules of who can mint and how much they can mint. Here are some games you might want to play:</Info>
       <div>example expressions...</div>
@@ -195,17 +210,17 @@
       </SectionBody>
     </Section>
 
-    <div class="self-start">
-      <Button shrink on:click={handleClick}>Deploy EmissionsERC20</Button>
-      {#if deployPromise}
-      <div class="p-4">
-        <ContractDeploy {deployPromise} type="Toy Token" />
-      </div>
+    <div class="self-start flex flex-row items-center gap-x-2">
+      <Button shrink disabled={!$signer} on:click={handleClick}>Deploy EmissionsERC20</Button>
+      {#if !$signer}
+      <span class="text-gray-600">Connect your wallet to deploy</span>
       {/if}
     </div>
   </div>
+
   <div class="w-1/3 gap-y-4 fixed bottom-0 top-16 right-0 border-l border-gray-400 grid grid-rows-2">
     <OpDocs {OpMeta} />
     <OtherTokens />
   </div>
+
 </div>

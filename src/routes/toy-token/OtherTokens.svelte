@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { client } from './../../stores';
-    import { queryStore } from "@urql/svelte";
-    import { Formatter } from 'rain-sdk';
+  import { queryStore } from "@urql/svelte";
+  import { Formatter } from 'rain-sdk';
 
 
     $: allTokens = queryStore({
@@ -34,11 +34,9 @@
           }`,
     requestPolicy: "network-only"
   });
-
-  $: console.log($allTokens)
 </script>
 
-<div class="border-t border-gray-400">
+<div class="border-t border-gray-400 h-full">
     <div class="border-b border-gray-400 p-2 w-full font-semibold">Other deployed tokens</div>
     <div class="flex flex-col overflow-scroll h-full">
         {#if $allTokens.data?.emissionsERC20S}
@@ -53,7 +51,7 @@
                     <span class="text-gray-500">Deployer: </span>
                     <span>{token.deployer}</span>
                 </div>
-                <div class="max-w-full font-mono p-2 bg-gray-200 rounded-lg">{Formatter.get(token.calculateClaimStateConfig)}</div>
+                <div class="max-w-full font-mono p-2 bg-gray-200">{Formatter.get(token.calculateClaimStateConfig)}</div>
             </div>
             {/each}
         {/if}

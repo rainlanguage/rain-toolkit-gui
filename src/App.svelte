@@ -50,7 +50,9 @@
   import ListErc20s from "./routes/mint-erc20/ListERC20s.svelte";
   import StakeTokens from "$routes/stake/StakeTokens.svelte";
     import ToyToken from "$routes/toy-token/ToyToken.svelte";
+    import ViewToken from "$routes/toy-token/ViewToken.svelte";
 
+  
   let routes = {};
 
   routes = {
@@ -77,7 +79,7 @@
     "/sale/list": ListSale,
 
     "/emissions/deploy": DeployEmissions,
-    "/emissions/claim/*": ClaimEmissions,
+    "/token/*": ViewToken,
 
     "/verify/deploy": DeployVerify,
     "/verify/administer/*": AdministerVerify,
