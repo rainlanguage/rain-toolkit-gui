@@ -26,6 +26,7 @@
     import Item from "$routes/toy-token/Item.svelte";
     import { writable, type Writable } from "svelte/store";
     import IconLibrary from "$components/IconLibrary.svelte";
+    import OtherTokens from "$routes/toy-token/OtherTokens.svelte";
 
   let deployPromise;
 
@@ -52,10 +53,6 @@
   }
 
   const deployEmissions = async (fieldValues) => {
-    // const { validationResult, fieldValues } = await validateFields(fields);
-
-    // GET THE SOURCE
-
     const vmStateConfig = $parserVmStateConfig;
 
     let erc20Config: ERC20Config;
@@ -199,7 +196,7 @@
     </Section>
 
     <div class="self-start">
-        <Button shrink on:click={handleClick}>Deploy EmissionsERC20</Button>
+      <Button shrink on:click={handleClick}>Deploy EmissionsERC20</Button>
       {#if deployPromise}
       <div class="p-4">
         <ContractDeploy {deployPromise} type="Toy Token" />
@@ -207,24 +204,8 @@
       {/if}
     </div>
   </div>
-  <div class="flex w-1/3 flex-col gap-y-4 fixed bottom-0 top-16 right-0 border-l border-gray-600">
-        <!-- <FormPanel heading="Human Readable Source">
-          <HumanReadable
-            signer={$signerAddress}
-            contractType="emissions"
-            {FriendlySource}
-          />
-        </FormPanel> -->
-          <OpDocs {OpMeta} />
+  <div class="w-1/3 gap-y-4 fixed bottom-0 top-16 right-0 border-l border-gray-600 grid grid-rows-2">
+    <OpDocs {OpMeta} />
+    <OtherTokens />
   </div>
 </div>
-
-<style>
-  span.sticky {
-    margin-top: 80px;
-    float: right;
-    position: sticky;
-    top: 90px;
-    padding: 5px;
-  }
-</style>

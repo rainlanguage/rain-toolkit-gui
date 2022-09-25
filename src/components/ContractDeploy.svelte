@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Contract, logger } from "ethers";
+  import { Contract } from "ethers";
   import { Logger } from "ethers/lib/utils";
   import { selectedNetwork } from "$src/stores";
   import NewAddress from "./NewAddress.svelte";
@@ -91,15 +91,6 @@
         View contract on block explorer
       </a>
     </span>
-    <!-- <span>
-      <a
-        target="_blank"
-        class="underline"
-        href={`${$selectedNetwork.blockExplorer}/tx/${receipt.transactionHash}`}
-      >
-        View transaction on block explorer
-      </a>
-    </span> -->
   {/if}
   {#if err}
     <div class="text-red-400">{errorMsg}</div>
