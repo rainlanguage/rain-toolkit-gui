@@ -59,7 +59,7 @@
 
 <style lang="postcss">
   .primary {
-    @apply bg-gray-700 hover:bg-gray-600;
+    @apply bg-blue-700 hover:bg-blue-600;
   }
 
   .secondary {

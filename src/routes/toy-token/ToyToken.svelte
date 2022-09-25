@@ -25,6 +25,7 @@
     import SectionBody from "$routes/toy-token/SectionBody.svelte";
     import Item from "$routes/toy-token/Item.svelte";
     import { writable, type Writable } from "svelte/store";
+    import IconLibrary from "$components/IconLibrary.svelte";
 
   let deployPromise;
 
@@ -55,7 +56,7 @@
 
     // GET THE SOURCE
 
-    const vmStateConfig = parserVmStateConfig;
+    const vmStateConfig = $parserVmStateConfig;
 
     let erc20Config: ERC20Config;
     erc20Config = {
@@ -119,9 +120,14 @@
     <Section>
       <SectionHeading>Expressions (1)</SectionHeading>
       <SectionBody>
-        <span class="text-xl  mb-2">Claimable amount expression</span>
-          <div>This expression will be evaluated every time the claim function is called to determine how much of this ERC20 the wallet can mint (if anything).</div>
-          <div>Remember - this is totally unique to your copy of Toy Token and gets evaluated as part of the claim function.</div>
+        <span class="text-xl font-semibold">Claimable amount expression</span>
+          <div class="max-w-prose">This expression will be evaluated every time the claim function is called to determine how much of this ERC20 the wallet can mint (if anything).</div>
+          
+          <div class="flex flex-row gap-x-2 items-center text-white bg-gray-700 rounded-lg self-start p-3 max-w-prose">
+            <IconLibrary width={30} icon="tip" />
+            <div class="max-w-prose">Remember - this is totally unique to your copy of Toy Token and gets evaluated as part of the claim function.</div>
+          </div>
+          
           <div class="grid grid-cols-7 gap-4 items-stretch">
             <div class="col-span-4 flex flex-col gap-y-4">
               <Parser vmStateConfig={parserVmStateConfig} />
@@ -192,13 +198,14 @@
       </SectionBody>
     </Section>
 
-      <FormPanel>
-        {#if !deployPromise}
-          <Button shrink on:click={handleClick}>Deploy EmissionsERC20</Button>
-        {:else}
-          <ContractDeploy {deployPromise} type="EmissionsERC20" />
-        {/if}
-      </FormPanel>
+    <div class="self-start">
+        <Button shrink on:click={handleClick}>Deploy EmissionsERC20</Button>
+      {#if deployPromise}
+      <div class="p-4">
+        <ContractDeploy {deployPromise} type="Toy Token" />
+      </div>
+      {/if}
+    </div>
   </div>
   <div class="flex w-1/3 flex-col gap-y-4 fixed bottom-0 top-16 right-0 border-l border-gray-600">
         <!-- <FormPanel heading="Human Readable Source">
