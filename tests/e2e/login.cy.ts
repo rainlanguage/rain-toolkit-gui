@@ -14,12 +14,8 @@ describe('Rain Protocol Toolkit', () => {
         });
     })
 
-    // after(() => {
-    //     cy.disconnectMetamaskWalletFromDapp()
-    // })
-
     it(`Home Page`, () => {
-        cy.contains('MUMBAI - 0x5A2c...1022') // change it to your account address
+        cy.contains('MUMBAI - 0x5A2c...1022') // change it to with your account address
     })
 
     // it('Sale: Deploy Sale with Default Value', () => {

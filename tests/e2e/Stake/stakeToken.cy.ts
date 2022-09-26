@@ -5,14 +5,10 @@ describe('Stake : Rain Protocol Toolkit', () => {
         cy.contains('Metamask').click()
         cy.contains('Stake').click()
         cy.contains('Stake tokens').click()
-        cy.get('input').type("0x9091a553d42e3291f08a0b093700bf133f58906a")
+        cy.get('input').type("0x9091a553d42e3291f08a0b093700bf133f58906a") //change input value according to your convenience
         cy.contains("Load").click()
         cy.wait(1500)
     })
-
-    // after(() => {
-    //     cy.disconnectMetamaskWalletFromDapp()
-    // })
 
     it.skip(`Select Stake from List Stake Page`, () => {
         cy.contains('Stake').click()
@@ -25,6 +21,7 @@ describe('Stake : Rain Protocol Toolkit', () => {
 
     it("Stake : Deposit in Stake", () => {
         cy.contains('button', 'Deposit').click()
+        //change input value according to your convenience
         cy.get('body > div.fixed.top-0.left-0.w-screen.h-screen.flex.flex-col.justify-center.bg-gray-900.bg-opacity-75.z-50.backdrop-blur.s-_bRanQFElcIc > div > div > div > div > div.flex.w-full.flex-col.gap-y-2 > div.flex.w-full.flex-row.items-center.gap-x-2.self-stretch > input').type('1')
         cy.wait(1000)
         cy.contains('button', 'Approve Amount').click()
@@ -40,6 +37,7 @@ describe('Stake : Rain Protocol Toolkit', () => {
 
     it("Stake : Withdraw from Stake", () => {
         cy.contains('button', 'Withdraw').click()
+        //change input value according to your convenience
         cy.get('body > div.fixed.top-0.left-0.w-screen.h-screen.flex.flex-col.justify-center.bg-gray-900.bg-opacity-75.z-50.backdrop-blur.s-_bRanQFElcIc > div > div > div > div > div.flex.w-full.flex-col.gap-y-2 > div.flex.w-full.flex-row.items-center.gap-x-2.self-stretch > input').type('1')
         cy.wait(500)
         cy.contains('button', 'Withdraw Amount').click()
@@ -52,17 +50,17 @@ describe('Stake : Rain Protocol Toolkit', () => {
     it("Stake : Report for all Tier for my Address", () => {
         cy.contains('button', 'Report').click()
         cy.wait(1500)
-        cy.get('input[placeholder="Tier 1"]').type('1')
-        cy.get('input[placeholder="Tier 2"]').type('2')
-        cy.get('input[placeholder="Tier 3"]').type('3')
-        cy.get('input[placeholder="Tier 4"]').type('4')
-        cy.get('input[placeholder="Tier 5"]').type('5')
-        cy.get('input[placeholder="Tier 6"]').type('6')
-        cy.get('input[placeholder="Tier 7"]').type('7')
-        cy.get('input[placeholder="Tier 8"]').type('8')
+        cy.get('input[placeholder="Tier 1"]').type('1') //change input value according to your convenience
+        cy.get('input[placeholder="Tier 2"]').type('2') //change input value according to your convenience
+        cy.get('input[placeholder="Tier 3"]').type('3') //change input value according to your convenience
+        cy.get('input[placeholder="Tier 4"]').type('4') //change input value according to your convenience
+        cy.get('input[placeholder="Tier 5"]').type('5') //change input value according to your convenience
+        cy.get('input[placeholder="Tier 6"]').type('6') //change input value according to your convenience
+        cy.get('input[placeholder="Tier 7"]').type('7') //change input value according to your convenience
+        cy.get('input[placeholder="Tier 8"]').type('8') //change input value according to your convenience
         cy.contains('button', 'Get my report').click()
         cy.wait(1000)
-        cy.contains("Tier 1 : 1 ✅")
+        cy.contains("Tier 1 : 1 ✅") //change according to your convenience
     })
 
 })

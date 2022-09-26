@@ -6,16 +6,10 @@ describe('Sale : Rain Protocol Toolkit', () => {
         cy.contains('Metamask').click()
         cy.contains('Sale').click()
         cy.contains('Purchase rTKN from a Sale').click()
-        cy.get('input').type("0x4be0ee50519a854a1e69fdf48e9302cd5d569efa")
-
-        //0x5d52a7040066ac03f3efc72d9097626733f5c345
+        cy.get('input').type("0x4be0ee50519a854a1e69fdf48e9302cd5d569efa")  //change input value according to your convenience
         cy.contains("Load").click()
         cy.wait(1500)
 
-    })
-
-    after(() => {
-        cy.disconnectMetamaskWalletFromDapp()
     })
 
     it.skip(`Select Sale from List Sale Page`, () => {
@@ -27,7 +21,7 @@ describe('Sale : Rain Protocol Toolkit', () => {
         cy.contains('td', 'Active')
         cy.contains("Start sale").click()
         cy.wait(1000)
-        cy.contains("execution reverted: NOT_PENDING")
+        cy.contains("execution reverted: NOT_PENDING")  //change according to your convenience
     })
 
     it(`Sale : Start Sale Check`, () => {
@@ -52,6 +46,7 @@ describe('Sale : Rain Protocol Toolkit', () => {
                 cy.contains("execution reverted: NOT_ACTIVE")
             else {
                 // change according to the sale ending date
+                // -----------------------
                 cy.confirmMetamaskTransaction()
                 cy.wait(15000)
                 cy.contains("Ended!")
@@ -78,7 +73,7 @@ describe('Sale : Rain Protocol Toolkit', () => {
             } else if (butName[0] == 'Buy') {
                 cy.contains("button", "Buy").click()
                 cy.wait(1000)
-                cy.get('body > div.fixed.top-0.left-0.w-screen.h-screen.flex.flex-col.justify-center.bg-gray-900.bg-opacity-75.z-50.backdrop-blur.s-_bRanQFElcIc > div > div > div > div > div.flex.w-full.flex-col.gap-y-2 > div.flex.w-full.flex-row.items-center.gap-x-2.self-stretch > input').type('1')
+                cy.get('body > div.fixed.top-0.left-0.w-screen.h-screen.flex.flex-col.justify-center.bg-gray-900.bg-opacity-75.z-50.backdrop-blur.s-_bRanQFElcIc > div > div > div > div > div.flex.w-full.flex-col.gap-y-2 > div.flex.w-full.flex-row.items-center.gap-x-2.self-stretch > input').type('1') //change input value according to your convenience
                 cy.wait(1500)
                 cy.contains('button', 'Buy').click()
                 cy.get('body > main > div.w-full.py-5.px-8.s-XsEmFtvddWTw > div > div:nth-child(2) > div.grid.w-full.grid-cols-2.items-start > table.table-auto > tr:nth-child(1) > td:nth-child(2)').invoke('text').then(text => {
@@ -110,7 +105,7 @@ describe('Sale : Rain Protocol Toolkit', () => {
     it("Sale : Deposit in Escrow", () => {
         cy.contains('button', 'Deposit').click()
         cy.wait(1000)
-        cy.get('body > div.fixed.top-0.left-0.w-screen.h-screen.flex.flex-col.justify-center.bg-gray-900.bg-opacity-75.z-50.backdrop-blur.s-_bRanQFElcIc > div > div > div > div > div:nth-child(4) > div.flex.w-full.flex-row.items-center.gap-x-2.self-stretch > input').type('1')
+        cy.get('body > div.fixed.top-0.left-0.w-screen.h-screen.flex.flex-col.justify-center.bg-gray-900.bg-opacity-75.z-50.backdrop-blur.s-_bRanQFElcIc > div > div > div > div > div:nth-child(4) > div.flex.w-full.flex-row.items-center.gap-x-2.self-stretch > input').type('1') //change input value according to your convenience
         cy.contains('button', 'Approve Amount').click()
         cy.confirmMetamaskPermissionToSpend() //use when you need token to spend
         cy.wait(25000)
@@ -130,7 +125,7 @@ describe('Sale : Rain Protocol Toolkit', () => {
 
     it("Sale : Undeposit from Escrow Undeposit History Table", () => {
         cy.get('body > main > div.w-full.py-5.px-8.s-XsEmFtvddWTw > div > div:nth-child(9) > div > table > tr:nth-child(2) > td.py-2.text-right > span').click()
-        cy.get('body > div.fixed.top-0.left-0.w-screen.h-screen.flex.flex-col.justify-center.bg-gray-900.bg-opacity-75.z-50.backdrop-blur.s-_bRanQFElcIc > div > div > div > div > div.flex.w-full.flex-col.gap-y-2 > div.flex.w-full.flex-row.items-center.gap-x-2.self-stretch > input').type('1')
+        cy.get('body > div.fixed.top-0.left-0.w-screen.h-screen.flex.flex-col.justify-center.bg-gray-900.bg-opacity-75.z-50.backdrop-blur.s-_bRanQFElcIc > div > div > div > div > div.flex.w-full.flex-col.gap-y-2 > div.flex.w-full.flex-row.items-center.gap-x-2.self-stretch > input').type('1') //change input value according to your convenience
         cy.wait(1500)
         cy.contains('button', 'Confirm').click()
         cy.confirmMetamaskTransaction()
