@@ -1,3 +1,7 @@
+import { slowCypressDown } from 'cypress-slow-down'
+
+slowCypressDown(1000)
+
 describe('Stake : Rain Protocol Toolkit', () => {
     beforeEach(() => {
         cy.visit('http://127.0.0.1:5173')

@@ -1,3 +1,6 @@
+import { slowCypressDown } from 'cypress-slow-down'
+
+slowCypressDown(1000)
 
 describe('Sale : Rain Protocol Toolkit', () => {
     beforeEach(() => {
