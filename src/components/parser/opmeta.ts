@@ -188,7 +188,7 @@ export const OpMeta: Map<number, IOpMeta> = new Map([
             description: 'Get the balance of an ERC20 token for an account.',
             pushes: pnp.one,
             pops: pnp.two,
-            isZeroOperand: false,
+            isZeroOperand: true,
             jsvmfn: OpERC20BalanceOf,
             data: {
                 category: "ERC20",
@@ -216,7 +216,7 @@ export const OpMeta: Map<number, IOpMeta> = new Map([
             description: 'Get the totalSupply of an ERC20 token.',
             pushes: pnp.one,
             pops: pnp.one,
-            isZeroOperand: false,
+            isZeroOperand: true,
             jsvmfn: OpERC20TotalSupply,
             data: {
                 category: "ERC20",
@@ -239,7 +239,7 @@ export const OpMeta: Map<number, IOpMeta> = new Map([
             description: 'Retrieves the balance of an account at the time a snapshotId was created.',
             pushes: pnp.one,
             pops: pnp.three,
-            isZeroOperand: false,
+            isZeroOperand: true,
             jsvmfn: OpERC20SnapshotBalanceOfAt,
             data: {
                 category: "ERC20",
@@ -272,7 +272,7 @@ export const OpMeta: Map<number, IOpMeta> = new Map([
             description: 'Retrieves the total supply of a token at the time a snapshotId was created.',
             pushes: pnp.one,
             pops: pnp.two,
-            isZeroOperand: false,
+            isZeroOperand: true,
             jsvmfn: OpERC20SnapshotTotalSupplyAt,
             data: {
                 category: "ERC20",
@@ -300,7 +300,7 @@ export const OpMeta: Map<number, IOpMeta> = new Map([
             description: 'Get the balance of an ERC721 token for an account.',
             pushes: pnp.one,
             pops: pnp.two,
-            isZeroOperand: false,
+            isZeroOperand: true,
             jsvmfn: OpERC721BalanceOf,
             data: {
                 category: "ERC721",
@@ -329,7 +329,7 @@ export const OpMeta: Map<number, IOpMeta> = new Map([
             description: 'Returns the owner of the tokenId token.',
             pushes: pnp.one,
             pops: pnp.two,
-            isZeroOperand: false,
+            isZeroOperand: true,
             jsvmfn: OpERC721OwnerOf,
             data: {
                 category: "ERC721",
@@ -357,7 +357,7 @@ export const OpMeta: Map<number, IOpMeta> = new Map([
             description: '',
             pushes: pnp.one,
             pops: pnp.three,
-            isZeroOperand: false,
+            isZeroOperand: true,
             jsvmfn: OpERC1155BalanceOf,
             data: {
                 category: "ERC1155",
