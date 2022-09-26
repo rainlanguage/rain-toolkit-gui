@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { signer } from "svelte-ethers-store";
+  import { signer, signerAddress } from "svelte-ethers-store";
   import Button from "$components/Button.svelte";
   import FormPanel from "$components/FormPanel.svelte";
   import Input from "$components/Input.svelte";
@@ -53,7 +53,7 @@
     simulatedResult = null
     if ($parserVmStateConfig?.sources[0].length) {
       const simulator = new EmissionsERC20JSVM($parserVmStateConfig, {signer: $signer})
-      simulatedResult = await simulator.run()
+      simulatedResult = await simulator.run({context: [$signerAddress]})
     }
   }
 
@@ -102,7 +102,7 @@
   <div class="flex w-2/3 flex-col gap-y-6 p-8">
 
     <span class="text-3xl font-semibold">Create a Toy Token</span>
-    
+
     <div class="mb-2 flex flex-col w-full">
       <Info>Create a token and your friends and can come and mint it. You set the rules of who can mint and how much they can mint. Here are some games you might want to play:</Info>
       <div>example expressions...</div>
