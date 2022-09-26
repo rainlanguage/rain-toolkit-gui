@@ -38,7 +38,7 @@ describe('Stake : Rain Protocol Toolkit', () => {
         cy.contains("Deposit confirmed!")
     })
 
-    it.only("Stake : Withdraw from Stake", () => {
+    it("Stake : Withdraw from Stake", () => {
         cy.contains('button', 'Withdraw').click()
         cy.get('body > div.fixed.top-0.left-0.w-screen.h-screen.flex.flex-col.justify-center.bg-gray-900.bg-opacity-75.z-50.backdrop-blur.s-_bRanQFElcIc > div > div > div > div > div.flex.w-full.flex-col.gap-y-2 > div.flex.w-full.flex-row.items-center.gap-x-2.self-stretch > input').type('1')
         cy.wait(500)
@@ -49,7 +49,7 @@ describe('Stake : Rain Protocol Toolkit', () => {
         cy.contains("Withdraw confirmed!")
     })
 
-    it.only("Stake : Report for all Tier for my Address", () => {
+    it("Stake : Report for all Tier for my Address", () => {
         cy.contains('button', 'Report').click()
         cy.wait(1500)
         cy.get('input[placeholder="Tier 1"]').type('1')

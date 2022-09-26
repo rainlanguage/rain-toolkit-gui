@@ -64,7 +64,7 @@ describe('Sale : Rain Protocol Toolkit', () => {
 
     })
 
-    it.only(`Sale : Buy reserve token`, () => {
+    it(`Sale : Buy reserve token`, () => {
         cy.get('button').invoke('text').then((text) => {
             let butName = text.match('Buy') || text.match('Approve')
 

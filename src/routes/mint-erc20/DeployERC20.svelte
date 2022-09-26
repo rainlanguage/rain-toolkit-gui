@@ -107,7 +107,7 @@
       </Input>
       <Input
         type="address"
-        placeholder="Name"
+        placeholder="Owner Address"
         bind:this={fields.ownerAddress}
         bind:value={ownerAddress}
         validator={addressValidate}
@@ -117,6 +117,7 @@
       {#if fixedSupply}
         <Input
           type="number"
+          placeholder="Initial Supply"
           bind:this={fields.initSupply}
           bind:value={initSupply}
           validator={required}
@@ -126,6 +127,7 @@
       {:else}
         <Input
           type="number"
+          placeholder="Total Supply"
           bind:this={fields.initSupply}
           bind:value={initSupply}
           validator={required}
@@ -147,6 +149,7 @@
           <br /><br />
           <Input
             type="number"
+            placeholder="Fixed Supply"
             bind:this={fields.amount}
             bind:value={amount}
             validator={required}
@@ -172,6 +175,7 @@
       {#if faucets}
         <Input
           type="number"
+          placeholder="Number of blocks"
           bind:this={fields.blocks}
           bind:value={blocks}
           validator={required}
@@ -184,13 +188,14 @@
         </Input>
         <Input
           type="text"
+          placeholder="Number of token(units)"
           bind:this={fields.units}
           bind:value={units}
           validator={required}
         >
           <span slot="label"> Number of token(units) </span>
           <span slot="description">
-            Number of token to be transfered by the fuacet each time it is
+            Number of token to be transfered by the faucet each time it is
             triggered (at each claim)
           </span>
         </Input>
