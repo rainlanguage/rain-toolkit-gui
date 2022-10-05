@@ -27,7 +27,9 @@
           stakeWithdraws(where: {stakeToken: $stakeAddress}) {
             id
             stakeTokenMinted
-            withdrawer
+            withdrawer {
+              address
+            }
             stakeToken {
               address
               decimals
@@ -53,7 +55,9 @@
           stakeWithdraws(where: {stakeToken: $stakeAddress, withdrawer: $withdrawer}) {
             id
             stakeTokenMinted
-            withdrawer
+            withdrawer {
+              address
+            }
             stakeToken {
               address
               decimals
@@ -114,7 +118,7 @@
       </tr>
       {#each $txQuery.data.stakeWithdraws as data}
         <tr>
-          <td> {formatAddress(data.withdrawer)} </td>
+          <td> {formatAddress(data.withdrawer.address)} </td>
           <td>
             {formatAddress(data.stakeToken.address)}
           </td>

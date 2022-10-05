@@ -25,7 +25,9 @@
     query: `
         query ($stakeAddress: Bytes!) {
           stakeDeposits(where: {stakeToken: $stakeAddress}) {
-            depositor
+            depositor {
+              address
+            }
             id
             stakeTokenMinted
             stakeToken {
@@ -54,7 +56,9 @@
     query: `
         query ($stakeAddress: Bytes!, $depositor: Bytes!) {
           stakeDeposits(where: {stakeToken: $stakeAddress, depositor: $depositor}) {
-            depositor
+            depositor {
+              address
+            }
             id
             stakeTokenMinted
             stakeToken {
@@ -111,7 +115,7 @@
     Loading transactions...
   {:else if $txQuery.error}
     Something went wrong.
-  {:else if $txQuery?.data?.stakeDeposits.length}
+  {:else if $txQuery?.data?.stakeDeposits?.length}
     <table class="table-auto w-full space-y-2 text-sm">
       <tr class="border-b border-gray-600 uppercase text-sm">
         <th class="text-gray-400 text-left pb-2 font-light">Depositor</th>
@@ -120,7 +124,7 @@
       </tr>
       {#each $txQuery.data.stakeDeposits as data}
         <tr>
-          <td> {formatAddress(data.depositor)} </td>
+          <td> {formatAddress(data.depositor.address)} </td>
           <td>
             {formatAddress(data.stakeToken.address)}
           </td>
