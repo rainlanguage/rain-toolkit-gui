@@ -5,6 +5,10 @@ import { OpMeta } from '$components/parser/opmeta';
 import { Parser, type StateConfig} from 'rain-sdk'
 import { tick } from 'svelte';
     import { insert } from 'svelte/internal';
+    import IgnoredText from '$components/parser/nodes/IgnoredText.svelte';
+    import Op from '$components/parser/nodes/Op.svelte';
+    import UnknownOp from '$components/parser/nodes/UnknownOp.svelte';
+    import Param from '$components/parser/nodes/Param.svelte';
 
 export let vmStateConfig: Writable<StateConfig>
 
@@ -36,6 +40,7 @@ const inputAction = (node: HTMLDivElement) => {
  
     const getTextSegments = (element: ChildNode) => {
         const textSegments = [];
+        console.log(element.childNodes)
         Array.from(element.childNodes).forEach((node) => {
             switch(node.nodeType) {
                 case Node.TEXT_NODE:
@@ -44,6 +49,9 @@ const inputAction = (node: HTMLDivElement) => {
                     
                 case Node.ELEMENT_NODE:
                     textSegments.splice(textSegments.length, 0, ...(getTextSegments(node)));
+                    break;
+
+                case Node.COMMENT_NODE:
                     break;
                     
                 default:
@@ -70,7 +78,7 @@ const inputAction = (node: HTMLDivElement) => {
             currentIndex += text.length;
         });
         
-        node.innerHTML = renderText(textContent);
+        renderText(textContent);
         
         restoreSelection(anchorIndex, focusIndex);
         autocomplete();
@@ -141,20 +149,54 @@ const inputAction = (node: HTMLDivElement) => {
 
         // console.log(textSegments)
 
-        return textSegments.map((segment, i) => {
-            if (segment.type == 'ignored') {
-                return `<span data-type="ignored" data-index=${i}>${segment.text}</span>`
+        node.innerHTML = ""
+
+        textSegments.forEach((segment, i) => {
+            switch(segment.type) {
+                case 'ignored':                 
+                    new IgnoredText({
+                        target: node,
+                        props: { i, segment }
+                    })
+                break;
+
+                case 'op':
+                    new Op({
+                        target: node,
+                        props: { i, segment }
+                    })
+                break;
+
+                case 'unknown-op':
+                    new UnknownOp({
+                        target: node,
+                        props: { i, segment }
+                    })     
+                break;
+
+                case 'param':
+                    new Param({
+                        target: node,
+                        props: { i, segment }
+                    })
+                break;
             }
-            if (segment.type == 'op') {
-                return `<span style="color:darkMagenta" data-type="op" data-index=${i}>${segment.text}</span>`
-            }
-            if (segment.type == 'unknown-op') {
-                return `<span style="color:darkMagenta" data-type="unknown-op" data-index=${i}>${segment.text}</span>`
-            }
-            if (segment.type == 'param') {
-                return `<span style="color:green" data-type="param" data-index=${i}>${segment.text}</span>`
-            }
-        }).join('')
+        })
+
+        // return textSegments.map((segment, i) => {
+        //     if (segment.type == 'ignored') {
+        //         return `<span data-type="ignored" data-index=${i}>${segment.text}</span>`
+        //     }
+        //     if (segment.type == 'op') {
+        //         return `<span style="color:darkMagenta" data-type="op" data-index=${i}>${segment.text}</span>`
+        //     }
+        //     if (segment.type == 'unknown-op') {
+        //         return `<span style="color:darkMagenta" data-type="unknown-op" data-index=${i}>${segment.text}</span>`
+        //     }
+        //     if (segment.type == 'param') {
+        //         return `<span style="color:green" data-type="param" data-index=${i}>${segment.text}</span>`
+        //     }
+        // }).join('')
     }
 
     const onPaste = (event) => {
