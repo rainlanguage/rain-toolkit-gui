@@ -46,6 +46,14 @@ export function formatAddress(address) {
   return formatted;
 }
 
+export function formatAddressExtended(address) {
+  let formatted =
+    address.slice(0, 10) +
+    "..." +
+    address.slice(address.length - 10, address.length);
+  return formatted;
+}
+
 /**
  * Converts an opcode and operand to bytes, and returns their concatenation.
  * @param code - the opcode

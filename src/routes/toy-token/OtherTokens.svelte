@@ -3,7 +3,6 @@
   import { queryStore } from "@urql/svelte";
   import { Formatter } from 'rain-sdk';
 
-
     $: allTokens = queryStore({
     client: $client,
 
@@ -34,6 +33,7 @@
           }`,
     requestPolicy: "network-only"
   });
+
 </script>
 
 <div class="border-t border-gray-400 h-full">
@@ -42,18 +42,27 @@
         {#if $allTokens.data?.emissionsERC20S}
             {#each $allTokens?.data.emissionsERC20S as token}
             <div class="text-sm flex flex-col gap-y-1 p-2 border-b border-gray-300 w-full">
-                <div>{token.name} ({token.symbol})</div>
                 <div>
-                    <span class="text-gray-500">Deployed: </span>
-                    <span>{new Date(token.deployTimestamp * 1000).toLocaleString()}</span>
+                  <a
+                    class="text-blue-400 underline"
+                    href={`/#/token/${token.address}`}>
+                      {token.name} ({token.symbol})
+                    </a>
+                    <span class="text-gray-500">(Deployed: </span>
+                    <span>{new Date(token.deployTimestamp * 1000).toLocaleString()})</span>
                 </div>
                 <div>
+                  <a
+                    class="text-blue-400 underline"
+                    href={`/#/deployer/${token.deployer}`}>
                     <span class="text-gray-500">Deployer: </span>
                     <span>{token.deployer}</span>
+                    </a>
                 </div>
-                <div class="max-w-full font-mono p-2 bg-gray-200">{Formatter.get(token.calculateClaimStateConfig)}</div>
+                <div class="max-w-full font-mono p-2 bg-gray-200 break-words">{Formatter.get(token.calculateClaimStateConfig)}</div>
             </div>
             {/each}
         {/if}
     </div>
 </div>
+<!--  whitespace-pre -->
