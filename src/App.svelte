@@ -49,8 +49,10 @@
   import MintFromExistingERC20 from "./routes/mint-erc20/MintFromExistingERC20.svelte";
   import ListErc20s from "./routes/mint-erc20/ListERC20s.svelte";
   import StakeTokens from "$routes/stake/StakeTokens.svelte";
-    import ToyToken from "$routes/toy-token/ToyToken.svelte";
-    import ViewToken from "$routes/toy-token/ViewToken.svelte";
+  import ToyToken from "$routes/toy-token/ToyToken.svelte";
+  import ViewToken from "$routes/toy-token/ViewToken.svelte";
+  import DeployersTokens from "$routes/toy-token/DeployersToken.svelte";
+  import TopDeployers from "$routes/toy-token/TopDeployer.svelte"
 
   
   let routes = {};
@@ -80,6 +82,8 @@
 
     "/emissions/deploy": DeployEmissions,
     "/token/*": ViewToken,
+    "/deployer/*": DeployersTokens,
+    "/topdeployer": TopDeployers,
 
     "/verify/deploy": DeployVerify,
     "/verify/administer/*": AdministerVerify,
