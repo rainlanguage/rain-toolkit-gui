@@ -22,7 +22,7 @@
   let tierError, tierDiscountError, tierCapMulError;
 
   // some default values for testing
-  let recipient = "0xf6CF014a3e92f214a3332F0d379aD32bf0Fae929";
+  let recipient = "";
   let reserve = "";
   let startBlock = 24407548;
   let cooldownDuration = 100;
