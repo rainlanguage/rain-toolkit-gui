@@ -23,7 +23,7 @@
 
   // some default values for testing
   let recipient = "0xf6CF014a3e92f214a3332F0d379aD32bf0Fae929";
-  let reserve = "0x25a4Dd4cd97ED462EB5228de47822e636ec3E31A";
+  let reserve = "";
   let startBlock = 24407548;
   let cooldownDuration = 100;
   let saleTimeout = 100;
@@ -36,7 +36,7 @@
   let distributionEndForwardingAddress = ethers.constants.AddressZero;
   let maxWalletCap = 10;
   let minWalletCap = 3;
-  let tier = "0x6BA1fADB694E806c316337143241Dd6cFebd5033";
+  let tier = "";
   let minimumStatus = 0;
   let raiseRange;
   let extraTimeDiscountThreshold = 5;
