@@ -26,7 +26,7 @@
   let reserve = "";
   let startBlock = 24407548;
   let cooldownDuration = 100;
-  let saleTimeout = 100;
+  let saleTimeout ;
   let minimumRaise = 1000;
   let startPrice = 10;
   let endPrice = 20;
@@ -36,7 +36,7 @@
   let distributionEndForwardingAddress = ethers.constants.AddressZero;
   let maxWalletCap = 10;
   let minWalletCap = 3;
-  let tier = "";
+  let tier = "0x6BA1fADB694E806c316337143241Dd6cFebd5033";
   let minimumStatus = 0;
   let raiseRange;
   let extraTimeDiscountThreshold = 5;
