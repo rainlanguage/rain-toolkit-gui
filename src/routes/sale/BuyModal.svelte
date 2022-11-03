@@ -77,6 +77,7 @@
     };
 
     return {
+      price,
       subtotal,
       fee,
       total,

@@ -50,8 +50,8 @@
         } else {
           receipt = await error.replacement.wait();
         }
-      } else {
-        errorMsg = error.data?.message || error?.message;
+      } else {        
+        errorMsg = error?.data ? error.data?.message : error?.reason ? error.reason : error?.message;
         txStatus = TxStatus.Error;
         return;
       }
@@ -95,3 +95,4 @@
     <span class="text-lg text-red-400">{errorMsg}</span>
   </div>
 {/if}
+
