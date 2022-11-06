@@ -7,6 +7,7 @@
   import { selectedNetwork } from "$src/stores";
   import selectNetwork from "./selectNetwork.svelte";
   import { getContext } from "svelte";
+    import IconLibrary from "$components/IconLibrary.svelte";
 
   const { open } = getContext("simple-modal");
 
@@ -47,8 +48,13 @@
   };
 </script>
 
-<div class="flex items-center gap-y-4">
+<div class="flex items-center gap-y-4 gap-x-8">
   {#if $signerAddress}
+  <button
+      class="rounded-md border-none px-4 py-2 gap-x-1 text-black"
+      on:click={() => open(selectNetwork, { onNetworkChange, library })}
+      >{networkName}<IconLibrary icon="down-open-arrow"/></button
+    >
     {#if changedName}
       <span
         class="align-center ease mr-2 flex w-max cursor-pointer rounded-full bg-gray-200 px-4 py-2 text-sm font-bold text-gray-500 transition duration-300 active:bg-gray-300"
@@ -72,14 +78,10 @@
         />
       </span>
     {/if}
-    <button
-      class="rounded-md border-none bg-gray-700 px-4 py-2 text-gray-200"
-      on:click={() => open(selectNetwork, { onNetworkChange, library })}
-      >Change Network</button
-    >
+    
   {:else}
     <button
-      class="rounded-md border-none bg-gray-700 px-4 py-2 text-gray-200"
+      class="rounded-md border-none px-4 py-2 text-black"
       on:click={connectWallet}>Connect Wallet</button
     >
   {/if}

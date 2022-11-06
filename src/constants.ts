@@ -68,51 +68,66 @@ export const networks = [{
   },
   blockExplorer: 'https://mumbai.polygonscan.com/'
 },
-{
-  label: "Avalanche Testnet",
-  config: {
-    chainId: '0xA869',
-    chainName: 'Avalanche Testnet C-Chain',
-    rpcUrls: ['https://api.avax-test.network/ext/bc/C/rpc'],
-    nativeCurrency: {
-      name: 'Avalanche',
-      symbol: 'AVAX',
-      decimals: 18
-    },
-    blockExplorerUrls: ['https://testnet.snowtrace.io/']
-  },
-  blockExplorer: 'https://testnet.snowtrace.io/'
-},
-{
-  label: "BSC - Testnet",
-  config: {
-    chainId: "0x61",
-    chainName: 'BSC - Testnet',
-    rpcUrls: ['https://data-seed-prebsc-1-s1.binance.org:8545'],
-    nativeCurrency: {
-      name: 'Binance Coin',
-      symbol: 'BNB',
-      decimals: 18
-    },
-    blockExplorerUrls: ['https://testnet.bscscan.com']
-  },
-  blockExplorer: 'https://testnet.bscscan.com'
-},
-{
-  label: "BSC - Mainnet",
-  config: {
-    chainId: "0x38",
-    chainName: 'BSC',
-    rpcUrls: ['https://bsc-dataseed.binance.org/'],
-    nativeCurrency: {
-      name: 'Binance Coin',
-      symbol: 'BNB',
-      decimals: 18
-    },
-    blockExplorerUrls: ['https://bscscan.com/']
-  },
-  blockExplorer: 'https://bscscan.com/'
-},
+// {
+//   label: "Avalanche Testnet",
+//   config: {
+//     chainId: '0xA869',
+//     chainName: 'Avalanche Testnet C-Chain',
+//     rpcUrls: ['https://api.avax-test.network/ext/bc/C/rpc'],
+//     nativeCurrency: {
+//       name: 'Avalanche',
+//       symbol: 'AVAX',
+//       decimals: 18
+//     },
+//     blockExplorerUrls: ['https://testnet.snowtrace.io/']
+//   },
+//   blockExplorer: 'https://testnet.snowtrace.io/'
+// },
+// {
+//   label: "BSC - Testnet",
+//   config: {
+//     chainId: "0x61",
+//     chainName: 'BSC - Testnet',
+//     rpcUrls: ['https://data-seed-prebsc-1-s1.binance.org:8545'],
+//     nativeCurrency: {
+//       name: 'Binance Coin',
+//       symbol: 'BNB',
+//       decimals: 18
+//     },
+//     blockExplorerUrls: ['https://testnet.bscscan.com']
+//   },
+//   blockExplorer: 'https://testnet.bscscan.com'
+// },
+// {
+//   label: "BSC - Mainnet",
+//   config: {
+//     chainId: "0x38",
+//     chainName: 'BSC',
+//     rpcUrls: ['https://bsc-dataseed.binance.org/'],
+//     nativeCurrency: {
+//       name: 'Binance Coin',
+//       symbol: 'BNB',
+//       decimals: 18
+//     },
+//     blockExplorerUrls: ['https://bscscan.com/']
+//   },
+//   blockExplorer: 'https://bscscan.com/'
+// },
+// {
+//   label: "Ethereum",
+//   config: {
+//     chainId: "0x1",
+//     chainName: 'Ethereum',
+//     rpcUrls: ['https://eth-mainnet.public.blastapi.io'],
+//     nativeCurrency: {
+//       name: 'Ethereum',
+//       symbol: 'ETH',
+//       decimals: 18
+//     },
+//     blockExplorerUrls: ['https://etherscan.io/']
+//   },
+//   blockExplorer: 'https://etherscan.io/'
+// },
 // {
 //   label: "Fantom - Testnet",
 //   config: {
@@ -127,21 +142,6 @@ export const networks = [{
 //     blockExplorerUrls: ['https://testnet.ftmscan.com']
 //   }
 // },
-{
-  label: "Ethereum",
-  config: {
-    chainId: "0x1",
-    chainName: 'Ethereum',
-    rpcUrls: ['https://eth-mainnet.public.blastapi.io'],
-    nativeCurrency: {
-      name: 'Ethereum',
-      symbol: 'ETH',
-      decimals: 18
-    },
-    blockExplorerUrls: ['https://etherscan.io/']
-  },
-  blockExplorer: 'https://etherscan.io/'
-},
 // {
 //   label: "Ropsten",
 //   config: {
@@ -170,21 +170,21 @@ export const networks = [{
 //     blockExplorerUrls: ['https://rinkeby.etherscan.io']
 //   }
 // },
-{
-  label: "Goerli",
-  config: {
-    chainId: "0x5",
-    chainName: 'Goerli',
-    rpcUrls: ['https://goerli.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161'],
-    nativeCurrency: {
-      name: 'Goerli',
-      symbol: 'ETH',
-      decimals: 18
-    },
-    blockExplorerUrls: ['https://goerli.etherscan.io']
-  },
-  blockExplorer: 'https://goerli.etherscan.io'
-},
+// {
+//   label: "Goerli",
+//   config: {
+//     chainId: "0x5",
+//     chainName: 'Goerli',
+//     rpcUrls: ['https://goerli.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161'],
+//     nativeCurrency: {
+//       name: 'Goerli',
+//       symbol: 'ETH',
+//       decimals: 18
+//     },
+//     blockExplorerUrls: ['https://goerli.etherscan.io']
+//   },
+//   blockExplorer: 'https://goerli.etherscan.io'
+// },
 // {
 //   label: " Kovan",
 //   config: {

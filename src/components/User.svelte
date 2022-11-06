@@ -18,7 +18,7 @@
   {/if}
   <div class="flex flex-row items-center space-x-2 font-medium">
     {#if !name && !avatar}
-      <span class="space-x-2 ">{network.toUpperCase()} -</span>
+      <span class="space-x-2 ">{network?.toUpperCase()} -</span>
       <DisplayAddress {address} />
       <Jazzicon {address} width="24" />
     {/if}

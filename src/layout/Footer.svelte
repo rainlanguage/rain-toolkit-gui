@@ -1,10 +1,10 @@
 <div
-  class="sticky bottom-0 z-40 flex h-10 w-full items-center justify-center border-t border-red-900 bg-red-800"
+  class="sticky bottom-0 z-30 flex h-10 w-full items-center justify-center"
 >
-  <div class="flex flex-col">
-    <span class="text-base font-light text-white">
-      This toolkit is a testing ground for Rain proof of concepts and comes with
-      no guarantees. Treat as alpha and use at your own risk!
+  <div class="flex flex-row items-center">
+    <span class="text-sm font-normal text-black pr-4">
+      Powered by Rain 
     </span>
+    <img src="/assets/logo.svg" alt="Rain Logo" class="w-7" />
   </div>
 </div>
