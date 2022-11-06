@@ -35,11 +35,11 @@
   classWindowWrap="relative m-2 max-h-full flex flex-col"
   classContent="p-6"
 >
-<div class="back">
+<div class="back ">
 <Header />
 <main class="relative flex">
     <!-- <Sidebar /> -->
-    <div class="w-full">
+    <div class="w-full h-full">
         <Router {routes} />
     </div>
   </main>
@@ -49,6 +49,7 @@
 
 <style global lang="postcss">
   .back{
+    height: 100vh;
     background: rgb(233,183,108);
     background: linear-gradient(180deg, rgba(233,183,108,1) 0%, rgba(255,238,149,1) 100%);
   }
