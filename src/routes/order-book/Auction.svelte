@@ -21,7 +21,7 @@
             </div>
     </div>
     <div class="w-full px-4">
-        <button class="bg-orange-400 w-full rounded-full text-base py-3 px-5 text-white ">Ok</button>
+        <button class="bg-orange-400 w-full rounded-full text-base py-3 px-5 text-black ">Ok</button>
     </div>
     <!-- <button class="bg-orange-400 w-full rounded-full text-base leading-none py-3 px-5 text-white" >Ok</button> -->
 </div>

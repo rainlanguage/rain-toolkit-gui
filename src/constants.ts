@@ -200,3 +200,47 @@ export const networks = [{
 //   }
 // }
 ]
+
+export const tokenAddressess = [
+  {
+    tokenAddress : '0x3b55b7b2Eec07cf5F0634B130eFbb1A1e4eDEd0a',
+    tokenName : "USD Classic",
+    tokenSymbol : "USDCC"
+  },
+  {
+    tokenAddress : '0x05cE0B29D94Cb8b156638D06336228b935212652',
+    tokenName : "USD Tether",
+    tokenSymbol : "USDT"
+  },
+  //emo
+  // {
+  //   tokenAddress : '0x3b55b7b2Eec07cf5F0634B130eFbb1A1e4eDEd0a',
+  //   tokenName : "USD Classic",
+  //   tokenSymbol : "USDCC"
+  // },
+  // {
+  //   tokenAddress : '0x05cE0B29D94Cb8b156638D06336228b935212652',
+  //   tokenName : "USD Tether",
+  //   tokenSymbol : "USDT"
+  // },
+  // {
+  //   tokenAddress : '0x3b55b7b2Eec07cf5F0634B130eFbb1A1e4eDEd0a',
+  //   tokenName : "USD Classic",
+  //   tokenSymbol : "USDCC"
+  // },
+  // {
+  //   tokenAddress : '0x05cE0B29D94Cb8b156638D06336228b935212652',
+  //   tokenName : "USD Tether",
+  //   tokenSymbol : "USDT"
+  // },
+  // {
+  //   tokenAddress : '0x3b55b7b2Eec07cf5F0634B130eFbb1A1e4eDEd0a',
+  //   tokenName : "USD Classic",
+  //   tokenSymbol : "USDCC"
+  // },
+  // {
+  //   tokenAddress : '0x05cE0B29D94Cb8b156638D06336228b935212652',
+  //   tokenName : "USD Tether",
+  //   tokenSymbol : "USDT"
+  // }
+]
