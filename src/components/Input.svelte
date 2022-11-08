@@ -26,6 +26,7 @@
   export let max = "";
   export let disabled = false;
   export let errorMsg = "";
+  export let bgColor = "bg-gray-200";
 
   let error: string;
   let timer, validating;
@@ -95,7 +96,7 @@
       <slot name="description" />
     </span>
   {/if}
-  <div class="flex w-full flex-row items-center gap-x-2 self-stretch">
+  <div class="flex flex-row items-center gap-x-2 self-stretch">
     <input
       type={_type}
       {value}
@@ -108,7 +109,7 @@
       {disabled}
       {min}
       {max}
-      class="w-full rounded-md bg-gray-200 p-2 font-light  {borderColor}"
+      class="w-full rounded-md {bgColor} p-1 font-light  {borderColor}"
     />
     {#if validating}
       <div

@@ -2,5 +2,5 @@
 
 </script>
 <div>
-    demo
+    select
 </div>

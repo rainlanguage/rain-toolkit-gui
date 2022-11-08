@@ -21,7 +21,8 @@
     | "down-arrow"
     | "tip"
     | "share"
-    | "down-open-arrow";
+    | "down-open-arrow"
+    | 'up-arrow';
   export let inline = true;
 
   $: if (!height) {
@@ -312,17 +313,11 @@
   >
     <path d="M0 0 L12 10 L24 0" />
   </svg>
+{:else if icon == "up-arrow"}
+  <svg class:inline {width} {height} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width={2} d="M5 10l7-7m0 0l7 7m-7-7v18" />
+  </svg>
 {:else if icon == "down-open-arrow"}
-  <!-- <svg
-    class:inline
-    class="fill-current {color}"
-    {width}
-    {height}
-    viewBox="0 0 22 22"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path d="M0 0 L12 10 L24 0" />
-  </svg> -->
   <svg class:inline {width} {height} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
     <path stroke-linecap="round" stroke-linejoin="round" stroke-width={2} d="M19 9l-7 7-7-7" />
   </svg>

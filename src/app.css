@@ -6,7 +6,9 @@
 @tailwind base;
 
 body {
-    @apply bg-gray-100;
+    background: rgb(233,183,108);
+    background: linear-gradient(180deg, rgba(233,183,108,1) 0%, rgba(255,238,149,1) 100%);
+    /* @apply bg-gray-100; */
     font-family: 'DM Sans', sans-serif;
     @apply text-gray-800
   }
