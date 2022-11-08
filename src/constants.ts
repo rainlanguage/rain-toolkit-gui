@@ -205,42 +205,28 @@ export const tokenAddressess = [
   {
     tokenAddress : '0x3b55b7b2Eec07cf5F0634B130eFbb1A1e4eDEd0a',
     tokenName : "USD Classic",
-    tokenSymbol : "USDCC"
+    tokenSymbol : "USDCC", 
+    logo : '../../../assets/usdcc.svg'
   },
   {
     tokenAddress : '0x05cE0B29D94Cb8b156638D06336228b935212652',
     tokenName : "USD Tether",
-    tokenSymbol : "USDT"
+    tokenSymbol : "USDT" ,
+    logo : '../../../assets/usdt.svg'
+
+  }, 
+  {
+    tokenAddress : '0x333ed7DAD058090645Ccf59b33919B3d3295200C',
+    tokenName : "BUSD Token",
+    tokenSymbol : "BUSD",
+    logo : '../../../assets/busd.svg'
+
   },
-  //emo
-  // {
-  //   tokenAddress : '0x3b55b7b2Eec07cf5F0634B130eFbb1A1e4eDEd0a',
-  //   tokenName : "USD Classic",
-  //   tokenSymbol : "USDCC"
-  // },
-  // {
-  //   tokenAddress : '0x05cE0B29D94Cb8b156638D06336228b935212652',
-  //   tokenName : "USD Tether",
-  //   tokenSymbol : "USDT"
-  // },
-  // {
-  //   tokenAddress : '0x3b55b7b2Eec07cf5F0634B130eFbb1A1e4eDEd0a',
-  //   tokenName : "USD Classic",
-  //   tokenSymbol : "USDCC"
-  // },
-  // {
-  //   tokenAddress : '0x05cE0B29D94Cb8b156638D06336228b935212652',
-  //   tokenName : "USD Tether",
-  //   tokenSymbol : "USDT"
-  // },
-  // {
-  //   tokenAddress : '0x3b55b7b2Eec07cf5F0634B130eFbb1A1e4eDEd0a',
-  //   tokenName : "USD Classic",
-  //   tokenSymbol : "USDCC"
-  // },
-  // {
-  //   tokenAddress : '0x05cE0B29D94Cb8b156638D06336228b935212652',
-  //   tokenName : "USD Tether",
-  //   tokenSymbol : "USDT"
-  // }
+  {
+    tokenAddress : '0xA6565a4Cf2fB6631A30DfF3EAe2ebb534Acd2F4e',
+    tokenName : "Dai Stablecoin",
+    tokenSymbol : "DAI",
+    logo : '../../../assets/dai.svg'
+
+  }
 ]

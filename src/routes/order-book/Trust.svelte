@@ -9,8 +9,11 @@
     import { required } from "$src/validation";
     import { validateFields } from "$src/utils";
     import {utils, OrderBook } from 'rain-sdk'
-    // import opcodes from './opcodes.ts'
-    import {tokenAddressess } from "$src/constants"
+     import { op , Opcode ,max_uint32,max_uint256 , memoryOperand , MemoryType   } from './opcodes.ts'
+    import {tokenAddressess } from "$src/constants" 
+    import { concat } from "ethers/lib/utils"; 
+  
+
 
     let fields: any = {};
     let orderBookContract, thresholdVal
@@ -43,24 +46,29 @@
     };
 
 const addOrder = async () => { 
-    const max_uint256 = ethers.BigNumber.from("0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");  
-    const max_uint32 = ethers.BigNumber.from("0xffffffff");
-    // askPrice = 10^18 + 10^18 + givenThreshold
+    
     let x = 1 + ((1 * thresholdVal)/100) 
 
-    let askPrice = ethers.utils.parseEther(x.toString())
+    let askPrice = ethers.utils.parseEther(x.toString()) 
+    
 
-    const askConstants = [max_uint256, askPrice];
-    // const vAskOutputMax = utils.op(OrderBook.Opcodes.CONSTANT, 0); 
-    // const vAskPrice = utils.op(OrderBook.Opcodes.CONSTANT, 1);  
+    const askConstants = [max_uint256, askPrice ,max_uint32 ];
+    const vAskOutputMax = op( Opcode.STATE,memoryOperand(MemoryType.Constant, 0));
+    const vAskPrice = op(Opcode.STATE, memoryOperand(MemoryType.Constant, 1));
+    const vExpiresAfter = op(Opcode.STATE, memoryOperand(MemoryType.Constant, 2));
+    const ensure =op(Opcode.ENSURE, 1);
 
-    let askSource = new Uint8Array([0,6,0,1,0,6,0,3]) 
+    const askSource = concat([ vAskOutputMax,vAskPrice ,vExpiresAfter ,ensure ]);  
     let tokenInput = []
-    let tokenOutput = []
+    let tokenOutput = [] 
+    let randomNumber = ethers.BigNumber.from(window.crypto.getRandomValues(new Uint8Array(1))[0]) // random number later can be changed . 
+    
+
     for(let i = 0; i < tokenAddressess.length; i++ ){
-        if(checkedTokens[i] == true)
-        tokenInput.push({"token" : tokenAddressess[i].tokenAddress, "vaultId" : ethers.BigNumber.from(i + 1)})
-        tokenOutput.push({"token" : tokenAddressess[i].tokenAddress, "vaultId" : ethers.BigNumber.from(i + 2)})
+        if(checkedTokens[i] == true){
+            tokenInput.push({"token" : tokenAddressess[i].tokenAddress, "vaultId" : randomNumber})
+            tokenOutput.push({"token" : tokenAddressess[i].tokenAddress, "vaultId" : randomNumber })
+        }
     }
     
     let askOrderConfig = { 
@@ -73,7 +81,11 @@ const addOrder = async () => {
         constants: askConstants,  
         }, 
         expiresAfter: max_uint32,
-    }
+    } 
+
+    console.log("askOrderConfig : " , askOrderConfig )
+
+    console.log("askSource : " , askSource )
 
     let  txAskOrderLive = await orderBookContract.addOrder(askOrderConfig); 
     console.log("txAskOrderLive ")
@@ -84,8 +96,11 @@ const addOrder = async () => {
     <div class="flex flex-col gap-y-2 px-4 pt-2 ">
                 {#each tokenAddressess as token, i}
                     <div class="grid items-stretch border border-orange-400 w-96 rounded-full ">
-                        <div class="grid grid-cols-2 items-center  px-10 py-3 border-orange-400">
-                            <span>{token.tokenName}</span>
+                        <div class="grid grid-cols-2 items-center  px-10 py-3 border-orange-400"> 
+                            <span class="flex items-center gap-x-2">
+                                <img src={token.logo} alt="Rain Logo" class="w-7" />
+                                <span>{token.tokenName}</span>
+                            </span>
                             <span class="flex justify-end"><Switch color="#22c55e" bind:checked={checkedTokens[i]} /></span>
                         </div>
                     </div>
