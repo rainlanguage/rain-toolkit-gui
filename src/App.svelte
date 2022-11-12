@@ -10,16 +10,25 @@
     
   import AddressLibrary from "$routes/address-library/AddressLibrary.svelte";
   import Orderbook from "$routes/order-book/Orderbook.svelte";
-
-
-  
+  import AddSlosh from "$routes/order-book/AddSlosh.svelte";
+  import SloshBalance from "$routes/order-book/SloshBalance.svelte";
+  import VaultBalance from "$routes/order-book/VaultBalance.svelte";
+  import Sloshes from "$routes/order-book/Sloshes.svelte";
+    import Vaults from "$routes/order-book/Vaults.svelte";
+   
   let routes = {};
 
   routes = {
 
     "/address-library": AddressLibrary,
 
-    "/": Orderbook,
+    "/": Vaults,
+    // "/addvault" : Sloshes,
+    // "/vaults" : Sloshes,
+    "/sloshes" : Sloshes,
+    "/addslosh": AddSlosh,
+    "/sloshbalance": SloshBalance,
+    "/vaultbalance": VaultBalance,
 
     // Catch-all
     // This is optional, but if present it must be the last

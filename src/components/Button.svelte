@@ -13,6 +13,7 @@
   export let small = false;
   export let id = "";
   export let shrink = false;
+  export let bRadius = "rounded-lg"
   $: variantCalc = disabled ? "disabled" : variant;
 </script>
 
@@ -21,8 +22,7 @@
     {disabled}
     {id}
     on:click={click}
-    class={"rounded-lg transition-colors text-sm leading-none py-3 px-5 text-white " +
-      variantCalc}
+    class={`transition-colors text-sm leading-none py-3 px-5 text-white ${bRadius} ${variantCalc}`}
   >
     <slot />
     {#if !$$slots.default}
@@ -34,8 +34,7 @@
     {disabled}
     {id}
     on:click={click}
-    class={"transition-colors rounded-lg text-base leading-none py-3 px-5 text-white " +
-      variantCalc}
+    class={`transition-colors text-base leading-none py-3 px-5 text-white ${bRadius} ${variantCalc}`}
   >
     <slot />
     {#if !$$slots.default}
@@ -47,8 +46,7 @@
     {disabled}
     {id}
     on:click={click}
-    class={"w-full transition-colors rounded-lg text-base leading-none py-3 px-5 text-white " +
-      variantCalc}
+    class={`w-full transition-colors text-base leading-none py-3 px-5 text-white ${bRadius} ${variantCalc}`}
   >
     <slot />
     {#if !$$slots.default}

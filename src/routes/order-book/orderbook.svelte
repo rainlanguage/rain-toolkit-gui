@@ -4,14 +4,13 @@
     import TabPanel from "$components/tabs/TabPanel.svelte";
     import Tabs from "$components/tabs/Tabs.svelte";
     import Auction from "./Auction.svelte";
-    import Trust from "./Trust.svelte";
-
+    import AddSlosh from "./AddSlosh.svelte";
+    import SloshBalance from "./SloshBalance.svelte";
+    import VaultBalance from "./VaultBalance.svelte";
 
 </script>
-<div class="ht">
-    <div class="flex flex-col items-center justify-start py-14">
-        <div class="flex flex-col items-center bg-white gap-y-4 pt-4 pb-4 rounded-lg">
-            <Tabs>
+<div>
+        <!-- <Tabs>
                 <div class="flex justify-center">
                     <TabList>
                         <Tab>Trust</Tab>
@@ -22,16 +21,13 @@
                     <Trust />
                 </TabPanel>
                 <TabPanel>
-                    <!-- <Auction /> -->
+                    <Auction />
                     <div class="w-96 p-6 flex justify-center">Work in progress</div>
                 </TabPanel>
-            </Tabs>
-        </div>
-    </div>
+        </Tabs> -->
+        <!-- <Router>
+            <Route component={AddSlosh} />
+            <Route path="sloshbalance" component={SloshBalance}/>
+            <Route path="vaultbalance" component={VaultBalance} />
+        </Router> -->
 </div>
-
-<style>
-    .ht{
-        min-height: 82vh;
-    }
-</style>
