@@ -25,10 +25,10 @@
     "/": Vaults,
     // "/addvault" : Sloshes,
     // "/vaults" : Sloshes,
-    "/sloshes" : Sloshes,
-    "/addslosh": AddSlosh,
-    "/sloshbalance": SloshBalance,
-    "/vaultbalance": VaultBalance,
+    "/sloshes/*" : Sloshes,
+    "/addslosh/*": AddSlosh,
+    "/sloshbalance/*": SloshBalance,
+    "/vaultbalance/*": VaultBalance,
 
     // Catch-all
     // This is optional, but if present it must be the last

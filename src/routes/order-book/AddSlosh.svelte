@@ -8,12 +8,13 @@
     import Section from "$routes/order-book/Section.svelte";
     import { required } from "$src/validation";
     import { validateFields } from "$src/utils";
-    import {utils, OrderBook } from 'rain-sdk'
     import { op , Opcode ,max_uint32,max_uint256 , memoryOperand , MemoryType   } from './opcodes.ts'
     import {tokenAddressess } from "$src/constants" 
     import { concat } from "ethers/lib/utils"; 
-    import { push } from "svelte-spa-router";
 
+    export let params: {
+        wild: string;
+    }; 
 
     let fields: any = {};
     let orderBookContract, thresholdVal
@@ -23,20 +24,6 @@
         orderBookContract = new ethers.Contract('0x75b4A6c9238A5206adBa189221B90ebbFe4ac248',orderABI , $signer )
         console.log("order", orderBookContract);
     }
-
-    // const getTokenDetails = async () =>{
-    //     let token1 = new ethers.Contract(tokenAddressess[0]tokenA, erc20ABI, $signer )
-    //     let token2 = new ethers.Contract(tokenAddressess.tokenB, erc20ABI, $signer )
-        
-    //     tokenAName = await token1.name()
-    //     tokenASymbol = await token1.symbol()
-    //     tokenADecimals = await token1.decimals()
-
-    //     tokenBName = await token2.name()
-    //     tokenBSymbol = await token2.symbol()
-    //     tokenBDecimals = await token2.decimals()
-
-    // }
     
     const handleClick = async () => {
         const { validationResult } = await validateFields(fields);
@@ -61,7 +48,7 @@ const addOrder = async () => {
     const askSource = concat([ vAskOutputMax,vAskPrice ,vExpiresAfter ,ensure ]);  
     let tokenInput = []
     let tokenOutput = [] 
-    let randomNumber = ethers.BigNumber.from(window.crypto.getRandomValues(new Uint8Array(1))[0]) // random number later can be changed . 
+    let randomNumber = params.wild // random number later can be changed . 
     
 
     for(let i = 0; i < tokenAddressess.length; i++ ){
@@ -96,13 +83,13 @@ const addOrder = async () => {
     <div class="py-4">
         <div class="flex flex-col gap-y-2 px-4 pt-2 ">
             <div class="flex justify-between pb-6">
-                <span on:click={() =>{push(`/sloshes`)}}><IconLibrary icon="back" width={14} /></span>
+                <span class="cursor-pointer" on:click={() =>{history.back()}}><IconLibrary icon="back" width={14} /></span>
                 <div class="flex flex-col justify-center items-center pb-2">
                     <span class="font-semibold">Add Slosh</span>
                     <!-- <span class="font-normal">(Ox2413fb3709b0...)</span> -->
                 </div>
-                <!-- <div /> -->
-                <span on:click={() =>{push(`/sloshbalance`)}}><IconLibrary icon="forward" width={14} /></span>
+                <div />
+                <!-- <span on:click={() =>{push(`/sloshbalance`)}}><IconLibrary icon="forward" width={14} /></span> -->
             </div>
             {#each tokenAddressess as token, i}
                 <div class="grid items-stretch border border-orange-400 w-96 rounded-full ">

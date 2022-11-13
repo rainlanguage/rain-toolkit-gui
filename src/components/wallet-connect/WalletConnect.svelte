@@ -8,6 +8,7 @@
   import selectNetwork from "./selectNetwork.svelte";
   import { getContext } from "svelte";
     import IconLibrary from "$components/IconLibrary.svelte";
+    import { onMount } from "svelte";
 
   const { open } = getContext("simple-modal");
 
@@ -19,7 +20,29 @@
   const web3Modal = new Web3Modal({
     cacheProvider: false, // optional
     providerOptions, // required
-  });
+  }); 
+
+  onMount(() => {
+     
+    onMountLoad()
+    }) 
+
+    const onMountLoad = async () => {
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      defaultEvmStores.setProvider(provider); 
+
+      const network = await provider.getNetwork();
+
+      // library = provider;
+      // networkName = network.name;
+
+      networks.forEach((element) => {
+        if (parseInt(element.config.chainId) === network.chainId) {
+          networkName = element.config.chainName;
+          $selectedNetwork = element;
+        }
+      });
+    }
 
   const connectWallet = async () => {
     try {
