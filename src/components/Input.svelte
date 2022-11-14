@@ -109,7 +109,7 @@
       {disabled}
       {min}
       {max}
-      class="w-full rounded-md {bgColor} p-1 font-light  {borderColor}"
+      class="w-full rounded-md {bgColor} p-1 font-light text-black {borderColor}"
     />
     {#if validating}
       <div

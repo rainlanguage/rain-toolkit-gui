@@ -3,9 +3,7 @@
     import IconLibrary from "$components/IconLibrary.svelte";
     import Section from "$routes/order-book/Section.svelte";
     import SloshBalance from "./SloshBalance.svelte"; 
-    import erc20ABI from "./erc20ABI.json"
-
-    import { push } from "svelte-spa-router";  
+    import erc20ABI from "./erc20ABI.json" 
 
     import { client } from "$src/stores";
     import { queryStore , gql } from "@urql/svelte"; 
@@ -18,6 +16,10 @@
     import { Token } from "graphql";
     import { id } from "ethers/lib/utils";
     import Ring from "$components/Ring.svelte";
+    import { getContext } from "svelte";
+    import DepositModal from "./DepositModal.svelte";
+    import WithdrawModal from "./WithdrawModal.svelte";
+    const { open } = getContext("simple-modal");
 
 
     export let params: {
@@ -47,6 +49,7 @@
                         id
                         name  
                         decimals
+                        symbol
                     } 
                     balance
                     orders{
@@ -69,26 +72,6 @@
         } 
         console.log("orders : " , orders )
 
-    } 
-
-    const deposit = async (tokenAddress) => {   
-        console.log("tokenAddress : " , tokenAddress)
-        
-        const amount = ethers.BigNumber.from("10" + eighteenZeros); //to be taken input
-        let vaultId = ethers.BigNumber.from(vault[0].vaultId);   
-
-        const depositConfigStruct = {
-            token: tokenAddress ,
-            vaultId: vaultId,
-            amount: amount
-        }; 
-
-        let tokenContract = new ethers.Contract(tokenAddress, erc20ABI, $signer )
-        let approveTx = await tokenContract.approve('0x75b4A6c9238A5206adBa189221B90ebbFe4ac248', depositConfigStruct.amount);  
-        await approveTx.wait() 
-
-        const txDepositOrderAlice = await orderBookContract.deposit(depositConfigStruct); 
-        await txDepositOrderAlice.wait()
     } 
 
     const withdraw = async (tokenAddress) => {   
@@ -145,12 +128,14 @@
                                     <div class="flex justify-between">
                                         <div>
                                             <Button small bRadius="rounded-full" variant="bg-orange-400" on:click={() => {
-                                                withdraw(vault_.token.id)
+                                                open(WithdrawModal, {vault_, orderBookContract})
+                                                // withdraw(vault_.token.id)
                                             }}>Withdraw</Button>
                                         </div>
                                         <div><Button small bRadius="rounded-full" variant="bg-orange-400" on:click={() => {
-                                            deposit(vault_.token.id)
+                                            open(DepositModal, {vault_, orderBookContract})
                                         }}>Deposit</Button></div>
+                                            <!-- // deposit(vault_.token.id) -->
                                     </div>
                                 </td>
                             </tr> 
