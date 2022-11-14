@@ -1,5 +1,4 @@
 import { createClient } from "@urql/svelte";
-import { AddressBook } from "rain-sdk";
 import { derived, writable } from "svelte/store";
 import { networks } from "./constants";
 
