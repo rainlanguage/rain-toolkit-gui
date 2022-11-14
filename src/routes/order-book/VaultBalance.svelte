@@ -52,7 +52,7 @@
                         symbol
                     } 
                     balance
-                    orders{
+                    orders(where : {orderLive : true}){
                         id
                     }
                 }                     
@@ -65,11 +65,14 @@
         // vaultIds = data.tokenVaults.map(e => {return e.vaultId} ).filter(function(item,index ,arr){  return arr.indexOf(item) == index;  })  
         vault = $Vault.data.tokenVaults
         console.log(vault)  
-
+        let orders_ = [] 
         for(let i = 0 ; i < vault.length ; i++ ){   
             vault[i].balance = ethers.utils.formatUnits(BigNumber.from(vault[i].balance) , vault[i].token.decimals)
-            orders = orders.concat(vault[i].orders)
-        } 
+            orders_ = orders_.concat(vault[i].orders)
+        }  
+
+        orders = orders_.map(e => {return e.id} ).filter(function(item,index ,arr){  return arr.indexOf(item) == index;  })
+
         console.log("orders : " , orders )
 
     } 
@@ -149,7 +152,7 @@
                     <div class="font-semibold">Sloshes</div>
                     <ul class="list-none "> 
                         {#each orders as order}
-                        <li class="leading-8"> <a href="/#/sloshbalance/{order.id}">{order.id}</a></li>
+                        <li class="leading-8"> <a href="/#/sloshbalance/{vault[0].vaultId}/{order}">{order}</a></li>
                         {/each}
                     </ul>
                 </div>
