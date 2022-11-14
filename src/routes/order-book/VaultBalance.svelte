@@ -152,7 +152,7 @@
                     <div class="font-semibold">Sloshes</div>
                     <ul class="list-none "> 
                         {#each orders as order}
-                        <li class="leading-8"> <a href="/#/sloshbalance/{vault[0].vaultId}/{order}">{order}</a></li>
+                        <li class="leading-8"> <a class="items-center underline hover:text-blue-500" href="/#/sloshbalance/{vault[0].vaultId}/{order}">{order}</a></li>
                         {/each}
                     </ul>
                 </div>

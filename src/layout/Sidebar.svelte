@@ -1,4 +1,4 @@
-<script>
+<!-- <script>
   import SidebarLink from "../components/SidebarLink.svelte";
   import SidebarLinkGroup from "../components/SidebarLinkGroup.svelte";
 </script>
@@ -87,4 +87,4 @@
       <SidebarLink url="/erc20/list">List ERC20 Tokens</SidebarLink>
     </SidebarLinkGroup>
   </div>
-</div>
+</div> -->

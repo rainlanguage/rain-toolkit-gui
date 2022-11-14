@@ -9,12 +9,11 @@
   import Modal from "svelte-simple-modal";
     
   import AddressLibrary from "$routes/address-library/AddressLibrary.svelte";
-  import Orderbook from "$routes/order-book/orderbook.svelte";
   import AddSlosh from "$routes/order-book/AddSlosh.svelte";
   import SloshBalance from "$routes/order-book/SloshBalance.svelte";
   import VaultBalance from "$routes/order-book/VaultBalance.svelte";
   import Sloshes from "$routes/order-book/Sloshes.svelte";
-    import Vaults from "$routes/order-book/Vaults.svelte";
+  import Vaults from "$routes/order-book/Vaults.svelte";
    
   let routes = {};
 
