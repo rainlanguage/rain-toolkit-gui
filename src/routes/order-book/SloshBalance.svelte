@@ -128,38 +128,38 @@
 
     const handleClick = async () =>{ 
 
-        let order_ = $getOrder.data.orders[0] 
-        console.log("order_ validInputs  : " , order_ .validInputs) 
-        console.log("order_ validOutputs : " , order_ .validOutputs) 
+        // let order_ = $getOrder.data.orders[0] 
+        // console.log("order_ validInputs  : " , order_ .validInputs) 
+        // console.log("order_ validOutputs : " , order_ .validOutputs) 
 
-        let IO = []
-        for(let i = 0 ; i < order_.validInputs.length ; i++ ){
-            IO.push(
-                {
-                    token : order_.validInputs[i].tokenVault.token.id ,
-                    vaultId : ethers.BigNumber.from(order_.validInputs[i].tokenVault.vaultId) 
-                }
-            )
-        } 
-        IO = IO.reverse() 
-        console.log("IO : " , IO ) 
+        // let IO = []
+        // for(let i = 0 ; i < order_.validInputs.length ; i++ ){
+        //     IO.push(
+        //         {
+        //             token : order_.validInputs[i].tokenVault.token.id ,
+        //             vaultId : ethers.BigNumber.from(order_.validInputs[i].tokenVault.vaultId) 
+        //         }
+        //     )
+        // } 
+        // IO = IO.reverse() 
+        // console.log("IO : " , IO ) 
 
-        let deleteOrderConfig  = { 
-            owner : order_.owner , 
-            interpreter:  order_.interpreter,
-            expression:order_.expression ,
-            expiresAfter: max_uint32,
-            validInputs: IO,
-            validOutputs: IO 
+        // let deleteOrderConfig  = { 
+        //     owner : order_.owner , 
+        //     interpreter:  order_.interpreter,
+        //     expression:order_.expression ,
+        //     expiresAfter: max_uint32,
+        //     validInputs: IO,
+        //     validOutputs: IO 
         
-        }  
+        // }  
 
-        console.log("deleteOrderConfig : " , deleteOrderConfig ) 
+        // console.log("deleteOrderConfig : " , deleteOrderConfig ) 
 
-        const txAskRemoveOrder = await orderBookContract.removeOrder(deleteOrderConfig); 
-        let receipt = await txAskRemoveOrder.wait() 
+        // const txAskRemoveOrder = await orderBookContract.removeOrder(deleteOrderConfig); 
+        // let receipt = await txAskRemoveOrder.wait() 
 
-        console.log("receipt : " , receipt ) 
+        // console.log("receipt : " , receipt ) 
 
 
 
