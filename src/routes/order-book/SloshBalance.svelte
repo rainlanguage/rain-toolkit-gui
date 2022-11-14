@@ -239,7 +239,7 @@
             
                 </div>
                 <span class="grid justify-end px-6 pt-8">
-                    <Button on:click={handleClick}>Deactivate Slosh</Button>
+                    <Button variant="bg-gray-300" tColor="text-black" on:click={handleClick}>Deactivate Slosh</Button>
                 </span>
             {/if}
         </div>
