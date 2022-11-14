@@ -26,7 +26,7 @@
             query ($owner: Bytes!, $vaultId: BigInt!) { 
 
                 tokenVaults(where: {owner: $owner , vaultId : $vaultId}){
-                    orders{
+                    orders(where : {orderLive : true}){
                         id
                     }
                 }
@@ -37,12 +37,15 @@
 
     $: if ($sloshes.data) {  
         let tokenVaultsArray = $sloshes.data.tokenVaults  
-        console.log("tokenVaultsArray : " , tokenVaultsArray ) 
+        console.log("tokenVaultsArray : " , tokenVaultsArray )  
+        let orders_ = [] 
         for(let i = 0 ; i < tokenVaultsArray.length ; i++ ){   
             
-            orders = orders.concat(tokenVaultsArray[i].orders)
+            orders_ = orders_.concat(tokenVaultsArray[i].orders)
         } 
-        console.log("orders : " , orders )
+        // console.log("orders : " , orders ) 
+
+        orders = orders_.map(e => {return e.id} ).filter(function(item,index ,arr){  return arr.indexOf(item) == index;  })
 
     }
     const addSlosh = () =>{
@@ -79,8 +82,8 @@
                         <div class="pb-10">
                             {#each orders as order}
                                 <span class="flex flex-col leading-7 items-center underline hover:text-blue-500">
-                                    <a href="/#/sloshbalance/{params.wild}/{order.id}">
-                                        {order.id}
+                                    <a href="/#/sloshbalance/{params.wild}/{order}">
+                                        {order}
                                     </a>
                                 </span>
                             {/each}

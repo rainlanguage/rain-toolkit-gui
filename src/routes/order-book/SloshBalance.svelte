@@ -7,11 +7,23 @@
     import { queryStore , gql } from "@urql/svelte"; 
     import { signer , signerAddress } from "svelte-ethers-store";
     import { BigNumber, ethers } from "ethers";
-    import Ring from "$components/Ring.svelte";
+    import Ring from "$components/Ring.svelte"; 
+    import orderABI from "./orderbookABI.json" 
+    import { max_uint32   } from './opcodes.ts'
+
+    
+
 
     export let params: {
         wild: string;
-    };   
+    };     
+
+    let orderBookContract
+
+    $: if($signer){
+        orderBookContract = new ethers.Contract('0x75b4A6c9238A5206adBa189221B90ebbFe4ac248',orderABI , $signer )
+        console.log("order", orderBookContract);
+    }
 
     let vaultId = params.wild.split('/')[0]
     let sloshId = params.wild.split('/')[1]
@@ -26,10 +38,16 @@
         client: $client,
         query: `
             query ($id: Bytes!) { 
-                orders(where : {id : $id}){
+                orders(where : {id : $id , orderLive : true}){ 
+                    interpreter
+                    expression
+                    expiresAfter
+                    owner
                     validInputs{
-                        tokenVault{ 
+                        tokenVault{  
+                            vaultId
                             token{
+                                id
                                 name
                             } 
                         }
@@ -58,6 +76,7 @@
                     output
                     order {
                         id
+                        orderLive
                     }
                     inputToken {
                         id 
@@ -107,7 +126,44 @@
             ownerAddress = $signerAddress?.toLowerCase()
         }
 
-    const handleClick = () =>{}
+    const handleClick = async () =>{ 
+
+        let order_ = $getOrder.data.orders[0] 
+        console.log("order_ validInputs  : " , order_ .validInputs) 
+        console.log("order_ validOutputs : " , order_ .validOutputs) 
+
+        let IO = []
+        for(let i = 0 ; i < order_.validInputs.length ; i++ ){
+            IO.push(
+                {
+                    token : order_.validInputs[i].tokenVault.token.id ,
+                    vaultId : ethers.BigNumber.from(order_.validInputs[i].tokenVault.vaultId) 
+                }
+            )
+        } 
+        IO = IO.reverse() 
+        console.log("IO : " , IO ) 
+
+        let deleteOrderConfig  = { 
+            owner : order_.owner , 
+            interpreter:  order_.interpreter,
+            expression:order_.expression ,
+            expiresAfter: max_uint32,
+            validInputs: IO,
+            validOutputs: IO 
+        
+        }  
+
+        console.log("deleteOrderConfig : " , deleteOrderConfig ) 
+
+        const txAskRemoveOrder = await orderBookContract.removeOrder(deleteOrderConfig); 
+        let receipt = await txAskRemoveOrder.wait() 
+
+        console.log("receipt : " , receipt ) 
+
+
+
+    }
 </script> 
 
 <div class="flex flex-col items-center justify-center">
@@ -191,4 +247,6 @@
     <div class="pt-6 pb-4 flex justify-center">
         <span class="font-semibold text-lg italic">How’s the liquidity. So much liquidity.</span>
     </div>
-</div>
+</div>  
+
+
