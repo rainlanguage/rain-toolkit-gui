@@ -1,9 +1,6 @@
 <script>
   import { getContext } from "svelte";
-  import { signerAddress } from "svelte-ethers-store";
-  import Connect from "../components/Connect.svelte";
-  import User from "../components/User.svelte";
-  import WalletConnect from "../components/wallet-connect/WalletConnect.svelte";
+  import WalletConnect from "$components/wallet-connect/WalletConnect.svelte";
 
   const { open } = getContext("simple-modal");
 
