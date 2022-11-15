@@ -166,23 +166,7 @@
         let receipt = await txAskRemoveOrder.wait() 
 
         console.log("receipt : " , receipt ) 
-        // console.log("order_ validInputs  : " , order_ .validInputs) 
-        // console.log("order_ validOutputs : " , order_ .validOutputs) 
-
-        // let IO = []
-        // for(let i = 0 ; i < order_.validInputs.length ; i++ ){
-        //     IO.push(
-        //         {
-        //             token : order_.validInputs[i].tokenVault.token.id ,
-        //             vaultId : ethers.BigNumber.from(order_.validInputs[i].tokenVault.vaultId) 
-        //         }
-        //     )
-        // } 
-        // IO = IO.reverse() 
-        // console.log("IO : " , IO ) 
-
-
-
+       
 
     }
 </script> 
