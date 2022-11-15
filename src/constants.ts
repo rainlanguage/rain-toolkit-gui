@@ -209,7 +209,7 @@ export const tokenAddressess = [
     logo : '../../../assets/usdcc.svg'
   },
   {
-    tokenAddress : '0x05cE0B29D94Cb8b156638D06336228b935212652',
+    tokenAddress : '0x8204Cfc5d4F773fD3F422d28AA494E9FA5680cc7',
     tokenName : "USD Tether",
     tokenSymbol : "USDT" ,
     logo : '../../../assets/usdt.svg'
@@ -221,12 +221,110 @@ export const tokenAddressess = [
     tokenSymbol : "BUSD",
     logo : '../../../assets/busd.svg'
 
-  },
+  }, 
+
+
+
   {
     tokenAddress : '0xA6565a4Cf2fB6631A30DfF3EAe2ebb534Acd2F4e',
     tokenName : "Dai Stablecoin",
     tokenSymbol : "DAI",
     logo : '../../../assets/dai.svg'
+  }   ,
 
-  }
+  {
+    tokenAddress : '0xda83AD4e50C0Ac341969C180887638250839BE10',
+    tokenName : "Pax Dollar",
+    tokenSymbol : "PUSD",
+    logo : '../../../assets/PUSD.svg'
+  }  ,
+
+  {
+    tokenAddress : '0xD992E6d765c28f0a8c56ACd3a2B5A6c66714a743',
+    tokenName : "Gemini Dollar",
+    tokenSymbol : "GUSD",
+    logo : '../../../assets/GUSD.svg'
+  }  ,
+
+  
+  {
+    tokenAddress : '0x3cb8008e33bb02BDdb0badc67454750e5BddF146',
+    tokenName : "Decentralized USD",
+    tokenSymbol : "USDD",
+    logo : '../../../assets/USDD.svg'
+  }  ,
+
+  {
+    tokenAddress : '0xF615F6837daBF7FDC536cdE6DaeB9CfBF1A458ad',
+    tokenName : "MindsyncAI",
+    tokenSymbol : "MAI",
+    logo : '../../../assets/logo_.svg'
+  }  ,
+
+  {
+    tokenAddress : '0x7394E875CC4776A66Ecd5F7BcDf75BbFdd7F5165',
+    tokenName : "xDAI",
+    tokenSymbol : "xDAI",
+    logo : '../../../assets/logo_.svg'
+  }  ,
+
+  
+  {
+    tokenAddress : '0xB4e46F1fb5af51A785aFac60f081F1473bD63781',
+    tokenName : "LUSD Stablecoin",
+    tokenSymbol : "LUSD",
+    logo : '../../../assets/logo_.svg'
+  }   ,
+
+  {
+    tokenAddress : '0xa866dF2d90368961c3eBB0415268985604799b16',
+    tokenName : "mStable USD",
+    tokenSymbol : "mUSD",
+    logo : '../../../assets/logo_.svg'
+  }  ,
+
+  {
+    tokenAddress : '0x562EBa9748eE888c3D7a63F63510ECFA8aFd3ea1',
+    tokenName : "Fei USD",
+    tokenSymbol : "FEI",
+    logo : '../../../assets/FEI.svg'
+  }  , 
+
+  {
+    tokenAddress : '0xfF37EC6c19EA8BD339e07857396bCa86109dA851',
+    tokenName : "Alchemix USD",
+    tokenSymbol : "alUSD",
+    logo : '../../../assets/logo_.svg'
+  }  , 
+
+  {
+    tokenAddress : '0x3AB7f2170DEf34dFF15aD14A4356ADfbB85B9d7C',
+    tokenName : "Frax",
+    tokenSymbol : "FRAX",
+    logo : '../../../assets/FRAX.svg'
+  }  , 
+
+  {
+    tokenAddress : '0x9DD1e94798f768bd7Ee06d4f4F0F3fB096492116',
+    tokenName : " CUSD",
+    tokenSymbol : "CUSD",
+    logo : '../../../assets/logo_.svg'
+  }  , 
+
+  
+
+  {
+    tokenAddress:"0x755c2a7e5429d53F5eE58F5Af41ECC66C4Eb0394",
+    tokenName:"Magic Internet Money",
+    tokenSymbol:"MIM",
+    logo :"../../../assets/MIM.svg"
+}
+ 
+ 
+ 
+  
+
+  
+  
+
 ]

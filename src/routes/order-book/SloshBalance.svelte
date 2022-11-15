@@ -5,7 +5,7 @@
 
     import { client } from "$src/stores";
     import { queryStore , gql } from "@urql/svelte"; 
-    import { signer , signerAddress } from "svelte-ethers-store";
+    import { provider , signer , signerAddress } from "svelte-ethers-store";
     import { BigNumber, ethers } from "ethers";
     import Ring from "$components/Ring.svelte"; 
     import orderABI from "./orderbookABI.json" 
@@ -41,7 +41,8 @@
                 orders(where : {id : $id , orderLive : true}){ 
                     interpreter
                     expression
-                    expiresAfter
+                    expiresAfter 
+                    transactionHash
                     owner
                     validInputs{
                         tokenVault{  
@@ -93,13 +94,13 @@
                     transactionHash
                 } 
             }`,
-        variables: {  id : params.wild }
+        variables: {  id : sloshId }
     });  
     
     $: if ($getOrder.data && $signerAddress ) {  
         let order_ = $getOrder.data.orders   
 
-        console.log("order_ : " , order_)
+        // console.log("order_ : " , order_)
         let inputArray = order_[0].validInputs  
     
         for(let i = 0 ; i <inputArray.length ; i++ ){ 
@@ -107,12 +108,14 @@
             tokenArray.push(inputArray[i].tokenVault.token.name)
         } 
 
-        console.log("tokenArray : " , tokenArray ) 
+        // console.log("tokenArray : " , tokenArray ) 
     } 
 
     $: if ($takeOrders.data && $signerAddress ) {  
 
-        takeOrders_ = $takeOrders.data.takeOrderEntities
+        takeOrders_ = $takeOrders.data.takeOrderEntities 
+        //  console.log("takeOrders_ : " , takeOrders_)
+
   
         for(let i = 0 ; i < takeOrders_.length ; i++){
             takeOrders_[i].input = ethers.utils.formatUnits(BigNumber.from(takeOrders_[i].input) , takeOrders_[i].inputToken.decimals) 
@@ -126,9 +129,43 @@
             ownerAddress = $signerAddress?.toLowerCase()
         }
 
-    const handleClick = async () =>{ 
+    const handleClick = async () =>{  
 
-        // let order_ = $getOrder.data.orders[0] 
+      
+
+        let order_ = $getOrder.data.orders[0]  
+
+        let tx  = await $provider.getTransactionReceipt(order_.transactionHash)  
+        let byteData = tx.logs.filter(e => {return e.topics[0] == '0x36fac280a8b9196e1c478d650789fb1990a00c847a726b7ea8a5d241853eb760' }) 
+        let data = await ethers.utils.defaultAbiCoder.decode([
+               "address","tuple(address,address,address,uint32,tuple(address,uint256)[],tuple(address,uint256)[])","uint256"] ,
+                 byteData[0].data)  
+
+        let IO = data[1][5].map(e => { 
+                    let vaultId = e[1].toString() 
+                    return{
+                        token : e[0] ,
+                        vaultId : vaultId
+                    }
+            })
+        console.log(IO)
+
+        let deleteOrderConfig  = { 
+            owner : order_.owner , 
+            interpreter:  order_.interpreter,
+            expression:order_.expression ,
+            expiresAfter: max_uint32,
+            validInputs: IO,
+            validOutputs: IO 
+        
+        }  
+
+        console.log("deleteOrderConfig : " , deleteOrderConfig ) 
+
+        const txAskRemoveOrder = await orderBookContract.removeOrder(deleteOrderConfig); 
+        let receipt = await txAskRemoveOrder.wait() 
+
+        console.log("receipt : " , receipt ) 
         // console.log("order_ validInputs  : " , order_ .validInputs) 
         // console.log("order_ validOutputs : " , order_ .validOutputs) 
 
@@ -144,22 +181,6 @@
         // IO = IO.reverse() 
         // console.log("IO : " , IO ) 
 
-        // let deleteOrderConfig  = { 
-        //     owner : order_.owner , 
-        //     interpreter:  order_.interpreter,
-        //     expression:order_.expression ,
-        //     expiresAfter: max_uint32,
-        //     validInputs: IO,
-        //     validOutputs: IO 
-        
-        // }  
-
-        // console.log("deleteOrderConfig : " , deleteOrderConfig ) 
-
-        // const txAskRemoveOrder = await orderBookContract.removeOrder(deleteOrderConfig); 
-        // let receipt = await txAskRemoveOrder.wait() 
-
-        // console.log("receipt : " , receipt ) 
 
 
 
@@ -223,7 +244,9 @@
                         <span class="font-semibold">What was sold</span>
                         <ul class="list-none"> 
                             {#each takeOrders_ as takeOrder_}
-                            <li class="leading-7">{takeOrder_.outputToken.name}  {takeOrder_.output}</li>
+                            <!-- <li class="leading-7">{takeOrder_.outputToken.id}  {takeOrder_.output}</li>  -->
+                            <li class="leading-7"><a href="https://mumbai.polygonscan.com/address/{takeOrder_.outputToken.id}">{takeOrder_.outputToken.id.substring(0,5)}...</a>  {takeOrder_.output}</li>
+
                             {/each}
                             
                         </ul>
@@ -232,7 +255,7 @@
                         <span class="font-semibold">What was bought</span>
                         <ul class="list-none">
                             {#each takeOrders_ as takeOrder_}
-                            <li class="leading-7">{takeOrder_.inputToken.name}  {takeOrder_.input}</li>
+                            <li class="leading-7"><a href="https://mumbai.polygonscan.com/address/{takeOrder_.inputToken.id}">{takeOrder_.inputToken.id.substring(0,5)}...</a>  {takeOrder_.input}</li>
                             {/each}
                         </ul>
                     </div>
