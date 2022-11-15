@@ -9,6 +9,7 @@
   import { addressValidate, required } from "$src/validation";
   import { ethers } from "ethers";
   import erc20ABI from "./erc20ABI.json" 
+    import { formatAddress } from "$src/utils";
 
   enum TxStatus {
     None,
@@ -158,27 +159,43 @@
       >
         <span slot="label">Enter the number of units to deposit:</span>
       </Input>
+      {#if calcPricePromise}
+        <div>
+          {#await calcPricePromise}
+            Getting price...
+          {:then result}
+            <div class="flex flex-row gap-x-3">
+              <span
+                >Amount: {formatUnits(result._units, vault_.token.decimals)}
+                {vault_.token.symbol}
+              </span>
+            </div>
+          {/await}
+        </div>
+      {/if}
 
-      <Button bRadius="rounded-full" variant="bg-orange-400" on:click={approve}>Approve Amount</Button>
+      <Button bRadius="rounded-full" variant="bg-orange-400" disabled={!priceConfirmed} on:click={approve}>Approve Amount</Button>
     {/if}
     {#if activeStep == DepositSteps.Confirm}
       <span>Confirm your deposit.</span>
-      <div class="flex flex-row gap-x-3">
-        {#if calcPricePromise}
-          <div>
-            {#await calcPricePromise}
-              Getting price...
-            {:then result}
-              <div class="flex flex-row gap-x-3">
-                <span
-                  >Amount: {formatUnits(result._units, vault_.token.decimals)}
-                  {vault_.token.symbol}
-                </span>
-              </div>
-            {/await}
-          </div>
-        {/if}
-      </div>
+      {#if calcPricePromise}
+        <div class="grid grid-cols-2 gap-4 rounded-md border border-gray-600 p-4">
+          {#await calcPricePromise}
+            Getting price...
+          {:then result}
+            <span>OrderBook Address:</span>
+            <span>{formatAddress(orderBookContract.address)}</span>
+
+            <span>Token Address:</span>
+            <span>{formatAddress(vault_.token.id)}</span>
+
+            <span>Amount:</span>
+            <span>{formatUnits(result._units, vault_.token.decimals)}
+              {vault_.token.symbol}
+            </span>
+          {/await}
+        </div>
+      {/if}
 
       <Button
         bRadius="rounded-full"

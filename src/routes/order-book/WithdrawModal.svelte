@@ -4,7 +4,6 @@
   import Steps from "$components/steps/Steps.svelte";
   import Ring from "$components/Ring.svelte";
   import { selectedNetwork } from "$src/stores";
-  import { RedeemableERC20ClaimEscrow } from "rain-sdk";
   import { signer } from "svelte-ethers-store";
   import { formatUnits, Logger, parseUnits } from "ethers/lib/utils";
   import { required } from "$src/validation";
@@ -136,7 +135,7 @@
       {/if}
     
       <span>Confirm your withdraw.</span>
-      <Button bRadius="rounded-full" variant="bg-orange-400" on:click={withdraw}>Confirm</Button>
+      <Button bRadius="rounded-full" variant="bg-orange-400" disabled={!priceConfirmed} on:click={withdraw}>Confirm</Button>
     {/if}
 
     {#if activeStep == WithdrawSteps.Complete}

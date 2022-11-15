@@ -1,7 +1,7 @@
 import { BigNumber, ethers } from "ethers";
 import type { BytesLike } from "ethers";
 import { concat, Hexable, hexlify, zeroPad } from "ethers/lib/utils";
-import { ERC20, ITierV2 } from "rain-sdk";
+// import { ERC20, ITierV2 } from "rain-sdk";
 
 export const getNewChildFromReceipt = (receipt, parentContract) => {
   return ethers.utils.defaultAbiCoder.decode(
@@ -166,40 +166,40 @@ export enum selectLteMode {
   first,
 }
 
-export const getERC20 = async (erc20Address, signer, signerAddress) => {
-  let erc20AddressError,
-    erc20Contract,
-    erc20name,
-    erc20symbol,
-    erc20balance,
-    erc20decimals,
-    erc20totalSupply;
+// export const getERC20 = async (erc20Address, signer, signerAddress) => {
+//   let erc20AddressError,
+//     erc20Contract,
+//     erc20name,
+//     erc20symbol,
+//     erc20balance,
+//     erc20decimals,
+//     erc20totalSupply;
 
-  if (ethers.utils.isAddress(erc20Address)) {
-    erc20AddressError = null;
-    erc20Contract = new ERC20(erc20Address, signer);
-    try {
-      erc20name = await erc20Contract.name();
-      erc20symbol = await erc20Contract.symbol();
-      erc20balance = await erc20Contract.balanceOf(signerAddress);
-      erc20decimals = await erc20Contract.decimals();
-      erc20totalSupply = await erc20Contract.totalSupply();
-      return {
-        erc20Contract,
-        erc20name,
-        erc20symbol,
-        erc20balance,
-        erc20decimals,
-        erc20AddressError,
-        erc20totalSupply,
-      };
-    } catch (error) {
-      erc20AddressError = "not a valid ERC20 token address";
-    }
-  } else {
-    erc20AddressError = "not a valid address";
-  }
-};
+//   if (ethers.utils.isAddress(erc20Address)) {
+//     erc20AddressError = null;
+//     erc20Contract = new ERC20(erc20Address, signer);
+//     try {
+//       erc20name = await erc20Contract.name();
+//       erc20symbol = await erc20Contract.symbol();
+//       erc20balance = await erc20Contract.balanceOf(signerAddress);
+//       erc20decimals = await erc20Contract.decimals();
+//       erc20totalSupply = await erc20Contract.totalSupply();
+//       return {
+//         erc20Contract,
+//         erc20name,
+//         erc20symbol,
+//         erc20balance,
+//         erc20decimals,
+//         erc20AddressError,
+//         erc20totalSupply,
+//       };
+//     } catch (error) {
+//       erc20AddressError = "not a valid ERC20 token address";
+//     }
+//   } else {
+//     erc20AddressError = "not a valid address";
+//   }
+// };
 
 export const validateFields = async (fields: any[]) => {
 
@@ -260,20 +260,20 @@ export const copyToClipboard = async (text) => {
   await navigator.clipboard.writeText(text)
 }
 
-export const isTier = async (tierAddress, signer, signerAddress) => {
-  let errorMsg = null;
-  if (ethers.utils.isAddress(tierAddress)) {
-    try {
-      const iTier = new ITierV2(tierAddress, signer)
-      await iTier.report(signerAddress, []);
-    }
-    catch (err) {
-      errorMsg = "Not a valid Tier Contract Address";
-    }
-  }
-  else {
-    errorMsg = "Not a valid Address";
-  }
-  return { errorMsg };
-}
+// export const isTier = async (tierAddress, signer, signerAddress) => {
+//   let errorMsg = null;
+//   if (ethers.utils.isAddress(tierAddress)) {
+//     try {
+//       const iTier = new ITierV2(tierAddress, signer)
+//       await iTier.report(signerAddress, []);
+//     }
+//     catch (err) {
+//       errorMsg = "Not a valid Tier Contract Address";
+//     }
+//   }
+//   else {
+//     errorMsg = "Not a valid Address";
+//   }
+//   return { errorMsg };
+// }
 
