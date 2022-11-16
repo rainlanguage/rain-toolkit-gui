@@ -33,7 +33,7 @@
     activeStep = WithdrawSteps.Confirm,
     txStatus = TxStatus.None,
     txReceipt,
-    priceConfirmed = PriceConfirmed.Pending,;
+    priceConfirmed = PriceConfirmed.Pending 
 
   const calculatePrice = async (amount) => {
     priceConfirmed = PriceConfirmed.Pending;

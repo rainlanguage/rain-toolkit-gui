@@ -203,9 +203,9 @@ export const networks = [{
 
 export const tokenAddressess = [
   {
-    tokenAddress : '0x3b55b7b2Eec07cf5F0634B130eFbb1A1e4eDEd0a',
+    tokenAddress : '0x29303cB73Ca33667cCB7A50A3e10A17a70460d34',
     tokenName : "USD Classic",
-    tokenSymbol : "USDCC", 
+    tokenSymbol : "USDC", 
     logo : '../../../assets/usdcc.svg'
   },
   {
@@ -216,8 +216,8 @@ export const tokenAddressess = [
 
   }, 
   {
-    tokenAddress : '0x333ed7DAD058090645Ccf59b33919B3d3295200C',
-    tokenName : "BUSD Token",
+    tokenAddress : '0x67696314fFD98ae763923C775173B6E8b24B7eFc',
+    tokenName : "Binance USD",
     tokenSymbol : "BUSD",
     logo : '../../../assets/busd.svg'
 
@@ -258,14 +258,14 @@ export const tokenAddressess = [
     tokenAddress : '0xF615F6837daBF7FDC536cdE6DaeB9CfBF1A458ad',
     tokenName : "MindsyncAI",
     tokenSymbol : "MAI",
-    logo : '../../../assets/logo_.svg'
+    logo : 'https://assets.coingecko.com/coins/images/7581/thumb/mindsync-logo.jpg?1548636745'
   }  ,
 
   {
-    tokenAddress : '0x7394E875CC4776A66Ecd5F7BcDf75BbFdd7F5165',
-    tokenName : "xDAI",
-    tokenSymbol : "xDAI",
-    logo : '../../../assets/logo_.svg'
+    tokenAddress : '0xD43d5D8F50F49e3C54fC634f8B96156e850E24Ce',
+    tokenName : "STAKE",
+    tokenSymbol : "STAKE",
+    logo : 'https://assets.coingecko.com/coins/images/11061/thumb/xdai.png?1587714165'
   }  ,
 
   
@@ -273,42 +273,42 @@ export const tokenAddressess = [
     tokenAddress : '0xB4e46F1fb5af51A785aFac60f081F1473bD63781',
     tokenName : "LUSD Stablecoin",
     tokenSymbol : "LUSD",
-    logo : '../../../assets/logo_.svg'
+    logo : 'https://assets.coingecko.com/coins/images/14666/thumb/Group_3.png?1617631327'
   }   ,
 
   {
     tokenAddress : '0xa866dF2d90368961c3eBB0415268985604799b16',
     tokenName : "mStable USD",
-    tokenSymbol : "mUSD",
-    logo : '../../../assets/logo_.svg'
+    tokenSymbol : "MUSD",
+    logo : 'https://assets.coingecko.com/coins/images/11576/thumb/mStable_USD.png?1595591803'
   }  ,
 
   {
     tokenAddress : '0x562EBa9748eE888c3D7a63F63510ECFA8aFd3ea1',
     tokenName : "Fei USD",
     tokenSymbol : "FEI",
-    logo : '../../../assets/FEI.svg'
+    logo : 'https://assets.coingecko.com/coins/images/14570/thumb/ZqsF51Re_400x400.png?1617082206'
   }  , 
 
   {
     tokenAddress : '0xfF37EC6c19EA8BD339e07857396bCa86109dA851',
     tokenName : "Alchemix USD",
-    tokenSymbol : "alUSD",
-    logo : '../../../assets/logo_.svg'
+    tokenSymbol : "ALUSD",
+    logo : 'https://assets.coingecko.com/coins/images/14114/thumb/Alchemix_USD.png?1614410406'
   }  , 
 
   {
     tokenAddress : '0x3AB7f2170DEf34dFF15aD14A4356ADfbB85B9d7C',
     tokenName : "Frax",
     tokenSymbol : "FRAX",
-    logo : '../../../assets/FRAX.svg'
+    logo : 'https://assets.coingecko.com/coins/images/13423/thumb/frax_share.png?1608478989'
   }  , 
 
   {
     tokenAddress : '0x9DD1e94798f768bd7Ee06d4f4F0F3fB096492116',
     tokenName : " CUSD",
     tokenSymbol : "CUSD",
-    logo : '../../../assets/logo_.svg'
+    logo : 'https://assets.coingecko.com/coins/images/11621/thumb/cUSDT.png?1592113270'
   }  , 
 
   
@@ -317,7 +317,14 @@ export const tokenAddressess = [
     tokenAddress:"0x755c2a7e5429d53F5eE58F5Af41ECC66C4Eb0394",
     tokenName:"Magic Internet Money",
     tokenSymbol:"MIM",
-    logo :"../../../assets/MIM.svg"
+    logo :"https://assets.coingecko.com/coins/images/15264/thumb/mimatic-red.png?162028101"
+} , 
+
+{
+  tokenAddress:"0x755c2a7e5429d53F5eE58F5Af41ECC66C4Eb0394",
+  tokenName:"TrueUSD",
+  tokenSymbol:"TUSD",
+  logo :"https://assets.coingecko.com/coins/images/3449/thumb/tusd.png?1618395665"
 }
  
  
