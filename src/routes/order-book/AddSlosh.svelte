@@ -21,7 +21,7 @@
     let checkedTokens = []
 
     $: if($signer){
-        orderBookContract = new ethers.Contract('0x75b4A6c9238A5206adBa189221B90ebbFe4ac248',orderABI , $signer )
+        orderBookContract = new ethers.Contract('0x7b60B0225e002577322FdE6b4288f3C13bd8FA8b',orderABI , $signer )
         console.log("order", orderBookContract);
     }
     
@@ -42,10 +42,8 @@ const addOrder = async () => {
     const askConstants = [max_uint256, askPrice ,max_uint32 ];
     const vAskOutputMax = op( Opcode.STATE,memoryOperand(MemoryType.Constant, 0));
     const vAskPrice = op(Opcode.STATE, memoryOperand(MemoryType.Constant, 1));
-    const vExpiresAfter = op(Opcode.STATE, memoryOperand(MemoryType.Constant, 2));
-    const ensure =op(Opcode.ENSURE, 1);
 
-    const askSource = concat([ vAskOutputMax,vAskPrice ,vExpiresAfter ,ensure ]);  
+    const askSource = concat([ vAskOutputMax,vAskPrice]);  
     let tokenInput = []
     let tokenOutput = [] 
     let randomNumber = params.wild // random number later can be changed . 
@@ -60,14 +58,13 @@ const addOrder = async () => {
     
     let askOrderConfig = { 
         interpreter: '0x19dd1aF639604544276353d14439eFC0AD3285E4',
-        expressionDeployer: '0x84E24EA1c545927D1515CBbB2E567Efe5248c322',
+        expressionDeployer: '0x6a199e376D0dc789E87E5f9ED6d303b63b259c91',
         validInputs: tokenInput,
         validOutputs: tokenOutput,
         interpreterStateConfig: {
         sources: [askSource],
         constants: askConstants,  
         }, 
-        expiresAfter: max_uint32,
     } 
 
     console.log("askOrderConfig : " , askOrderConfig )

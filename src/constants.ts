@@ -321,8 +321,8 @@ export const tokenAddressess = [
 } , 
 
 {
-  tokenAddress:"0x755c2a7e5429d53F5eE58F5Af41ECC66C4Eb0394",
-  tokenName:"TrueUSD",
+  tokenAddress:"0xfA933e866B2089D9DD019556D771f6A692c3fcb5",
+  tokenName:"True USD",
   tokenSymbol:"TUSD",
   logo :"https://assets.coingecko.com/coins/images/3449/thumb/tusd.png?1618395665"
 }

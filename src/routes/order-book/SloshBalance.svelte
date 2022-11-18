@@ -21,7 +21,7 @@
     let orderBookContract
 
     $: if($signer){
-        orderBookContract = new ethers.Contract('0x75b4A6c9238A5206adBa189221B90ebbFe4ac248',orderABI , $signer )
+        orderBookContract = new ethers.Contract('0x7b60B0225e002577322FdE6b4288f3C13bd8FA8b',orderABI , $signer )
         console.log("order", orderBookContract);
     }
 
@@ -41,7 +41,6 @@
                 orders(where : {id : $id , orderLive : true}){ 
                     interpreter
                     expression
-                    expiresAfter 
                     transactionHash
                     owner
                     validInputs{
@@ -136,25 +135,24 @@
         let order_ = $getOrder.data.orders[0]  
 
         let tx  = await $provider.getTransactionReceipt(order_.transactionHash)  
-        let byteData = tx.logs.filter(e => {return e.topics[0] == '0x36fac280a8b9196e1c478d650789fb1990a00c847a726b7ea8a5d241853eb760' }) 
+        let byteData = tx.logs.filter(e => {return e.topics[0] == '0xdf492703d86d52993d34aad33487d33a01a48dfe75334365699d82415badeeb9' }) 
         let data = await ethers.utils.defaultAbiCoder.decode([
-               "address","tuple(address,address,address,uint32,tuple(address,uint256)[],tuple(address,uint256)[])","uint256"] ,
-                 byteData[0].data)  
+               "address","tuple(address,address,address,tuple(address,uint256)[],tuple(address,uint256)[])","uint256"] ,
+                byteData[0].data)  
 
-        let IO = data[1][5].map(e => { 
-                    let vaultId = e[1].toString() 
-                    return{
-                        token : e[0] ,
-                        vaultId : vaultId
-                    }
-            })
+        let IO = data[1][4].map(e => { 
+            let vaultId = e[1].toString() 
+            return{
+                token : e[0] ,
+                vaultId : vaultId
+            }
+        })
         console.log(IO)
 
         let deleteOrderConfig  = { 
             owner : order_.owner , 
             interpreter:  order_.interpreter,
             expression:order_.expression ,
-            expiresAfter: max_uint32,
             validInputs: IO,
             validOutputs: IO 
         

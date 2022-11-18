@@ -20,10 +20,17 @@
   <div >
     <img src="./assets/Sloshy.png" alt="Slosh Logo" />
   </div> 
-  <div class="flex flex-row items-center pr-14 gap-x-14">
+  <div class="flex direction flex-row items-center pr-14 gap-x-14">
     <div>Trust Vaults</div>
     <div>How this works</div>
     <WalletConnect />
   </div>
 </div>
 </div>
+<style>
+  @media (max-width: 500px) { 
+    .direction{
+      flex-direction: column;
+    }
+  }
+</style>
