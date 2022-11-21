@@ -6,7 +6,8 @@ const config = {
   theme: {
     extend: {
       fontFamily: {
-        'mono': ['DM Mono', 'mono']
+        'mono': ['DM Mono', 'mono'],
+        'lobster' : ['Lobster']
       },
       colors: {
         gray: colors.neutral,

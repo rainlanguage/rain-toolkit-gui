@@ -44,8 +44,8 @@
 </script> 
 
 <div class="flex items-center justify-center">
-    <Section>
-        <div class="py-4 px-4">
+    <Section outerpB="pb-0" innerpB="pb-3">
+        <div class="pt-4 px-4">
             {#if $vaults.fetching}
                 <div class="p-4">
                     <Ring color="#1D4ED8" />
@@ -69,7 +69,7 @@
                         <!-- <span on:click={() =>{push(`/sloshbalance`)}}><IconLibrary icon="forward" width={14} /></span> -->
                     </div>
                     <div class="px-10">
-                        <div class="pb-10">
+                        <div class="pb-10 overflow-y-scroll max-h-72">
                             {#each vaultIds as id}
                                 <span class="flex flex-col leading-7 items-center underline hover:text-blue-500">
                                     <a href="/#/sloshes/{id}">{id}</a>
@@ -85,9 +85,9 @@
                             {/if}
                         </div> 
                     </div>
-                    <div class="px-6 pt-4">
-                        <div class="border-b border-gray-300" />
-                        <div class="flex pt-2 justify-center text-center"><span>
+                    <div class="border-b pt-4 border-gray-300" />
+                    <div class="px-6">
+                        <div class="flex pt-1 justify-center text-center"><span>
                             Make a vault to start Sloshing!
                         </span></div>
                     </div>
@@ -96,3 +96,14 @@
         </div>
     </Section>
 </div> 
+
+<style>
+    ::-webkit-scrollbar {
+        width: 2px;
+    }
+    /* ::-webkit-scrollbar-thumb {
+        background: #e5e5e5; 
+        border-radius: 10px;
+        
+    } */
+</style>

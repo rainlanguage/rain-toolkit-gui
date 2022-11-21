@@ -196,9 +196,12 @@
                     <div>
                         <div class="flex flex-col justify-center items-center pb-4">
                             <div class="font-semibold">Token</div>
-                            <ul class="list-none "> 
+                            <ul class="list-none overflow-y-scroll max-h-16"> 
                                 {#if tokenArray} 
                                     {#each tokenArray as token}
+                                        <li>{token}</li>
+                                        <li>{token}</li>
+                                        <li>{token}</li>
                                         <li>{token}</li>
                                     {/each}
                                 {/if}
@@ -211,13 +214,12 @@
                 <div class="w-full bg-gray-300 p-2  gap-x-4 px-6 my-4">
                     <div class="w-full text-sm flex justify-center items-center">Threshold : {threshold} %</div>
                 </div>
-                <div class="grid grid-cols-3 px-14 gap-x-6">
+                <div class="grid grid-cols-3 px-14 gap-x-6 overflow-y-scroll max-h-32">
                     <div class="flex flex-col gap-y-2">
                         <span class="font-semibold">History</span>
                         <ul class="list-none"> 
-
                             {#each takeOrders_ as takeOrder_}
-                            <li class="leading-7">{takeOrder_.transactionHash.substring(0,12)}...</li>
+                                <li class="leading-7">{takeOrder_.transactionHash.substring(0,12)}...</li>
                             {/each}
                             
                         </ul>
@@ -225,6 +227,13 @@
                     <div class="flex flex-col gap-y-2">
                         <span class="font-semibold">What was sold</span>
                         <ul class="list-none"> 
+                            <li class="leading-7">sdhfgjkfhdj...</li>
+                            <li class="leading-7">sdhfgjkfhdj...</li>
+                            <li class="leading-7">sdhfgjkfhdj...</li>
+                            <li class="leading-7">sdhfgjkfhdj...</li>
+                            <li class="leading-7">sdhfgjkfhdj...</li>
+                            <li class="leading-7">sdhfgjkfhdj...</li>
+                            <li class="leading-7">sdhfgjkfhdj...</li>
                             {#each takeOrders_ as takeOrder_}
                             <!-- <li class="leading-7">{takeOrder_.outputToken.id}  {takeOrder_.output}</li>  -->
                             <li class="leading-7"><a href="https://mumbai.polygonscan.com/address/{takeOrder_.outputToken.id}">{takeOrder_.outputToken.id.substring(0,5)}...</a>  {takeOrder_.output}</li>
@@ -249,9 +258,14 @@
             {/if}
         </div>
     </Section>
-    <div class="pt-6 pb-4 flex justify-center">
+    <!-- <div class="pt-6 pb-4 flex justify-center">
         <span class="font-semibold text-lg italic">How’s the liquidity. So much liquidity.</span>
-    </div>
+    </div> -->
 </div>  
 
 
+<style>
+    ::-webkit-scrollbar {
+        width: 2px;
+    }
+</style>

@@ -79,7 +79,7 @@ const addOrder = async () => {
     <Section>
     <div class="py-4">
         <div class="flex flex-col gap-y-2 px-4 pt-2 ">
-            <div class="flex justify-between pb-6">
+            <div class="flex justify-between pb-4">
                 <span class="cursor-pointer" on:click={() =>{history.back()}}><IconLibrary icon="back" width={14} /></span>
                 <div class="flex flex-col justify-center items-center pb-2">
                     <span class="font-semibold">Add Slosh</span>
@@ -88,20 +88,22 @@ const addOrder = async () => {
                 <div />
                 <!-- <span on:click={() =>{push(`/sloshbalance`)}}><IconLibrary icon="forward" width={14} /></span> -->
             </div>
-            {#each tokenAddressess as token, i}
-                <div class="grid items-stretch border border-orange-400 w-96 rounded-full ">
-                    <div class="grid grid-cols-2 items-center  px-10 py-3 border-orange-400"> 
-                        <span class="flex items-center gap-x-2">
-                            <img src={token.logo} alt="Rain Logo" class="w-7" />
-                            <span>{token.tokenName}</span>
-                        </span>
-                        <span class="flex justify-end"><Switch color="#22c55e" bind:checked={checkedTokens[i]} /></span>
+            <div class="grid overflow-y-scroll max-h-72 gap-y-2.5">
+                 {#each tokenAddressess as token, i}
+                    <div class="grid items-stretch border border-orange-400 w-96 rounded-full ">
+                        <div class="grid grid-cols-2 items-center  px-10 py-3 border-orange-400"> 
+                            <span class="flex items-center gap-x-2">
+                                <img src={token.logo} alt="Rain Logo" class="w-7" />
+                                <span>{token.tokenName}</span>
+                            </span>
+                            <span class="flex justify-end"><Switch color="#22c55e" bind:checked={checkedTokens[i]} /></span>
+                        </div>
                     </div>
-                </div>
-            {/each}      
+                {/each}
+            </div>    
         </div>
         <div class="w-full bg-gray-300 p-2 flex justify-center items-center gap-x-4 px-6 my-4">
-            <div class="w-full text-sm">Choose a threshold :</div>
+            <div class="w-full ">Choose a threshold :</div>
             <span class="flex items-center gap-x-2"><Input bgColor="bg-white" bind:value={thresholdVal} type="number" validator={required} bind:this={fields.tiers1} />%</span>
             
         </div>
@@ -115,3 +117,8 @@ const addOrder = async () => {
     </div>
     </Section>
 </div>
+<style>
+    ::-webkit-scrollbar {
+        width: 5px;
+    }
+</style>
