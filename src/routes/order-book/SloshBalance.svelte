@@ -200,9 +200,6 @@
                                 {#if tokenArray} 
                                     {#each tokenArray as token}
                                         <li>{token}</li>
-                                        <li>{token}</li>
-                                        <li>{token}</li>
-                                        <li>{token}</li>
                                     {/each}
                                 {/if}
                                 
@@ -227,13 +224,6 @@
                     <div class="flex flex-col gap-y-2">
                         <span class="font-semibold">What was sold</span>
                         <ul class="list-none"> 
-                            <li class="leading-7">sdhfgjkfhdj...</li>
-                            <li class="leading-7">sdhfgjkfhdj...</li>
-                            <li class="leading-7">sdhfgjkfhdj...</li>
-                            <li class="leading-7">sdhfgjkfhdj...</li>
-                            <li class="leading-7">sdhfgjkfhdj...</li>
-                            <li class="leading-7">sdhfgjkfhdj...</li>
-                            <li class="leading-7">sdhfgjkfhdj...</li>
                             {#each takeOrders_ as takeOrder_}
                             <!-- <li class="leading-7">{takeOrder_.outputToken.id}  {takeOrder_.output}</li>  -->
                             <li class="leading-7"><a href="https://mumbai.polygonscan.com/address/{takeOrder_.outputToken.id}">{takeOrder_.outputToken.id.substring(0,5)}...</a>  {takeOrder_.output}</li>
