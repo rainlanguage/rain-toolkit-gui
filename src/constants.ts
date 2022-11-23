@@ -206,20 +206,20 @@ export const tokenAddressess = [
     tokenAddress : '0x29303cB73Ca33667cCB7A50A3e10A17a70460d34',
     tokenName : "USD Classic",
     tokenSymbol : "USDC", 
-    logo : '../../../assets/usdcc.svg'
+    logo : 'https://assets.coingecko.com/coins/images/6319/thumb/USD_Coin_icon.png?1547042389'
   },
   {
     tokenAddress : '0x8204Cfc5d4F773fD3F422d28AA494E9FA5680cc7',
     tokenName : "USD Tether",
     tokenSymbol : "USDT" ,
-    logo : '../../../assets/usdt.svg'
+    logo : 'https://assets.coingecko.com/coins/images/325/thumb/Tether.png?1668148663'
 
   }, 
   {
     tokenAddress : '0x67696314fFD98ae763923C775173B6E8b24B7eFc',
     tokenName : "Binance USD",
     tokenSymbol : "BUSD",
-    logo : '../../../assets/busd.svg'
+    logo : 'https://assets.coingecko.com/coins/images/9576/thumb/BUSD.png?1568947766'
 
   }, 
 
@@ -229,21 +229,21 @@ export const tokenAddressess = [
     tokenAddress : '0xA6565a4Cf2fB6631A30DfF3EAe2ebb534Acd2F4e',
     tokenName : "Dai Stablecoin",
     tokenSymbol : "DAI",
-    logo : '../../../assets/dai.svg'
+    logo : 'https://assets.coingecko.com/coins/images/9956/thumb/4943.png?1636636734'
   }   ,
 
   {
     tokenAddress : '0xda83AD4e50C0Ac341969C180887638250839BE10',
     tokenName : "Pax Dollar",
     tokenSymbol : "PUSD",
-    logo : '../../../assets/PUSD.svg'
+    logo : 'https://assets.coingecko.com/coins/images/25858/thumb/PUSd.png?1654161232'
   }  ,
 
   {
     tokenAddress : '0xD992E6d765c28f0a8c56ACd3a2B5A6c66714a743',
     tokenName : "Gemini Dollar",
     tokenSymbol : "GUSD",
-    logo : '../../../assets/GUSD.svg'
+    logo : 'https://assets.coingecko.com/coins/images/5992/thumb/gemini-dollar-gusd.png?1536745278'
   }  ,
 
   
@@ -251,7 +251,7 @@ export const tokenAddressess = [
     tokenAddress : '0x3cb8008e33bb02BDdb0badc67454750e5BddF146',
     tokenName : "Decentralized USD",
     tokenSymbol : "USDD",
-    logo : '../../../assets/USDD.svg'
+    logo : 'https://assets.coingecko.com/coins/images/25380/thumb/UUSD.jpg?1651823371'
   }  ,
 
   {
