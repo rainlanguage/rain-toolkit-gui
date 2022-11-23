@@ -21,7 +21,7 @@
     let checkedTokens = []
 
     $: if($signer){
-        orderBookContract = new ethers.Contract('0x7b60B0225e002577322FdE6b4288f3C13bd8FA8b',orderABI , $signer )
+        orderBookContract = new ethers.Contract('0x7c61305d38643b29208b3b1ad587a8409bb51ec1',orderABI , $signer )
         console.log("order", orderBookContract);
     }
     
@@ -38,10 +38,15 @@ const addOrder = async () => {
 
     let askPrice = ethers.utils.parseEther(x.toString()) 
     
+    console.log("askPrice : " , askPrice)
 
-    const askConstants = [max_uint256, askPrice ,max_uint32 ];
-    const vAskOutputMax = op( Opcode.STATE,memoryOperand(MemoryType.Constant, 0));
-    const vAskPrice = op(Opcode.STATE, memoryOperand(MemoryType.Constant, 1));
+    const askConstants = [max_uint256, askPrice ]; 
+
+    const vAskOutputMax = op( Opcode.READ_MEMORY,memoryOperand(MemoryType.Constant, 0)); 
+    console.log("vAskOutputMax : " , vAskOutputMax ) 
+
+    const vAskPrice = op(Opcode.READ_MEMORY, memoryOperand(MemoryType.Constant, 1));
+    console.log("vAskPrice : " , vAskPrice )
 
     const askSource = concat([ vAskOutputMax,vAskPrice]);  
     let tokenInput = []
@@ -54,25 +59,29 @@ const addOrder = async () => {
             tokenInput.push({"token" : tokenAddressess[i].tokenAddress, "vaultId" : randomNumber})
             tokenOutput.push({"token" : tokenAddressess[i].tokenAddress, "vaultId" : randomNumber })
         }
-    }
+    } 
+
+    console.log("tokenInput : " , tokenInput)
+    console.log("tokenOutput : " , tokenOutput)
+
     
     let askOrderConfig = { 
-        interpreter: '0x19dd1aF639604544276353d14439eFC0AD3285E4',
-        expressionDeployer: '0x6a199e376D0dc789E87E5f9ED6d303b63b259c91',
+        expressionDeployer: '0x5C13ee05006364965093e827521118Ed269091a9',
+        interpreter: '0x856b7C73322Dd5F74163C0b9e7586197a1E4496F',
         validInputs: tokenInput,
         validOutputs: tokenOutput,
         interpreterStateConfig: {
-        sources: [askSource],
-        constants: askConstants,  
+            sources: [askSource , [] ],
+            constants: askConstants,  
         }, 
     } 
+    let  txAskOrderLive = await orderBookContract.addOrder(askOrderConfig );  
 
-    console.log("askOrderConfig : " , askOrderConfig )
-
-    console.log("askSource : " , askSource )
-
-    let  txAskOrderLive = await orderBookContract.addOrder(askOrderConfig); 
+    
     console.log("txAskOrderLive ")
+    console.log("askOrderConfig : " , askOrderConfig )
+    
+    console.log("askSource : " , askSource )
 }  
 </script>
 <div>

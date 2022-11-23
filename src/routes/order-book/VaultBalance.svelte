@@ -34,7 +34,7 @@
 
     $: if($signer) {
          ownerAddress = $signerAddress?.toLowerCase() 
-        orderBookContract = new ethers.Contract('0x7b60B0225e002577322FdE6b4288f3C13bd8FA8b',orderABI , $signer )
+        orderBookContract = new ethers.Contract('0x7c61305d38643b29208b3b1ad587a8409bb51ec1',orderABI , $signer )
 
     }
 

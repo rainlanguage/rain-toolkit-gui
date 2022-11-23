@@ -25,11 +25,15 @@
         query: `
             query ($owner: Bytes!, $vaultId: BigInt!) { 
 
-                tokenVaults(where: {owner: $owner , vaultId : $vaultId}){
-                    orders(where : {orderLive : true}){
-                        id
+                tokenVaults(where: {owner: $owner , vaultId : $vaultId }){
+                    orders(where: { orderLive : true , stateConfig_: {constants_contains: ["115792089237316195423570985008687907853269984665640564039457584007913129639935"]}}) {
+                       id   
+                       stateConfig{
+                         constants
+                         sources
+                       }
                     }
-                }
+               }  
             }`,
         variables: { owner : ownerAddress , vaultId : params.wild }
         
@@ -37,15 +41,33 @@
 
     $: if ($sloshes.data) {  
         let tokenVaultsArray = $sloshes.data.tokenVaults  
-        console.log("tokenVaultsArray : " , tokenVaultsArray )  
-        let orders_ = [] 
-        for(let i = 0 ; i < tokenVaultsArray.length ; i++ ){   
-            
-            orders_ = orders_.concat(tokenVaultsArray[i].orders)
-        } 
-        // console.log("orders : " , orders ) 
+        console.log("tokenVaultsArray : " , tokenVaultsArray )    
 
-        orders = orders_.map(e => {return e.id} ).filter(function(item,index ,arr){  return arr.indexOf(item) == index;  })
+        const filterOrder = async () => {  
+
+
+            let orders_ = []  
+
+            for(let i = 0 ; i < tokenVaultsArray.length ; i++ ){   
+                
+                orders_ = orders_.concat(tokenVaultsArray[i].orders)
+            } 
+            // console.log("orders : " , orders )  
+
+            let filteredArray = await Promise.all(orders_.map(async (e) => { 
+
+                console.log("e : " , e )
+
+            })) 
+
+            console.log(filteredArray)
+
+            orders = orders_.map(e => {return e.id} ).filter(function(item,index ,arr){  return arr.indexOf(item) == index;  })
+
+        }
+        filterOrder()
+
+       
 
     }
     const addSlosh = () =>{
