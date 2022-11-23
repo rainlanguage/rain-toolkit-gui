@@ -52,8 +52,7 @@
                 
                 orders_ = orders_.concat(tokenVaultsArray[i].orders)
             } 
-            // console.log("orders : " , orders )  
-
+           
             let filteredArray = await Promise.all(orders_.map(async (e) => { 
 
                 console.log("e : " , e )

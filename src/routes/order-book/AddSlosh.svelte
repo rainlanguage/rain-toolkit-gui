@@ -37,16 +37,10 @@ const addOrder = async () => {
     let x = 1 + ((1 * thresholdVal)/100) 
 
     let askPrice = ethers.utils.parseEther(x.toString()) 
-    
-    console.log("askPrice : " , askPrice)
-
     const askConstants = [max_uint256, askPrice ]; 
 
     const vAskOutputMax = op( Opcode.READ_MEMORY,memoryOperand(MemoryType.Constant, 0)); 
-    console.log("vAskOutputMax : " , vAskOutputMax ) 
-
     const vAskPrice = op(Opcode.READ_MEMORY, memoryOperand(MemoryType.Constant, 1));
-    console.log("vAskPrice : " , vAskPrice )
 
     const askSource = concat([ vAskOutputMax,vAskPrice]);  
     let tokenInput = []
@@ -60,9 +54,6 @@ const addOrder = async () => {
             tokenOutput.push({"token" : tokenAddressess[i].tokenAddress, "vaultId" : randomNumber })
         }
     } 
-
-    console.log("tokenInput : " , tokenInput)
-    console.log("tokenOutput : " , tokenOutput)
 
     
     let askOrderConfig = { 
@@ -78,8 +69,6 @@ const addOrder = async () => {
     let  txAskOrderLive = await orderBookContract.addOrder(askOrderConfig );  
 
     
-    console.log("txAskOrderLive ")
-    console.log("askOrderConfig : " , askOrderConfig )
     
     console.log("askSource : " , askSource )
 }  

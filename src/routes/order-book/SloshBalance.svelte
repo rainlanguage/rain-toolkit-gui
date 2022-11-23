@@ -40,8 +40,9 @@
             query ($id: Bytes!) { 
                  
                 orders(where : {id : $id , orderLive : true}){ 
-                    interpreter
-                    expression
+                    interpreter 
+                    dispatch
+    				handleIODispatch
                     transactionHash
                     owner
                     validInputs{
@@ -136,9 +137,9 @@
         let order_ = $getOrder.data.orders[0]  
 
         let tx  = await $provider.getTransactionReceipt(order_.transactionHash)  
-        let byteData = tx.logs.filter(e => {return e.topics[0] == '0xdf492703d86d52993d34aad33487d33a01a48dfe75334365699d82415badeeb9' }) 
+        let byteData = tx.logs.filter(e => {return e.topics[0] == '0xf78885f51d9a7bb8e5924562877609c44121ef6245bb6042a8613fb9d41c33fb' }) 
         let data = await ethers.utils.defaultAbiCoder.decode([
-               "address","tuple(address,address,address,tuple(address,uint256)[],tuple(address,uint256)[])","uint256"] ,
+               "address","tuple(address,address,uint256,uint256,tuple(address,uint256)[],tuple(address,uint256)[])","uint256"] ,
                 byteData[0].data)  
 
         let IO = data[1][4].map(e => { 
@@ -153,7 +154,8 @@
         let deleteOrderConfig  = { 
             owner : order_.owner , 
             interpreter:  order_.interpreter,
-            expression:order_.expression ,
+            dispatch:order_.dispatch ,
+            handleIODispatch:order_.handleIODispatch ,
             validInputs: IO,
             validOutputs: IO 
         
