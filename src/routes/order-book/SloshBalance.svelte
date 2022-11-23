@@ -132,8 +132,6 @@
 
     const handleClick = async () =>{  
 
-      
-
         let order_ = $getOrder.data.orders[0]  
 
         let tx  = await $provider.getTransactionReceipt(order_.transactionHash)  
