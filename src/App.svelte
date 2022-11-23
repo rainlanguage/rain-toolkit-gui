@@ -60,4 +60,7 @@
   @tailwind base;
   @tailwind components;
   @tailwind utilities;
+  main{
+    min-height: 74vh;
+  }
 </style>

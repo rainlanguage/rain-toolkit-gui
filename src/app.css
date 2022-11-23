@@ -7,8 +7,8 @@
 
 body {
     min-height: 100vh;
-    background: rgb(233,183,108);
-    background: linear-gradient(180deg, rgba(233,183,108,1) 0%, rgba(255,238,149,1) 100%);
+    background: rgb(242,182,94);
+    background: linear-gradient(180deg, rgba(242,182,94,1) 0%, rgba(255,236,134,1) 100%);
     /* @apply bg-gray-100; */
     font-family: 'DM Sans', sans-serif;
     @apply text-gray-800
@@ -23,4 +23,8 @@ body {
     -webkit-appearance: none;
     margin: 0;
   }
+}
+@font-face {
+  font-family: "Lobster";
+  src: url("../public/Lobster/Lobster.ttf");
 }

@@ -116,50 +116,60 @@
                         <div />
                     </div>
                     <div>
-                        <table class="table-fixed">
-                            <tr class="font-semibold ">
-                            <th class="text-left pb-2 w-52">Token</th>
-                            <th class="text-left pb-2 w-52">Vault Balances</th>
-                            <th class="w-52"/>
+                        <table class="table-auto block w-full">
+                            <tr class="font-semibold w-full">
+                                <th class="text-left pb-2 w-52">Token</th>
+                                <th class="text-left pb-2 w-52">Vault Balances</th>
+                                <th class="w-52"/>
                             </tr>  
-
-                            {#each vault as vault_}
-                            <tr class="gap-x-4">
-                                <td class="pr-6">{vault_.token.name}</td>
-                                <td class="pr-6">{vault_.balance}</td>
-                                <td class="py-2">
-                                    <div class="flex justify-between">
-                                        <div>
-                                            <Button small bRadius="rounded-full" variant="bg-orange-400" on:click={() => {
-                                                open(WithdrawModal, {vault_, orderBookContract})
-                                                // withdraw(vault_.token.id)
-                                            }}>Withdraw</Button>
-                                        </div>
-                                        <div><Button small bRadius="rounded-full" variant="bg-orange-400" on:click={() => {
-                                            open(DepositModal, {vault_, orderBookContract})
-                                        }}>Deposit</Button></div>
-                                            <!-- // deposit(vault_.token.id) -->
-                                    </div>
-                                </td>
-                            </tr> 
-                            {/each}
-
+                            <tbody class="overflow-y-scroll max-h-40 w-full inline-block">
+                                {#each vault as vault_}
+                                    <tr class="gap-x-4 flex w-full items-center">
+                                        <td class="pr-6 w-1/4">{vault_.token.name}</td>
+                                        <td class="pr-6 flex justify-center" style="width: 38%;">{vault_.balance}</td>
+                                        <td class="py-1" style="width: 37%;">
+                                            <div class="flex justify-between">
+                                                <div>
+                                                    <Button small bRadius="rounded-full" variant="bg-orange-400" on:click={() => {
+                                                        open(WithdrawModal, {vault_, orderBookContract})
+                                                        // withdraw(vault_.token.id)
+                                                    }}>Withdraw</Button>
+                                                </div>
+                                                <div><Button small bRadius="rounded-full" variant="bg-orange-400" on:click={() => {
+                                                    open(DepositModal, {vault_, orderBookContract})
+                                                }}>Deposit</Button></div>
+                                                    <!-- // deposit(vault_.token.id) -->
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {/each}
+                            </tbody>
                             
                         </table>
                     </div>
                 </div>
                 <div class="flex flex-col justify-center items-center pt-6 gap-y-2">
                     <div class="font-semibold">Sloshes</div>
-                    <ul class="list-none "> 
+                    <ul class="list-none overflow-y-scroll max-h-36"> 
                         {#each orders as order}
-                        <li class="leading-8"> <a class="items-center underline hover:text-blue-500" href="/#/sloshbalance/{vault[0].vaultId}/{order}">{order}</a></li>
+                            <li class="leading-8"> 
+                                <a class="items-center underline hover:text-blue-500" href="/#/sloshbalance/{vault[0].vaultId}/{order}">
+                                    {order.substring(0,20)}...
+                                </a>
+                            </li>
                         {/each}
                     </ul>
                 </div>
             {/if}
         </div>
     </Section>
-    <div class="pt-6 pb-4 flex justify-center">
+    <!-- <div class="pt-6 pb-4 flex justify-center">
         <span class="font-semibold text-lg italic">How’s the liquidity. So much liquidity.</span>
-    </div>
+    </div> -->
 </div> 
+
+<style>
+    ::-webkit-scrollbar {
+        width: 2px;
+    }
+</style>
