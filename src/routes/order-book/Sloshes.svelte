@@ -5,9 +5,11 @@
     import { signer , signerAddress } from "svelte-ethers-store";
     import Ring from "$components/Ring.svelte";
     import {tokenAddressess } from "$src/constants"   
+    import { ethers } from "ethers";
 
     import { client } from "$src/stores";
     import { queryStore , gql } from "@urql/svelte";
+    import { max_uint256, ONE  } from "./opcodes";
 
     export let params: {
         wild: string;
@@ -53,15 +55,17 @@
                 orders_ = orders_.concat(tokenVaultsArray[i].orders)
             } 
            
-            let filteredArray = await Promise.all(orders_.map(async (e) => { 
-
-                console.log("e : " , e )
-
-            })) 
+            let filteredArray = orders_.filter( (e) =>  { 
+                if(e.stateConfig.constants.length == 2 && e.stateConfig.constants[0] == max_uint256.toString() && ethers.BigNumber.from(e.stateConfig.constants[1]).gte(ONE) ){                     
+                    return true
+                }
+                    return false
+               
+            })
 
             console.log(filteredArray)
 
-            orders = orders_.map(e => {return e.id} ).filter(function(item,index ,arr){  return arr.indexOf(item) == index;  })
+            orders = filteredArray.map(e => {return e.id} ).filter(function(item,index ,arr){  return arr.indexOf(item) == index;  })
 
         }
         filterOrder()
