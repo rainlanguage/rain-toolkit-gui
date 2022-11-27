@@ -14,6 +14,7 @@
   import VaultBalance from "$routes/order-book/VaultBalance.svelte";
   import Sloshes from "$routes/order-book/Sloshes.svelte";
   import Vaults from "$routes/order-book/Vaults.svelte";
+    import AddLimitOrder from "$routes/order-book/AddLimitOrder.svelte";
    
   let routes = {};
 
@@ -28,6 +29,7 @@
     "/addslosh/*": AddSlosh,
     "/sloshbalance/*": SloshBalance,
     "/vaultbalance/*": VaultBalance,
+    "/place-order": AddLimitOrder,
 
     // Catch-all
     // This is optional, but if present it must be the last

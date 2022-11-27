@@ -13,6 +13,11 @@ export default defineConfig({
       'scrypt-js',
       'bech32'
     ]
+  }, 
+  define: {
+    "global": {}, 
+    'process.env': {} 
+  
   },
   plugins: [svelte()],
   resolve: {

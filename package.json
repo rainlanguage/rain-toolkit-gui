@@ -10,6 +10,8 @@
     "check": "svelte-check --tsconfig ./tsconfig.json"
   },
   "devDependencies": {
+    "@esbuild-plugins/node-globals-polyfill": "^0.1.1",
+    "@esbuild-plugins/node-modules-polyfill": "^0.1.4",
     "@sveltejs/vite-plugin-svelte": "^1.0.1",
     "@tsconfig/svelte": "^3.0.0",
     "autoprefixer": "^10.4.7",
@@ -26,6 +28,11 @@
     "vite": "^3.0.0"
   },
   "dependencies": {
+    "@0x/contract-wrappers": "^13.22.12",
+    "@0x/protocol-utils": "^11.17.2",
+    "@0x/subproviders": "^7.0.0",
+    "@0x/utils": "^7.0.0",
+    "@0x/web3-wrapper": "^8.0.0",
     "@formkit/auto-animate": "^1.0.0-beta.1",
     "@metamask/jazzicon": "^2.0.0",
     "@urql/svelte": "^2.0.2",
