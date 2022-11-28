@@ -174,7 +174,7 @@
     <Section>
         <div class="py-4">
             {#if $getOrder.fetching}
-                <div class="p-8">
+                <div class="p-8 text-black">
                     <Ring color="#1D4ED8" />
                     <div>Loading...</div>
                 </div>
@@ -186,65 +186,64 @@
             {:else}
                 <div class="flex flex-col gap-y-2 px-4 pt-2 ">
                     <div class="flex justify-between">
-                        <span class="cursor-pointer pl-8" on:click={() =>{history.back()}} ><IconLibrary icon="back" width={14} /></span>
+                        <span class="cursor-pointer pl-8 text-black" on:click={() =>{history.back()}} ><IconLibrary icon="back" width={14} /></span>
                         <div class="flex flex-col justify-center items-center pb-2">
-                            <span class="font-semibold">Slosh Balances</span>
-                            <span class="font-normal">({sloshId.substring(0,20)}...)</span>
+                            <span class="font-semibold text-black mr-5">Slosh Balances</span>
+                            <span class="font-normal text-gray-700 mr-5">({sloshId.substring(0,20)}...)</span>
                         </div>
                         <div />
                         <!-- <span on:click={() =>{push(`/vaultbalance`)}} class="pl-8"><IconLibrary icon="back" width={14} /></span> -->
                     </div>
                     <div>
                         <div class="flex flex-col justify-center items-center pb-4">
-                            <div class="font-semibold">Token</div>
+                            <div class="font-semibold text-black">Token</div>
                             <ul class="list-none overflow-y-scroll max-h-16"> 
                                 {#if tokenArray} 
                                     {#each tokenArray as token}
-                                        <li>{token}</li>
+                                        <li class="text-gray-700">{token}</li>
                                     {/each}
                                 {/if}
-                                
                             </ul>
                         </div>
-                        <div class="pl-8">Vault: <a class="items-center underline hover:text-blue-500" href="/#/vaultbalance/{vaultId}">{vaultId.substring(0,15)}</a></div>
+                        <div class="pl-8 text-black">Vault: <a class="items-center underline hover:text-blue-500" href="/#/vaultbalance/{vaultId}">{vaultId.substring(0,15)}</a></div>
                     </div>
                 </div>
-                <div class="w-full bg-gray-300 p-2  gap-x-4 px-6 my-4">
-                    <div class="w-full text-sm flex justify-center items-center">Threshold : {threshold} %</div>
+                <div class="w-full bg-gray-200 p-2  gap-x-4 px-6 my-4">
+                    <div class="w-full text-sm flex justify-center items-center text-black font-medium">Threshold : {threshold} %</div>
                 </div>
                 <div class="grid grid-cols-3 px-14 gap-x-6 overflow-y-scroll max-h-32">
                     <div class="flex flex-col gap-y-2">
-                        <span class="font-semibold">History</span>
+                        <span class="font-semibold text-black">History</span>
                         <ul class="list-none"> 
                             {#each takeOrders_ as takeOrder_}
-                                <li class="leading-7">{takeOrder_.transactionHash.substring(0,12)}...</li>
+                                <li class="leading-7 text-gray-700">{takeOrder_.transactionHash.substring(0,12)}...</li>
                             {/each}
                             
                         </ul>
                     </div>
                     <div class="flex flex-col gap-y-2">
-                        <span class="font-semibold">What was sold</span>
+                        <span class="font-semibold text-black">What was sold</span>
                         <ul class="list-none"> 
                             {#each takeOrders_ as takeOrder_}
                             <!-- <li class="leading-7">{takeOrder_.outputToken.id}  {takeOrder_.output}</li>  -->
-                            <li class="leading-7"><a href="https://mumbai.polygonscan.com/address/{takeOrder_.outputToken.id}">{takeOrder_.outputToken.id.substring(0,5)}...</a>  {takeOrder_.output}</li>
+                            <li class="leading-7 text-gray-700"><a href="https://mumbai.polygonscan.com/address/{takeOrder_.outputToken.id}">{takeOrder_.outputToken.id.substring(0,5)}...</a>  {takeOrder_.output}</li>
 
                             {/each}
                             
                         </ul>
                     </div>
                     <div class="flex flex-col gap-y-2">
-                        <span class="font-semibold">What was bought</span>
+                        <span class="font-semibold text-black">What was bought</span>
                         <ul class="list-none">
                             {#each takeOrders_ as takeOrder_}
-                            <li class="leading-7"><a href="https://mumbai.polygonscan.com/address/{takeOrder_.inputToken.id}">{takeOrder_.inputToken.id.substring(0,5)}...</a>  {takeOrder_.input}</li>
+                            <li class="leading-7 text-gray-700"><a href="https://mumbai.polygonscan.com/address/{takeOrder_.inputToken.id}">{takeOrder_.inputToken.id.substring(0,5)}...</a>  {takeOrder_.input}</li>
                             {/each}
                         </ul>
                     </div>
             
                 </div>
                 <span class="grid justify-end px-6 pt-8">
-                    <Button variant="bg-gray-300" tColor="text-black" on:click={handleClick}>Deactivate Slosh</Button>
+                    <button class="w-full transition-colors text-base leading-none py-2 px-5 bg-gray-300 text-black rounded-lg" on:click={handleClick}>Deactivate Slosh</button>
                 </span>
             {/if}
         </div>

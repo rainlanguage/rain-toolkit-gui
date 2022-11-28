@@ -18,11 +18,12 @@
 <div class="container flex flex-wrap justify-between items-center mx-auto">
   
   <div >
-    <img src="./assets/Sloshy.png" alt="Slosh Logo" />
+    <!-- <img src="./assets/Sloshy.png" alt="Slosh Logo" /> -->
+    <span class="font-lobster text-4xl pl-16">Sloshy</span>
   </div> 
   <div class="flex direction flex-row items-center pr-14 gap-x-14">
-    <div>Trust Vaults</div>
-    <div>How this works</div>
+    <div class="font-semibold">Trust Vaults</div>
+    <div class="font-semibold">How this works</div>
     <WalletConnect />
   </div>
 </div>

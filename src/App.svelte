@@ -4,7 +4,7 @@
   import Sidebar from "./layout/Sidebar.svelte";
   import Footer from "./layout/Footer.svelte";
 
-  import { signer } from "svelte-ethers-store";
+  import { signer, signerAddress } from "svelte-ethers-store";
   import Router from "svelte-spa-router";
   import Modal from "svelte-simple-modal";
     
@@ -14,6 +14,8 @@
   import VaultBalance from "$routes/order-book/VaultBalance.svelte";
   import Sloshes from "$routes/order-book/Sloshes.svelte";
   import Vaults from "$routes/order-book/Vaults.svelte";
+  import WalletConnect from "$components/wallet-connect/WalletConnect.svelte";
+    import Orderbook from "$routes/order-book/Orderbook.svelte";
    
   let routes = {};
 
@@ -21,9 +23,9 @@
 
     "/address-library": AddressLibrary,
 
-    "/": Vaults,
+    "/": Orderbook,
     // "/addvault" : Sloshes,
-    // "/vaults" : Sloshes,
+    "/vaults" : Vaults,
     "/sloshes/*" : Sloshes,
     "/addslosh/*": AddSlosh,
     "/sloshbalance/*": SloshBalance,
@@ -43,12 +45,19 @@
   classWindowWrap="relative m-2 max-h-full flex flex-col"
   classContent="p-6"
 >
-<Header />
-<main class="relative flex">
-    <div class="w-full">
-        <Router {routes} />
-    </div>
-  </main>
+  <Header />
+    <main class="relative flex font-light text-gray-50">
+      <div class="w-full py-5 px-8">
+        {#if $signerAddress}
+          <Router {routes} />
+        {:else}
+          <div class="flex flex-col justify-center items-center h-full">
+            <span class="text-xl font-semibold text-black">To use the app:</span>
+            <WalletConnect page={true}/>
+          </div>
+        {/if}
+      </div>
+    </main>
   <Footer />
 </Modal>
 
@@ -62,5 +71,9 @@
   @tailwind utilities;
   main{
     min-height: 74vh;
+    background-image: url("/assets/background.svg");
+    /* background-position: center; */
+    background-repeat: no-repeat;
+    background-size: cover;
   }
 </style>

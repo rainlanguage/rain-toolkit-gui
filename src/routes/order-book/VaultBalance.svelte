@@ -108,36 +108,36 @@
             {:else}
                 <div class="flex flex-col gap-y-2 px-4 pt-2 ">
                     <div class="flex justify-between">
-                        <span class="cursor-pointer" on:click={() =>{history.back()}}><IconLibrary icon="back" width={14} /></span>
+                        <span class="cursor-pointer text-black" on:click={() =>{history.back()}}><IconLibrary icon="back" width={14} /></span>
                         <div class="flex flex-col justify-center items-center pb-2">
-                            <span class="font-semibold">Vault Balances</span>
-                            <span class="font-normal">({vault[0].vaultId})</span>
+                            <span class="font-semibold text-black mr-5">Vault Balances</span>
+                            <span class="font-normal text-gray-700 mr-5">({vault[0].vaultId})</span>
                         </div>
                         <div />
                     </div>
                     <div>
                         <table class="table-auto block w-full">
                             <tr class="font-semibold w-full">
-                                <th class="text-left pb-2 w-52">Token</th>
-                                <th class="text-left pb-2 w-52">Vault Balances</th>
+                                <th class="text-left pb-2 w-52 text-black">Token</th>
+                                <th class="text-left pb-2 w-52 text-black">Vault Balances</th>
                                 <th class="w-52"/>
                             </tr>  
                             <tbody class="overflow-y-scroll max-h-40 w-full inline-block">
                                 {#each vault as vault_}
                                     <tr class="gap-x-4 flex w-full items-center">
-                                        <td class="pr-6 w-1/4">{vault_.token.name}</td>
-                                        <td class="pr-6 flex justify-center" style="width: 38%;">{vault_.balance}</td>
+                                        <td class="pr-6 w-1/4 text-gray-700">{vault_.token.name}</td>
+                                        <td class="pr-6 flex justify-center text-gray-700" style="width: 38%;">{vault_.balance}</td>
                                         <td class="py-1" style="width: 37%;">
                                             <div class="flex justify-between">
                                                 <div>
-                                                    <Button small bRadius="rounded-full" variant="bg-orange-400" on:click={() => {
+                                                    <button class="transition-colors text-sm leading-none py-1 px-5 rounded-full text-black" style="background-color: #FDB142;" on:click={() => {
                                                         open(WithdrawModal, {vault_, orderBookContract})
                                                         // withdraw(vault_.token.id)
-                                                    }}>Withdraw</Button>
+                                                    }}>Withdraw</button>
                                                 </div>
-                                                <div><Button small bRadius="rounded-full" variant="bg-orange-400" on:click={() => {
+                                                <div><button class="transition-colors text-sm leading-none py-1 px-5 rounded-full text-black" style="background-color: #FDB142;" on:click={() => {
                                                     open(DepositModal, {vault_, orderBookContract})
-                                                }}>Deposit</Button></div>
+                                                }}>Deposit</button></div>
                                                     <!-- // deposit(vault_.token.id) -->
                                             </div>
                                         </td>
@@ -149,10 +149,10 @@
                     </div>
                 </div>
                 <div class="flex flex-col justify-center items-center pt-6 gap-y-2">
-                    <div class="font-semibold">Sloshes</div>
+                    <div class="font-semibold text-black">Sloshes</div>
                     <ul class="list-none overflow-y-scroll max-h-36"> 
                         {#each orders as order}
-                            <li class="leading-8"> 
+                            <li class="leading-8 text-gray-700"> 
                                 <a class="items-center underline hover:text-blue-500" href="/#/sloshbalance/{vault[0].vaultId}/{order}">
                                     {order.substring(0,20)}...
                                 </a>

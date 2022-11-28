@@ -53,9 +53,4 @@
     items={networks}
     on:change={handleClick}
   />
-
-  <!-- <button
-    class="rounded-md border-none bg-gray-700 px-4 py-2 text-gray-200"
-    on:click={handleClick}>Connect</button
-  > -->
 </div>

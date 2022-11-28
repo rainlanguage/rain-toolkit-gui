@@ -85,19 +85,19 @@
             {#if $sloshes.fetching}
                 <div class="p-4">
                     <Ring color="#1D4ED8" />
-                    <div>Loading...</div>
+                    <div class=" text-black">Loading...</div>
                 </div>
             {:else if $sloshes.error}
-                <div class="text-red-400 font-medium text-xl px-4 py-4">
+                <div class="text-red-400 font-medium text-xl px-4 py-4 ">
                     Please connect your wallet<br />
                     to get vault Ids
                 </div>
             {:else}
                 <div class="flex flex-col gap-y-2 px-2 pt-2 ">
                     <div class="flex justify-between pb-6">
-                        <span class="cursor-pointer" on:click={() =>{history.back()}}><IconLibrary icon="back" width={14} /></span>
+                        <span class="cursor-pointer  text-black" on:click={() =>{history.back()}}><IconLibrary icon="back" width={14} /></span>
                         <div class="flex flex-col justify-center items-center pb-2">
-                            <span class="font-semibold">Sloshes</span>
+                            <span class="font-semibold text-black mr-5">Sloshes</span>
                             <!-- <span class="font-normal">(Ox2413fb3709b0...)</span> -->
                         </div>
                         <span />
@@ -106,7 +106,7 @@
                     <div class="px-10">
                         <div class="pb-10 overflow-y-scroll max-h-72">
                             {#each orders as order}
-                                <span class="flex flex-col leading-7 items-center underline hover:text-blue-500">
+                                <span class="flex flex-col leading-7 items-center underline hover:text-blue-500 text-black">
                                     <a href="/#/sloshbalance/{params.wild}/{order}">
                                         {order.substring(0,16)}...
                                     </a>
@@ -114,9 +114,9 @@
                             {/each}
                         </div>
 
-                        <div class="w-full flex px-6 justify-center">
+                        <div class="w-full flex px-2 justify-center">
                             {#if $signer}
-                                <button class="bg-orange-400 w-full rounded-full text-base py-3 px-5 text-black" disabled={!$signer} on:click={addSlosh}>Add a Slosh</button>
+                                <button class="w-full rounded-full text-base py-3 px-28 text-black" style="background-color: #FDB142;" disabled={!$signer} on:click={addSlosh}>Add a Slosh</button>
                             {:else}  
                                 <span class="">Please connect your wallet</span>
                             {/if}
@@ -124,7 +124,7 @@
                     </div>
                     <div class="border-b pt-4 border-gray-300" />
                     <div class="px-6 ">
-                        <div class="flex pt-1 justify-center text-center"><span>
+                        <div class="flex pt-1 justify-center text-center text-black"><span>
                             Sloshes are the things that make the tokens <br />
                             move between each other.
                         </span></div>

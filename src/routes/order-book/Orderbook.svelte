@@ -1,12 +1,20 @@
 <script lang="ts">
-    import Tab from "$components/tabs/Tab.svelte";
-    import TabList from "$components/tabs/TabList.svelte";
-    import TabPanel from "$components/tabs/TabPanel.svelte";
-    import Tabs from "$components/tabs/Tabs.svelte";
-    import Auction from "./Auction.svelte";
-    import AddSlosh from "./AddSlosh.svelte";
-    import SloshBalance from "./SloshBalance.svelte";
-    import VaultBalance from "./VaultBalance.svelte";
+    // import Tab from "$components/tabs/Tab.svelte";
+    // import TabList from "$components/tabs/TabList.svelte";
+    // import TabPanel from "$components/tabs/TabPanel.svelte";
+    // import Tabs from "$components/tabs/Tabs.svelte";
+    // import Auction from "./Auction.svelte";
+    // import AddSlosh from "./AddSlosh.svelte";
+    // import SloshBalance from "./SloshBalance.svelte";
+    // import VaultBalance from "./VaultBalance.svelte";
+
+    import { signerAddress } from 'svelte-ethers-store'
+    import { push } from "svelte-spa-router";
+    $: if($signerAddress){
+        console.log("signer", $signerAddress);
+        
+        push(`/vaults`) 
+    }
 
 </script>
 <div>

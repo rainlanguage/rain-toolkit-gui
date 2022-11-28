@@ -75,24 +75,24 @@ const addOrder = async () => {
 </script>
 <div>
     <Section>
-    <div class="py-4">
+    <div class="pt-4">
         <div class="flex flex-col gap-y-2 px-4 pt-2 ">
             <div class="flex justify-between pb-4">
-                <span class="cursor-pointer" on:click={() =>{history.back()}}><IconLibrary icon="back" width={14} /></span>
+                <span class="cursor-pointer text-black" on:click={() =>{history.back()}}><IconLibrary icon="back" width={14} /></span>
                 <div class="flex flex-col justify-center items-center pb-2">
-                    <span class="font-semibold">Add Slosh</span>
+                    <span class="font-semibold text-black mr-5">Add Slosh</span>
                     <!-- <span class="font-normal">(Ox2413fb3709b0...)</span> -->
                 </div>
                 <div />
                 <!-- <span on:click={() =>{push(`/sloshbalance`)}}><IconLibrary icon="forward" width={14} /></span> -->
             </div>
-            <div class="grid overflow-y-scroll max-h-72 gap-y-2.5">
+            <div class="grid overflow-y-scroll ht gap-y-2.5">
                  {#each tokenAddressess as token, i}
                     <div class="grid items-stretch border border-orange-400 w-96 rounded-full ">
-                        <div class="grid grid-cols-2 items-center  px-10 py-3 border-orange-400"> 
+                        <div class="grid grid-cols-2 items-center px-10 py-3 border-orange-400"> 
                             <span class="flex items-center gap-x-2">
-                                <img src={token.logo} alt="Rain Logo" class="w-7" />
-                                <span>{token.tokenName}</span>
+                                <img src={token.logo} alt="Rain Logo" class="w-5" />
+                                <span class=" text-black">{token.tokenName}</span>
                             </span>
                             <span class="flex justify-end"><Switch color="#22c55e" bind:checked={checkedTokens[i]} /></span>
                         </div>
@@ -101,13 +101,13 @@ const addOrder = async () => {
             </div>    
         </div>
         <div class="w-full bg-gray-300 p-2 flex justify-center items-center gap-x-4 px-6 my-4">
-            <div class="w-full ">Choose a threshold :</div>
-            <span class="flex items-center gap-x-2"><Input bgColor="bg-white" bind:value={thresholdVal} type="number" validator={required} bind:this={fields.tiers1} />%</span>
+            <div class="w-full text-black">Choose a threshold :</div>
+            <span class="flex items-center gap-x-2 text-black"><Input bgColor="bg-white" bind:value={thresholdVal} type="number" validator={required} bind:this={fields.tiers1} />%</span>
             
         </div>
         <div class="w-full flex px-4 justify-center">
             {#if $signer}
-                <button class="bg-orange-400 w-full rounded-full text-base py-3 px-5 text-black" disabled={!$signer} on:click={handleClick}>Ok</button>
+                <button class="w-full rounded-full text-base py-3 px-5 text-black" style="background-color: #FDB142;" disabled={!$signer} on:click={handleClick}>Ok</button>
             {:else}  
                 <span class="">Please connect your wallet</span>
             {/if}
@@ -118,5 +118,8 @@ const addOrder = async () => {
 <style>
     ::-webkit-scrollbar {
         width: 5px;
+    }
+    .ht{
+        max-height: 17rem;
     }
 </style>

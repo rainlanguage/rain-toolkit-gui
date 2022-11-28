@@ -11,7 +11,7 @@
     let vaultIds 
     
     $: if($signer) {
-         ownerAddress = $signerAddress?.toLowerCase()
+        ownerAddress = $signerAddress?.toLowerCase()
     }
 
     $: vaults = queryStore({
@@ -29,8 +29,6 @@
     $: data = $vaults.data; 
 
     $: if (data ) {  
-
-        
         vaultIds = data.tokenVaults.map(e => {return e.vaultId} ).filter(function(item,index ,arr){  return arr.indexOf(item) == index;  })  
         console.log(vaultIds)
 
@@ -43,13 +41,13 @@
     }
 </script> 
 
-<div class="flex items-center justify-center">
+<div class="flex items-center justify-center pt-14">
     <Section outerpB="pb-0" innerpB="pb-3">
         <div class="pt-4 px-4">
             {#if $vaults.fetching}
-                <div class="p-4">
+                <div class="p-4 ">
                     <Ring color="#1D4ED8" />
-                    <div>Loading...</div>
+                    <div class=" text-black">Loading...</div>
                 </div>
             {:else if $vaults.error}
                 <div class="text-red-400 font-medium text-xl px-4 py-4">
@@ -62,7 +60,7 @@
                         <span />
                         <!-- <span on:click={() =>{push(`/sloshes`)}}><IconLibrary icon="back" width={14} /></span> -->
                         <div class="flex flex-col justify-center items-center pb-2">
-                            <span class="font-semibold">Vaults</span>
+                            <span class="font-semibold text-black">Vaults</span>
                             <!-- <span class="font-normal">(Ox2413fb3709b0...)</span> -->
                         </div>
                         <span />
@@ -71,15 +69,15 @@
                     <div class="px-10">
                         <div class="pb-10 overflow-y-scroll max-h-72">
                             {#each vaultIds as id}
-                                <span class="flex flex-col leading-7 items-center underline hover:text-blue-500">
+                                <span class="flex flex-col leading-7 items-center underline hover:text-blue-500 text-black">
                                     <a href="/#/sloshes/{id}">{id}</a>
                                 </span>
                             {/each}
                         </div>
 
-                        <div class="w-full flex px-6 justify-center">
+                        <div class="w-full flex px-1 justify-center">
                             {#if $signer}
-                                <button class="bg-orange-400 w-full rounded-full text-base py-3 px-5 text-black" disabled={!$signer} on:click={addVault}>Add a vault</button>
+                                <button class="w-full rounded-full text-base py-3 px-28 text-black" style="background-color: #FDB142;" disabled={!$signer} on:click={addVault}>Add a vault</button>
                             {:else}  
                                 <span class="">Please connect your wallet</span>
                             {/if}
@@ -87,7 +85,7 @@
                     </div>
                     <div class="border-b pt-4 border-gray-300" />
                     <div class="px-6">
-                        <div class="flex pt-1 justify-center text-center"><span>
+                        <div class="flex pt-1 justify-center text-center text-black"><span>
                             Make a vault to start Sloshing!
                         </span></div>
                     </div>
