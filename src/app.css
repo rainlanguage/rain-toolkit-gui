@@ -28,5 +28,5 @@ body {
 }
 @font-face {
   font-family: "Lobster";
-  src: url("./Lobster/Lobster.ttf");
+  src: url("../public/Lobster/Lobster.ttf");
 }
