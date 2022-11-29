@@ -2,6 +2,7 @@
   import { getContext } from "svelte";
   import WalletConnect from "$components/wallet-connect/WalletConnect.svelte";
 
+  import { signerAddress } from "svelte-ethers-store";
   const { open } = getContext("simple-modal");
 
   const handleConnect = () => {
@@ -21,11 +22,15 @@
     <!-- <img src="./assets/Sloshy.png" alt="Slosh Logo" /> -->
     <span class="font-lobster text-4xl pl-16">Sloshy</span>
   </div> 
-  <div class="flex direction flex-row items-center pr-14 gap-x-14">
-    <div class="font-semibold">Trust Vaults</div>
-    <div class="font-semibold">How this works</div>
-    <WalletConnect />
-  </div>
+  {#if $signerAddress}
+    <div class="flex direction flex-row items-center pr-14 gap-x-14">
+      <div class="font-semibold">Trust Vaults</div>
+      <div class="font-semibold">How this works</div>
+      <WalletConnect />
+    </div>
+  {:else}
+    <div />
+  {/if}
 </div>
 </div>
 <style>

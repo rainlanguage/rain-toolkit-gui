@@ -108,13 +108,14 @@
     {#if page}
       <div class="mt-4">
         <button
-          class="rounded-full bg-indigo-900 border-none px-14 py-3 text-white"
+          class="rounded-full border-none px-14 py-3 text-white"
+          style="background-color: #2C2C54;"
           on:click={connectWallet}>Connect Wallet</button
         >
       </div>
     {:else}
       <button
-        class="rounded-md border-none px-4 py-2 text-black"
+        class="rounded-md border-none px-4 py-2 text-black font-semibold"
         on:click={connectWallet}>Connect Wallet</button
       >
     {/if}
