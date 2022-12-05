@@ -92,9 +92,9 @@
     
 </script> 
 
-<div class="flex flex-col items-center justify-center">
+<div class="flex flex-col items-center justify-center ">
     <Section>
-        <div class="py-4 px-4">
+        <div class="py-4 px-4 scroll">
             {#if $Vault.fetching}
                 <div class="p-4">
                     <Ring color="#1D4ED8" />
@@ -122,7 +122,8 @@
                                 <th class="text-left pb-2 w-52 text-black">Vault Balances</th>
                                 <th class="w-52"/>
                             </tr>  
-                            <tbody class="overflow-y-scroll max-h-40 w-full inline-block">
+                            <tbody class=" w-full inline-block">
+                            <!-- <tbody class="overflow-y-scroll max-h-40 w-full inline-block"> -->
                                 {#each vault as vault_}
                                     <tr class="gap-x-4 flex w-full items-center">
                                         <td class="pr-6 w-1/4 text-gray-700">{vault_.token.name}</td>
@@ -150,7 +151,8 @@
                 </div>
                 <div class="flex flex-col justify-center items-center pt-6 gap-y-2">
                     <div class="font-semibold text-black">Sloshes</div>
-                    <ul class="list-none overflow-y-scroll max-h-36"> 
+                    <ul class="list-none"> 
+                    <!-- <ul class="list-none overflow-y-scroll max-h-36">  -->
                         {#each orders as order}
                             <li class="leading-8 text-gray-700"> 
                                 <a class="items-center underline hover:text-blue-500" href="/#/sloshbalance/{vault[0].vaultId}/{order}">
@@ -169,6 +171,10 @@
 </div> 
 
 <style>
+    .scroll{
+        max-height: 28rem;
+        overflow-y: scroll;
+    }
     ::-webkit-scrollbar {
         width: 2px;
     }
