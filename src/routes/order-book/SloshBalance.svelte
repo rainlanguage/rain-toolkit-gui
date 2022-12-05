@@ -22,7 +22,6 @@
 
     $: if($signer){
         orderBookContract = new ethers.Contract('0x927f3f0579258fe1c96f9331e496cb1e091d0224',orderABI , $signer )
-        console.log("order", orderBookContract);
     }
 
     let vaultId = params.wild.split('/')[0]
@@ -101,21 +100,18 @@
     $: if ($getOrder.data && $signerAddress ) {  
         let order_ = $getOrder.data.orders   
 
-        // console.log("order_ : " , order_)
         let inputArray = order_[0].validInputs  
     
         for(let i = 0 ; i <inputArray.length ; i++ ){ 
-            console.log(inputArray[i].tokenVault.token.name)
+
             tokenArray.push(inputArray[i].tokenVault.token.name)
         } 
 
-        // console.log("tokenArray : " , tokenArray ) 
     } 
 
     $: if ($takeOrders.data && $signerAddress ) {  
 
         takeOrders_ = $takeOrders.data.takeOrderEntities 
-        //  console.log("takeOrders_ : " , takeOrders_)
 
   
         for(let i = 0 ; i < takeOrders_.length ; i++){
@@ -123,7 +119,7 @@
             takeOrders_[i].output = ethers.utils.formatUnits(BigNumber.from(takeOrders_[i].output) , takeOrders_[i].outputToken.decimals)
         }
 
-         console.log("takeOrders_ : " , takeOrders_ )   
+  
      }
 
     $: if($signer) {
@@ -147,7 +143,6 @@
                 vaultId : vaultId
             }
         })
-        console.log(IO)
 
         let deleteOrderConfig  = { 
             owner : order_.owner , 
@@ -159,13 +154,8 @@
         
         }  
 
-        console.log("deleteOrderConfig : " , deleteOrderConfig ) 
-
         const txAskRemoveOrder = await orderBookContract.removeOrder(deleteOrderConfig); 
-        let receipt = await txAskRemoveOrder.wait() 
-
-        console.log("receipt : " , receipt ) 
-       
+        let receipt = await txAskRemoveOrder.wait()        
 
     }
 </script> 

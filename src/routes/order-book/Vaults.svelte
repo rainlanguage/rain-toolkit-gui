@@ -30,7 +30,6 @@
 
     $: if (data ) {  
         vaultIds = data.tokenVaults.map(e => {return e.vaultId} ).filter(function(item,index ,arr){  return arr.indexOf(item) == index;  })  
-        console.log(vaultIds)
 
     }
 

@@ -10,7 +10,7 @@
   export let network;
 </script>
 
-<div class="flex flex-col space-y-2">
+<div class="flex flex-col space-y-2 w-max">
   {#if label}
     <span class="text-2xs font-medium uppercase leading-none text-gray-400"
       >{label}</span

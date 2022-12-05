@@ -22,7 +22,6 @@
 
     $: if($signer){
         orderBookContract = new ethers.Contract('0x927f3f0579258fe1c96f9331e496cb1e091d0224',orderABI , $signer )
-        console.log("order", orderBookContract);
     }
     
     const handleClick = async () => {
@@ -67,10 +66,6 @@ const addOrder = async () => {
         }, 
     } 
     let  txAskOrderLive = await orderBookContract.addOrder(askOrderConfig );  
-
-    
-    
-    console.log("askSource : " , askSource )
 }  
 </script>
 <div>

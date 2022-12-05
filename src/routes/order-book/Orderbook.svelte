@@ -10,9 +10,7 @@
 
     import { signerAddress } from 'svelte-ethers-store'
     import { push } from "svelte-spa-router";
-    $: if($signerAddress){
-        console.log("signer", $signerAddress);
-        
+    $: if($signerAddress){        
         push(`/vaults`) 
     }
 

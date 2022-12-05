@@ -42,8 +42,7 @@
     });   
 
     $: if ($sloshes.data) {  
-        let tokenVaultsArray = $sloshes.data.tokenVaults  
-        console.log("tokenVaultsArray : " , tokenVaultsArray )    
+        let tokenVaultsArray = $sloshes.data.tokenVaults     
 
         const filterOrder = async () => {  
 
@@ -62,9 +61,6 @@
                     return false
                
             })
-
-            console.log(filteredArray)
-
             orders = filteredArray.map(e => {return e.id} ).filter(function(item,index ,arr){  return arr.indexOf(item) == index;  })
 
         }

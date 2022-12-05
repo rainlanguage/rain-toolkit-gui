@@ -9,12 +9,14 @@
   import { getContext } from "svelte";
   import IconLibrary from "$components/IconLibrary.svelte";
   import { onMount } from "svelte";
+  import Select from "$components/Select.svelte";
 
   const { open } = getContext("simple-modal");
 
   export let page: boolean = false;
 
   let providers,
+    oldNetName,
     library,
     networkName,
     changedName = false;
@@ -31,11 +33,12 @@
 
     const onMountLoad = async () => {
       const provider = new ethers.providers.Web3Provider(window.ethereum);
+      // const webLibrary = new ethers.providers.Web3Provider(webProvider);
       defaultEvmStores.setProvider(provider); 
 
       const network = await provider.getNetwork();
 
-      // library = provider;
+      library = provider;
       // networkName = network.name;
 
       networks.forEach((element) => {
@@ -60,26 +63,64 @@
       networks.forEach((element) => {
         if (parseInt(element.config.chainId) === network.chainId) {
           networkName = element.config.chainName;
+          oldNetName = element.config.chainName;
           $selectedNetwork = element;
         }
       });
     } catch (err) {
-      console.log(err);
+      console.log("err", err);
     }
   };
   const onNetworkChange = (text) => {
     networkName = text;
     changedName = true;
   };
+
+  const switchNetwork = async (network, event) => {
+
+    try {
+      // await window.ethereum.request({
+      await library.provider.request({
+        method: "wallet_switchEthereumChain",
+        params: [{ chainId: network.config.chainId }],
+      });
+      defaultEvmStores.setProvider();
+      
+      networkName = network.config.chainName;
+    } catch (switchError) {
+      // This error code indicates that the chain has not been added to MetaMask.
+      if (switchError.code === 4902) {
+        try {
+          // await window.ethereum.request({
+          await library.provider.request({
+            method: "wallet_addEthereumChain",
+            params: [network.config],
+          });
+          defaultEvmStores.setProvider();
+          // name = network.config.chainName;
+          networkName = network.config.chainName;
+        } catch (addError) {}
+      }
+      if (switchError.code === 4001) {
+        defaultEvmStores.disconnect();
+      }
+    }
+  };
 </script>
 
 <div class="flex items-center gap-y-4 gap-x-8">
   {#if $signerAddress}
-  <button
+  <!-- <button
       class="rounded-md border-none px-4 py-2 gap-x-1 text-black font-semibold"
       on:click={() => open(selectNetwork, { onNetworkChange, library })}
-      >{networkName}<IconLibrary icon="down-open-arrow"/></button
-    >
+      >
+      {networkName}<IconLibrary icon="down-open-arrow"/></button
+    > -->
+    <Select
+      bind:value={$selectedNetwork}
+      items={networks}
+      on:change={() => switchNetwork($selectedNetwork)}
+    />
     {#if changedName}
       <span
         class="align-center ease mr-2 flex w-max cursor-pointer rounded-full bg-gray-200 px-4 py-2 text-sm font-bold text-gray-500 transition duration-300 active:bg-gray-300"
@@ -121,3 +162,4 @@
     {/if}
   {/if}
 </div>
+

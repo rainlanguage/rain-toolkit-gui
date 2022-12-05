@@ -25,18 +25,17 @@
       <slot name="description" />
     </span>
   {/if}
-  <div class="self-start rounded-md border border-gray-500 text-white">
+  <div class="self-start rounded-md text-white">
     <select
-      class="text-light outline-none mr-2 border-none bg-transparent px-4 py-2
-      text-gray-400"
+      class="text-light outline-none mr-2 border-none bg-transparent px-4 py-2 text-black font-medium"
       bind:value
       on:change={() => {
         dispatch("change");
       }}
     >
-      {#each items as item}
-        <option class="text-white" value={item}>{item.label}</option>
-      {/each}
+        {#each items as item}
+          <option class="text-white" value={item}>{item.label}</option>
+        {/each}
     </select>
   </div>
 </div>
