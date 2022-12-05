@@ -75,7 +75,7 @@
           txReceipt = await error.replacement.wait();
         }
       } else {
-        errorMsg =
+        errorMsg = error?.code ||
           error.error?.data?.message ||
           error.error?.message ||
           error.data?.message ||
@@ -108,7 +108,7 @@
       txReceipt = await tx.wait();
     } catch (error) {
       if (error.code === Logger.errors.TRANSACTION_REPLACED) {
-        if (error.cancelled) {
+        if (error.cancelled) {  
           errorMsg = "Transaction Cancelled";
           txStatus = TxStatus.Error;
           return;
@@ -116,7 +116,7 @@
           txReceipt = await error.replacement.wait();
         }
       } else {
-        errorMsg =
+        errorMsg = error?.code ||
           error.error?.data?.message ||
           error.error?.message ||
           error.data?.message ||

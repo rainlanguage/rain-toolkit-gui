@@ -77,7 +77,7 @@
           txReceipt = await error.replacement.wait();
         }
       } else {
-        errorMsg =
+        errorMsg = error?.code ||
           error.error?.data?.message ||
           error.error?.message ||
           error.data?.message ||

@@ -76,7 +76,7 @@
     changedName = true;
   };
 
-  const switchNetwork = async (network, event) => {
+  const switchNetwork = async (network) => {
 
     try {
       // await window.ethereum.request({
@@ -110,17 +110,17 @@
 
 <div class="flex items-center gap-y-4 gap-x-8">
   {#if $signerAddress}
-  <!-- <button
+  <button
       class="rounded-md border-none px-4 py-2 gap-x-1 text-black font-semibold"
       on:click={() => open(selectNetwork, { onNetworkChange, library })}
       >
       {networkName}<IconLibrary icon="down-open-arrow"/></button
-    > -->
-    <Select
+    >
+    <!-- <Select
       bind:value={$selectedNetwork}
       items={networks}
       on:change={() => switchNetwork($selectedNetwork)}
-    />
+    /> -->
     {#if changedName}
       <span
         class="align-center ease mr-2 flex w-max cursor-pointer rounded-full bg-gray-200 px-4 py-2 text-sm font-bold text-gray-500 transition duration-300 active:bg-gray-300"
