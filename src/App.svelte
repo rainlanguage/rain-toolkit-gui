@@ -70,11 +70,12 @@
   @tailwind components;
   @tailwind utilities;
   main{
-    z-index: 10;
+    z-index: 1;
     min-height: 74vh;
     background-image: url("/assets/background.svg");
+    /* background-image: url("/assets/sloshy_background.svg"); */
     /* background-position: center; */
     background-repeat: no-repeat;
-    /* background-size: cover; */
+    background-size: contain;
   }
 </style>

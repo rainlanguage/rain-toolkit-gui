@@ -89,7 +89,7 @@ const addOrder = async () => {
                                 <img src={token.logo} alt="Rain Logo" class="w-5" />
                                 <span class=" text-black">{token.tokenName}</span>
                             </span>
-                            <span class="flex justify-end"><Switch color="#22c55e" bind:checked={checkedTokens[i]} /></span>
+                            <span class="flex justify-end"><Switch color="#418be4" bind:checked={checkedTokens[i]} /></span>
                         </div>
                     </div>
                 {/each}

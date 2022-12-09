@@ -44,10 +44,11 @@
     <Section outerpB="pb-0" innerpB="pb-3">
         <div class="pt-4 px-4">
             {#if $vaults.fetching}
-                <div class="p-4 ">
-                    <Ring color="#1D4ED8" />
-                    <div class=" text-black">Loading...</div>
-                </div>
+            <lottie-player src="https://lottie.host/5f90529b-22d1-4337-8c44-46e3ba7c0c68/pgMhlFIAcQ.json" background="transparent" speed="1" style="width: 300px; height: 300px;" loop autoplay></lottie-player>
+                <!-- <div class="p-4 ">
+                    <Ring color="#1D4ED8" size="128px" />
+                     <div class=" text-black">Loading...</div> 
+                </div> -->
             {:else if $vaults.error}
                 <div class="text-red-400 font-medium text-xl px-4 py-4">
                     Please connect your wallet<br />
