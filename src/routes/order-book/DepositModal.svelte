@@ -150,7 +150,7 @@
         <span slot="label">Enter token:</span>
       </Input> -->
       <Input
-        type="number"
+        type="text"
         on:input={({ detail }) => {
           calcPricePromise = calculatePrice(detail);
         }}
@@ -174,7 +174,13 @@
         </div>
       {/if}
 
-      <Button bRadius="rounded-full" variant="bg-orange-400" disabled={!priceConfirmed} on:click={approve}>Approve Amount</Button>
+      <!-- <Button bRadius="rounded-full" variant="bg-orange-400" disabled={!priceConfirmed} on:click={approve}>Approve Amount</Button> -->
+      <button 
+        class="w-full rounded-full text-base py-2 px-28 text-black" 
+        style="background-color: #FDB142;" 
+        disabled={!priceConfirmed} 
+        on:click={approve}>Approve Amount
+      </button>
     {/if}
     {#if activeStep == DepositSteps.Confirm}
       <span>Confirm your deposit.</span>
@@ -197,14 +203,18 @@
         </div>
       {/if}
 
-      <Button
+      <!-- <Button
         bRadius="rounded-full"
         variant="bg-orange-400"
         disabled={!priceConfirmed}
         on:click={Deposit}
-      >
-        Deposit</Button
-      >
+      > -->
+      <button 
+        class="w-full rounded-full text-base py-2 px-28 text-black" 
+        style="background-color: #FDB142;" 
+        disabled={!priceConfirmed} 
+        on:click={Deposit}>Deposit
+      </button>
     {/if}
 
     {#if activeStep == DepositSteps.Complete}

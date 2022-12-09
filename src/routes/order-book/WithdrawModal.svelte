@@ -105,7 +105,7 @@
     />
     {#if activeStep == WithdrawSteps.Confirm}
       <Input
-          type="number"
+          type="text"
           on:input={({ detail }) => {
             calcPricePromise = calculatePrice(detail);
           }}
@@ -135,7 +135,13 @@
       {/if}
     
       <span>Confirm your withdraw.</span>
-      <Button bRadius="rounded-full" variant="bg-orange-400" disabled={!priceConfirmed} on:click={withdraw}>Confirm</Button>
+      <!-- <Button bRadius="rounded-full" variant="bg-orange-400" disabled={!priceConfirmed} on:click={withdraw}>Confirm</Button> -->
+      <button 
+        class="w-full rounded-full text-base py-2 px-28 text-black" 
+        style="background-color: #FDB142;" 
+        disabled={!priceConfirmed} 
+        on:click={withdraw}>Confirm
+      </button>
     {/if}
 
     {#if activeStep == WithdrawSteps.Complete}
