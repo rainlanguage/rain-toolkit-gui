@@ -15,6 +15,7 @@
   export let shrink = false;
   export let bRadius = "rounded-lg"
   export let tColor = "text-white"
+  export let shadow = true
   $: variantCalc = disabled ? "disabled" : variant;
 </script>
 
@@ -23,7 +24,7 @@
     {disabled}
     {id}
     on:click={click}
-    class={`transition-colors text-sm leading-none py-3 px-5 ${tColor} ${bRadius} ${variantCalc}`}
+    class={`transition-colors text-sm leading-none py-3 px-5 ${tColor} ${bRadius} ${variantCalc} shadow`}
   >
     <slot />
     {#if !$$slots.default}
@@ -35,7 +36,7 @@
     {disabled}
     {id}
     on:click={click}
-    class={`transition-colors text-base leading-none py-3 px-5 ${tColor} ${bRadius} ${variantCalc}`}
+    class={`transition-colors text-base leading-none py-3 px-5 ${tColor} ${bRadius} ${variantCalc} shadow`}
   >
     <slot />
     {#if !$$slots.default}
@@ -47,7 +48,7 @@
     {disabled}
     {id}
     on:click={click}
-    class={`w-full transition-colors text-base leading-none py-3 px-5 ${tColor} ${bRadius} ${variantCalc}`}
+    class={`w-full transition-colors text-base leading-none py-3 px-5 ${tColor} ${bRadius} shadow`}
   >
     <slot />
     {#if !$$slots.default}
@@ -67,5 +68,8 @@
 
   .disabled {
     @apply cursor-not-allowed bg-gray-400;
+  }
+  .shadow{
+    box-shadow: inset 0 0 5px 5px #FDB142;
   }
 </style>

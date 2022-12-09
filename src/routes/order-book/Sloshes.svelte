@@ -100,7 +100,7 @@
                         <!-- <span on:click={() =>{push(`/sloshbalance`)}}><IconLibrary icon="forward" width={14} /></span> -->
                     </div>
                     <div class="px-10">
-                        <div class="pb-10 overflow-y-scroll max-h-72">
+                        <div class="pb-10">
                             {#each orders as order}
                                 <span class="flex flex-col leading-7 items-center underline hover:text-blue-500 text-black">
                                     <a href="/#/sloshbalance/{params.wild}/{order}">
@@ -112,7 +112,7 @@
 
                         <div class="w-full flex px-2 justify-center">
                             {#if $signer}
-                                <button class="w-full rounded-full text-base py-3 px-28 text-black" style="background-color: #FDB142;" disabled={!$signer} on:click={addSlosh}>Add a Slosh</button>
+                                <button class="w-full rounded-full text-base py-3 px-28 text-black" style="background-color: #FDB142;  box-shadow: inset 0px 2px 6px 0px #ffffff;" disabled={!$signer} on:click={addSlosh}>Add a Slosh</button>
                             {:else}  
                                 <span class="">Please connect your wallet</span>
                             {/if}

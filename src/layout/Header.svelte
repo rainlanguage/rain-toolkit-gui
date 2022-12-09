@@ -24,7 +24,7 @@
   </div> 
   {#if $signerAddress}
     <div class="flex direction flex-row items-center pr-14 gap-x-14">
-      <div class="font-semibold">Trust Vaults</div>
+      <div class="font-semibold">Vaults</div>
       <div class="font-semibold">How this works</div>
       <WalletConnect />
     </div>

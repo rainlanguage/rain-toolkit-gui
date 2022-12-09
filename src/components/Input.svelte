@@ -96,21 +96,38 @@
       <slot name="description" />
     </span>
   {/if}
-  <div class="flex flex-row items-center gap-x-2 self-stretch">
-    <input
-      type={_type}
-      {value}
-      {placeholder}
-      on:input={handleInput}
-      on:blur={() => {
-        console.log("blur");
-        validate();
-      }}
-      {disabled}
-      {min}
-      {max}
-      class="w-full rounded-md {bgColor} p-1 font-light text-black {borderColor}"
-    />
+  <div class="flex flex-row items-center justify-end gap-x-2 self-stretch">
+    {#if type == "number"}
+      <input
+        type={_type}
+        {value}
+        {placeholder}
+        on:input={handleInput}
+        on:blur={() => {
+          console.log("blur");
+          validate();
+        }}
+        {disabled}
+        {min}
+        {max}
+        class="w-9/12 rounded-md {bgColor} p-1 font-light text-black {borderColor}"
+      />
+    {:else}
+      <input
+        type={_type}
+        {value}
+        {placeholder}
+        on:input={handleInput}
+        on:blur={() => {
+          console.log("blur");
+          validate();
+        }}
+        {disabled}
+        {min}
+        {max}
+        class="w-full rounded-md {bgColor} p-1 font-light text-black {borderColor}"
+      />
+    {/if}
     {#if validating}
       <div
         class="absolute right-1 top-0 bottom-0 flex flex-col justify-center"

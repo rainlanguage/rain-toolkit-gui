@@ -187,7 +187,7 @@
                     <div>
                         <div class="flex flex-col justify-center items-center pb-4">
                             <div class="font-semibold text-black">Token</div>
-                            <ul class="list-none overflow-y-scroll max-h-16"> 
+                            <ul class="list-none"> 
                                 {#if tokenArray} 
                                     {#each tokenArray as token}
                                         <li class="text-gray-700">{token}</li>
@@ -201,7 +201,7 @@
                 <div class="w-full bg-gray-200 p-2  gap-x-4 px-6 my-4">
                     <div class="w-full text-sm flex justify-center items-center text-black font-medium">Threshold : {threshold} %</div>
                 </div>
-                <div class="grid grid-cols-3 px-14 gap-x-6 overflow-y-scroll max-h-32">
+                <div class="grid grid-cols-3 px-14 gap-x-6">
                     <div class="flex flex-col gap-y-2">
                         <span class="font-semibold text-black">History</span>
                         <ul class="list-none"> 

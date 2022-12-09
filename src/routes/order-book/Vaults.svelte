@@ -57,16 +57,14 @@
                 <div class="flex flex-col gap-y-2 px-2 pt-2 ">
                     <div class="flex justify-between pb-6">
                         <span />
-                        <!-- <span on:click={() =>{push(`/sloshes`)}}><IconLibrary icon="back" width={14} /></span> -->
                         <div class="flex flex-col justify-center items-center pb-2">
                             <span class="font-semibold text-black">Vaults</span>
                             <!-- <span class="font-normal">(Ox2413fb3709b0...)</span> -->
                         </div>
                         <span />
-                        <!-- <span on:click={() =>{push(`/sloshbalance`)}}><IconLibrary icon="forward" width={14} /></span> -->
                     </div>
                     <div class="px-10">
-                        <div class="pb-10 overflow-y-scroll max-h-72">
+                        <div class="pb-10">
                             {#each vaultIds as id}
                                 <span class="flex flex-col leading-7 items-center underline hover:text-blue-500 text-black">
                                     <a href="/#/sloshes/{id}">{id}</a>
@@ -76,7 +74,7 @@
 
                         <div class="w-full flex px-1 justify-center">
                             {#if $signer}
-                                <button class="w-full rounded-full text-base py-3 px-28 text-black" style="background-color: #FDB142;" disabled={!$signer} on:click={addVault}>Add a vault</button>
+                                <button class="w-full rounded-full text-base py-3 px-28 text-black" style="background-color: #FDB142; box-shadow: inset 0px 2px 6px 0px #ffffff;" disabled={!$signer} on:click={addVault}>Add a vault</button>
                             {:else}  
                                 <span class="">Please connect your wallet</span>
                             {/if}

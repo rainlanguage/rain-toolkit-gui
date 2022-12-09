@@ -81,7 +81,7 @@ const addOrder = async () => {
                 <div />
                 <!-- <span on:click={() =>{push(`/sloshbalance`)}}><IconLibrary icon="forward" width={14} /></span> -->
             </div>
-            <div class="grid overflow-y-scroll ht gap-y-2.5">
+            <div class="grid  ht gap-y-2.5">
                  {#each tokenAddressess as token, i}
                     <div class="grid items-stretch border border-orange-400 w-96 rounded-full ">
                         <div class="grid grid-cols-2 items-center px-10 py-3 border-orange-400"> 
@@ -102,7 +102,7 @@ const addOrder = async () => {
         </div>
         <div class="w-full flex px-4 justify-center">
             {#if $signer}
-                <button class="w-full rounded-full text-base py-3 px-5 text-black" style="background-color: #FDB142;" disabled={!$signer} on:click={handleClick}>Ok</button>
+                <button class="w-full rounded-full text-base py-3 px-5 text-black" style="background-color: #FDB142;  box-shadow: inset 0px 2px 6px 0px #ffffff;" disabled={!$signer} on:click={handleClick}>Ok</button>
             {:else}  
                 <span class="">Please connect your wallet</span>
             {/if}
@@ -110,11 +110,11 @@ const addOrder = async () => {
     </div>
     </Section>
 </div>
-<style>
+<!-- <style>
     ::-webkit-scrollbar {
         width: 5px;
     }
     .ht{
         max-height: 17rem;
     }
-</style>
+</style> -->

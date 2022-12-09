@@ -39,3 +39,16 @@
     </select>
   </div>
 </div>
+
+<style>
+  select{
+    -moz-appearance:none; /* Firefox */
+    -webkit-appearance:none; /* Safari and Chrome */
+    appearance:none;
+    background-image: url("/assets/down-arrow.png");
+    background-repeat: no-repeat;
+    background-size: 20px;
+    background-position: right;
+    padding-right: 35px;
+  }
+</style>
