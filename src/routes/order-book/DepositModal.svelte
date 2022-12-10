@@ -74,7 +74,8 @@
         } else {
           txReceipt = await error.replacement.wait();
         }
-      } else {
+      } else { 
+        console.log("error : " , error)
         errorMsg = error?.code ||
           error.error?.data?.message ||
           error.error?.message ||

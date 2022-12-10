@@ -29,7 +29,7 @@
 
     let ownerAddress
     let tokenArray = []
-    let threshold : number = 2  
+    let threshold  
 
     let takeOrders_  = []
 
@@ -44,6 +44,9 @@
     				handleIODispatch
                     transactionHash
                     owner
+                    stateConfig{
+                        constants
+                    }
                     validInputs{
                         tokenVault{  
                             vaultId
@@ -98,8 +101,10 @@
     });  
     
     $: if ($getOrder.data && $signerAddress ) {  
-        let order_ = $getOrder.data.orders   
-
+        let order_ = $getOrder.data.orders    
+        let ONE = ethers.BigNumber.from("1000000000000000000") 
+        let threshold_ = (ethers.BigNumber.from(order_[0].stateConfig.constants[1]).sub( ONE ))   
+        threshold = threshold_.div(ethers.BigNumber.from("10000000000000000"))
         let inputArray = order_[0].validInputs  
     
         for(let i = 0 ; i <inputArray.length ; i++ ){ 
@@ -128,34 +133,53 @@
 
     const handleClick = async () =>{  
 
-        let order_ = $getOrder.data.orders[0]  
+        try { 
 
-        let tx  = await $provider.getTransactionReceipt(order_.transactionHash)  
-        let byteData = tx.logs.filter(e => {return e.topics[0] == '0xf78885f51d9a7bb8e5924562877609c44121ef6245bb6042a8613fb9d41c33fb' }) 
-        let data = await ethers.utils.defaultAbiCoder.decode([
-               "address","tuple(address,address,uint256,uint256,tuple(address,uint256)[],tuple(address,uint256)[])","uint256"] ,
-                byteData[0].data)  
+            let order_ = $getOrder.data.orders[0]  
 
-        let IO = data[1][4].map(e => { 
-            let vaultId = e[1].toString() 
-            return{
-                token : e[0] ,
-                vaultId : vaultId
+            let tx  = await $provider.getTransactionReceipt(order_.transactionHash)  
+            let byteData = tx.logs.filter(e => {return e.topics[0] == '0xf78885f51d9a7bb8e5924562877609c44121ef6245bb6042a8613fb9d41c33fb' }) 
+            let data = await ethers.utils.defaultAbiCoder.decode([
+                "address","tuple(address,address,uint256,uint256,tuple(address,uint256)[],tuple(address,uint256)[])","uint256"] ,
+                    byteData[0].data)  
+
+            let IO = data[1][4].map(e => { 
+                let vaultId = e[1].toString() 
+                return{
+                    token : e[0] ,
+                    vaultId : vaultId
+                }
+            })
+
+            let deleteOrderConfig  = { 
+                owner : order_.owner , 
+                interpreter:  order_.interpreter,
+                dispatch:order_.dispatch ,
+                handleIODispatch:order_.handleIODispatch ,
+                validInputs: IO,
+                validOutputs: IO 
+            
+            }  
+
+            const txAskRemoveOrder = await orderBookContract.removeOrder(deleteOrderConfig); 
+            let receipt = await txAskRemoveOrder.wait()  
+            
+        } catch (error) { 
+
+            if (error.code === error.TRANSACTION_REPLACED) {
+                if (error.cancelled) {
+                    console.log("Transaction Cancelled")
+                } else {
+                    await error.replacement.wait();
+                }
+            } else {
+                console.log(error)
             }
-        })
-
-        let deleteOrderConfig  = { 
-            owner : order_.owner , 
-            interpreter:  order_.interpreter,
-            dispatch:order_.dispatch ,
-            handleIODispatch:order_.handleIODispatch ,
-            validInputs: IO,
-            validOutputs: IO 
+            
+        }      
         
-        }  
-
-        const txAskRemoveOrder = await orderBookContract.removeOrder(deleteOrderConfig); 
-        let receipt = await txAskRemoveOrder.wait()        
+        
+        
 
     }
 </script> 

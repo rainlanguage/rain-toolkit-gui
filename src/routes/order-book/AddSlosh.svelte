@@ -33,6 +33,8 @@
 
 const addOrder = async () => { 
     
+  try { 
+
     let x = 1 + ((1 * thresholdVal)/100) 
 
     let askPrice = ethers.utils.parseEther(x.toString()) 
@@ -45,7 +47,7 @@ const addOrder = async () => {
     let tokenInput = []
     let tokenOutput = [] 
     let randomNumber = params.wild // random number later can be changed . 
-    
+
 
     for(let i = 0; i < tokenAddressess.length; i++ ){
         if(checkedTokens[i] == true){
@@ -54,7 +56,7 @@ const addOrder = async () => {
         }
     } 
 
-    
+
     let askOrderConfig = { 
         expressionDeployer: '0x5C13ee05006364965093e827521118Ed269091a9',
         interpreter: '0x856b7C73322Dd5F74163C0b9e7586197a1E4496F',
@@ -65,7 +67,23 @@ const addOrder = async () => {
             constants: askConstants,  
         }, 
     } 
-    let  txAskOrderLive = await orderBookContract.addOrder(askOrderConfig );  
+    let  txAskOrderLive = await orderBookContract.addOrder(askOrderConfig ); 
+
+  } catch (error) {  
+
+    if (error.code === error.TRANSACTION_REPLACED) {
+        if (error.cancelled) {
+          console.log("Cancelled")
+        } else {
+          await error.replacement.wait();
+        }
+      } else {
+        console.log(error)
+      }
+
+    
+  }
+
 }  
 </script>
 <div>
