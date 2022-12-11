@@ -158,6 +158,11 @@
       {/if}
     {/if}
   </div>
+  {#if $$slots.tip}
+    <span class="text-black font-light" style="font-size: 14px;">
+      <slot name="tip" />
+    </span>
+  {/if}
   {#if error}
     <span class="text-red-500">{error}</span>
   {/if}

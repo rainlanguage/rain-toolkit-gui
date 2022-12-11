@@ -29,7 +29,7 @@
     Confirmed,
   }
 
-  export let vault_, orderBookContract
+  export let token, orderBookContract
   let units,
     activeStep = DepositSteps.Approve,
     txStatus = TxStatus.None,
@@ -40,10 +40,10 @@
 
   const calculatePrice = async (amount) => {
     priceConfirmed = PriceConfirmed.Pending;
-    const one = parseUnits("1", vault_.token.decimals.toString());
+    const one = parseUnits("1", token?.tokenVault?.token.decimals.toString());
     const _units = parseUnits(
       amount.toString(),
-      vault_.token.decimals.toString()
+      token?.tokenVault?.token.decimals.toString()
     );
     units = _units;
 
@@ -56,7 +56,7 @@
 
   const approve = async () => {
     
-    let tokenContract = new ethers.Contract(vault_.token.id, erc20ABI, $signer )
+    let tokenContract = new ethers.Contract(token?.tokenVault?.token.id, erc20ABI, $signer )
 
     let tx;
     txStatus = TxStatus.AwaitingSignature;
@@ -94,9 +94,9 @@
   const Deposit = async () => {
     let tx;
     txStatus = TxStatus.AwaitingSignature;
-    let vaultId = ethers.BigNumber.from(vault_.vaultId);
+    let vaultId = ethers.BigNumber.from(token?.tokenVault?.vaultId);
     const depositConfigStruct = {
-      token: vault_.token.id ,
+      token: token?.tokenVault?.token.id ,
       vaultId: vaultId,
       amount: units
     }; 
@@ -136,14 +136,14 @@
     <Steps
       steps={["Approve", "Confirm", "Complete"]}
       {activeStep}
-      fulfilledTextClass="text-gray-100"
+      fulfilledTextClass="text-black font-semibold"
       lineBorderClass="border-gray-400"
     />
-
+    <span class="text-red-500">Don't Close the Modal until transaction complete</span>
     {#if activeStep == DepositSteps.Approve}
       <!-- <Input
         type="address"
-        bind:value={vault_.token.id}
+        bind:value={token?.tokenVault?.token.id}
         from="depositModal"
         validator={addressValidate}
       >
@@ -166,8 +166,8 @@
           {:then result}
             <div class="flex flex-row gap-x-3">
               <span
-                >Amount: {formatUnits(result._units, vault_.token.decimals)}
-                {vault_.token.symbol}
+                >Amount: {formatUnits(result._units, token?.tokenVault?.token.decimals)}
+                {token?.tokenVault?.token.symbol}
               </span>
             </div>
           {/await}
@@ -193,11 +193,11 @@
             <span>{formatAddress(orderBookContract.address)}</span>
 
             <span>Token Address:</span>
-            <span>{formatAddress(vault_.token.id)}</span>
+            <span>{formatAddress(token?.tokenVault?.token.id)}</span>
 
             <span>Amount:</span>
-            <span>{formatUnits(result._units, vault_.token.decimals)}
-              {vault_.token.symbol}
+            <span>{formatUnits(result._units, token?.tokenVault?.token.decimals)}
+              {token?.tokenVault?.token.symbol}
             </span>
           {/await}
         </div>
@@ -232,13 +232,15 @@
 
 {#if txStatus == TxStatus.AwaitingSignature}
   <div class="flex flex-col items-center gap-y-5 p-6">
-    <Ring color="#fff" />
+    <!-- <Ring color="#fff" /> -->
+    <lottie-player src="https://lottie.host/5f90529b-22d1-4337-8c44-46e3ba7c0c68/pgMhlFIAcQ.json" background="transparent" speed="1" style="width: 300px; height: 200px;" loop autoplay></lottie-player>
     <span class="text-lg">Awaiting signature...</span>
   </div>
 {/if}
 {#if txStatus == TxStatus.AwaitingConfirmation}
   <div class="flex flex-col items-center gap-y-5 p-6">
-    <Ring color="#fff" />
+    <!-- <Ring color="#fff" /> -->
+    <lottie-player src="https://lottie.host/5f90529b-22d1-4337-8c44-46e3ba7c0c68/pgMhlFIAcQ.json" background="transparent" speed="1" style="width: 300px; height: 200px;" loop autoplay></lottie-player>
     <span class="text-lg">Transaction confirming...</span>
   </div>
 {/if}
@@ -248,3 +250,14 @@
     <span class="text-lg text-red-400">{errorMsg}</span>
   </div>
 {/if}
+
+
+<style>
+  :global(div[role=dialog]){
+    background-color: #fff;
+    color: #000;
+  }
+  button[disabled]{
+    color: rgb(115 115 115);
+  }
+</style>

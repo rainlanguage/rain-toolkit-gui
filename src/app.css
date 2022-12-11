@@ -6,10 +6,12 @@
 @tailwind base;
 
 body {
+    width: 100%;
     min-height: 100vh;
-    /* background-image: url("/assets/sloshy_background.svg"); */
     background: rgb(242,182,94);
     background: linear-gradient(180deg, rgba(242,182,94,1) 0%, rgba(255,236,134,1) 100%);
+    /* background-image: url("./../public/assets/sloshy_background 1.svg"), linear-gradient(180deg, rgba(242,182,94,1) 0%, rgba(255,236,134,1) 100%); */
+    /* background-image: url("./../public/assets/sloshylines_extended.svg"), linear-gradient(180deg, rgba(242,182,94,1) 0%, rgba(255,236,134,1) 100%); */
     background-repeat: no-repeat;
     background-attachment: fixed;
     /* @apply bg-gray-100; */

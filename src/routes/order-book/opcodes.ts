@@ -12,6 +12,16 @@ export function bytify(
   return zeroPad(hexlify(value), bytesLength);
 }
 
+export function hex_to_ascii(str1)
+ {
+  var hex  = str1.toString();
+  var str = '';
+  for (var n = 0; n < hex.length; n += 2) {
+    str += String.fromCharCode(parseInt(hex.substr(n, 2), 16));
+  } 
+  return str.replace( /[\x00-\x1F\x7F-\xA0]+/g, '' );
+ }
+
 export function memoryOperand(type: number, offset: number): number {
   return (offset << 1) + type;
 }

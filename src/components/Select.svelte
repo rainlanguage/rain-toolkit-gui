@@ -34,7 +34,9 @@
       }}
     >
         {#each items as item}
-          <option class="text-white" value={item}>{item.label}</option>
+          <option class="text-white" value={item}>
+            <span><img src={item.icon} />{item.label}</span>
+          </option>
         {/each}
     </select>
   </div>

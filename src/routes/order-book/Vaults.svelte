@@ -68,7 +68,7 @@
                         <div class="pb-10">
                             {#each vaultIds as id}
                                 <span class="flex flex-col leading-7 items-center underline hover:text-blue-500 text-black">
-                                    <a href="/#/sloshes/{id}">{id}</a>
+                                    <a href="/#/vaultbalance/{id}">{id}</a>
                                 </span>
                             {/each}
                         </div>

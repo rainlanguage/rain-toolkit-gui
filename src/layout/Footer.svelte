@@ -4,7 +4,7 @@
 <div class="font-lobster text-lg pb-2">How’s the liquidity. So much liquidity.</div>
   <div class="flex flex-row items-center">
     <span class="flex text-sm font-normal text-black pr-2 items-center">
-      Powered by <img src="/assets/gildlab_logo.png" alt="Rain Logo" class="w-14 mx-2" /> and Rain <img src="/assets/logo.svg" alt="Rain Logo" class="w-7 ml-2" />
+      Powered by <a target="_blank" href="https://www.gildlab.xyz/"><img src="/assets/gildlab_logo.png" alt="Rain Logo" class="w-14 mx-2" /></a> and Rain <a target="_blank" href="https://www.rainprotocol.xyz/"><img src="/assets/logo.svg" alt="Rain Logo" class="w-7 ml-2" /></a>
     </span>
     
   </div>

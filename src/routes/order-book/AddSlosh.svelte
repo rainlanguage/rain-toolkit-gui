@@ -11,17 +11,25 @@
     import { op , Opcode ,max_uint32,max_uint256 , memoryOperand , MemoryType   } from './opcodes.ts'
     import {tokenAddressess } from "$src/constants" 
     import { concat } from "ethers/lib/utils"; 
+    import { push } from "svelte-spa-router";
 
     export let params: {
         wild: string;
     }; 
 
+    enum TxStatus {
+        None,
+        AwaitingConfirmation,
+        Error,
+    }
+
+    let txStatus = TxStatus.None, errorMsg;
     let fields: any = {};
-    let orderBookContract, thresholdVal
+    let orderBookContract, thresholdVal, sloshName
     let checkedTokens = []
 
     $: if($signer){
-        orderBookContract = new ethers.Contract('0x927f3f0579258fe1c96f9331e496cb1e091d0224',orderABI , $signer )
+        orderBookContract = new ethers.Contract('0x1d4e06f86d0d07059a4fc76069c1d8660558947e',orderABI , $signer )
     }
     
     const handleClick = async () => {
@@ -32,6 +40,7 @@
     };
 
 const addOrder = async () => { 
+    console.log("fields", sloshName, );
     
     let x = 1 + ((1 * thresholdVal)/100) 
 
@@ -44,17 +53,21 @@ const addOrder = async () => {
     const askSource = concat([ vAskOutputMax,vAskPrice]);  
     let tokenInput = []
     let tokenOutput = [] 
-    let randomNumber = params.wild // random number later can be changed . 
-    
+    const nonce = new Uint8Array(32); 
+    let val = crypto.getRandomValues(nonce);  
+    let randomNumber = ethers.BigNumber.from(ethers.utils.hexlify(val)).toString() // random number later can be changed .
 
+    
+    // push(`/sloshbalance/${params.wild}/0x3dc604409337a6cb622d1f791b44fd6a11b9c2aaca741a389b8514a5871b0b96`)
     for(let i = 0; i < tokenAddressess.length; i++ ){
         if(checkedTokens[i] == true){
-            tokenInput.push({"token" : tokenAddressess[i].tokenAddress, "vaultId" : randomNumber})
-            tokenOutput.push({"token" : tokenAddressess[i].tokenAddress, "vaultId" : randomNumber })
+            tokenInput.push({"token" : tokenAddressess[i].tokenAddress, "vaultId" : randomNumber, decimals : tokenAddressess[i].decimals})
+            tokenOutput.push({"token" : tokenAddressess[i].tokenAddress, "vaultId" : randomNumber, decimals : tokenAddressess[i].decimals})
         }
     } 
 
-    
+    let aliceAskOrder = ethers.utils.toUtf8Bytes(sloshName)
+
     let askOrderConfig = { 
         expressionDeployer: '0x5C13ee05006364965093e827521118Ed269091a9',
         interpreter: '0x856b7C73322Dd5F74163C0b9e7586197a1E4496F',
@@ -64,57 +77,94 @@ const addOrder = async () => {
             sources: [askSource , [] ],
             constants: askConstants,  
         }, 
+        data : aliceAskOrder
     } 
-    let  txAskOrderLive = await orderBookContract.addOrder(askOrderConfig );  
+    try{
+        let txAskOrderLive = await orderBookContract.addOrder(askOrderConfig );
+        console.log(txAskOrderLive)
+        txStatus = TxStatus.AwaitingConfirmation;
+        
+        let receipt = await txAskOrderLive.wait()
+
+        let sloshId = receipt.events.filter(e => e.event == 'AddOrder')[0].args[2].toHexString()
+        
+        txStatus = TxStatus.None;
+        setTimeout(5000)
+        push(`/sloshbalance/${params.wild}/${sloshId}`)
+    }catch(error){
+        errorMsg = error?.code ||
+          error.error?.data?.message ||
+          error.error?.message ||
+          error.data?.message ||
+          error?.message;
+        
+        txStatus = TxStatus.Error;
+        return;
+    }
+
+
 }  
 </script>
+
 <div>
     <Section>
-    <div class="pt-4">
-        <div class="flex flex-col gap-y-2 px-4 pt-2 ">
-            <div class="flex justify-between pb-4">
-                <span class="cursor-pointer text-black" on:click={() =>{history.back()}}><IconLibrary icon="back" width={14} /></span>
-                <div class="flex flex-col justify-center items-center pb-2">
-                    <span class="font-semibold text-black mr-5">Add Slosh</span>
-                    <!-- <span class="font-normal">(Ox2413fb3709b0...)</span> -->
-                </div>
-                <div />
-                <!-- <span on:click={() =>{push(`/sloshbalance`)}}><IconLibrary icon="forward" width={14} /></span> -->
-            </div>
-            <div class="grid  ht gap-y-2.5">
-                 {#each tokenAddressess as token, i}
-                    <div class="grid items-stretch border border-orange-400 w-96 rounded-full ">
-                        <div class="grid grid-cols-2 items-center px-10 py-3 border-orange-400"> 
-                            <span class="flex items-center gap-x-2">
-                                <img src={token.logo} alt="Rain Logo" class="w-5" />
-                                <span class=" text-black">{token.tokenName}</span>
-                            </span>
-                            <span class="flex justify-end"><Switch color="#418be4" bind:checked={checkedTokens[i]} /></span>
+        {#if txStatus == TxStatus.None}
+            <div class="pt-4">
+                <div class="flex flex-col gap-y-2 px-4 pt-2 ">
+                    <div class="flex justify-between pb-1">
+                        <span class="cursor-pointer text-black" on:click={() =>{history.back()}}><IconLibrary icon="back" width={14} /></span>
+                        <div class="flex flex-col justify-center items-center pb-2">
+                            <span class="font-semibold text-black mr-5">Add Slosh</span>
                         </div>
+                        <div />
+                        <!-- <span on:click={() =>{push(`/sloshbalance`)}}><IconLibrary icon="forward" width={14} /></span> -->
                     </div>
-                {/each}
-            </div>    
-        </div>
-        <div class="w-full bg-gray-300 p-2 flex justify-center items-center gap-x-4 px-6 my-4">
-            <div class="w-full text-black">Choose a threshold :</div>
-            <span class="flex items-center gap-x-2 text-black"><Input bgColor="bg-white" bind:value={thresholdVal} type="number" validator={required} bind:this={fields.tiers1} />%</span>
-            
-        </div>
-        <div class="w-full flex px-4 justify-center">
-            {#if $signer}
-                <button class="w-full rounded-full text-base py-3 px-5 text-black" style="background-color: #FDB142;  box-shadow: inset 0px 2px 6px 0px #ffffff;" disabled={!$signer} on:click={handleClick}>Ok</button>
-            {:else}  
-                <span class="">Please connect your wallet</span>
-            {/if}
-        </div>
-    </div>
+                    <div class="w-full p-2 px-2 flex justify-center items-start">
+                        <span class="w-max font-semibold text-black mr-2 pt-1">Slosh name:</span>
+                        <span class="w-2/3">
+                            <Input bind:value={sloshName} type="text" validator={required} bind:this={fields.sloshName} >
+                                <span slot="tip">Tip: Shorter names cost less gas :D</span>
+                            </Input>
+                        </span>
+                    </div>
+                    <div class="grid  ht gap-y-2.5">
+                        {#each tokenAddressess as token, i}
+                            <div class="grid items-stretch border border-orange-400 w-96 rounded-full ">
+                                <div class="grid grid-cols-2 items-center px-10 py-3 border-orange-400"> 
+                                    <span class="flex items-center gap-x-2">
+                                        <img src={token.logo} alt="Rain Logo" class="w-5" />
+                                        <span class=" text-black">{token.tokenName}</span>
+                                    </span>
+                                    <span class="flex justify-end"><Switch color="#418be4" bind:checked={checkedTokens[i]} /></span>
+                                </div>
+                            </div>
+                        {/each}
+                    </div>    
+                </div>
+                <div class="w-full bg-gray-300 p-2 flex justify-center items-center gap-x-4 px-6 my-4">
+                    <div class="w-full text-black">Choose a threshold :</div>
+                    <span class="flex items-center gap-x-2 text-black"><Input bgColor="bg-white" bind:value={thresholdVal} type="number" validator={required} bind:this={fields.tiers1} />%</span>  
+                </div>
+                <div class="w-full flex px-4 justify-center">
+                    {#if $signer}
+                        <button class="w-full rounded-full text-base py-3 px-5 text-black" style="background-color: #FDB142;  box-shadow: inset 0px 2px 6px 0px #ffffff;" disabled={!$signer} on:click={handleClick}>OK</button>
+                    {:else}  
+                        <span class="">Please connect your wallet</span>
+                    {/if}
+                </div>
+            </div>
+        {/if}
+        {#if txStatus == TxStatus.AwaitingConfirmation}
+          <div class="flex flex-col items-center gap-y-5 p-6">
+            <lottie-player src="https://lottie.host/5f90529b-22d1-4337-8c44-46e3ba7c0c68/pgMhlFIAcQ.json" background="transparent" speed="1" style="width: 300px; height: 200px;" loop autoplay></lottie-player>
+            <span class="text-lg text-black">Transaction confirming...</span>
+          </div>
+        {/if}
+        {#if txStatus == TxStatus.Error}
+            <div class="flex flex-col items-center gap-y-5 p-6">
+                <span class="text-lg text-black">Something went wrong.</span>
+                <span class="text-lg text-red-400">{errorMsg}</span>
+            </div>
+        {/if}
     </Section>
 </div>
-<!-- <style>
-    ::-webkit-scrollbar {
-        width: 5px;
-    }
-    .ht{
-        max-height: 17rem;
-    }
-</style> -->

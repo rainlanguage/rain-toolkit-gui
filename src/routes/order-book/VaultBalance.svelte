@@ -34,7 +34,7 @@
 
     $: if($signer) {
          ownerAddress = $signerAddress?.toLowerCase() 
-        orderBookContract = new ethers.Contract('0x927f3f0579258fe1c96f9331e496cb1e091d0224',orderABI , $signer )
+        orderBookContract = new ethers.Contract('0x1d4e06f86d0d07059a4fc76069c1d8660558947e',orderABI , $signer )
 
     }
 
@@ -75,20 +75,7 @@
 
         console.log("orders : " , orders )
 
-    } 
-
-    const withdraw = async (tokenAddress) => {   
-        const amount = ethers.BigNumber.from("10" + eighteenZeros); //to be taken input
-        let vaultId = ethers.BigNumber.from(vault[0].vaultId);   
-
-        const withdrawConfigStruct = {
-            token: tokenAddress ,
-            vaultId: vaultId,
-            amount: amount
-        }; 
-        const txDepositOrderAlice = await orderBookContract.withdraw(withdrawConfigStruct); 
-        await txDepositOrderAlice.wait()
-    }
+    }  
     
 </script> 
 
@@ -96,10 +83,11 @@
     <Section>
         <div class="py-4 px-4">
             {#if $Vault.fetching}
-                <div class="p-4">
+            <lottie-player src="https://lottie.host/5f90529b-22d1-4337-8c44-46e3ba7c0c68/pgMhlFIAcQ.json" background="transparent" speed="1" style="width: 300px; height: 300px;" loop autoplay></lottie-player>
+                <!-- <div class="p-4">
                     <Ring color="#1D4ED8" />
                     <div>Loading...</div>
-                </div>
+                </div> -->
             {:else if $Vault.error}
                 <div class="text-red-400 font-medium text-xl px-4 py-4">
                     Please connect your wallet<br />

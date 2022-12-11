@@ -25,9 +25,9 @@
 
     "/": Orderbook,
     // "/addvault" : Sloshes,
-    "/vaults" : Vaults,
-    "/sloshes/*" : Sloshes,
-    "/addslosh/*": AddSlosh,
+    // "/vaults" : Vaults,
+    "/sloshes" : Sloshes,
+    "/addslosh": AddSlosh,
     "/sloshbalance/*": SloshBalance,
     "/vaultbalance/*": VaultBalance,
 
@@ -40,13 +40,13 @@
 <Modal
   unstyled={true}
   closeButton={false}
-  classWindow="relative max-w-full max-h-full my-2 mx-auto text-white rounded-xl shadow-md bg-gray-800"
+  classWindow="relative max-w-full max-h-full my-2 mx-auto text-white rounded-xl shadow-md bg-gray-800 "
   classBg="fixed top-0 left-0 w-screen h-screen flex flex-col justify-center bg-gray-900 bg-opacity-75 z-50 backdrop-blur"
   classWindowWrap="relative m-2 max-h-full flex flex-col"
   classContent="p-6"
 >
   <Header />
-    <main class="relative flex font-light text-gray-50">
+    <main class="relative flex font-light text-gray-50 image">
       <div class="w-full py-5 px-8">
         {#if $signerAddress}
           <Router {routes} />
@@ -72,10 +72,19 @@
   main{
     z-index: 1;
     min-height: 74vh;
-    background-image: url("/assets/background.svg");
-    /* background-image: url("/assets/sloshy_background.svg"); */
+    /* background-image: url("/assets/background.svg"); */
+    
     /* background-position: center; */
+    /* background-size: contain; */
+    /* position: relative; */
+  }
+  .image{
+    background-image: url("/assets/Frame.svg");
+    /* background-image: url("/assets/sloshylines_extended.svg"); */
     background-repeat: no-repeat;
     background-size: contain;
   }
+  svg {       
+    viewBox: 0 0 100% 100%; 
+  } 
 </style>
