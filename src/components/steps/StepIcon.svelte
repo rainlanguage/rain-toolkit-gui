@@ -1,6 +1,7 @@
 <script>
   export let state;
-  export let step;
+  export let step; 
+  export let bgColor = false
 </script>
 
 {#if state == "unfulfilled"}
@@ -13,7 +14,8 @@
   </div>
 {:else}
   <div
-    class="flex-shrink-0 w-7 h-7 rounded-full bg-green-500 flex justify-center items-center"
+    class="flex-shrink-0 w-7 h-7 rounded-full {!bgColor ? 'bg-green-500' : '' } flex justify-center items-center"
+    style="{bgColor ? 'background-color : #2c9dda' : ''}"
   >
     {#if state == "fulfilled"}
       <svg

@@ -99,7 +99,8 @@
     <span class="text-xl font-bold">Withdraw</span>
     <Steps
       steps={["Confirm", "Complete"]}
-      {activeStep}
+      {activeStep} 
+      bgColor={true}
       fulfilledTextClass="text-black font-semibold"
       lineBorderClass="border-gray-400"
     />

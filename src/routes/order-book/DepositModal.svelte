@@ -137,6 +137,7 @@
     <Steps
       steps={["Approve", "Confirm", "Complete"]}
       {activeStep}
+      bgColor={true}
       fulfilledTextClass="text-black font-semibold"
       lineBorderClass="border-gray-400"
     />

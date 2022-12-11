@@ -112,9 +112,13 @@
     $: order = $getOrder?.data?.order;
 
     $: if ($getOrder.data != undefined && $signerAddress ) {  
-        let order_ = $getOrder.data.order   
+        let order_ = $getOrder.data.order    
 
-        let inputArray = order_[0]?.validInputs  
+        let ONE = ethers.BigNumber.from("1000000000000000000") 
+        let threshold_ = (ethers.BigNumber.from(order_.stateConfig.constants[1]).sub( ONE ))   
+        threshold = threshold_.div(ethers.BigNumber.from("10000000000000000"))
+
+        let inputArray = order_?.validInputs  
     
         for(let i = 0 ; i <inputArray?.length ; i++ ){ 
 
@@ -221,10 +225,9 @@
                             <tbody class=" w-full inline-block">
                             <!-- <tbody class=" max-h-40 w-full inline-block"> -->
                                 {#each order.validInputs as token}
-                                {console.log("token", token)}
                                 <tr class="gap-x-4 flex w-full items-center">
                                     <td class="pr-6 w-1/4 text-gray-700">{token?.tokenVault?.token?.name}</td>
-                                    <td class="pr-6 flex justify-center text-gray-700" style="width: 38%;">{token?.tokenVault?.balance}</td>
+                                    <td class="pr-6 flex justify-center text-gray-700" style="width: 38%;">{ethers.utils.formatUnits(token?.tokenVault?.balance , token?.tokenVault?.token?.decimals  )}</td>
                                     <td class="py-1" style="width: 37%;">
                                         <div class="flex justify-between">
                                             <div>
@@ -249,7 +252,7 @@
                     </div>
                 </div>
                 <div class="grid grid-cols-3 px-14 gap-x-6">
-                    <div class="flex flex-col gap-y-2">
+                    <div class="flex flex-col gap-y-2"> 
                         <span class="font-semibold text-black">History</span>
                         <ul class="list-none"> 
                             {#each takeOrders_ as takeOrder_}

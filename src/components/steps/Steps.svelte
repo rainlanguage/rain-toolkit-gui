@@ -4,7 +4,9 @@
   export let activeStep;
   export let lineBorderClass = "border-gray-200";
   export let fulfilledTextClass = "text-gray-800";
-  export let unfulfilledTextClass = "text-gray-500";
+  export let unfulfilledTextClass = "text-gray-500"; 
+  export let bgColor 
+
 </script>
 
 <div class="flex flex-row items-center space-x-2">
@@ -13,6 +15,7 @@
       name={step}
       step={i}
       {activeStep}
+      {bgColor}
       classes={[fulfilledTextClass, unfulfilledTextClass]}
     />
     {#if i !== steps.length - 1}

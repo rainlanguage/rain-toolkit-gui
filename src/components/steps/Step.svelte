@@ -5,6 +5,7 @@
   export let activeStep;
   export let name;
   export let classes;
+  export let bgColor 
 
   const [fulfilledTextClass, unfulfilledTextClass] = classes;
 
@@ -22,7 +23,7 @@
 </script>
 
 <div class="flex flex-shrink-0 flex-row items-center">
-  <StepIcon {step} {state} />
+  <StepIcon {step} {state} {bgColor}/>
   {#if state == "active"}
     <span class={`ml-2 text-sm ${fulfilledTextClass} leading-none`}>{name}</span
     >
