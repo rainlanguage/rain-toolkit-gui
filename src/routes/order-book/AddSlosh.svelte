@@ -41,7 +41,7 @@
 
 const addOrder = async () => { 
     console.log("fields", sloshName, );
-    
+
     let x = 1 + ((1 * thresholdVal)/100) 
 
     let askPrice = ethers.utils.parseEther(x.toString()) 
@@ -90,7 +90,7 @@ const addOrder = async () => {
         
         txStatus = TxStatus.None;
         setTimeout(5000)
-        push(`/sloshbalance/${params.wild}/${sloshId}`)
+        push(`/sloshbalance/${sloshId}`)
     }catch(error){
         errorMsg = error?.code ||
           error.error?.data?.message ||
@@ -101,8 +101,6 @@ const addOrder = async () => {
         txStatus = TxStatus.Error;
         return;
     }
-
-
 }  
 </script>
 

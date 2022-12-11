@@ -30,7 +30,7 @@
     let tokenVault
     let ownerAddress
     let tokenArray = []
-    let threshold : number = 2  
+    let threshold  
 
     let takeOrders_  = []
 
@@ -49,6 +49,9 @@
     				handleIODispatch
                     transactionHash
                     owner
+                    stateConfig{
+                        constants
+                    }
                     validInputs{
                         tokenVault{  
                             vaultId
@@ -173,7 +176,6 @@
             let receipt = await txAskRemoveOrder.wait()  
             
         } catch (error) { 
-            console.log(error)
             if (error.code === error.TRANSACTION_REPLACED) {
                 if (error.cancelled) {
                     console.log("Transaction Cancelled")
@@ -239,26 +241,6 @@
                                     </td>
                                 </tr>
                                 {/each}
-                                <!-- {#each vault as vault_}
-                                    <tr class="gap-x-4 flex w-full items-center">
-                                        <td class="pr-6 w-1/4 text-gray-700">{vault_.token.name}</td>
-                                        <td class="pr-6 flex justify-center text-gray-700" style="width: 38%;">{vault_.balance}</td>
-                                        <td class="py-1" style="width: 37%;">
-                                            <div class="flex justify-between">
-                                                <div>
-                                                    <button class="transition-colors text-sm leading-none py-1 px-5 rounded-full text-black" style="background-color: #FDB142;" on:click={() => {
-                                                        open(WithdrawModal, {vault_, orderBookContract})
-                                                        // withdraw(vault_.token.id)
-                                                    }}>Withdraw</button>
-                                                </div>
-                                                <div><button class="transition-colors text-sm leading-none py-1 px-5 rounded-full text-black" style="background-color: #FDB142;" on:click={() => {
-                                                    open(DepositModal, {vault_, orderBookContract})
-                                                }}>Deposit</button></div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                {/each} -->
-                            <!-- </tbody> -->
                         </table>
                         <div class="pl-8 text-black">Vault: <a class="items-center underline hover:text-blue-500" href="/#/vaultbalance/{sloshId}">{sloshId.substring(0,15)}</a></div>
                     </div>
