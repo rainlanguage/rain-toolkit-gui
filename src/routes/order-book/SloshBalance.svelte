@@ -21,7 +21,7 @@
     let orderBookContract
 
     $: if($signer){
-        orderBookContract = new ethers.Contract('0x927f3f0579258fe1c96f9331e496cb1e091d0224',orderABI , $signer )
+        orderBookContract = new ethers.Contract('0x45f51ed4aa4a5b73319af11150a40349e70100b6',orderABI , $signer )
     }
 
     let vaultId = params.wild.split('/')[0]

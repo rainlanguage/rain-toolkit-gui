@@ -21,7 +21,7 @@
     let checkedTokens = []
 
     $: if($signer){
-        orderBookContract = new ethers.Contract('0x927f3f0579258fe1c96f9331e496cb1e091d0224',orderABI , $signer )
+        orderBookContract = new ethers.Contract('0x45f51ed4aa4a5b73319af11150a40349e70100b6',orderABI , $signer )
     }
     
     const handleClick = async () => {
@@ -51,11 +51,12 @@ const addOrder = async () => {
 
     for(let i = 0; i < tokenAddressess.length; i++ ){
         if(checkedTokens[i] == true){
-            tokenInput.push({"token" : tokenAddressess[i].tokenAddress, "vaultId" : randomNumber})
-            tokenOutput.push({"token" : tokenAddressess[i].tokenAddress, "vaultId" : randomNumber })
+            tokenInput.push({"token" : tokenAddressess[i].tokenAddress, "vaultId" : randomNumber , decimals : tokenAddressess[i].decimals })
+            tokenOutput.push({"token" : tokenAddressess[i].tokenAddress, "vaultId" : randomNumber, decimals : tokenAddressess[i].decimals  })
         }
     } 
 
+    const aliceAskOrder = ethers.utils.toUtf8Bytes("aliceAskOrder")
 
     let askOrderConfig = { 
         expressionDeployer: '0x5C13ee05006364965093e827521118Ed269091a9',
@@ -66,8 +67,14 @@ const addOrder = async () => {
             sources: [askSource , [] ],
             constants: askConstants,  
         }, 
+        data : aliceAskOrder
+
     } 
-    let  txAskOrderLive = await orderBookContract.addOrder(askOrderConfig ); 
+    let  txAskOrderLive = await orderBookContract.addOrder(askOrderConfig );   
+    let receipt = await txAskOrderLive.wait()  
+    let filterArr = receipt.events.filter(e => e.event == 'AddOrder')[0].args[2].toHexString()
+    console.log("filterArr : " , )
+
 
   } catch (error) {  
 
