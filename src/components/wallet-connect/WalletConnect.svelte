@@ -11,13 +11,15 @@
   import Select from "$components/Select.svelte";
     import CustomSelect from "$components/CustomSelect.svelte";
     import FlashTooltip from "$components/FlashTooltip.svelte";
+    import { push } from "svelte-spa-router";
 
   const { open } = getContext("simple-modal");
 
   export let page: boolean = false;
 
   let providers,
-    oldNetName,
+    tempExplorer = $selectedNetwork.blockExplorer,
+    blockExplorer = $selectedNetwork.blockExplorer,
     library,
     networkName,
     changedName = false;
@@ -48,41 +50,41 @@
           $selectedNetwork = element;
         }
       });
+      blockExplorer = $selectedNetwork.blockExplorer
     }
 
-  const connectWallet = async () => {
-    try {
-      await web3Modal.clearCachedProvider();
-      const webProvider = await web3Modal.connect();
-      const webLibrary = new ethers.providers.Web3Provider(webProvider);
-      defaultEvmStores.setProvider(webProvider);
-      const network = await webLibrary.getNetwork();
+  // const connectWallet = async () => {
+  //   try {
+  //     await web3Modal.clearCachedProvider();
+  //     const webProvider = await web3Modal.connect();
+  //     const webLibrary = new ethers.providers.Web3Provider(webProvider);
+  //     defaultEvmStores.setProvider(webProvider);
+  //     const network = await webLibrary.getNetwork();
 
-      library = webLibrary;
-      // networkName = network.name;
+  //     library = webLibrary;
+  //     // networkName = network.name;
 
-      networks.forEach((element) => {
-        if (parseInt(element.config.chainId) === network.chainId) {
-          networkName = element.config.chainName;
-          oldNetName = element.config.chainName;
-          $selectedNetwork = element;
-        }
-      });
-    } catch (err) {
-      console.log("err", err);
-    }
-  };
-  const onNetworkChange = (text) => {
-    networkName = text;
-    changedName = true;
-  };
+  //     networks.forEach((element) => {
+  //       if (parseInt(element.config.chainId) === network.chainId) {
+  //         networkName = element.config.chainName;
+  //         oldNetName = element.config.chainName;
+  //         $selectedNetwork = element;
+  //       }
+  //     });
+  //   } catch (err) {
+  //     console.log("err", err);
+  //   }
+  // };
+  // const onNetworkChange = (text) => {
+  //   networkName = text;
+  //   changedName = true;
+  // };
 
   const switchNetwork = async (event) => {
     let network = event.detail.selected
     
     try {
       // await window.ethereum.request({
-        console.log("hello from try", network );
       await library.provider.request({
         method: "wallet_switchEthereumChain",
         params: [{ chainId: network.config.chainId }],
@@ -93,6 +95,7 @@
     } catch (switchError) {
       // This error code indicates that the chain has not been added to MetaMask.
       if (switchError.code === 4902) {
+
         try {
           // await window.ethereum.request({
           await library.provider.request({
@@ -102,37 +105,49 @@
           defaultEvmStores.setProvider();
           // name = network.config.chainName;
           networkName = network.config.chainName;
-        } catch (addError) {}
+          blockExplorer = network.blockExplorer
+        } catch (addError) {
+        }
       }
       if (switchError.code === 4001) {
         defaultEvmStores.disconnect();
+        location.reload();
+
       }
     }
   };
 
+  
+
+
   let accountMenuOptions = [
-        {
-            id: "copy",
-            label: "Copy Address",
-            action: () => {
-                if (navigator && navigator.clipboard && navigator.clipboard.writeText) {
-                    // this.showTooltip = true;
-                    // setTimeout(() => {
-                    //     this.showTooltip = false;
-                    // }, 1000);
-                    return navigator.clipboard.writeText($signerAddress);
-                }
-                return Promise.reject("The Clipboard API is not available.");
-            }
-        },
-        {
+    {
+          id: "copy",
+          label: "Copy Address",
+          action: () => {
+              if (navigator && navigator.clipboard && navigator.clipboard.writeText) {
+                  // this.showTooltip = true;
+                  // setTimeout(() => {
+                  //     this.showTooltip = false;
+                  // }, 1000);
+                  return navigator.clipboard.writeText($signerAddress);
+              }
+              return Promise.reject("The Clipboard API is not available.");
+          }
+    },
+    {
             id: "view",
             label: "View on Explorer",
             action: () => {
-                window.open(`${$selectedNetwork.blockExplorer}address/${$signerAddress}`);
+              console.log("temp", tempExplorer, blockExplorer);
+              
+              if(tempExplorer != blockExplorer){
+                tempExplorer = blockExplorer;
+                window.open(`${blockExplorer}address/${$signerAddress}`);
+              }
             },
-        }
-    ]
+    }
+  ]
 </script>
 
 <div class="flex items-center gap-y-4">
@@ -183,15 +198,29 @@
     {/if}
   {/if} -->
 <!-- {() => switchNetwork($selectedNetwork)} -->
-  <CustomSelect options={networks} on:change={switchNetwork} 
+    <!-- {#if $signerAddress} -->
+      {console.log("demouser", $selectedNetwork)}
+      <CustomSelect options={networks} on:change={switchNetwork} 
               label={networkName || 'Available networks'} className={'meinMenu'}
               dropDownClass={'nav-dropdown'}>
         <span slot="icon" class="select-icon"><img src={$selectedNetwork?.config?.icon}
                                                    alt={networkName}/></span>
       </CustomSelect>
+      
       <CustomSelect className={'meinMenu'} options={accountMenuOptions}
               label={$signerAddress?.replace(/(.{6}).*(.{4})/, "$1…$2")}
               staticLabel={true} dropDownClass={'nav-dropdown'}>
       </CustomSelect>
+    <!-- {:else}
+      {#if page}
+        <div class="mt-4">
+          <button
+            class="rounded-full border-none px-14 py-3 text-white"
+            style="background-color: #2C2C54;"
+            on:click={connectWallet}>Connect Wallet</button
+          >
+        </div>
+      {/if}
+    {/if} -->
 </div>
 

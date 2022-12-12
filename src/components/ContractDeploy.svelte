@@ -52,7 +52,6 @@
     .then((receipt) => {
       isReceipt = true;
       contractAddress = receipt.address;
-      console.log('the receipt', receipt)
       checkForIndexing(contractAddress)
     })
     .catch(async (error) => {

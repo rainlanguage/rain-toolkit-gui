@@ -5,17 +5,17 @@
     import { selectedNetwork } from "$src/stores";  
 
     import { client } from "$src/stores";
-    import { queryStore , gql } from "@urql/svelte"; 
+    import { queryStore } from "@urql/svelte"; 
     import { provider , signer , signerAddress } from "svelte-ethers-store";
-    import { BigNumber, ethers } from "ethers";
-    import Ring from "$components/Ring.svelte"; 
+    import { BigNumber, ethers } from "ethers"; 
     import orderABI from "./orderbookABI.json" 
-    import { max_uint32   } from './opcodes.ts'
     import DepositModal from "./DepositModal.svelte";
     import WithdrawModal from "./WithdrawModal.svelte";
     import { getContext } from "svelte";
     import { hex_to_ascii } from "./opcodes";
+    import {BigNumber as FloatBigNum} from 'bignumber.js'
     const { open } = getContext("simple-modal");
+
 
     export let params: {
         wild: string;
@@ -112,11 +112,13 @@
     $: order = $getOrder?.data?.order;
 
     $: if ($getOrder.data != undefined && $signerAddress ) {  
-        let order_ = $getOrder.data.order    
+        let order_ = $getOrder.data.order     
 
-        let ONE = ethers.BigNumber.from("1000000000000000000") 
-        let threshold_ = (ethers.BigNumber.from(order_.stateConfig.constants[1]).sub( ONE ))   
-        threshold = threshold_.div(ethers.BigNumber.from("10000000000000000"))
+        let ratio = new FloatBigNum(order_.stateConfig.constants[1]) 
+        let ONE = new FloatBigNum("1000000000000000000")   
+        let HUNDRED = new FloatBigNum("100")   
+        threshold = (ratio.minus(ONE)).times(HUNDRED).dividedBy(ONE)   
+
 
         let inputArray = order_?.validInputs  
     
@@ -143,19 +145,13 @@
     const handleClick = async () =>{  
         try {
             let order_ = $getOrder.data.order 
-            
-            // console.log("order_ : " , order_.data )
-            // console.log("order_ : " , order_.transactionHash )
 
             let tx  = await $provider.getTransactionReceipt(order_.transactionHash)  
             let byteData = tx.logs.filter(e => {return e.topics[0] == '0x7e4a3d1b8b320d979824450641b0d97507684bf55eafb4503032f4042f8fbf8d' })  
-            // console.log("byteData : " , byteData[0].data )
 
             let data = await ethers.utils.defaultAbiCoder.decode([
                 "address","tuple(address,address,uint256,uint256,tuple(address,uint8,uint256)[],tuple(address,uint8,uint256)[],bytes)","uint256"] ,
                     byteData[0].data)   
-
-            // console.log("data : " , data )
 
             let IO = data[1][4].map(e => { 
                 let vaultId = e[2].toString() 
@@ -191,8 +187,6 @@
             }
         }      
     }
-
-    $: console.log("demo", $getOrder.data)
 </script> 
 
 <div class="flex flex-col items-center justify-center">
@@ -250,7 +244,7 @@
                                 </tr>
                                 {/each}
                         </table>
-                        <div class="pl-8 text-black">Vault: <a class="items-center underline hover:text-blue-500" target="_blank"
+                        <div class="pl-8 text-black">Vault: <a class="items-center text-gray-700 underline hover:text-blue-500" target="_blank"
                             href={`${$selectedNetwork.blockExplorer}/tx/${sloshId}`}>{sloshId.substring(0,15)}...</a></div>
                     </div>
                     <div class="bg-gray-200 p-2 gap-x-4 px-6 my-4">

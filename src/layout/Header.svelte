@@ -21,11 +21,11 @@
   
   <div >
     <!-- <img src="./assets/Sloshy.png" alt="Slosh Logo" /> -->
-    <span class="font-lobster text-4xl pl-16">Sloshy</span>
+    <span class="font-lobster text-4xl pl-16 cursor-pointer">Sloshy</span>
   </div> 
   {#if $signerAddress}
     <div class="flex direction flex-row items-center pr-14 gap-x-14">
-      <div class="font-semibold"><a href="/#/vaults">Vaults</a></div>
+      <div class="font-semibold"><a href="/#/sloshes">Sloshes</a></div>
       <div class="font-semibold"><a href="/#/">How this works</a></div>
       <WalletConnect />
       <!-- <CustomSelect options={networks} on:select={handleNetworkSelect}

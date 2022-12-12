@@ -75,7 +75,6 @@
           txReceipt = await error.replacement.wait();
         }
       } else { 
-        console.log("error : " , error)
         errorMsg = error?.code ||
           error.error?.data?.message ||
           error.error?.message ||
@@ -133,12 +132,13 @@
 
 {#if txStatus == TxStatus.None}
   <div class="flex w-full flex-col items-start gap-y-7">
-    <span class="text-xl font-bold">Deposit</span>
+    <span class="text-xl text-black font-bold">Deposit</span>
     <Steps
       steps={["Approve", "Confirm", "Complete"]}
       {activeStep}
       bgColor={true}
-      fulfilledTextClass="text-black font-semibold"
+      fulfilledTextClass="text-black font-semibold text-sm"
+      unfulfilledTextClass = "text-gray-500 text-sm font-semibold"
       lineBorderClass="border-gray-400"
     />
     <span class="text-red-500">Don't Close the Modal until transaction complete</span>
@@ -167,7 +167,7 @@
             Getting price...
           {:then result}
             <div class="flex flex-row gap-x-3">
-              <span
+              <span class="text-black"
                 >Amount: {formatUnits(result._units, token?.tokenVault?.token.decimals)}
                 {token?.tokenVault?.token.symbol}
               </span>
@@ -185,9 +185,9 @@
       </button>
     {/if}
     {#if activeStep == DepositSteps.Confirm}
-      <span>Confirm your deposit.</span>
+      <span class="text-black">Confirm your deposit.</span>
       {#if calcPricePromise}
-        <div class="grid grid-cols-2 gap-4 rounded-md border border-gray-600 p-4">
+        <div class="grid grid-cols-2 gap-4 rounded-md border border-gray-600 p-4 text-black">
           {#await calcPricePromise}
             Getting price...
           {:then result}
@@ -220,7 +220,7 @@
     {/if}
 
     {#if activeStep == DepositSteps.Complete}
-      <span>Deposit confirmed!</span>
+      <span class="text-black">Deposit confirmed!</span>
       <a
         class="text-blue-400 underline"
         target="_blank"
@@ -236,19 +236,19 @@
   <div class="flex flex-col items-center gap-y-5 p-6">
     <!-- <Ring color="#fff" /> -->
     <lottie-player src="https://lottie.host/5f90529b-22d1-4337-8c44-46e3ba7c0c68/pgMhlFIAcQ.json" background="transparent" speed="1" style="width: 300px; height: 200px;" loop autoplay></lottie-player>
-    <span class="text-lg">Awaiting signature...</span>
+    <span class="text-lg text-black">Awaiting signature...</span>
   </div>
 {/if}
 {#if txStatus == TxStatus.AwaitingConfirmation}
   <div class="flex flex-col items-center gap-y-5 p-6">
     <!-- <Ring color="#fff" /> -->
     <lottie-player src="https://lottie.host/5f90529b-22d1-4337-8c44-46e3ba7c0c68/pgMhlFIAcQ.json" background="transparent" speed="1" style="width: 300px; height: 200px;" loop autoplay></lottie-player>
-    <span class="text-lg">Transaction confirming...</span>
+    <span class="text-lg text-black">Transaction confirming...</span>
   </div>
 {/if}
 {#if txStatus == TxStatus.Error}
   <div class="flex flex-col items-center gap-y-5 p-6">
-    <span class="text-lg">Something went wrong.</span>
+    <span class="text-lg text-black">Something went wrong.</span>
     <span class="text-lg text-red-400">{errorMsg}</span>
   </div>
 {/if}

@@ -40,8 +40,6 @@
     };
 
 const addOrder = async () => { 
-    console.log("fields", sloshName, );
-
     let x = 1 + ((1 * thresholdVal)/100) 
 
     let askPrice = ethers.utils.parseEther(x.toString()) 
@@ -81,7 +79,6 @@ const addOrder = async () => {
     } 
     try{
         let txAskOrderLive = await orderBookContract.addOrder(askOrderConfig );
-        console.log(txAskOrderLive)
         txStatus = TxStatus.AwaitingConfirmation;
         
         let receipt = await txAskOrderLive.wait()
@@ -89,8 +86,8 @@ const addOrder = async () => {
         let sloshId = receipt.events.filter(e => e.event == 'AddOrder')[0].args[2].toHexString()
         
         txStatus = TxStatus.None;
-        setTimeout(5000)
-        push(`/sloshbalance/${sloshId}`)
+        // setTimeout(5000)
+        push(`/sloshes`)
     }catch(error){
         errorMsg = error?.code ||
           error.error?.data?.message ||

@@ -19,7 +19,7 @@
     | "textarea" = "text";
   export let value: string | number = "";
   export let placeholder = "";
-  export let validator = async (value: any): Promise<any> => null;
+  export let validator = async (value: any, type: any): Promise<any> => null;
   export let debounce: boolean = false;
   export let debounceTime: number = 750;
   export let min = "";
@@ -59,7 +59,7 @@
 
   export const validate = async () => {
     validating = true;
-    const validation = await validator(value);
+    const validation = await validator(value, type);
     validating = false;
     if (validation?.error) {
       ({ error } = validation);

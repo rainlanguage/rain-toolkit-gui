@@ -32,6 +32,7 @@
     "@walletconnect/web3-provider": "^1.7.8",
     "authereum": "^0.1.14",
     "autoprefixer": "^9.8.8",
+    "bignumber.js": "^9.1.1",
     "d3-quadtree": "^3.0.1",
     "d3-shape": "^3.1.0",
     "dayjs": "^1.11.4",

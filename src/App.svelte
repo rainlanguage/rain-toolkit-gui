@@ -4,7 +4,7 @@
   import Sidebar from "./layout/Sidebar.svelte";
   import Footer from "./layout/Footer.svelte";
 
-  import { signer, signerAddress } from "svelte-ethers-store";
+  import { defaultEvmStores, signerAddress } from "svelte-ethers-store";
   import Router from "svelte-spa-router";
   import Modal from "svelte-simple-modal";
     
@@ -16,6 +16,11 @@
   import Vaults from "$routes/order-book/Vaults.svelte";
   import WalletConnect from "$components/wallet-connect/WalletConnect.svelte";
     import Orderbook from "$routes/order-book/Orderbook.svelte";
+    import Web3Modal from "web3modal";
+    import { onMount } from "svelte";
+    import { networks, providerOptions } from "./constants";
+    import { ethers } from "ethers";
+    import { selectedNetwork } from "$src/stores";
    
   let routes = {};
 
@@ -32,6 +37,62 @@
     // Catch-all
     // This is optional, but if present it must be the last
     // '*': NotFound,
+  };
+
+  let providers,
+    oldNetName,
+    library,
+    networkName
+
+    onMount(() => {
+     
+     onMountLoad()
+     }) 
+ 
+     const onMountLoad = async () => {
+       const provider = new ethers.providers.Web3Provider(window.ethereum);
+       // const webLibrary = new ethers.providers.Web3Provider(webProvider);
+       defaultEvmStores.setProvider(provider); 
+ 
+       const network = await provider.getNetwork();
+ 
+       library = provider;
+       // networkName = network.name;
+ 
+       networks.forEach((element) => {
+         if (parseInt(element.config.chainId) === network.chainId) {
+           networkName = element.config.chainName;
+           $selectedNetwork = element;
+         }
+       });
+     }
+
+  const web3Modal = new Web3Modal({
+    cacheProvider: false, // optional
+    providerOptions, // required
+  }); 
+
+  const connectWallet = async () => {
+    try {
+      await web3Modal.clearCachedProvider();
+      const webProvider = await web3Modal.connect();
+      const webLibrary = new ethers.providers.Web3Provider(webProvider);
+      defaultEvmStores.setProvider(webProvider);
+      const network = await webLibrary.getNetwork();
+
+      library = webLibrary;
+      // networkName = network.name;
+
+      networks.forEach((element) => {
+        if (parseInt(element.config.chainId) === network.chainId) {
+          networkName = element.config.chainName;
+          oldNetName = element.config.chainName;
+          $selectedNetwork = element;
+        }
+      });
+    } catch (err) {
+      console.log("err", err);
+    }
   };
 </script>
 
@@ -51,7 +112,14 @@
         {:else}
           <div class="flex flex-col justify-center items-center h-full">
             <span class="text-xl font-semibold text-black">To use the app:</span>
-            <WalletConnect page={true}/>
+              <div class="mt-4">
+                <button
+                  class="rounded-full border-none px-14 py-3 text-white"
+                  style="background-color: #2C2C54;"
+                  on:click={connectWallet}>Connect Wallet</button
+                >
+              </div>
+              <!-- <WalletConnect /> -->
           </div>
         {/if}
       </div>
@@ -77,8 +145,8 @@
     /* position: relative; */
   }
   .image{
-    background-image: url("/assets/Frame.svg");
-    /* background-image: url("/assets/sloshylines_extended.svg"); */
+    /* background-image: url("/assets/Frame.svg"); */
+    background-image: url("/assets/sloshylines_extended.svg");
     background-repeat: no-repeat;
     background-size: contain;
   }

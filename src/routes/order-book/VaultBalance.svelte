@@ -73,8 +73,6 @@
 
         orders = orders_.map(e => {return e.id} ).filter(function(item,index ,arr){  return arr.indexOf(item) == index;  })
 
-        console.log("orders : " , orders )
-
     }  
     
 </script> 

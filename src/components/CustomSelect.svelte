@@ -16,7 +16,6 @@
     const dispatch = createEventDispatcher();
 
     function selectOption(option) {
-        console.log("selectOption", option);
         dispatch('change', {
             selected: option
         });
@@ -27,7 +26,6 @@
     let dropdownTrigger;
 
     function commitAction(option) {
-        console.log("commitAction", option);
         if (option.action) {
             option.action()
         }
@@ -51,7 +49,7 @@
         <span class="expand"><IconLibrary icon="down-open-arrow" width={20} /></span>
       {/if}
     </button>
-    <div slot="DropdownMenu" class={`${dropDownClass} dropdown`}>
+    <div slot="DropdownMenu" class={`${dropDownClass} dropdown-M`}>
       {#each options as option}
         <button class="dropdown-item" type="button" on:click={()=>commitAction(option)}>
           {#if option?.config?.icon}
@@ -64,8 +62,11 @@
   </Dropdown>
 </div>
 <style>
-    @import url("https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css");
+    /* @import url("https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"); */
 
+    :global(.dropdown){
+        position: relative;
+    }
     .btn:focus {
         outline: none;
         box-shadow: none;
@@ -80,11 +81,37 @@
         justify-content: space-between;
         align-items: center;
         text-align: start;
+        color: #212529;
+        text-align: center;
+        vertical-align: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        background-color: transparent;
+        border: 1px solid transparent;
+        padding: 0.375rem 0.75rem;
+        font-size: 1rem;
+        line-height: 1.5;
+        border-radius: 0.25rem;
+        transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    }
+
+    .dropdown-item {
+        width: 100%;
+        clear: both;
+        text-align: inherit;
+        white-space: nowrap;
+        /* background-color: transparent; */
+        border: 0;
     }
 
     .expand {
         /* margin-right: 10px; */
         margin-left: 10px;
+    }
+    .dropdown-toggle {
+        white-space: nowrap;
     }
 
     .dropdown-toggle::after {
@@ -110,7 +137,7 @@
         min-width: 180px;
     }
 
-    .dropdown {
+    .dropdown-M {
         max-height: 255px;
         height: auto;
         overflow: auto;
@@ -120,6 +147,10 @@
     .select-label {
         margin-left: 10px;
         width: calc(100% - 15px);
+    }
+
+    :global(.dropdown-menu.show) {
+        display: block;
     }
 
 
@@ -166,6 +197,26 @@
         text-decoration: none;
     }
     :global(.dropdown-menu){
-        background-color: #959495 !important;;
+        background-color: #959495 !important;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        z-index: 1000;
+        display: none;
+        float: left;
+        min-width: 10rem;
+        padding: 0.5rem 0;
+        margin: 0.125rem 0 0;
+        font-size: 1rem;
+        color: #212529;
+        text-align: left;
+        list-style: none;
+        background-color: #fff;
+        background-clip: padding-box;
+        border: 1px solid rgba(0,0,0,.15);
+        border-radius: 0.25rem;
+    }
+    :global(.btn:not(:disabled):not(.disabled)) {
+        cursor: pointer;
     }
 </style>
