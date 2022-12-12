@@ -24,12 +24,10 @@
     "/address-library": AddressLibrary,
 
     "/": Orderbook,
-    // "/addvault" : Sloshes,
-    // "/vaults" : Vaults,
     "/sloshes" : Sloshes,
     "/addslosh": AddSlosh,
     "/sloshbalance/*": SloshBalance,
-    "/vaultbalance/*": VaultBalance,
+    // "/vaultbalance/*": VaultBalance,
 
     // Catch-all
     // This is optional, but if present it must be the last

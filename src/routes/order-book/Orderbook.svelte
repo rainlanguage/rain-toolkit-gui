@@ -11,7 +11,7 @@
     import { signerAddress } from 'svelte-ethers-store'
     import { push } from "svelte-spa-router";
     $: if($signerAddress){        
-        push(`/vaults`) 
+        push(`/sloshes`) 
     }
 
 </script>

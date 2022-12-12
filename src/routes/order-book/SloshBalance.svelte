@@ -1,7 +1,8 @@
 <script lang="ts">
     import Button from "$components/Button.svelte";
     import IconLibrary from "$components/IconLibrary.svelte";
-    import Section from "$routes/order-book/Section.svelte";  
+    import Section from "$routes/order-book/Section.svelte";
+    import { selectedNetwork } from "$src/stores";  
 
     import { client } from "$src/stores";
     import { queryStore , gql } from "@urql/svelte"; 
@@ -82,8 +83,8 @@
     $: takeOrders = queryStore({
         client: $client,
         query: `
-            query ($owner: Bytes!) { 
-                takeOrderEntities(where: {owner: $owner}) {
+            query ($id: Bytes!) { 
+                takeOrderEntities(where: {order_: {id :$id }}) {
                     id
                     input
                     output
@@ -106,7 +107,7 @@
                     transactionHash
                 } 
             }`,
-        variables: { owner : ownerAddress }
+        variables: { id : sloshId }
     });  
 
     $: order = $getOrder?.data?.order;
@@ -131,8 +132,8 @@
         takeOrders_ = $takeOrders.data.takeOrderEntities 
 
         for(let i = 0 ; i < takeOrders_.length ; i++){
-            takeOrders_[i].input = ethers.utils.formatUnits(BigNumber.from(takeOrders_[i].input) , takeOrders_[i].inputToken.decimals) 
-            takeOrders_[i].output = ethers.utils.formatUnits(BigNumber.from(takeOrders_[i].output) , takeOrders_[i].outputToken.decimals)
+            takeOrders_[i].input = ethers.utils.formatUnits(BigNumber.from(takeOrders_[i].input) , takeOrders_[i].outputToken.decimals) 
+            takeOrders_[i].output = ethers.utils.formatUnits(BigNumber.from(takeOrders_[i].output) , takeOrders_[i].inputToken.decimals)
         }
      }
 
@@ -210,7 +211,7 @@
                     <div class="flex justify-between">
                         <span class="cursor-pointer pl-8 text-black" on:click={() =>{history.back()}} ><IconLibrary icon="back" width={14} /></span>
                         <div class="flex flex-col justify-center items-center pb-2">
-                            <span class="font-semibold text-black mr-5">Slosh</span>
+                            <span class="font-semibold text-black mr-5">Slosh {#if !order.orderLive} <span class="text-red-500">(deactivated)</span> {/if}</span>
                             <span class="font-normal text-gray-700 mr-5">{hex_to_ascii(order.data)} - {sloshId.substring(0,20)}...</span>
                         </div>
                         <div />
@@ -227,25 +228,31 @@
                                 {#each order.validInputs as token}
                                 <tr class="gap-x-4 flex w-full items-center">
                                     <td class="pr-6 w-1/4 text-gray-700">{token?.tokenVault?.token?.name}</td>
-                                    <td class="pr-6 flex justify-center text-gray-700" style="width: 38%;">{ethers.utils.formatUnits(token?.tokenVault?.balance , token?.tokenVault?.token?.decimals  )}</td>
+                                    <td class="pr-6 flex justify-center text-gray-700" style="width: 38%;">{ethers.utils.formatUnits(token?.tokenVault?.balance , token?.tokenVault?.token?.decimals)}</td>
                                     <td class="py-1" style="width: 37%;">
                                         <div class="flex justify-between">
                                             <div>
-                                                <button class="transition-colors text-sm leading-none py-1 px-5 rounded-full text-black" style="background-color: #FDB142;" on:click={() => {
-                                                    open(WithdrawModal, {token, orderBookContract})
-                                                    // withdraw(vault_.token.id)
-                                                }}>Withdraw</button>
+                                                {#if ethers.utils.formatUnits(token?.tokenVault?.balance , token?.tokenVault?.token?.decimals) != '0.0'}
+                                                    <button class="transition-colors text-sm leading-none py-1 px-5 rounded-full text-black" style="background-color: #FDB142;" on:click={() => {
+                                                        open(WithdrawModal, {token, orderBookContract})
+                                                        // withdraw(vault_.token.id)
+                                                    }}>Withdraw</button>
+                                                {/if}
                                             </div>
-                                            <div><button class="transition-colors text-sm leading-none py-1 px-5 rounded-full text-black" style="background-color: #FDB142;" on:click={() => {
-                                                open(DepositModal, {token, orderBookContract})
-                                            }}>Deposit</button></div>
+                                            <div>
+                                                <button class="transition-colors text-sm leading-none py-1 px-5 rounded-full text-black bgColor" 
+                                                    on:click={() => {open(DepositModal, {token, orderBookContract})}}
+                                                    disabled = {!order.orderLive}
+                                                >Deposit</button>    
+                                            </div>
                                                 <!-- // deposit(vault_.token.id) -->
                                         </div>
                                     </td>
                                 </tr>
                                 {/each}
                         </table>
-                        <div class="pl-8 text-black">Vault: <a class="items-center underline hover:text-blue-500" href="/#/vaultbalance/{sloshId}">{sloshId.substring(0,15)}</a></div>
+                        <div class="pl-8 text-black">Vault: <a class="items-center underline hover:text-blue-500" target="_blank"
+                            href={`${$selectedNetwork.blockExplorer}/tx/${sloshId}`}>{sloshId.substring(0,15)}...</a></div>
                     </div>
                     <div class="bg-gray-200 p-2 gap-x-4 px-6 my-4">
                         <div class="w-full text-sm flex justify-center items-center text-black font-medium">Threshold : {threshold} %</div>
@@ -283,7 +290,9 @@
             
                 </div>
                 <span class="grid justify-start px-6 pt-8">
+                    {#if order.orderLive}
                     <button class="w-full transition-colors underline text-base leading-none py-2 px-5 text-red-500" on:click={handleClick}>Deactivate Slosh</button>
+                    {/if}
                 </span>
             {/if}
         </div>
@@ -297,5 +306,11 @@
 <style>
     ::-webkit-scrollbar {
         width: 2px;
+    }
+    .bgColor{
+        background-color: #FDB142;
+    }
+    button:disabled{
+        background-color: #D2D2D2;
     }
 </style>

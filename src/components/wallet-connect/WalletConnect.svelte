@@ -5,11 +5,12 @@
   import { defaultEvmStores, signerAddress } from "svelte-ethers-store";
   import User from "$components/User.svelte";
   import { selectedNetwork } from "$src/stores";
-  import selectNetwork from "./selectNetwork.svelte";
   import { getContext } from "svelte";
   import IconLibrary from "$components/IconLibrary.svelte";
   import { onMount } from "svelte";
   import Select from "$components/Select.svelte";
+    import CustomSelect from "$components/CustomSelect.svelte";
+    import FlashTooltip from "$components/FlashTooltip.svelte";
 
   const { open } = getContext("simple-modal");
 
@@ -76,10 +77,12 @@
     changedName = true;
   };
 
-  const switchNetwork = async (network) => {
-
+  const switchNetwork = async (event) => {
+    let network = event.detail.selected
+    
     try {
       // await window.ethereum.request({
+        console.log("hello from try", network );
       await library.provider.request({
         method: "wallet_switchEthereumChain",
         params: [{ chainId: network.config.chainId }],
@@ -106,16 +109,34 @@
       }
     }
   };
+
+  let accountMenuOptions = [
+        {
+            id: "copy",
+            label: "Copy Address",
+            action: () => {
+                if (navigator && navigator.clipboard && navigator.clipboard.writeText) {
+                    // this.showTooltip = true;
+                    // setTimeout(() => {
+                    //     this.showTooltip = false;
+                    // }, 1000);
+                    return navigator.clipboard.writeText($signerAddress);
+                }
+                return Promise.reject("The Clipboard API is not available.");
+            }
+        },
+        {
+            id: "view",
+            label: "View on Explorer",
+            action: () => {
+                window.open(`${$selectedNetwork.blockExplorer}address/${$signerAddress}`);
+            },
+        }
+    ]
 </script>
 
-<div class="flex items-center gap-y-4 gap-x-8">
-  {#if $signerAddress}
-  <!-- <button
-      class="rounded-md border-none px-4 py-2 gap-x-1 text-black font-semibold"
-      on:click={() => open(selectNetwork, { onNetworkChange, library })}
-      >
-      {networkName}<IconLibrary icon="down-open-arrow"/></button
-    > -->
+<div class="flex items-center gap-y-4">
+  <!-- {#if $signerAddress}
     <Select
       bind:value={$selectedNetwork}
       items={networks}
@@ -160,6 +181,17 @@
         on:click={connectWallet}>Connect Wallet</button
       >
     {/if}
-  {/if}
+  {/if} -->
+<!-- {() => switchNetwork($selectedNetwork)} -->
+  <CustomSelect options={networks} on:change={switchNetwork} 
+              label={networkName || 'Available networks'} className={'meinMenu'}
+              dropDownClass={'nav-dropdown'}>
+        <span slot="icon" class="select-icon"><img src={$selectedNetwork?.config?.icon}
+                                                   alt={networkName}/></span>
+      </CustomSelect>
+      <CustomSelect className={'meinMenu'} options={accountMenuOptions}
+              label={$signerAddress?.replace(/(.{6}).*(.{4})/, "$1…$2")}
+              staticLabel={true} dropDownClass={'nav-dropdown'}>
+      </CustomSelect>
 </div>
 

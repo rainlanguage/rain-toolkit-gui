@@ -3,6 +3,7 @@
   import WalletConnect from "$components/wallet-connect/WalletConnect.svelte";
 
   import { signerAddress } from "svelte-ethers-store";
+    import CustomSelect from "$components/CustomSelect.svelte";
   const { open } = getContext("simple-modal");
 
   const handleConnect = () => {
@@ -27,6 +28,16 @@
       <div class="font-semibold"><a href="/#/vaults">Vaults</a></div>
       <div class="font-semibold"><a href="/#/">How this works</a></div>
       <WalletConnect />
+      <!-- <CustomSelect options={networks} on:select={handleNetworkSelect}
+              label={$activeNetwork?.displayName || 'Available networks'} className={'meinMenu'}
+              dropDownClass={'nav-dropdown'}>
+        <span slot="icon" class="select-icon"><img src={icons[$activeNetwork?.icon]}
+                                                   alt={$activeNetwork?.displayName}/></span>
+      </CustomSelect>
+      <CustomSelect className={'meinMenu'} options={accountMenuOptions}
+              label={$account.replace(/(.{6}).*(.{4})/, "$1…$2")}
+              staticLabel={true} dropDownClass={'nav-dropdown'}>
+      </CustomSelect> -->
     </div>
   {:else}
     <div />
