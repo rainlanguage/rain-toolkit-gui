@@ -45,7 +45,7 @@
     $: if ($sloshes.data) {  
         let orders_ = $sloshes.data.orders   
 
-        const filterOrder = async () => {   
+        const filterOrder = async () => {    
            
             let filteredArray = orders_.filter( (e) =>  { 
                 if(e.stateConfig.constants.length == 2 && e.stateConfig.constants[0] == max_uint256.toString() && ethers.BigNumber.from(e.stateConfig.constants[1]).gte(ONE) ){                     

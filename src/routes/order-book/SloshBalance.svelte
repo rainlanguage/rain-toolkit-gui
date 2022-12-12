@@ -104,7 +104,6 @@
                     }
                     inputIOIndex
                     outputIOIndex 
-                    transactionHash
                 } 
             }`,
         variables: { id : sloshId }
@@ -263,7 +262,7 @@
                         <span class="font-semibold text-black">History</span>
                         <ul class="list-none"> 
                             {#each takeOrders_ as takeOrder_}
-                                <li class="leading-7 text-gray-700">{takeOrder_.transactionHash.substring(0,12)}...</li>
+                                <li class="leading-7 text-gray-700">{takeOrder_.id.substring(0,12)}...</li>
                             {/each}
                             
                         </ul>
