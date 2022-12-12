@@ -82,8 +82,8 @@
     $: takeOrders = queryStore({
         client: $client,
         query: `
-            query ($owner: Bytes!) { 
-                takeOrderEntities(where: {owner: $owner}) {
+            query ($id: Bytes!) { 
+                takeOrderEntities(where: {order_: {id :$id }}) {
                     id
                     input
                     output
@@ -103,10 +103,9 @@
                     }
                     inputIOIndex
                     outputIOIndex 
-                    transactionHash
                 } 
             }`,
-        variables: { owner : ownerAddress }
+        variables: { id : sloshId }
     });  
 
     $: order = $getOrder?.data?.order;
@@ -131,8 +130,8 @@
         takeOrders_ = $takeOrders.data.takeOrderEntities 
 
         for(let i = 0 ; i < takeOrders_.length ; i++){
-            takeOrders_[i].input = ethers.utils.formatUnits(BigNumber.from(takeOrders_[i].input) , takeOrders_[i].inputToken.decimals) 
-            takeOrders_[i].output = ethers.utils.formatUnits(BigNumber.from(takeOrders_[i].output) , takeOrders_[i].outputToken.decimals)
+            takeOrders_[i].input = ethers.utils.formatUnits(BigNumber.from(takeOrders_[i].input) , takeOrders_[i].outputToken.decimals) 
+            takeOrders_[i].output = ethers.utils.formatUnits(BigNumber.from(takeOrders_[i].output) , takeOrders_[i].inputToken.decimals)
         }
      }
 
@@ -256,7 +255,7 @@
                         <span class="font-semibold text-black">History</span>
                         <ul class="list-none"> 
                             {#each takeOrders_ as takeOrder_}
-                                <li class="leading-7 text-gray-700">{takeOrder_.transactionHash.substring(0,12)}...</li>
+                                <li class="leading-7 text-gray-700">{takeOrder_.id.substring(0,12)}...</li>
                             {/each}
                             
                         </ul>
