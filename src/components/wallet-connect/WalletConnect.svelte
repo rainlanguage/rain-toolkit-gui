@@ -117,7 +117,7 @@
     }
   };
 
-  
+
 
 
   let accountMenuOptions = [
@@ -199,7 +199,6 @@
   {/if} -->
 <!-- {() => switchNetwork($selectedNetwork)} -->
     <!-- {#if $signerAddress} -->
-      {console.log("demouser", $selectedNetwork)}
       <CustomSelect options={networks} on:change={switchNetwork} 
               label={networkName || 'Available networks'} className={'meinMenu'}
               dropDownClass={'nav-dropdown'}>
