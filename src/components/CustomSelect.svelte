@@ -3,6 +3,7 @@
     import Dropdown from 'sv-bootstrap-dropdown';
     import { selectedNetwork } from "$src/stores";
     import IconLibrary from './IconLibrary.svelte';
+    import { img } from '$routes/assets';
 
     export let options;
     export let showExpand = true;
@@ -53,7 +54,7 @@
       {#each options as option}
         <button class="dropdown-item" type="button" on:click={()=>commitAction(option)}>
           {#if option?.config?.icon}
-            <img src={option.config.icon} alt={option?.label}/>
+            <img src={img[option.config.icon]} alt={option?.label}/>
           {/if}
           <span class="select-label">{option.label}</span>
         </button>

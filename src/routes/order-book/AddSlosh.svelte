@@ -55,8 +55,6 @@ const addOrder = async () => {
     let val = crypto.getRandomValues(nonce);  
     let randomNumber = ethers.BigNumber.from(ethers.utils.hexlify(val)).toString() // random number later can be changed .
 
-    
-    // push(`/sloshbalance/${params.wild}/0x3dc604409337a6cb622d1f791b44fd6a11b9c2aaca741a389b8514a5871b0b96`)
     for(let i = 0; i < tokenAddressess.length; i++ ){
         if(checkedTokens[i] == true){
             tokenInput.push({"token" : tokenAddressess[i].tokenAddress, "vaultId" : randomNumber, decimals : tokenAddressess[i].decimals})
@@ -112,7 +110,6 @@ const addOrder = async () => {
                             <span class="font-semibold text-black mr-5">Add Slosh</span>
                         </div>
                         <div />
-                        <!-- <span on:click={() =>{push(`/sloshbalance`)}}><IconLibrary icon="forward" width={14} /></span> -->
                     </div>
                     <div class="w-full p-2 px-2 flex justify-center items-start">
                         <span class="w-max font-semibold text-black mr-2 pt-1">Slosh name:</span>

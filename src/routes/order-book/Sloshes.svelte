@@ -1,10 +1,7 @@
 <script lang="ts">
     import Section from "$routes/order-book/Section.svelte";
-    import IconLibrary from "$components/IconLibrary.svelte";
     import { push } from "svelte-spa-router";
     import { signer , signerAddress } from "svelte-ethers-store";
-    import Ring from "$components/Ring.svelte";
-    import {tokenAddressess } from "$src/constants"   
     import { ethers } from "ethers";
     import dayjs from "dayjs";
 
@@ -106,7 +103,7 @@
                                     <td class={`w-1/3  ${!order.orderLive ? 'text-red-500' : 'text-gray-700'} `}>{hex_to_ascii(order.data)}</td>
                                     <td class={`w-1/3  text-gray-700`}>{dayjs.unix(order.timestamp).toISOString().slice(0,10)}</td>
                                     <td class={`py-1 w-1/3 ${!order.orderLive ? 'text-red-500' : 'text-gray-700'}  underline hover:text-blue-500`}>
-                                        <a href="/#/sloshbalance/{order.id}">
+                                        <a href="/#/slosh/{order.id}">
                                             {order.id.substring(0,16)}...
                                         </a>
                                     </td>
@@ -116,16 +113,6 @@
                         </table>
                     </div>
                     <div class="px-10">
-                        <!--<div class="pb-10">
-                            {#each orders as order}
-                                <span class="flex flex-col leading-7 items-center underline hover:text-blue-500 text-black">
-                                    <a href="/#/sloshbalance/{params.wild}/{order}">
-                                        {order.substring(0,16)}...
-                                    </a>
-                                </span>
-                            {/each}
-                        </div> -->
-
                         <div class="w-full flex px-2 justify-center">
                             {#if $signer}
                                 <button class="w-full rounded-full text-base py-3 px-28 text-black" style="background-color: #FDB142;  box-shadow: inset 0px 2px 6px 0px #ffffff;" disabled={!$signer} on:click={addSlosh}>Add a Slosh</button>

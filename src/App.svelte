@@ -1,7 +1,5 @@
 <script lang="ts" type="module">
-  import Home from "./routes/Home.svelte";
   import Header from "./layout/Header.svelte";
-  import Sidebar from "./layout/Sidebar.svelte";
   import Footer from "./layout/Footer.svelte";
 
   import { defaultEvmStores, signerAddress } from "svelte-ethers-store";
@@ -11,16 +9,15 @@
   import AddressLibrary from "$routes/address-library/AddressLibrary.svelte";
   import AddSlosh from "$routes/order-book/AddSlosh.svelte";
   import SloshBalance from "$routes/order-book/SloshBalance.svelte";
-  import VaultBalance from "$routes/order-book/VaultBalance.svelte";
   import Sloshes from "$routes/order-book/Sloshes.svelte";
-  import Vaults from "$routes/order-book/Vaults.svelte";
-  import WalletConnect from "$components/wallet-connect/WalletConnect.svelte";
-    import Orderbook from "$routes/order-book/Orderbook.svelte";
-    import Web3Modal from "web3modal";
-    import { onMount } from "svelte";
-    import { networks, providerOptions } from "./constants";
-    import { ethers } from "ethers";
-    import { selectedNetwork } from "$src/stores";
+  import Orderbook from "$routes/order-book/Orderbook.svelte";
+  import SloshComic from "$routes/order-book/SloshComic.svelte";
+  import Web3Modal from "web3modal";
+  import { onMount } from "svelte";
+  import { networks, providerOptions } from "./constants";
+  import { ethers } from "ethers";
+  import { selectedNetwork } from "$src/stores";
+  import NotFound from "$routes/order-book/NotFound.svelte";
    
   let routes = {};
 
@@ -31,12 +28,14 @@
     "/": Orderbook,
     "/sloshes" : Sloshes,
     "/addslosh": AddSlosh,
-    "/sloshbalance/*": SloshBalance,
+    "/slosh/*": SloshBalance,
+    "/slosh-comic": SloshComic,
+    
     // "/vaultbalance/*": VaultBalance,
 
     // Catch-all
     // This is optional, but if present it must be the last
-    // '*': NotFound,
+    '*': NotFound,
   };
 
   let providers,
@@ -94,6 +93,8 @@
       console.log("err", err);
     }
   };
+
+
 </script>
 
 <Modal
@@ -138,19 +139,14 @@
   main{
     z-index: 1;
     min-height: 74vh;
-    /* background-image: url("/assets/background.svg"); */
-    
-    /* background-position: center; */
-    /* background-size: contain; */
-    /* position: relative; */
   }
   .image{
     /* background-image: url("/assets/Frame.svg"); */
     background-image: url("/assets/sloshylines_extended.svg");
     background-repeat: no-repeat;
-    background-size: contain;
+    /* background-size: contain; */
   }
   svg {       
-    viewBox: 0 0 100% 100%; 
+    viewBox: 0 0 1512px 74vh; 
   } 
 </style>

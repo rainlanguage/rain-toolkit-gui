@@ -9,9 +9,10 @@
   import IconLibrary from "$components/IconLibrary.svelte";
   import { onMount } from "svelte";
   import Select from "$components/Select.svelte";
-    import CustomSelect from "$components/CustomSelect.svelte";
-    import FlashTooltip from "$components/FlashTooltip.svelte";
-    import { push } from "svelte-spa-router";
+  import CustomSelect from "$components/CustomSelect.svelte";
+  import FlashTooltip from "$components/FlashTooltip.svelte";
+  import { push } from "svelte-spa-router";
+  import { img } from "$routes/assets";
 
   const { open } = getContext("simple-modal");
 
@@ -53,33 +54,6 @@
       blockExplorer = $selectedNetwork.blockExplorer
     }
 
-  // const connectWallet = async () => {
-  //   try {
-  //     await web3Modal.clearCachedProvider();
-  //     const webProvider = await web3Modal.connect();
-  //     const webLibrary = new ethers.providers.Web3Provider(webProvider);
-  //     defaultEvmStores.setProvider(webProvider);
-  //     const network = await webLibrary.getNetwork();
-
-  //     library = webLibrary;
-  //     // networkName = network.name;
-
-  //     networks.forEach((element) => {
-  //       if (parseInt(element.config.chainId) === network.chainId) {
-  //         networkName = element.config.chainName;
-  //         oldNetName = element.config.chainName;
-  //         $selectedNetwork = element;
-  //       }
-  //     });
-  //   } catch (err) {
-  //     console.log("err", err);
-  //   }
-  // };
-  // const onNetworkChange = (text) => {
-  //   networkName = text;
-  //   changedName = true;
-  // };
-
   const switchNetwork = async (event) => {
     let network = event.detail.selected
     
@@ -115,6 +89,7 @@
 
       }
     }
+    location.reload()
   };
 
 
@@ -139,87 +114,23 @@
             id: "view",
             label: "View on Explorer",
             action: () => {
-              console.log("temp", tempExplorer, blockExplorer);
-              
-              if(tempExplorer != blockExplorer){
-                tempExplorer = blockExplorer;
-                window.open(`${blockExplorer}address/${$signerAddress}`);
-              }
+                window.open(`${$selectedNetwork.blockExplorer}address/${$signerAddress}`);
             },
     }
   ]
 </script>
 
 <div class="flex items-center gap-y-4">
-  <!-- {#if $signerAddress}
-    <Select
-      bind:value={$selectedNetwork}
-      items={networks}
-      on:change={() => switchNetwork($selectedNetwork)}
-    />
-    {#if changedName}
-      <span
-        class="align-center ease mr-2 flex w-max cursor-pointer rounded-full bg-gray-200 px-4 py-2 text-sm font-bold text-gray-500 transition duration-300 active:bg-gray-300"
-      >
-        <User
-          address={$signerAddress}
-          name={null}
-          avatar={null}
-          network={networkName}
-        />
-      </span>
-    {:else}
-      <span
-        class="mr-2 px-4 py-2 rounded-full text-gray-600 bg-gray-200 font-bold text-sm flex align-center w-max cursor-pointer active:bg-gray-300 transition duration-300 ease"
-      >
-        <User
-          address={$signerAddress}
-          name={null}
-          avatar={null}
-          network={networkName}
-        />
-      </span>
-    {/if}
-    
-  {:else}
-    {#if page}
-      <div class="mt-4">
-        <button
-          class="rounded-full border-none px-14 py-3 text-white"
-          style="background-color: #2C2C54;"
-          on:click={connectWallet}>Connect Wallet</button
-        >
-      </div>
-    {:else}
-      <button
-        class="rounded-md border-none px-4 py-2 text-black font-semibold"
-        on:click={connectWallet}>Connect Wallet</button
-      >
-    {/if}
-  {/if} -->
-<!-- {() => switchNetwork($selectedNetwork)} -->
-    <!-- {#if $signerAddress} -->
-      <CustomSelect options={networks} on:change={switchNetwork} 
-              label={networkName || 'Available networks'} className={'meinMenu'}
-              dropDownClass={'nav-dropdown'}>
-        <span slot="icon" class="select-icon"><img src={$selectedNetwork?.config?.icon}
-                                                   alt={networkName}/></span>
-      </CustomSelect>
-      
-      <CustomSelect className={'meinMenu'} options={accountMenuOptions}
-              label={$signerAddress?.replace(/(.{6}).*(.{4})/, "$1…$2")}
-              staticLabel={true} dropDownClass={'nav-dropdown'}>
-      </CustomSelect>
-    <!-- {:else}
-      {#if page}
-        <div class="mt-4">
-          <button
-            class="rounded-full border-none px-14 py-3 text-white"
-            style="background-color: #2C2C54;"
-            on:click={connectWallet}>Connect Wallet</button
-          >
-        </div>
-      {/if}
-    {/if} -->
+  <CustomSelect options={networks} on:change={switchNetwork} 
+          label={networkName || 'Available networks'} className={'meinMenu'}
+          dropDownClass={'nav-dropdown'}>
+    <span slot="icon" class="select-icon"><img src={img[$selectedNetwork?.config?.icon]}
+                                               alt={networkName}/></span>
+  </CustomSelect>
+  
+  <CustomSelect className={'meinMenu'} options={accountMenuOptions}
+          label={$signerAddress?.replace(/(.{6}).*(.{4})/, "$1…$2")}
+          staticLabel={true} dropDownClass={'nav-dropdown'}>
+  </CustomSelect>
 </div>
 

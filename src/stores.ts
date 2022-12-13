@@ -11,6 +11,3 @@ export const client = derived(
     // url: AddressBook.getSubgraphEndpoint(Number($selectedNetwork.config.chainId))
   })
 )
-
-
-

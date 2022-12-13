@@ -50,7 +50,7 @@ export const networks = [{
       decimals: 18
     },
     blockExplorerUrls: ['https://polygonscan.com/'],
-    icon: "./assets/polygon.svg"
+    icon: 'polygon',
   },
   blockExplorer: 'https://polygonscan.com/'
 },
@@ -66,7 +66,7 @@ export const networks = [{
       decimals: 18
     },
     blockExplorerUrls: ['https://mumbai.polygonscan.com/'],
-    icon: "./assets/polygon.svg"
+    icon: 'polygon',
   },
   blockExplorer: 'https://mumbai.polygonscan.com/'
 },

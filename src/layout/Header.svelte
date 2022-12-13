@@ -26,7 +26,7 @@
   {#if $signerAddress}
     <div class="flex direction flex-row items-center pr-14 gap-x-14">
       <div class="font-semibold"><a href="/#/sloshes">Sloshes</a></div>
-      <div class="font-semibold"><a href="/#/">How this works</a></div>
+      <div class="font-semibold"><a href="/#/slosh-comic">How this works</a></div>
       <WalletConnect />
       <!-- <CustomSelect options={networks} on:select={handleNetworkSelect}
               label={$activeNetwork?.displayName || 'Available networks'} className={'meinMenu'}
