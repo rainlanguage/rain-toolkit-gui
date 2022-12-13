@@ -28,6 +28,8 @@
   "dependencies": {
     "@formkit/auto-animate": "^1.0.0-beta.1",
     "@metamask/jazzicon": "^2.0.0",
+    "@sentry/svelte": "^7.25.0",
+    "@sentry/tracing": "^7.25.0",
     "@urql/svelte": "^2.0.2",
     "@walletconnect/web3-provider": "^1.7.8",
     "authereum": "^0.1.14",

@@ -11,11 +11,10 @@
     import { op , Opcode ,max_uint32,max_uint256 , memoryOperand , MemoryType   } from './opcodes.ts'
     import {tokenAddressess } from "$src/constants" 
     import { concat } from "ethers/lib/utils"; 
-    import { push } from "svelte-spa-router";
+    import { push } from "svelte-spa-router"; 
+    import { Logger } from "ethers/lib/utils";
 
-    export let params: {
-        wild: string;
-    }; 
+    import * as Sentry from "@sentry/svelte";
 
     enum TxStatus {
         None,
@@ -39,64 +38,83 @@
         addOrder()
     };
 
-const addOrder = async () => { 
-    let x = 1 + ((1 * thresholdVal)/100) 
+    const addOrder = async () => { 
+        try{
+        let x = 1 + ((1 * thresholdVal)/100) 
 
-    let askPrice = ethers.utils.parseEther(x.toString()) 
-    const askConstants = [max_uint256, askPrice ]; 
+        let askPrice = ethers.utils.parseEther(x.toString()) 
+        const askConstants = [max_uint256, askPrice ]; 
 
-    const vAskOutputMax = op( Opcode.READ_MEMORY,memoryOperand(MemoryType.Constant, 0)); 
-    const vAskPrice = op(Opcode.READ_MEMORY, memoryOperand(MemoryType.Constant, 1));
+        const vAskOutputMax = op( Opcode.READ_MEMORY,memoryOperand(MemoryType.Constant, 0)); 
+        const vAskPrice = op(Opcode.READ_MEMORY, memoryOperand(MemoryType.Constant, 1));
 
-    const askSource = concat([ vAskOutputMax,vAskPrice]);  
-    let tokenInput = []
-    let tokenOutput = [] 
-    const nonce = new Uint8Array(32); 
-    let val = crypto.getRandomValues(nonce);  
-    let randomNumber = ethers.BigNumber.from(ethers.utils.hexlify(val)).toString() // random number later can be changed .
+        const askSource = concat([ vAskOutputMax,vAskPrice]);  
+        let tokenInput = []
+        let tokenOutput = [] 
+        const nonce = new Uint8Array(32); 
+        let val = crypto.getRandomValues(nonce);  
+        let randomNumber = ethers.BigNumber.from(ethers.utils.hexlify(val)).toString() // random number later can be changed .
 
-    for(let i = 0; i < tokenAddressess.length; i++ ){
-        if(checkedTokens[i] == true){
-            tokenInput.push({"token" : tokenAddressess[i].tokenAddress, "vaultId" : randomNumber, decimals : tokenAddressess[i].decimals})
-            tokenOutput.push({"token" : tokenAddressess[i].tokenAddress, "vaultId" : randomNumber, decimals : tokenAddressess[i].decimals})
+        for(let i = 0; i < tokenAddressess.length; i++ ){
+            if(checkedTokens[i] == true){
+                tokenInput.push({"token" : tokenAddressess[i].tokenAddress, "vaultId" : randomNumber, decimals : tokenAddressess[i].decimals})
+                tokenOutput.push({"token" : tokenAddressess[i].tokenAddress, "vaultId" : randomNumber, decimals : tokenAddressess[i].decimals})
+            }
+        } 
+
+        let aliceAskOrder = ethers.utils.toUtf8Bytes(sloshName)
+
+        let askOrderConfig = { 
+            expressionDeployer: '0x5C13ee05006364965093e827521118Ed269091a9',
+            interpreter: '0x856b7C73322Dd5F74163C0b9e7586197a1E4496F',
+            validInputs: tokenInput,
+            validOutputs: tokenOutput,
+            interpreterStateConfig: {
+                sources: [askSource , [] ],
+                constants: [askConstants],  
+            }, 
+            data : aliceAskOrder
+        } 
+        
+            let txAskOrderLive = await orderBookContract.addOrder(askOrderConfig );
+            txStatus = TxStatus.AwaitingConfirmation;
+            
+            let receipt = await txAskOrderLive.wait()
+
+            let sloshId = receipt.events.filter(e => e.event == 'AddOrder')[0].args[2].toHexString()
+            
+            txStatus = TxStatus.None;
+            // setTimeout(5000)
+            push(`/sloshes`)
+        }catch(error){  
+            Sentry.captureException(error);
+            if (error.code === Logger.errors.TRANSACTION_REPLACED) {
+                if (error.cancelled) {
+                    errorMsg = "Transaction Cancelled";
+                    txStatus = TxStatus.Error;
+                    return;
+                } else {
+                    await error.replacement.wait();
+                }
+            } else if(error.code === -32603){
+                errorMsg = 'Transaction Underpriced , please try again'
+                txStatus = TxStatus.Error;
+                return;
+            }else if(error.code == Logger.errors.ACTION_REJECTED){
+                errorMsg = 'Transaction Rejected'
+                txStatus = TxStatus.Error;
+                return;
+            }else { 
+                errorMsg = error.error?.data?.message  ||
+                error.error?.message ||
+                error.data?.message ||
+                error?.message || 
+                error?.code 
+                txStatus = TxStatus.Error;
+                return;
+            }
         }
-    } 
-
-    let aliceAskOrder = ethers.utils.toUtf8Bytes(sloshName)
-
-    let askOrderConfig = { 
-        expressionDeployer: '0x5C13ee05006364965093e827521118Ed269091a9',
-        interpreter: '0x856b7C73322Dd5F74163C0b9e7586197a1E4496F',
-        validInputs: tokenInput,
-        validOutputs: tokenOutput,
-        interpreterStateConfig: {
-            sources: [askSource , [] ],
-            constants: askConstants,  
-        }, 
-        data : aliceAskOrder
-    } 
-    try{
-        let txAskOrderLive = await orderBookContract.addOrder(askOrderConfig );
-        txStatus = TxStatus.AwaitingConfirmation;
-        
-        let receipt = await txAskOrderLive.wait()
-
-        let sloshId = receipt.events.filter(e => e.event == 'AddOrder')[0].args[2].toHexString()
-        
-        txStatus = TxStatus.None;
-        // setTimeout(5000)
-        push(`/sloshes`)
-    }catch(error){
-        errorMsg = error?.code ||
-          error.error?.data?.message ||
-          error.error?.message ||
-          error.data?.message ||
-          error?.message;
-        
-        txStatus = TxStatus.Error;
-        return;
-    }
-}  
+    }  
 </script>
 
 <div>

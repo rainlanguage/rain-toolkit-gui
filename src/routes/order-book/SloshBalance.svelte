@@ -15,7 +15,17 @@
     import { hex_to_ascii } from "./opcodes";
     import {BigNumber as FloatBigNum} from 'bignumber.js'
     const { open } = getContext("simple-modal");
+    import * as Sentry from "@sentry/svelte";
+    import { Logger } from "ethers/lib/utils";
+    import { push } from "svelte-spa-router"; 
 
+
+
+    enum TxStatus {
+        None,
+        AwaitingConfirmation,
+        Error,
+    }
 
     export let params: {
         wild: string;
@@ -26,6 +36,8 @@
     $: if($signer){
         orderBookContract = new ethers.Contract('0x1d4e06f86d0d07059a4fc76069c1d8660558947e',orderABI , $signer )
     }
+
+    let txStatus = TxStatus.None, errorMsg;
     let sloshId = params.wild
     let vault = []
     let tokenVault
@@ -172,24 +184,49 @@
                 data : order_.data
             }  
 
-            const txAskRemoveOrder = await orderBookContract.removeOrder(deleteOrderConfig); 
-            let receipt = await txAskRemoveOrder.wait()  
+            const txAskRemoveOrder = await orderBookContract.removeOrder(deleteOrderConfig);  
+            txStatus = TxStatus.AwaitingConfirmation;
+
+            let receipt = await txAskRemoveOrder.wait()   
+
+            txStatus = TxStatus.None;
+            push(`/sloshes`)
             
-        } catch (error) { 
-            if (error.code === error.TRANSACTION_REPLACED) {
+        } catch (error) {   
+            
+             Sentry.captureException(error);
+            if (error.code === Logger.errors.TRANSACTION_REPLACED) {
                 if (error.cancelled) {
-                    console.log("Transaction Cancelled")
+                    errorMsg = "Transaction Cancelled";
+                    txStatus = TxStatus.Error;
+                    return;
                 } else {
                     await error.replacement.wait();
                 }
-            } else {
-                console.log(error)
+            } else if(error.code === -32603){
+                errorMsg = 'Transaction Underpriced , please try again'
+                txStatus = TxStatus.Error;
+                return;
+            }else if(error.code == Logger.errors.ACTION_REJECTED){
+                errorMsg = 'Transaction Rejected'
+                txStatus = TxStatus.Error;
+                return;
+            }else { 
+                errorMsg = error.error?.data?.message  ||
+                error.error?.message ||
+                error.data?.message ||
+                error?.message || 
+                error?.code 
+                txStatus = TxStatus.Error;
+                return;
             }
         }      
-    }
+    } 
+
 </script> 
 
-<div class="flex flex-col items-center justify-center">
+<div class="flex flex-col items-center justify-center"> 
+    {#if txStatus == TxStatus.None}
     <Section>
         <div class="py-4">
             {#if $getOrder.fetching}
@@ -289,10 +326,22 @@
                 </span>
             {/if}
         </div>
-    </Section>
-    <!-- <div class="pt-6 pb-4 flex justify-center">
-        <span class="font-semibold text-lg italic">How’s the liquidity. So much liquidity.</span>
-    </div> -->
+    </Section> 
+    {/if}
+
+    {#if txStatus == TxStatus.AwaitingConfirmation}
+        <div class="flex flex-col items-center gap-y-5 p-6">
+        <lottie-player src="https://lottie.host/5f90529b-22d1-4337-8c44-46e3ba7c0c68/pgMhlFIAcQ.json" background="transparent" speed="1" style="width: 300px; height: 200px;" loop autoplay></lottie-player>
+        <span class="text-lg text-black">Transaction confirming...</span>
+        </div>
+    {/if}
+    {#if txStatus == TxStatus.Error}
+        <div class="flex flex-col items-center gap-y-5 p-6">
+            <span class="text-lg text-black">Something went wrong.</span>
+            <span class="text-lg text-red-400">{errorMsg}</span>
+        </div>
+    {/if}
+  
 </div>  
 
 
@@ -305,5 +354,9 @@
     }
     button:disabled{
         background-color: #D2D2D2;
-    }
+    }  
+
+  
+
+    
 </style>

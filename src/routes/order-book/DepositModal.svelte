@@ -10,6 +10,7 @@
   import { ethers } from "ethers";
   import erc20ABI from "./erc20ABI.json" 
     import { formatAddress } from "$src/utils";
+    import * as Sentry from "@sentry/svelte";
 
   enum TxStatus {
     None,
@@ -62,10 +63,10 @@
     txStatus = TxStatus.AwaitingSignature;
     try {
       tx = await tokenContract.approve(orderBookContract.address, units);  
-
       txStatus = TxStatus.AwaitingConfirmation;
       const txReceipt = await tx.wait();
-    } catch (error) {
+    } catch (error) { 
+      Sentry.captureException(error);
       if (error.code === Logger.errors.TRANSACTION_REPLACED) {
         if (error.cancelled) {
           errorMsg = "Transaction Cancelled";
@@ -74,12 +75,20 @@
         } else {
           txReceipt = await error.replacement.wait();
         }
-      } else { 
-        errorMsg = error?.code ||
-          error.error?.data?.message ||
+      } else if(error.code === -32603){
+        errorMsg = 'Transaction Underpriced , please try again'
+        txStatus = TxStatus.Error;
+        return;
+      }else if(error.code == Logger.errors.ACTION_REJECTED){
+                errorMsg = 'Transaction Rejected'
+                txStatus = TxStatus.Error;
+                return;
+      }else {  
+        errorMsg = error.error?.data?.message ||
           error.error?.message ||
           error.data?.message ||
-          error?.message;
+          error?.message || 
+          error?.code 
         txStatus = TxStatus.Error;
         return;
       }
@@ -106,7 +115,9 @@
 
       txStatus = TxStatus.AwaitingConfirmation;
       txReceipt = await tx.wait();
-    } catch (error) {
+    } catch (error) { 
+      Sentry.captureException(error);
+
       if (error.code === Logger.errors.TRANSACTION_REPLACED) {
         if (error.cancelled) {  
           errorMsg = "Transaction Cancelled";
@@ -115,12 +126,20 @@
         } else {
           txReceipt = await error.replacement.wait();
         }
-      } else {
-        errorMsg = error?.code ||
-          error.error?.data?.message ||
+      } else if(error.code === -32603){
+        errorMsg = 'Transaction Underpriced , please try again'
+        txStatus = TxStatus.Error;
+        return;
+      }else if(error.code == Logger.errors.ACTION_REJECTED){
+                errorMsg = 'Transaction Rejected'
+                txStatus = TxStatus.Error;
+                return;
+      }else { 
+        errorMsg = error.error?.data?.message  ||
           error.error?.message ||
           error.data?.message ||
-          error?.message;
+          error?.message || 
+          error?.code 
         txStatus = TxStatus.Error;
         return;
       }

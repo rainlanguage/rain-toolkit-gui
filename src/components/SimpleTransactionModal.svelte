@@ -38,7 +38,6 @@
 
     try {
       tx = await method(...args);
-
       txStatus = TxStatus.AwaitingConfirmation;
       receipt = await tx.wait();
     } catch (error) {
@@ -50,17 +49,25 @@
         } else {
           receipt = await error.replacement.wait();
         }
-      } else {
-        errorMsg =
-          error.error?.data?.message ||
+      } else if(error.code === -32603){
+        errorMsg = 'Transaction Underpriced , please try again'
+        txStatus = TxStatus.Error;
+        return;
+      }else if(error.code == Logger.errors.ACTION_REJECTED){
+                errorMsg = 'Transaction Rejected'
+                txStatus = TxStatus.Error;
+                return;
+      }else {   
+        errorMsg = error.error?.data?.message  ||
           error.error?.message ||
           error.data?.message ||
-          error?.message;
+          error?.message || 
+          error?.code 
         txStatus = TxStatus.Error;
         return;
       }
     }
-    txStatus = TxStatus.Confirmed;
+   
   });
 </script>
 
