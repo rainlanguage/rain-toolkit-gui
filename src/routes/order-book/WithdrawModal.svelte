@@ -39,18 +39,18 @@
 
     console.log("token", token);
     
-  const calculatePrice = async (amount) => {
+  const calculatePrice = async (amount) => { 
     priceConfirmed = PriceConfirmed.Pending;
     const one = parseUnits("1", token?.tokenVault?.token.decimals.toString());
     const _units = parseUnits(
       amount.toString(),
       token?.tokenVault?.token.decimals.toString()
-    );
+    );  
     units = _units;
     
-    let isWithdrawable = (token?.tokenVault?.balance >= _units.toString())
+    let isWithdrawable = (ethers.BigNumber.from(token?.tokenVault?.balance).gte(_units) )
     isWithdraw = isWithdrawable
-
+    
     priceConfirmed = PriceConfirmed.Confirmed;
 
     return {
@@ -139,7 +139,7 @@
           Getting price...
         {:then result}
           {#if !result.isWithdrawable}
-            <span class="text-red-500">Please Enter units less than or equal to the Vault Balance</span>
+            <span class="text-red-500">Please Enter amount less than or equal to the Vault Balance</span>
           {:else}
             <div class="grid grid-cols-2 gap-4 rounded-md border border-gray-600 p-4 text-black">
               <span>OrderBook Address:</span>

@@ -279,7 +279,7 @@
           <div class="display flex flex-col items-center gap-y-4">
             <IconLibrary icon="close" width={64} color="text-red-500" />
             <div class="text-xl">Oops...</div>
-            <span class="text-red-500">insufficient balance for the transaction</span>
+            <span class="text-red-500">Insufficient Balance for deposit</span>
           </div>
         {/if}
       {/await}
