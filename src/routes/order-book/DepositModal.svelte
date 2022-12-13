@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { signer } from "svelte-ethers-store";
+  import { signer, signerAddress } from "svelte-ethers-store";
   import { formatUnits, Logger, parseUnits } from "ethers/lib/utils";
   import Button from "$components/Button.svelte";
   import Steps from "$components/steps/Steps.svelte";
@@ -7,10 +7,12 @@
   import Input from "$components/Input.svelte";
   import { selectedNetwork } from "$src/stores";
   import { addressValidate, required } from "$src/validation";
-  import { ethers } from "ethers";
+  import { BigNumber, ethers } from "ethers";
   import erc20ABI from "./erc20ABI.json" 
-    import { formatAddress } from "$src/utils";
-    import * as Sentry from "@sentry/svelte";
+  import { formatAddress } from "$src/utils";
+  import * as Sentry from "@sentry/svelte";
+  import { onMount } from "svelte";
+    import IconLibrary from "$components/IconLibrary.svelte";
 
   enum TxStatus {
     None,
@@ -37,7 +39,26 @@
     priceConfirmed = PriceConfirmed.Pending,
     txReceipt,
     errorMsg,
-    calcPricePromise
+    calcPricePromise,
+    tokenContract,
+    approved,
+    checkBal
+
+  onMount(() => {
+    tokenContract = new ethers.Contract(token?.tokenVault?.token.id, erc20ABI, $signer)
+    const checkBalanace = async () =>{
+      return await tokenContract.balanceOf($signerAddress?.toLowerCase())
+    }
+    checkBal = checkBalanace()
+
+    // const checkApproval = async () => {
+    //   const allowance = await tokenContract.allowance($signerAddress, orderBookContract);
+
+    //   approved = allowance.gte(
+    //     BigNumber.from(ethers.constants.MaxUint256).div(BigNumber.from(2))
+    //   );
+    // };
+  })
 
   const calculatePrice = async (amount) => {
     priceConfirmed = PriceConfirmed.Pending;
@@ -56,8 +77,6 @@
   };
 
   const approve = async () => {
-    
-    let tokenContract = new ethers.Contract(token?.tokenVault?.token.id, erc20ABI, $signer )
 
     let tx;
     txStatus = TxStatus.AwaitingSignature;
@@ -150,105 +169,121 @@
 </script>
 
 {#if txStatus == TxStatus.None}
-  <div class="flex w-full flex-col items-start gap-y-7">
-    <span class="text-xl text-black font-bold">Deposit</span>
-    <Steps
-      steps={["Approve", "Confirm", "Complete"]}
-      {activeStep}
-      bgColor={true}
-      fulfilledTextClass="text-black font-semibold text-sm"
-      unfulfilledTextClass = "text-gray-500 text-sm font-semibold"
-      lineBorderClass="border-gray-400"
-    />
-    <span class="text-red-500">Don't Close the Modal until transaction complete</span>
-    {#if activeStep == DepositSteps.Approve}
-      <!-- <Input
-        type="address"
-        bind:value={token?.tokenVault?.token.id}
-        from="depositModal"
-        validator={addressValidate}
-      >
-        <span slot="label">Enter token:</span>
-      </Input> -->
-      <Input
-        type="text"
-        on:input={({ detail }) => {
-          calcPricePromise = calculatePrice(detail);
-        }}
-        debounce
-        validator={required}
-      >
-        <span slot="label">Enter the number of units to deposit:</span>
-      </Input>
-      {#if calcPricePromise}
-        <div>
-          {#await calcPricePromise}
-            Getting price...
-          {:then result}
-            <div class="flex flex-row gap-x-3">
-              <span class="text-black"
-                >Amount: {formatUnits(result._units, token?.tokenVault?.token.decimals)}
-                {token?.tokenVault?.token.symbol}
-              </span>
-            </div>
-          {/await}
-        </div>
-      {/if}
+    {#if checkBal}
+      {#await checkBal}
+      <lottie-player src="https://lottie.host/5f90529b-22d1-4337-8c44-46e3ba7c0c68/pgMhlFIAcQ.json" background="transparent" speed="1" style="width: 250px; height: 250px;" loop autoplay></lottie-player>
+        <div class="display flex justify-center items-center gap-y-4">Checking signer balance...</div> 
+      {:then result}
+        <!-- {console.log("res", typeof result.toString())} -->
+        {#if result.toString() != '0'}
+          <div class="flex w-full flex-col items-start gap-y-7">
+            <span class="text-xl text-black font-bold">Deposit</span>
+            <Steps
+              steps={["Approve", "Confirm", "Complete"]}
+              {activeStep}
+              bgColor={true}
+              fulfilledTextClass="text-black font-semibold text-sm"
+              unfulfilledTextClass = "text-gray-500 text-sm font-semibold"
+              lineBorderClass="border-gray-400"
+            />
+            <!-- <span class="text-red-500">Don't Close the Modal until transaction complete</span> -->
+            {#if activeStep == DepositSteps.Approve}
+              <!-- <Input
+                type="address"
+                bind:value={token?.tokenVault?.token.id}
+                from="depositModal"
+                validator={addressValidate}
+              >
+                <span slot="label">Enter token:</span>
+              </Input> -->
+              <Input
+                type="text"
+                on:input={({ detail }) => {
+                  calcPricePromise = calculatePrice(detail);
+                }}
+                debounce
+                validator={required}
+              >
+                <span slot="label">Enter the number of units to deposit:</span>
+              </Input>
+              {#if calcPricePromise}
+                <div>
+                  {#await calcPricePromise}
+                    Getting price...
+                  {:then result}
+                    <div class="flex flex-row gap-x-3">
+                      <span class="text-black"
+                        >Amount: {formatUnits(result._units, token?.tokenVault?.token.decimals)}
+                        {token?.tokenVault?.token.symbol}
+                      </span>
+                    </div>
+                  {/await}
+                </div>
+              {/if}
 
-      <!-- <Button bRadius="rounded-full" variant="bg-orange-400" disabled={!priceConfirmed} on:click={approve}>Approve Amount</Button> -->
-      <button 
-        class="w-full rounded-full text-base py-2 px-28 text-black" 
-        style="background-color: #FDB142;" 
-        disabled={!priceConfirmed} 
-        on:click={approve}>Approve Amount
-      </button>
+              <!-- <Button bRadius="rounded-full" variant="bg-orange-400" disabled={!priceConfirmed} on:click={approve}>Approve Amount</Button> -->
+              <button 
+                class="w-full rounded-full text-base py-2 px-28 text-black" 
+                style="background-color: #FDB142;  box-shadow: inset 0px 2px 6px 0px #ffffff;"
+                disabled={!priceConfirmed} 
+                on:click={approve}>Approve Amount
+              </button>
+            {/if}
+            {#if activeStep == DepositSteps.Confirm}
+              <span class="text-black">Confirm your deposit.</span>
+              {#if calcPricePromise}
+                <div class="grid grid-cols-2 gap-4 rounded-md border border-gray-600 p-4 text-black">
+                  {#await calcPricePromise}
+                    Getting price...
+                  {:then result}
+                    <span>OrderBook Address:</span>
+                    <span>{formatAddress(orderBookContract.address)}</span>
+
+                    <span>Token Address:</span>
+                    <span>{formatAddress(token?.tokenVault?.token.id)}</span>
+
+                    <span>Amount:</span>
+                    <span>{formatUnits(result._units, token?.tokenVault?.token.decimals)}
+                      {token?.tokenVault?.token.symbol}
+                    </span>
+                  {/await}
+                </div>
+              {/if}
+
+              <!-- <Button
+                bRadius="rounded-full"
+                variant="bg-orange-400"
+                disabled={!priceConfirmed}
+                on:click={Deposit}
+              > -->
+              <button 
+                class="w-full rounded-full text-base py-2 px-28 text-black" 
+                style="background-color: #FDB142;  box-shadow: inset 0px 2px 6px 0px #ffffff;"
+                disabled={!priceConfirmed} 
+                on:click={Deposit}>Deposit
+              </button>
+            {/if}
+
+            {#if activeStep == DepositSteps.Complete}
+              <span class="text-black">Deposit confirmed!</span>
+              <a
+                class="text-blue-400 underline"
+                target="_blank"
+                href={`${$selectedNetwork.blockExplorer}/tx/${txReceipt?.transactionHash}`}
+              >
+                See transaction.
+              </a>
+            {/if}
+          </div>
+        {:else}
+          <div class="display flex flex-col items-center gap-y-4">
+            <IconLibrary icon="close" width={64} color="text-red-500" />
+            <div class="text-xl">Oops...</div>
+            <span class="text-red-500">insufficient balance for the transaction</span>
+          </div>
+        {/if}
+      {/await}
     {/if}
-    {#if activeStep == DepositSteps.Confirm}
-      <span class="text-black">Confirm your deposit.</span>
-      {#if calcPricePromise}
-        <div class="grid grid-cols-2 gap-4 rounded-md border border-gray-600 p-4 text-black">
-          {#await calcPricePromise}
-            Getting price...
-          {:then result}
-            <span>OrderBook Address:</span>
-            <span>{formatAddress(orderBookContract.address)}</span>
-
-            <span>Token Address:</span>
-            <span>{formatAddress(token?.tokenVault?.token.id)}</span>
-
-            <span>Amount:</span>
-            <span>{formatUnits(result._units, token?.tokenVault?.token.decimals)}
-              {token?.tokenVault?.token.symbol}
-            </span>
-          {/await}
-        </div>
-      {/if}
-
-      <!-- <Button
-        bRadius="rounded-full"
-        variant="bg-orange-400"
-        disabled={!priceConfirmed}
-        on:click={Deposit}
-      > -->
-      <button 
-        class="w-full rounded-full text-base py-2 px-28 text-black" 
-        style="background-color: #FDB142;" 
-        disabled={!priceConfirmed} 
-        on:click={Deposit}>Deposit
-      </button>
-    {/if}
-
-    {#if activeStep == DepositSteps.Complete}
-      <span class="text-black">Deposit confirmed!</span>
-      <a
-        class="text-blue-400 underline"
-        target="_blank"
-        href={`${$selectedNetwork.blockExplorer}/tx/${txReceipt?.transactionHash}`}
-      >
-        See transaction.
-      </a>
-    {/if}
-  </div>
 {/if}
 
 {#if txStatus == TxStatus.AwaitingSignature}

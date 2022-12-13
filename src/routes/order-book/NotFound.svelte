@@ -11,9 +11,9 @@
 
 <div class="flex items-center justify-center">
     <Section>
-        <div class="p-12">
-            <!-- <img src={img['sloshy_comic']} alt="Sloshy Comic" /> -->
-            <span class="text-lg text-black"> 404 Not Found</span>
+        <div class="p-10">
+            <img src={img['not_found']} alt="Not Found" width="300" height="300" />
+            <!-- <span class="text-lg text-black"> 404 Not Found</span> -->
         </div>
     </Section>
 </div> 

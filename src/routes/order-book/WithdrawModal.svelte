@@ -30,12 +30,15 @@
   export let token, orderBookContract
   let errorMsg,
     units,
+    isWithdraw,
     calcPricePromise,
     activeStep = WithdrawSteps.Confirm,
     txStatus = TxStatus.None,
     txReceipt,
     priceConfirmed = PriceConfirmed.Pending 
 
+    console.log("token", token);
+    
   const calculatePrice = async (amount) => {
     priceConfirmed = PriceConfirmed.Pending;
     const one = parseUnits("1", token?.tokenVault?.token.decimals.toString());
@@ -44,11 +47,15 @@
       token?.tokenVault?.token.decimals.toString()
     );
     units = _units;
+    
+    let isWithdrawable = (token?.tokenVault?.balance >= _units.toString())
+    isWithdraw = isWithdrawable
 
     priceConfirmed = PriceConfirmed.Confirmed;
 
     return {
       _units,
+      isWithdrawable
     };
   };
 
@@ -124,34 +131,38 @@
           debounce
           validator={required}
       >
-        <span slot="label">Enter the number of units to deposit:</span>
+        <span slot="label">Enter the number of units to withdraw:</span>
       </Input>
 
       {#if calcPricePromise}
-        <div class="grid grid-cols-2 gap-4 rounded-md border border-gray-600 p-4 text-black">
-          {#await calcPricePromise}
-            Getting price...
-          {:then result}
-            <span>OrderBook Address:</span>
-            <span>{formatAddress(orderBookContract.address)}</span>
+        {#await calcPricePromise}
+          Getting price...
+        {:then result}
+          {#if !result.isWithdrawable}
+            <span class="text-red-500">Please Enter units less than or equal to the Vault Balance</span>
+          {:else}
+            <div class="grid grid-cols-2 gap-4 rounded-md border border-gray-600 p-4 text-black">
+              <span>OrderBook Address:</span>
+              <span>{formatAddress(orderBookContract.address)}</span>
 
-            <span>Token Address:</span>
-            <span>{formatAddress(token?.tokenVault?.token.id)}</span>
+              <span>Token Address:</span>
+              <span>{formatAddress(token?.tokenVault?.token.id)}</span>
 
-            <span>Total Supply:</span>
-            <span>{formatUnits(result._units, token?.tokenVault?.token.decimals)}
-              {token?.tokenVault?.token.symbol}
-            </span>
-          {/await}
-        </div>
+              <span>Total Supply:</span>
+              <span>{formatUnits(result._units, token?.tokenVault?.token.decimals)}
+                {token?.tokenVault?.token.symbol}
+              </span>
+            </div>
+          {/if}
+        {/await}
       {/if}
     
       <span class="text-black">Confirm your withdraw.</span>
       <!-- <Button bRadius="rounded-full" variant="bg-orange-400" disabled={!priceConfirmed} on:click={withdraw}>Confirm</Button> -->
       <button 
         class="w-full rounded-full text-base py-2 px-28 text-black" 
-        style="background-color: #FDB142;" 
-        disabled={!priceConfirmed} 
+        style="background-color: #FDB142;  box-shadow: inset 0px 2px 6px 0px #ffffff;"
+        disabled={!priceConfirmed || !isWithdraw} 
         on:click={withdraw}>Confirm
       </button>
     {/if}

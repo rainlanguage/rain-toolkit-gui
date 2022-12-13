@@ -141,12 +141,10 @@
     min-height: 74vh;
   }
   .image{
-    /* background-image: url("/assets/Frame.svg"); */
-    background-image: url("/assets/sloshylines_extended.svg");
+    background-image: url("/assets/background.svg");
+    /* background-image: url("/assets/sloshylines_extended.svg"); */
     background-repeat: no-repeat;
-    /* background-size: contain; */
+    /* position: fixed !important; */
+    /* height: 100vh; */
   }
-  svg {       
-    viewBox: 0 0 1512px 74vh; 
-  } 
 </style>

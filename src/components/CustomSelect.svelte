@@ -181,7 +181,7 @@
         color: #000;
         padding-top: 2px;
         padding-bottom: 2px;
-        background: #f2b861 !important;
+        background: #b3b2b2 !important;
     }
 
 
@@ -206,7 +206,7 @@
         display: none;
         float: left;
         min-width: 10rem;
-        padding: 0.5rem 0;
+        /* padding: 0.5rem 0; */
         margin: 0.125rem 0 0;
         font-size: 1rem;
         color: #212529;

@@ -21,7 +21,7 @@
   
   <div >
     <!-- <img src="./assets/Sloshy.png" alt="Slosh Logo" /> -->
-    <span class="font-lobster text-4xl pl-16 cursor-pointer">Sloshy</span>
+    <span class="font-lobster text-4xl pl-16 cursor-pointer"><a href="/">Sloshy</a></span>
   </div> 
   {#if $signerAddress}
     <div class="flex direction flex-row items-center pr-14 gap-x-14">

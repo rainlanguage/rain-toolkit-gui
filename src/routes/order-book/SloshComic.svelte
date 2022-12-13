@@ -12,7 +12,7 @@
 <div class="flex items-center justify-center">
     <Section>
         <div class="p-12">
-            <img src={img['sloshy_comic']} alt="Sloshy Comic" />
+            <img src={img['sloshy_comic']} alt="Sloshy Comic" width="550" height="550" />
         </div>
     </Section>
 </div> 
