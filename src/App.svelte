@@ -108,8 +108,8 @@
   classContent="p-6"
 >
   <Header />
-    <main class="relative flex font-light text-gray-50 image">
-      <div class="w-full py-5 px-8">
+    <main class="relative flex flex-col font-light text-gray-50 image">
+      <div class="w-full py-5 px-8 height">
         {#if $signerAddress}
           <Router {routes} />
         {:else}
@@ -126,8 +126,8 @@
           </div>
         {/if}
       </div>
+      <Footer />
     </main>
-  <Footer />
 </Modal>
 
 <style global lang="postcss">
@@ -140,13 +140,14 @@
   @tailwind utilities;
   main{
     z-index: 1;
-    min-height: 74vh;
   }
   .image{
-    background-image: url("/assets/background.svg");
-    /* background-image: url("/assets/sloshylines_extended.svg"); */
+    background-image: url("/assets/sloshylines_extended.svg");
+    /* background-image: url("/assets/sloshy_extended.webp"); */
     background-repeat: no-repeat;
-    /* position: fixed !important; */
-    /* height: 100vh; */
+    background-size: cover;
+  }
+  .height{
+    min-height: 74vh;
   }
 </style>
