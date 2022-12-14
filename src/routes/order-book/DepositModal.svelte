@@ -42,38 +42,49 @@
     calcPricePromise,
     tokenContract,
     approved,
-    checkBal
+    allowance
 
   onMount(() => {
     tokenContract = new ethers.Contract(token?.tokenVault?.token.id, erc20ABI, $signer)
-    const checkBalanace = async () =>{
-      return await tokenContract.balanceOf($signerAddress?.toLowerCase())
-    }
-    checkBal = checkBalanace()
+    // const checkBalanace = async () =>{
+    //   return await tokenContract.balanceOf($signerAddress?.toLowerCase())
+    // }
+    // checkBal = checkBalanace()
 
-    // const checkApproval = async () => {
-    //   const allowance = await tokenContract.allowance($signerAddress, orderBookContract);
+    const checkApproval = async () => {
+      
 
-    //   approved = allowance.gte(
-    //     BigNumber.from(ethers.constants.MaxUint256).div(BigNumber.from(2))
-    //   );
-    // };
+    };
+    checkApproval()
   })
 
   const calculatePrice = async (amount) => {
+
     priceConfirmed = PriceConfirmed.Pending;
     const one = parseUnits("1", token?.tokenVault?.token.decimals.toString());
     const _units = parseUnits(
       amount.toString(),
       token?.tokenVault?.token.decimals.toString()
     );
+    console.log("val", tokenContract);
+    
     units = _units;
-
-    priceConfirmed = PriceConfirmed.Confirmed;
-
-    return {
-      _units,
-    };
+    allowance = await tokenContract.allowance($signerAddress.toLowerCase(), orderBookContract.address);
+    console.log("allowance.gte(BigNumber.from(_units)", allowance.toString(), allowance.gte(BigNumber.from(_units)));
+    
+    if(allowance.gte(BigNumber.from(_units))){
+      activeStep = DepositSteps.Confirm;
+      priceConfirmed = PriceConfirmed.Confirmed;
+      return {
+        _units,
+      };
+    }else{
+      // units = BigNumber.from(_units).sub(allowance);
+      priceConfirmed = PriceConfirmed.Confirmed;
+      return {
+        _units,
+      };
+    }
   };
 
   const approve = async () => {
@@ -169,13 +180,12 @@
 </script>
 
 {#if txStatus == TxStatus.None}
-    {#if checkBal}
+    <!-- {#if checkBal}
       {#await checkBal}
       <lottie-player src="https://lottie.host/5f90529b-22d1-4337-8c44-46e3ba7c0c68/pgMhlFIAcQ.json" background="transparent" speed="1" style="width: 250px; height: 250px;" loop autoplay></lottie-player>
         <div class="display flex justify-center items-center gap-y-4">Checking signer balance...</div> 
       {:then result}
-        <!-- {console.log("res", typeof result.toString())} -->
-        {#if result.toString() != '0'}
+        {#if result.toString() != '0'} -->
           <div class="flex w-full flex-col items-start gap-y-7">
             <span class="text-xl text-black font-bold">Deposit</span>
             <Steps
@@ -275,15 +285,15 @@
               </a>
             {/if}
           </div>
-        {:else}
+        <!-- {:else}
           <div class="display flex flex-col items-center gap-y-4">
             <IconLibrary icon="close" width={64} color="text-red-500" />
             <div class="text-xl">Oops...</div>
             <span class="text-red-500">Insufficient Balance for deposit</span>
           </div>
-        {/if}
+        {/if} 
       {/await}
-    {/if}
+    {/if} -->
 {/if}
 
 {#if txStatus == TxStatus.AwaitingSignature}

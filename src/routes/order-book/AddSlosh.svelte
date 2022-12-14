@@ -6,7 +6,7 @@
     import { signer } from "svelte-ethers-store";
     import orderABI from "./orderbookABI.json"
     import Section from "$routes/order-book/Section.svelte";
-    import { required } from "$src/validation";
+    import { defaultValidator, required } from "$src/validation";
     import { validateFields } from "$src/utils";
     import { op , Opcode ,max_uint32,max_uint256 , memoryOperand , MemoryType   } from './opcodes.ts'
     import {tokenAddressess } from "$src/constants" 
@@ -62,7 +62,7 @@
             }
         } 
 
-        let aliceAskOrder = ethers.utils.toUtf8Bytes(sloshName)
+        let aliceAskOrder = sloshName != "" ? ethers.utils.toUtf8Bytes(sloshName) : []
 
         let askOrderConfig = { 
             expressionDeployer: '0x5C13ee05006364965093e827521118Ed269091a9',
@@ -71,7 +71,7 @@
             validOutputs: tokenOutput,
             interpreterStateConfig: {
                 sources: [askSource , [] ],
-                constants: [askConstants],  
+                constants: askConstants,  
             }, 
             data : aliceAskOrder
         } 
@@ -87,6 +87,8 @@
             // setTimeout(5000)
             push(`/sloshes`)
         }catch(error){  
+            console.log("error", error);
+            
             Sentry.captureException(error);
             if (error.code === Logger.errors.TRANSACTION_REPLACED) {
                 if (error.cancelled) {
@@ -132,7 +134,7 @@
                     <div class="w-full p-2 px-2 flex justify-center items-start">
                         <span class="w-max font-semibold text-black mr-2 pt-1">Slosh name:</span>
                         <span class="w-2/3">
-                            <Input bind:value={sloshName} type="text" validator={required} bind:this={fields.sloshName} >
+                            <Input bind:value={sloshName} type="text" validator={defaultValidator} bind:this={fields.sloshName} >
                                 <span slot="tip">Tip: Shorter names cost less gas :D</span>
                             </Input>
                         </span>

@@ -13,14 +13,30 @@ export function bytify(
 }
 
 export function hex_to_ascii(str1)
- {
-  var hex  = str1.toString();
-  var str = '';
+{
+  var hex  = str1.toString(); 
+  var str = ''; 
+  let flag = true
   for (var n = 0; n < hex.length; n += 2) {
+    if(parseInt(hex.substr(n, 2), 16 ) > 127){
+      flag = false
+      break
+    }
     str += String.fromCharCode(parseInt(hex.substr(n, 2), 16));
-  } 
-  return str.replace( /[\x00-\x1F\x7F-\xA0]+/g, '' );
- }
+  }  
+  if(flag){
+    return {
+      isValid : true ,
+      asciiString : str.replace( /[\x00-\x1F\x7F-\xA0]+/g, '' )
+    }
+  }else{
+    return {
+      isValid : false ,
+      asciiString : ''
+    }
+  }
+  
+}
 
 export function memoryOperand(type: number, offset: number): number {
   return (offset << 1) + type;

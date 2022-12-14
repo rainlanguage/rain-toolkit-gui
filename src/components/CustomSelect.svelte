@@ -133,7 +133,7 @@
         font-weight: 400;
         font-size: 16px;
         line-height: 25px;
-        color: #000000;
+        color: #fff;
         padding: 0;
         min-width: 180px;
     }
@@ -171,14 +171,14 @@
         line-height: 30px !important;
         padding: 0 40px 0 13px !important;
         background: transparent;
-        color: #000;
+        color: #fff;
         height: 39px;
     }
 
     .nav-dropdown .dropdown-item:focus,
     .nav-dropdown .dropdown-item:hover {
         text-decoration: none;
-        color: #000;
+        color: #fff;
         padding-top: 2px;
         padding-bottom: 2px;
         background: #b3b2b2 !important;
@@ -186,7 +186,7 @@
 
 
     .dropdown-item {
-        color: #000000;
+        color: #fff;
         font-style: normal;
         font-weight: 400;
         font-size: 16px;

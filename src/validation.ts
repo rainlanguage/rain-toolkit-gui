@@ -28,6 +28,9 @@ export const required = async (value, type): Promise<true | { error: string }> =
   return true;
 };
 
-export const defaultValidator = () => {
+export const defaultValidator = async (value, type): Promise<true | { error: string }> => {
+  if (type == 'text' && !re.test(value)) {
+    return { error: "Enter valid string" };
+  }
   return true;
 };

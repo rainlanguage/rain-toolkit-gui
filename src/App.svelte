@@ -18,6 +18,7 @@
   import { ethers } from "ethers";
   import { selectedNetwork } from "$src/stores";
   import NotFound from "$routes/order-book/NotFound.svelte";
+    import Privacy from "$routes/order-book/Privacy.svelte";
    
   let routes = {};
 
@@ -30,6 +31,7 @@
     "/addslosh": AddSlosh,
     "/slosh/*": SloshBalance,
     "/slosh-comic": SloshComic,
+    "/privacy" : Privacy,
     
     // "/vaultbalance/*": VaultBalance,
 
