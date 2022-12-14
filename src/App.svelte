@@ -109,7 +109,7 @@
 >
   <Header />
     <main class="relative flex flex-col font-light text-gray-50 image">
-      <div class="w-full py-5 px-8 height">
+      <div class="w-full py-5 px-8 height flex flex-col justify-center items-center">
         {#if $signerAddress}
           <Router {routes} />
         {:else}
