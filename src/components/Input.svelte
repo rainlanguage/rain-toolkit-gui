@@ -1,13 +1,13 @@
 <script lang="ts">
   import autoAnimate from "@formkit/auto-animate";
-  import AddressLibrary from "$src/routes/address-library/AddressLibrary.svelte";
+  // import AddressLibrary from "$src/routes/address-library/AddressLibrary.svelte";
   import { createEventDispatcher, getContext } from "svelte";
   import IconLibrary from "./IconLibrary.svelte";
   import { writable } from "svelte/store";
   import Modal, { bind } from "svelte-simple-modal/src/Modal.svelte";
   import Ring from "$components/Ring.svelte";
   const modal2 = writable(null);
-  const showModal = () => modal2.set(bind(AddressLibrary, { onSelectAddress }));
+  // const showModal = () => modal2.set(bind(AddressLibrary, { onSelectAddress }));
 
   export let from: string | undefined = undefined;
   export let type:
@@ -75,9 +75,9 @@
     }
   };
 
-  const openLibrary = () => {
-    open(AddressLibrary, { onSelectAddress });
-  };
+  // const openLibrary = () => {
+  //   open(AddressLibrary, { onSelectAddress });
+  // };
 
   const onSelectAddress = (address) => {
     value = address;
@@ -136,7 +136,7 @@
         <Ring size="30px" color="#FFF" />
       </div>
     {/if}
-    {#if type == "address"}
+    <!-- {#if type == "address"}
       {#if from == "depositModal"}
         <Modal
           show={$modal2}
@@ -156,7 +156,7 @@
           ><IconLibrary icon="library" inline /></span
         >
       {/if}
-    {/if}
+    {/if} -->
   </div>
   {#if $$slots.tip}
     <span class="text-black font-light" style="font-size: 14px;">

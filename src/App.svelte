@@ -6,7 +6,6 @@
   import Router from "svelte-spa-router";
   import Modal from "svelte-simple-modal";
     
-  import AddressLibrary from "$routes/address-library/AddressLibrary.svelte";
   import AddSlosh from "$routes/order-book/AddSlosh.svelte";
   import SloshBalance from "$routes/order-book/SloshBalance.svelte";
   import Sloshes from "$routes/order-book/Sloshes.svelte";
@@ -23,8 +22,6 @@
   let routes = {};
 
   routes = {
-
-    "/address-library": AddressLibrary,
 
     "/": Orderbook,
     "/sloshes" : Sloshes,
@@ -115,14 +112,13 @@
         {:else}
           <div class="flex flex-col justify-center items-center h-full">
             <span class="text-xl font-semibold text-black">To use the app:</span>
-              <div class="mt-4">
-                <button
-                  class="rounded-full border-none px-14 py-3 text-white"
-                  style="background-color: #2C2C54;"
-                  on:click={connectWallet}>Connect Wallet</button
-                >
-              </div>
-              <!-- <WalletConnect /> -->
+            <div class="mt-4">
+              <button
+                class="rounded-full border-none px-14 py-3 text-white"
+                style="background-color: #2C2C54;"
+                on:click={connectWallet}>Connect Wallet</button
+              >
+            </div>
           </div>
         {/if}
       </div>
@@ -131,10 +127,6 @@
 </Modal>
 
 <style global lang="postcss">
-  /* .back{
-    background: rgb(233,183,108);
-    background: linear-gradient(180deg, rgba(233,183,108,1) 0%, rgba(255,238,149,1) 100%);
-  } */
   @tailwind base;
   @tailwind components;
   @tailwind utilities;
@@ -142,8 +134,7 @@
     z-index: 1;
   }
   .image{
-    background-image: url("/assets/sloshylines_extended.svg");
-    /* background-image: url("/assets/sloshy_extended.webp"); */
+    background-image: url("/assets/sloshylines_extend.svg");
     background-repeat: no-repeat;
     background-size: cover;
   }

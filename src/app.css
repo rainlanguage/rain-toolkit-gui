@@ -10,10 +10,8 @@ body {
     min-height: 100vh;
     background: rgb(242,182,94);
     background: linear-gradient(180deg, rgba(242,182,94,1) 0%, rgba(255,236,134,1) 100%);
-    /* background-image: url("./../public/assets/sloshy_background.svg"), linear-gradient(180deg, rgba(242,182,94,1) 0%, rgba(255,236,134,1) 100%); */
     background-repeat: no-repeat;
-    background-attachment: fixed;
-    /* @apply bg-gray-100; */
+    /* background-attachment: fixed; */
     font-family: 'DM Sans', sans-serif;
     @apply text-gray-800
 }
