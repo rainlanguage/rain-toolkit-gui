@@ -15,13 +15,13 @@
   class="sticky top-0 z-40 flex h-16 w-full flex-row items-center justify-between px-5"
 > -->
 <div
-  class="top-0 z-30 flex h-24 w-full flex-row items-end  justify-end px-5"
+  class="top-0 z-30 flex h-20 w-full flex-row items-end  justify-end px-5"
 > 
 <div class="container flex flex-wrap justify-between items-center mx-auto">
   
-  <div >
+  <div class="flex">
     <!-- <img src="./assets/Sloshy.png" alt="Slosh Logo" /> -->
-    <span class="font-lobster text-4xl pl-16 cursor-pointer"><a href="/#/sloshes">Sloshy</a></span>
+    <span class="font-lobster text-4xl pl-16 cursor-pointer"><a href="/#/sloshes"><img src="./assets/sloshy.svg" alt="Sloshy" width="160px"/></a></span>
   </div> 
   {#if $signerAddress}
     <div class="flex direction flex-row items-center pr-14 gap-x-14">
