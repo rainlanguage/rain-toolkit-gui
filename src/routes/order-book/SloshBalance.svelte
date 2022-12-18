@@ -40,11 +40,9 @@
 
     let txStatus = TxStatus.None, errorMsg;
     let sloshId = params.wild
-    let vault = []
-    let tokenVault
+    let temp
     let ownerAddress
-    let tokenArray = []
-    let threshold, checkBal
+    let threshold
 
     let takeOrders_  = []
 
@@ -89,7 +87,8 @@
                 } 
    
             }`,
-        variables: { id : sloshId }
+        variables: { id : sloshId },
+        requestPolicy: "network-only",
         
     });   
     
@@ -125,10 +124,8 @@
     $: order = $getOrder?.data?.order;
     $: if(order){
         order.validInputs.map(async (token) =>{
-            // console.log("token", token);
             let tokenContract = new ethers.Contract(token.tokenVault.token.id, erc20ABI, $signer)
             token.userBal = await tokenContract.balanceOf($signerAddress?.toLowerCase())
-            // console.log("token.userBal", token.userBal);
             
         })
     }
@@ -223,7 +220,15 @@
                 return;
             }
         }      
-    } 
+    }
+    
+    const refresh = async () => {
+        temp = sloshId;
+        sloshId = undefined;
+        if (await !$getOrder.fetching) {
+            sloshId = temp;
+        }
+    };
 
 </script> 
 
@@ -240,13 +245,16 @@
                     </div>
                 {:else}
                     <div class="flex flex-col gap-y-2 px-4 pt-2 ">
-                        <div class="flex justify-between">
+                        <div class="grid grid-cols-3 grid-flow-col justify-between">
                             <span class="cursor-pointer pl-8 text-black" on:click={() =>{history.back()}} ><IconLibrary icon="back" width={14} /></span>
                             <div class="flex flex-col justify-center items-center pb-2">
-                                <span class="font-semibold text-black mr-5">Slosh {#if !order.orderLive} <span class="text-red-500">(deactivated)</span> {/if}</span>
-                                <span class="font-normal text-gray-700 mr-5">{hex_to_ascii(order.data).isValid ? hex_to_ascii(order.data).asciiString ? hex_to_ascii(order.data).asciiString + " - " + sloshId.substring(0,20) + "..." : sloshId.substring(0,20) + "..." : ""}</span>
+                                <span class="font-semibold text-black ">Slosh {#if !order.orderLive} <span class="text-red-500">(deactivated)</span> {/if}</span>
+                                <span class="font-normal text-gray-700 ">{hex_to_ascii(order.data).isValid ? hex_to_ascii(order.data).asciiString ? hex_to_ascii(order.data).asciiString + " - " + sloshId.substring(0,20) + "..." : sloshId.substring(0,20) + "..." : ""}</span>
                             </div>
-                            <div />
+                            <div>
+                                <span  class="flex justify-end items-center pr-8" class:animate-spin={$getOrder.fetching} on:click={refresh}>
+                                    <IconLibrary color="text-black" icon="reload" /></span>
+                            </div>
                         </div>
                         <div>
                             <table class="table-auto block w-full px-8 pb-2">
@@ -259,7 +267,9 @@
                                     {#each order.validInputs as token}
                                         <tr class="gap-x-4 flex w-full items-center">
                                             <td class="pr-6 w-1/4 text-gray-700">{token?.tokenVault?.token?.name}</td>
-                                            <td class="pr-6 flex justify-center text-gray-700" style="width: 38%;">{ethers.utils.formatUnits(token?.tokenVault?.balance , token?.tokenVault?.token?.decimals)}</td>
+                                            <td class="pr-6 flex justify-center text-gray-700" style="width: 38%;">
+                                                {ethers.utils.formatUnits(token?.tokenVault?.balance , token?.tokenVault?.token?.decimals)}
+                                            </td>
                                             <td class="py-1" style="width: 37%;">
                                                 <div class="flex justify-between">
                                                     <div>
@@ -275,7 +285,6 @@
                                                             on:click={async () => {
                                                                 let tokenContract = new ethers.Contract(token.tokenVault.token.id, erc20ABI, $signer)
                                                                 let bal = await tokenContract.balanceOf($signerAddress?.toLowerCase())
-                                                                console.log("bal", bal.toString());
                                                                 
                                                                 if(bal.gt(BigNumber.from('0')))
                                                                     

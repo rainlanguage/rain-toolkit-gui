@@ -7,9 +7,9 @@
   import { signer } from "svelte-ethers-store";
   import { formatUnits, Logger, parseUnits } from "ethers/lib/utils";
   import { required } from "$src/validation";
-    import { ethers } from "ethers";
-    import Input from "$components/Input.svelte";
-    import * as Sentry from "@sentry/svelte";
+  import { ethers } from "ethers";
+  import Input from "$components/Input.svelte";
+  import * as Sentry from "@sentry/svelte";
 
   enum TxStatus {
     None,

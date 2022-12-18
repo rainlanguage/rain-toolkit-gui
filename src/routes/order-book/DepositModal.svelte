@@ -66,11 +66,9 @@
       amount.toString(),
       token?.tokenVault?.token.decimals.toString()
     );
-    console.log("val", tokenContract);
     
     units = _units;
     allowance = await tokenContract.allowance($signerAddress.toLowerCase(), orderBookContract.address);
-    console.log("allowance.gte(BigNumber.from(_units)", allowance.toString(), allowance.gte(BigNumber.from(_units)));
     
     if(allowance.gte(BigNumber.from(_units))){
       activeStep = DepositSteps.Confirm;
