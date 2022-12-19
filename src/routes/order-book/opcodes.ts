@@ -36,17 +36,12 @@ const isValidUTF8 = (bytes) => {
 export function hex_to_ascii(str1)
 {   
 
-  if(isValidUTF8(str1)){
-
-    var hex  = str1.toString(); 
-    var str = ''; 
-    for (var n = 0; n < hex.length; n += 2) {
-      str += String.fromCharCode(parseInt(hex.substr(n, 2), 16));
-    }   
-
+  if(isValidUTF8(str1)){ 
+    
+    let str = str1.split('x')[1]
     return {
       isValid : true ,
-      asciiString : str.replace( /[\x00-\x1F\x7F-\xA0]+/g, '' )
+      asciiString : decodeURIComponent(str.replace(/(..)/g,'%$1'))
     }
 
   }else{ 
@@ -57,17 +52,6 @@ export function hex_to_ascii(str1)
     }
     
   }
-
-
-  
-  // if(flag){
-  //   return {
-  //     isValid : true ,
-  //     asciiString : str.replace( /[\x00-\x1F\x7F-\xA0]+/g, '' )
-  //   }
-  // }else{
-   
-  // }
   
 }
 
