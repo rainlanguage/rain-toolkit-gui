@@ -10,31 +10,64 @@ export function bytify(
   bytesLength = 1
 ): BytesLike {
   return zeroPad(hexlify(value), bytesLength);
-}
+} 
+
+const hex2bin = (hex) => { 
+  hex = hex.split('x')[1]
+  const bytes = [];
+  for (let i = 0; i < hex.length - 1; i += 2) {
+    bytes.push(parseInt(hex.substr(i, 2), 16));
+  }
+  return new Uint8Array(bytes);
+}; 
+
+const isValidUTF8 = (bytes) => {  
+  const decoder = new TextDecoder("utf-8"); 
+
+  const hexBytes = hex2bin(bytes)
+  // Decode the bytes with the TextDecoder object
+  const str = decoder.decode(hexBytes);
+
+  // Check if the string contains any replacement characters
+  const regex = /\uFFFD/g;
+  return !regex.test(str);
+}; 
 
 export function hex_to_ascii(str1)
-{
-  var hex  = str1.toString(); 
-  var str = ''; 
-  let flag = true
-  for (var n = 0; n < hex.length; n += 2) {
-    if(parseInt(hex.substr(n, 2), 16 ) > 127){
-      flag = false
-      break
-    }
-    str += String.fromCharCode(parseInt(hex.substr(n, 2), 16));
-  }  
-  if(flag){
+{   
+
+  if(isValidUTF8(str1)){
+
+    var hex  = str1.toString(); 
+    var str = ''; 
+    for (var n = 0; n < hex.length; n += 2) {
+      str += String.fromCharCode(parseInt(hex.substr(n, 2), 16));
+    }   
+
     return {
       isValid : true ,
       asciiString : str.replace( /[\x00-\x1F\x7F-\xA0]+/g, '' )
     }
-  }else{
+
+  }else{ 
+
     return {
       isValid : false ,
       asciiString : ''
     }
+    
   }
+
+
+  
+  // if(flag){
+  //   return {
+  //     isValid : true ,
+  //     asciiString : str.replace( /[\x00-\x1F\x7F-\xA0]+/g, '' )
+  //   }
+  // }else{
+   
+  // }
   
 }
 
