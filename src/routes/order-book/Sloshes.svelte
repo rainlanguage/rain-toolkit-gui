@@ -90,7 +90,7 @@
                 </div>
             {:else}
                 <div class="flex flex-col gap-y-2 px-2 pt-2 ">
-                    <div class="grid grid-cols-3 grid-flow-col justify-between">
+                    <div class="grid grid-cols-3 grid-flow-col justify-between pb-6">
                         <div />
                         <div class="flex flex-col justify-center items-center pb-2">
                             <span class="font-semibold text-black mr-5">Sloshes</span>
