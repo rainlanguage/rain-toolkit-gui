@@ -134,7 +134,7 @@
     z-index: 1;
   }
   .image{
-    background-image: url("/assets/sloshylines_extend.svg");
+    background-image: url("/assets/sloshylines_extended.svg");
     background-repeat: no-repeat;
     background-size: cover;
   }

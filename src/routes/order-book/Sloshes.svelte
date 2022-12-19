@@ -8,12 +8,13 @@
     import { client } from "$src/stores";
     import { queryStore , gql } from "@urql/svelte";
     import { max_uint256, ONE, hex_to_ascii  } from "./opcodes";
+    import IconLibrary from "$components/IconLibrary.svelte";
 
     export let params: {
         wild: string;
     }; 
 
-    let ownerAddress
+    let ownerAddress, temp
     let orders = [] 
 
     $: if($signer) {
@@ -35,7 +36,8 @@
                     }
                 }
             }`,
-        variables: { owner : ownerAddress }
+        variables: { owner : ownerAddress },
+        requestPolicy: "network-only",
         
     });    
 
@@ -57,6 +59,15 @@
         filterOrder()
 
     }
+
+    const refresh = async () => {
+        temp = ownerAddress;
+        ownerAddress = undefined;
+        if (await !$sloshes.fetching) {
+            ownerAddress = temp;
+        }
+    };
+
     const addSlosh = () =>{
          push(`/addslosh`)
     }
@@ -79,14 +90,15 @@
                 </div>
             {:else}
                 <div class="flex flex-col gap-y-2 px-2 pt-2 ">
-                    <div class="flex justify-between pb-6">
+                    <div class="grid grid-cols-3 grid-flow-col justify-between">
                         <div />
-                        <!-- <span class="cursor-pointer  text-black" on:click={() =>{history.back()}}><IconLibrary icon="back" width={14} /></span> -->
                         <div class="flex flex-col justify-center items-center pb-2">
                             <span class="font-semibold text-black mr-5">Sloshes</span>
-                            <!-- <span class="font-normal">(Ox2413fb3709b0...)</span> -->
                         </div>
-                        <span />
+                        <div>
+                            <span  class="flex justify-end items-center pr-8 cursor-pointer" class:animate-spin={$sloshes.fetching} on:click={refresh}>
+                                <IconLibrary color="text-black" icon="reload" /></span>
+                        </div>
                     </div>
                     <div>
                         <table class="table-auto block w-full px-8 pb-2">

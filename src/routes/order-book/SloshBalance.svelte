@@ -252,7 +252,7 @@
                                 <span class="font-normal text-gray-700 ">{hex_to_ascii(order.data).isValid ? hex_to_ascii(order.data).asciiString ? hex_to_ascii(order.data).asciiString + " - " + sloshId.substring(0,20) + "..." : sloshId.substring(0,20) + "..." : ""}</span>
                             </div>
                             <div>
-                                <span  class="flex justify-end items-center pr-8" class:animate-spin={$getOrder.fetching} on:click={refresh}>
+                                <span  class="flex justify-end items-center pr-8 cursor-pointer" class:animate-spin={$getOrder.fetching} on:click={refresh}>
                                     <IconLibrary color="text-black" icon="reload" /></span>
                             </div>
                         </div>
