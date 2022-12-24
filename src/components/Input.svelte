@@ -27,6 +27,7 @@
   export let disabled = false;
   export let errorMsg = "";
   export let bgColor = "bg-gray-200";
+  export let wid = false;
 
   let error: string;
   let timer, validating;
@@ -96,7 +97,7 @@
       <slot name="description" />
     </span>
   {/if}
-  <div class="flex flex-row items-center justify-end gap-x-2 self-stretch">
+  <div class="flex flex-row items-center justify-end gap-x-2 self-stretch {wid ? 'pl-7' : ''}">
     {#if type == "number"}
       <input
         type={_type}

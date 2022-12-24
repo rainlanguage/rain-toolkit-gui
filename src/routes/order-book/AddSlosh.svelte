@@ -131,15 +131,17 @@
                         </div>
                         <div />
                     </div>
-                    <div class="w-full p-2 px-2 flex justify-center items-start">
-                        <span class="w-max font-semibold text-black mr-2 pt-1">Slosh name:</span>
-                        <span class="w-2/3">
-                            <Input bind:value={sloshName} type="text" validator={defaultValidator} bind:this={fields.sloshName} >
-                                <span slot="tip">Tip: Shorter names cost less gas :D</span>
-                            </Input>
-                        </span>
+                    <div class="w-full p-2 px-2 flex flex-col justify-center items-start">
+                        <div class="w-full flex">
+                            <span class="w-max font-semibold text-black mr-2 pt-1">Slosh name:</span>
+                            <span class="w-2/3">
+                                <Input bind:value={sloshName} type="text" validator={defaultValidator} bind:this={fields.sloshName} >
+                                </Input>
+                            </span>
+                        </div>
+                        <span class="text-sm text-black pl-3 mt-1">Tip: Shorter names cost less gas :D P.s Names are public and permanent</span>
                     </div>
-                    <div class="grid  ht gap-y-2.5">
+                    <!-- <div class="grid  ht gap-y-2.5">
                         {#each tokenAddressess as token, i}
                             <div class="grid items-stretch border border-orange-400 w-96 rounded-full ">
                                 <div class="grid grid-cols-2 items-center px-10 py-3 border-orange-400"> 
@@ -151,13 +153,18 @@
                                 </div>
                             </div>
                         {/each}
-                    </div>    
+                    </div>     -->
+                    <div class="flex text-black justify-center items-center">
+                        choose a token
+                    </div>
                 </div>
-                <div class="w-full bg-gray-300 p-2 flex justify-center items-center gap-x-4 px-6 my-4">
-                    <div class="w-full text-black">Choose a threshold :</div>
-                    <span class="flex items-center gap-x-2 text-black"><Input bgColor="bg-white" bind:value={thresholdVal} type="number" validator={required} bind:this={fields.tiers1} />%</span>  
+                <div class="mr-10">
+                    <div class="w-full bg-gray-300 p-2 flex rounded-r-2xl gap-x-10 items-center my-4">
+                        <div class="w-1/3 ml-20 text-black">Choose a threshold :</div>
+                        <span class="w-1/3 flex items-center gap-x-2 text-black"><Input wid={true} bgColor="bg-white" bind:value={thresholdVal} type="number" validator={required} bind:this={fields.tiers1} />%</span>  
+                    </div>
                 </div>
-                <div class="w-full flex px-4 justify-center">
+                <div class="w-full flex px-16 py-4 justify-center">
                     {#if $signer}
                         <button class="w-full rounded-full text-base py-3 px-5 text-black" style="background-color: #FDB142;  box-shadow: inset 0px 2px 6px 0px #ffffff;" disabled={!$signer} on:click={handleClick}>OK</button>
                     {:else}  
