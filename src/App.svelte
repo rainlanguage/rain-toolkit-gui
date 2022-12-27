@@ -106,10 +106,12 @@
 >
   <Header />
     <main class="relative flex flex-col font-light text-gray-50 image">
-      <div class="w-full py-5 px-8 height flex flex-col  items-center">
-        {#if $signerAddress}
+      {#if $signerAddress}
+        <div class="w-full py-5 px-8 height flex flex-col  items-center">
           <Router {routes} />
+        </div>
         {:else}
+        <div class="w-full py-5 px-8 height flex flex-col justify-center items-center">
           <div class="flex flex-col justify-center items-center h-full">
             <span class="text-xl font-semibold text-black">To use the app:</span>
             <div class="mt-4">
@@ -120,8 +122,8 @@
               >
             </div>
           </div>
+        </div>
         {/if}
-      </div>
       <Footer />
     </main>
 </Modal>
