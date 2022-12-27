@@ -106,7 +106,7 @@
 >
   <Header />
     <main class="relative flex flex-col font-light text-gray-50 image">
-      <div class="w-full py-5 px-8 height flex flex-col justify-center items-center">
+      <div class="w-full py-5 px-8 height flex flex-col  items-center">
         {#if $signerAddress}
           <Router {routes} />
         {:else}
@@ -140,5 +140,6 @@
   }
   .height{
     min-height: 74vh;
+    /* min-height: 104vh; */
   }
 </style>
