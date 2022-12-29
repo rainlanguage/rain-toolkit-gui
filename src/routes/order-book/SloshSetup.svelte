@@ -127,52 +127,7 @@
         }
     }  
 
-//-----------------------------------------------------
-    // let anchor: HTMLButtonElement | undefined = undefined;
-    // let visible = false
-    // let bottom: number;
-    // let left: number;
-
-    // const initPosition = () =>
-    // ({ bottom, left } = anchor?.getBoundingClientRect() ?? { bottom: 0, left: 0 });
-
-    // $: anchor, initPosition();
-    // $: visible ? document.getElementsByClassName('height')[0].style.minHeight = '100vh' : document.getElementsByClassName('height')[0].style.minHeight = '74vh'
-
-
 </script>
-
-<!-- <svelte:window on:resize={initPosition} />
-
-{#if visible}
-    <div
-        role="dialog"
-        aria-labelledby="Title"
-        aria-describedby="Description"
-        aria-orientation="vertical"
-        class="popover"
-        on:click|stopPropagation
-        >
-        <div class="wrapper rounded-2xl">
-            <div class="grid ht gap-y-2.5 h-96 overflow-y-scroll pr-2 pb-3">
-                {#each tokenAddressess as token, i}
-                    <div class="grid items-stretch border border-orange-400 w-96 rounded-full ">
-                        <div class="grid grid-cols-2 items-center px-10 py-3 border-orange-400"> 
-                            <span class="flex items-center gap-x-2">
-                                <img src={token.logo} alt="Rain Logo" class="w-5" />
-                                <span class=" text-black">{token.tokenName}</span>
-                            </span>
-                            <span class="flex justify-end"><Switch color="#418be4" bind:checked={checkedTokens[i]} /></span>
-                        </div>
-                    </div>
-                {/each}
-            </div>    
-            <div class="pt-3 w-full">
-                <button class="w-full rounded-full text-base py-3 px-5 text-black" style="background-color: #FDB142;  box-shadow: inset 0px 2px 6px 0px #ffffff;" disabled={!$signer} on:click|stopPropagation={() => {visible = false}}>OK</button>
-            </div>
-        </div>
-    </div>
-{/if} -->
 
 <div>
     <Section>
@@ -180,15 +135,15 @@
             <div class="pt-4">
                 <div class="flex flex-col gap-y-2 px-4 pt-2 ">
                     <div class="flex justify-between pb-1">
-                        <span class="cursor-pointer text-black" on:click={() =>{history.back()}}><IconLibrary icon="back" width={14} /></span>
+                        <span class="pl-2 cursor-pointer text-black" on:click={() =>{history.back()}}><IconLibrary icon="back" width={14} /></span>
                         <div class="flex flex-col justify-center items-center pb-2">
-                            <span class="font-semibold text-black mr-5">Add Slosh</span>
+                            <span class="font-semibold text-black mr-5">Slosh Setup</span>
                         </div>
                         <div />
                     </div>
                     <div class="w-full p-2 px-2 flex flex-col justify-center items-start">
                         <div class="w-full flex">
-                            <span class="w-max font-semibold text-black mr-2 pt-1">Slosh name:</span>
+                            <span class="w-max font-semibold text-black ml-2 mr-2 pt-1">Slosh name:</span>
                             <span class="w-2/3">
                                 <Input bind:value={sloshName} type="text" validator={defaultValidator} bind:this={fields.sloshName} >
                                 </Input>

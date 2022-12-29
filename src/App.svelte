@@ -6,7 +6,7 @@
   import Router from "svelte-spa-router";
   import Modal from "svelte-simple-modal";
     
-  import AddSlosh from "$routes/order-book/AddSlosh.svelte";
+  import AddSlosh from "$routes/order-book/SloshSetup.svelte";
   import SloshBalance from "$routes/order-book/SloshBalance.svelte";
   import Sloshes from "$routes/order-book/Sloshes.svelte";
   import Orderbook from "$routes/order-book/Orderbook.svelte";

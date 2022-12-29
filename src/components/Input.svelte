@@ -28,6 +28,7 @@
   export let errorMsg = "";
   export let bgColor = "bg-gray-200";
   export let wid = false;
+  export let Id = "";
 
   let error: string;
   let timer, validating;
@@ -123,10 +124,11 @@
           console.log("blur");
           validate();
         }}
+        id={Id}
         {disabled}
         {min}
         {max}
-        class="w-full rounded-md {bgColor} p-1 font-light text-black {borderColor}"
+        class="w-full rounded-md {bgColor} p-1 font-light text-black {borderColor} {type == "text" ? 'depth' : ''}"
       />
     {/if}
     {#if validating}
@@ -171,3 +173,12 @@
     <span class="text-red-500">{errorMsg}</span>
   {/if}
 </div>
+
+
+<style>
+  .depth{
+    /* -moz-box-shadow: inset -1px -1px 2px #CCC;
+    -webkit-box-shadow: inset -1px -1px 2px #CCC; */
+    box-shadow: 2px 1px 150px rgb(176, 176, 176, 0.5), inset 1px 3px 5px rgb(176, 176, 176, 0.5)
+  }
+</style>

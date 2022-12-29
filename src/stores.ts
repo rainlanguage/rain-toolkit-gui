@@ -7,7 +7,10 @@ export const selectedNetwork = writable(networks[1]);
 export const client = derived(
   selectedNetwork,
   $selectedNetwork => createClient({
-    url: "https://api.thegraph.com/subgraphs/name/siddharth2207/orderbook"
-    // url: AddressBook.getSubgraphEndpoint(Number($selectedNetwork.config.chainId))
+    //Main
+    // url: "https://api.thegraph.com/subgraphs/name/siddharth2207/orderbook"
+    
+    //Dev
+    url: "https://api.thegraph.com/subgraphs/name/siddharth2207/orderbookdevelop"
   })
 )
