@@ -4,9 +4,12 @@
     import { tokenAddressess } from "$src/constants";
     import { signer } from "svelte-ethers-store";
     import { createEventDispatcher } from 'svelte';
-    import Input from "$components/Input.svelte";
 
     const dispatch = createEventDispatcher();
+
+    export let tokenLs
+    console.log("tokensLs", tokenLs);
+    
 
     let checkedTokens = []
     
@@ -23,9 +26,9 @@
 
     const handleClick = () =>{
         let tokens = []
-        for(let i = 0; i < tokenAddressess.length; i++ ){
+        for(let i = 0; i < tokenLs.length; i++ ){
             if(checkedTokens[i] == true){
-                tokens.push(tokenAddressess[i])
+                tokens.push(tokenLs[i])
             }
         } 
         console.log("tokens", tokens);
@@ -66,6 +69,7 @@
         class="popover"
         on:click|stopPropagation
         >
+        <div class="blocker" on:click|stopPropagation={() => visible = false} />
         <div class="wrapper rounded-2xl">
             <div class="grid ht gap-y-2.5  pb-3" id="myDropdown">
                 <input type="text" class="w-full rounded-md bg-gray-200 p-1 font-light text-black border-gray-500 depth" placeholder="Search token" id="myInput" on:keyup={filterFunction} />
@@ -85,20 +89,20 @@
             </div>
             </div>    
             <div class="pt-3 w-full">
-                <button class="w-full rounded-full text-base py-3 px-5 text-black" style="background-color: #FDB142;  box-shadow: inset 0px 2px 6px 0px #ffffff;" disabled={!$signer} on:click|stopPropagation={handleClick}>OK</button>
+                <button class="w-full rounded-full text-base py-3 px-5 text-black font-bold" style="background-color: #FDA742;  box-shadow: inset 0px 2px 6px 0px #ffffff;" disabled={!$signer} on:click|stopPropagation={handleClick}>Ok</button>
             </div>
         </div>
     </div>
 {/if}
 
 <div class="flex justify-center mx-3">
-    <buttom class="w-full rounded-lg text-base py-3 px-5 text-black justify-between flex items-center" 
+    <button class="w-full rounded-xl text-base py-3 px-5 text-black justify-between flex items-center" 
     style = "background-color: #ECECEC;" 
     on:click={() => (visible = true)}
     bind:this={anchor}>
         <span class="pl-8">Choose tokens</span>
         <span class="pr-2"><IconLibrary icon="down-open-arrow" /></span>
-    </buttom>
+    </button>
 </div>
 
 <style>
@@ -107,36 +111,32 @@
       inset: 0;
       display: inline-flex;
       justify-content: center;
-        /* width: 100%; */
       z-index: 2;
     }
-  
-    .backdrop {
-      position: absolute;
-      inset: 0;
-  
-      background: transparent;
+    .blocker {
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        content: ' ';
+        background: transparent;
     }
   
     .wrapper {
       position: absolute;
-  
       min-width: 200px;
       padding: 20px;
-  
       min-height: 100px;
-  
       width: fit-content;
       height: auto;
-  
       overflow: hidden;
-  
       display: flex;
       flex-direction: column;
       align-items: center;
-  
       background: white;
       color: black;
+      box-shadow: 0px 4px 23px rgb(0, 0, 0, 0.5)
     }
     ::-webkit-scrollbar {
         overflow-y: scroll;
@@ -151,8 +151,6 @@
     }
   
     .depth{
-        /* -moz-box-shadow: inset -1px -1px 2px #CCC;
-        -webkit-box-shadow: inset -1px -1px 2px #CCC; */
         box-shadow: 2px 1px 150px rgb(176, 176, 176, 0.5), inset 1px 3px 5px rgb(176, 176, 176, 0.5)
     }
     #myInput{

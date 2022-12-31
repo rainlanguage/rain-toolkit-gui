@@ -28,7 +28,7 @@
   export let errorMsg = "";
   export let bgColor = "bg-gray-200";
   export let wid = false;
-  export let Id = "";
+  export let padLeft = "";
 
   let error: string;
   let timer, validating;
@@ -112,7 +112,7 @@
         {disabled}
         {min}
         {max}
-        class="w-9/12 rounded-md {bgColor} p-1 font-light text-black {borderColor}"
+        class="w-10/12 rounded-md {bgColor} p-1 font-light text-black {borderColor}"
       />
     {:else}
       <input
@@ -124,11 +124,10 @@
           console.log("blur");
           validate();
         }}
-        id={Id}
         {disabled}
         {min}
         {max}
-        class="w-full rounded-md {bgColor} p-1 font-light text-black {borderColor} {type == "text" ? 'depth' : ''}"
+        class="w-full rounded-md {bgColor} p-1 {padLeft} font-light text-black {borderColor} {type == "text" ? 'depth' : ''}"
       />
     {/if}
     {#if validating}

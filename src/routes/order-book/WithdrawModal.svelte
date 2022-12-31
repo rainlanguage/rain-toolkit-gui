@@ -161,7 +161,7 @@
       <!-- <Button bRadius="rounded-full" variant="bg-orange-400" disabled={!priceConfirmed} on:click={withdraw}>Confirm</Button> -->
       <button 
         class="w-full rounded-full text-base py-2 px-28 text-black" 
-        style="background-color: #FDB142;  box-shadow: inset 0px 2px 6px 0px #ffffff;"
+        style="background-color: #FDA742;  box-shadow: inset 0px 2px 6px 0px #ffffff;"
         disabled={!priceConfirmed || !isWithdraw} 
         on:click={withdraw}>Confirm
       </button>

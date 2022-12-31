@@ -103,31 +103,31 @@
                     <div>
                         <table class="table-auto block w-full px-8 pb-2">
                             <thead class="block" style="width: 32rem;">
-                            <tr class="font-semibold flex w-full">
-                                <th class="text-left pb-2 w-1/3 text-black">Name</th>
-                                <th class="text-left pb-2 w-1/3 text-black">Date Created</th>
-                                <th class="text-left pb-2 w-1/3 text-black">Slosh ID</th>
-                            </tr>  
-                        </thead>
-                        <tbody class="block" style="width: 32rem;">
-                            {#each orders as order}
-                                <tr class={` flex w-full`}>
-                                    <td class={`w-1/3  ${!order.orderLive ? 'text-red-500' : 'text-gray-700'} `}>{hex_to_ascii(order.data).isValid ? hex_to_ascii(order.data).asciiString : ""}</td>
-                                    <td class={`w-1/3  text-gray-700`}>{dayjs.unix(order.timestamp).toISOString().slice(0,10)}</td>
-                                    <td class={`py-1 w-1/3 ${!order.orderLive ? 'text-red-500' : 'text-gray-700'}  underline hover:text-blue-500`}>
-                                        <a href="/#/slosh/{order.id}">
-                                            {order.id.substring(0,16)}...
-                                        </a>
-                                    </td>
-                                </tr>
-                            {/each}
-                        </tbody>
+                                <tr class="font-semibold flex w-full">
+                                    <th class="text-left pb-2 w-1/3 text-black">Name</th>
+                                    <th class="text-left pb-2 w-1/3 text-black">Date Created</th>
+                                    <th class="text-left pb-2 w-1/3 text-black">Slosh ID</th>
+                                </tr>  
+                            </thead>
+                            <tbody class="block" style="width: 32rem;">
+                                {#each orders as order}
+                                    <tr class={` flex w-full`}>
+                                        <td class={`w-1/3  ${!order.orderLive ? 'text-red-500' : 'text-gray-700'} `}>{hex_to_ascii(order.data).isValid ? hex_to_ascii(order.data).asciiString : ""}</td>
+                                        <td class={`w-1/3  text-gray-700`}>{dayjs.unix(order.timestamp).toISOString().slice(0,10)}</td>
+                                        <td class={`py-1 w-1/3 ${!order.orderLive ? 'text-red-500' : 'text-gray-700'}  underline hover:text-blue-500`}>
+                                            <a href="/#/slosh/{order.id}">
+                                                {order.id.substring(0,16)}...
+                                            </a>
+                                        </td>
+                                    </tr>
+                                {/each}
+                            </tbody>
                         </table>
                     </div>
                     <div class="px-10">
                         <div class="w-full flex px-2 justify-center">
                             {#if $signer}
-                                <button class="w-full rounded-full text-base py-3 px-28 text-black" style="background-color: #FDB142;  box-shadow: inset 0px 2px 6px 0px #ffffff;" disabled={!$signer} on:click={addSlosh}>Add a Slosh</button>
+                                <button class="w-full rounded-full text-base py-3 px-28 text-black" style="background-color: #FDA742;  box-shadow: inset 0px 2px 6px 0px #ffffff;" disabled={!$signer} on:click={addSlosh}>Add a Slosh</button>
                             {:else}  
                                 <span class="">Please connect your wallet</span>
                             {/if}
