@@ -125,6 +125,10 @@
         }
     }  
 
+    const handleTry = () =>{
+        txStatus = TxStatus.None
+    }
+
 </script>
 
 <div>
@@ -204,7 +208,7 @@
                 <span class="text-lg text-black font-medium pt-5 pb-2">Transaction Successful!</span>
                 <img src={img['false_circle']} alt="Error" />
                 <span class="text-base font-normal text-black pt-3">The slosh hasn't been created.</span>
-                <span class="text-base font-normal text-black"><a href="/#/addslosh" class="underline">Try again here</a> </span>
+                <span class="text-base font-normal text-black"><a on:click={handleTry} class="underline">Try again here</a> </span>
                 <span class="text-base font-medium text-black underline pt-5"><a href={`${$selectedNetwork.blockExplorer}/tx/${txHash?.hash}`} target="_blank">Verify Transaction <IconLibrary icon="link" width={26}/></a></span>
             </div>
         {/if}
