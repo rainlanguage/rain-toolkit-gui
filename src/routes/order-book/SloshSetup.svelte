@@ -86,8 +86,6 @@
             let txAskOrderLive = await orderBookContract.addOrder(askOrderConfig );
             txHash = txAskOrderLive
             txStatus = TxStatus.AwaitingConfirmation;
-            console.log("ts", txAskOrderLive);
-            
             
             let receipt = await txAskOrderLive.wait()
 
