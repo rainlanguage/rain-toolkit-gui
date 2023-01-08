@@ -2,6 +2,7 @@
     import IconLibrary from "$components/IconLibrary.svelte";
     import Input from "$components/Input.svelte";
     import Switch from "$components/Switch.svelte";
+    import { selectedNetwork } from "$src/stores"; 
     import { ethers } from "ethers";
     import { signer } from "svelte-ethers-store";
     import orderABI from "./orderbookABI.json"
@@ -25,7 +26,7 @@
         Error,
     }
 
-    let txStatus = TxStatus.None, errorMsg;
+    let txStatus = TxStatus.None, errorMsg, txHash;
     let fields: any = {};
     let orderBookContract, thresholdVal, sloshName, sloshId = '0x4d643d39264f51d05e04aeb58979fb21b72af8537c36a785a3274b23c830fa2a'
     let checkedTokens = []
@@ -83,7 +84,10 @@
         } 
         
             let txAskOrderLive = await orderBookContract.addOrder(askOrderConfig );
+            txHash = txAskOrderLive
             txStatus = TxStatus.AwaitingConfirmation;
+            console.log("ts", txAskOrderLive);
+            
             
             let receipt = await txAskOrderLive.wait()
 
@@ -185,7 +189,7 @@
           <div class="flex flex-col items-center p-6">
             <lottie-player src="https://lottie.host/5f90529b-22d1-4337-8c44-46e3ba7c0c68/pgMhlFIAcQ.json" background="transparent" speed="1" style="width: 300px; height: 200px;" loop autoplay></lottie-player>
             <span class="text-lg text-black font-medium pt-5">Transaction on chain</span>
-            <span class="text-base text-black underline">Verify Transaction <IconLibrary icon="link" width={26}/></span>
+            <span class="text-base text-black underline"><a href={`${$selectedNetwork.blockExplorer}/tx/${txHash?.hash}`} target="_blank">Verify Transaction <IconLibrary icon="link" width={26}/> </a></span>
           </div>
         {/if}
         {#if txStatus == TxStatus.Complete}
@@ -194,7 +198,7 @@
             <img src={img['true_circle']} alt="Success" />
             <span class="text-base text-black pt-3">The slosh has been created.</span>
             <span class="text-base text-black">You can now <a href="/#/slosh/{sloshId}" class="underline">deposit tokens.</a> </span>
-            <span class="text-base text-black underline pt-5">Verify Transaction <IconLibrary icon="link" width={26}/></span>
+            <span class="text-base text-black underline pt-5"><a href={`${$selectedNetwork.blockExplorer}/tx/${txHash?.hash}`} target="_blank">Verify Transaction <IconLibrary icon="link" width={26}/></a></span>
         </div>
         {/if}
         {#if txStatus == TxStatus.Error}
@@ -203,7 +207,7 @@
                 <img src={img['false_circle']} alt="Error" />
                 <span class="text-base text-black pt-3">The slosh hasn't been created.</span>
                 <span class="text-base text-black"><a href="/#/addslosh" class="underline">Try again here</a> </span>
-                <span class="text-base text-black underline pt-5">Verify Transaction <IconLibrary icon="link" width={26}/></span>
+                <span class="text-base text-black underline pt-5"><a href={`${$selectedNetwork.blockExplorer}/tx/${txHash?.hash}`} target="_blank">Verify Transaction <IconLibrary icon="link" width={26}/></a></span>
             </div>
         {/if}
     </Section>
