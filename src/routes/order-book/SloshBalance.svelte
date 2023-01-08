@@ -7,8 +7,6 @@
     import { provider , signer , signerAddress } from "svelte-ethers-store";
     import { BigNumber, ethers } from "ethers"; 
     import orderABI from "./orderbookABI.json" 
-    import DepositModal from "./DepositModal.svelte";
-    import WithdrawModal from "./WithdrawModal.svelte";
     import { getContext } from "svelte";
     import { hex_to_ascii } from "./opcodes";
     import {BigNumber as FloatBigNum} from 'bignumber.js'
