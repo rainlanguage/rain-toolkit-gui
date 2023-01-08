@@ -205,7 +205,7 @@
         {/if}
         {#if txStatus == TxStatus.Error}
             <div class="flex flex-col items-center justify-center w-96 h-80">
-                <span class="text-lg text-black font-medium pt-5 pb-2">Transaction Successful!</span>
+                <span class="text-lg text-black font-medium pt-5 pb-2">Transaction Unsuccessful</span>
                 <img src={img['false_circle']} alt="Error" />
                 <span class="text-base font-normal text-black pt-3">The slosh hasn't been created.</span>
                 <span class="text-base font-normal text-black"><a on:click={handleTry} class="underline">Try again here</a> </span>
