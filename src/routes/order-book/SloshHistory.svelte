@@ -250,7 +250,12 @@
                             <div class="flex flex-col justify-center items-center pb-2">
                                 <span class="font-semibold text-black ">Slosh History</span>
                                     <!-- {#if !order.orderLive} <span class="text-red-500">(deactivated)</span> {/if} -->
-                                <span class="font-normal text-gray-700 ">{hex_to_ascii(order.data).isValid ? hex_to_ascii(order.data).asciiString ? hex_to_ascii(order.data).asciiString + "(" + sloshId.substring(0,20) + "...)" : "(" + sloshId.substring(0,20) + "...)" : ""}</span>
+                                <span class="font-normal text-gray-700 ">
+                                    {hex_to_ascii(order.data).isValid ? 
+                                        hex_to_ascii(order.data).asciiString ? 
+                                            hex_to_ascii(order.data).asciiString + "(" + sloshId.substring(0,15) + '.....' + sloshId.substring(sloshId.length - 5, sloshId.length) + ")" 
+                                            : "(" + sloshId.substring(0,15) + '.....' + sloshId.substring(sloshId.length - 5, sloshId.length) + ")" : ""}
+                                </span>
                             </div>
                             <div class="flex justify-end">
                                 <button class="my-2 rounded-full text-base px-5 text-black" style="background-color: #FDA742;  box-shadow: inset 0px 2px 6px 0px #ffffff;" on:click={handleClick}>Slosh History</button>
@@ -262,7 +267,7 @@
                             </div>
                             <div />
                         </div>
-                        <div class="pl-8 text-black">Vault: <a class="items-center text-gray-700 underline hover:text-blue-500" target="_blank"
+                        <div class="pl-8 text-black font-normal">Vault: <a class="items-center text-gray-700 underline hover:text-blue-500" target="_blank"
                             href={`${$selectedNetwork.blockExplorer}/tx/${sloshId}`}>{sloshId.substring(0,15)}...</a>
                         </div>
                         

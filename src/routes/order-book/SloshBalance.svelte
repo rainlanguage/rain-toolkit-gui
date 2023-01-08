@@ -279,12 +279,12 @@
                         <div class="px-6">
                             <div class="grid grid-cols-3 grid-flow-col justify-between px-6">
                                 <!-- <span class="cursor-pointer pl-8 text-black" on:click={() =>{history.back()}} ><IconLibrary icon="back" width={14} /> -->
-                                <span class="text-black">Vault: <a class="items-center text-gray-700 underline hover:text-blue-500" target="_blank"
+                                <span class="text-black font-normal">Vault: <a class="items-center text-gray-700 underline hover:text-blue-500" target="_blank"
                                     href={`${$selectedNetwork.blockExplorer}/tx/${sloshId}`}>{sloshId.substring(0,15)}...</a>
                                 </span>
                                 <div class="flex flex-col justify-center items-center pb-2">
                                     <span class="font-semibold text-black ">{hex_to_ascii(order.data).isValid && hex_to_ascii(order.data).asciiString ? "{" + hex_to_ascii(order.data).asciiString + "}" : ''}Slosh Balances</span>
-                                    <span class="font-normal text-gray-700 ">{"(" + sloshId.substring(0,20) + ")"}</span>
+                                    <span class="font-normal text-gray-700 ">{"(" + sloshId.substring(0,15) + '.....' + sloshId.substring(sloshId.length - 5, sloshId.length) + ")"}</span>
                                 </div>
                                 <div class="flex justify-end">
                                         <button class="my-2 rounded-full text-base px-5 py-2 font-medium text-black" style="background-color: #FDA742;  box-shadow: inset 0px 2px 6px 0px #ffffff;"
@@ -310,7 +310,7 @@
                                                 }}
                                             use:onload
                                            >
-                                                <td class="w-4/6 text-gray-700 underline" id="firstTd{i}">{token?.tokenVault?.token?.name}</td>
+                                                <td class="w-4/6 text-gray-700 underline font-normal" id="firstTd{i}">{token?.tokenVault?.token?.name}</td>
                                                 <td class="w-2/6 text-gray-700">
                                                     {ethers.utils.formatUnits(token?.tokenVault?.balance , token?.tokenVault?.token?.decimals)}
                                                 </td>
@@ -393,7 +393,7 @@
                             </thead>
                             <tbody class="block items-center py-1 history text-black">
                                 <tr class="font-normal flex py-1 w-full">
-                                    <td class="text-center w-1/4 text-sm">Withdrawral</td>
+                                    <td class="text-center w-1/4 text-sm">Withdrawal</td>
                                     <td class="text-center w-1/4 text-sm">USDC</td>
                                     <td class="text-center w-1/4 text-sm">2345</td>
                                     <td class="text-center w-1/4 text-sm">2022 - 12- 09</td>
@@ -412,7 +412,7 @@
                     
                     <span class="grid justify-start px-6 pt-6">
                         {#if order.orderLive}
-                        <button class="w-full transition-colors underline text-base leading-none py-2 px-5 text-red-500" on:click={handleClick}>Deactivate Slosh</button>
+                        <button class="w-full transition-colors underline text-base leading-none py-2 px-5 text-red-500 font-normal" on:click={handleClick}>Deactivate Slosh</button>
                         {/if}
                     </span>
                 {/if}

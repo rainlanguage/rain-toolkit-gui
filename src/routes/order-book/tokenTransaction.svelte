@@ -174,7 +174,7 @@
                 {#if !transCancel}
                     <div class="flex flex-col justify-center items-center bg-white p-4 px-8" style="max-width: 17rem; border-radius: 20px;">
                         <img src={img['shield_good']} alt="shield" />
-                        <div class="text-black text-center pb-4">
+                        <div class="text-black text-center pb-4 font-normal">
                             Your permission is needed to approve the smart contract
                         </div>
                         <span>
@@ -186,8 +186,8 @@
                 {:else}
                     <div class="flex flex-col justify-center items-center bg-white p-4 px-8" style="max-width: 17rem; border-radius: 20px;">
                         <img src={img['clear_circle']} alt="clear_circle"/>
-                        <div class="text-black text-center pb-4">
-                            You cancelled your <span class="font-semibold">{token?.tokenVault?.token?.name}</span> approval
+                        <div class="text-black text-center pb-4 font-normal">
+                            You cancelled your <span class="font-medium">{token?.tokenVault?.token?.name}</span> approval
                         </div>
                         <span>
                             <button 
@@ -217,7 +217,7 @@
                         </div>
                         <span class='flex justify-center pt-1'>
                             <button 
-                                class="rounded-full text-base py-2 px-14 text-black" 
+                                class="rounded-full text-base py-2 px-14 text-black font-medium" 
                                 on:click={Deposit}>Deposit
                             </button>
                         </span>
@@ -242,7 +242,7 @@
                         </div>
                         <span class='flex justify-center'>
                             <button 
-                                class="rounded-full text-base py-2 px-14 text-black"
+                                class="rounded-full text-base py-2 px-14 text-black font-medium"
                                 on:click={withdraw}
                                 disabled={!isWithdrawable}>
                                 Withdrawal

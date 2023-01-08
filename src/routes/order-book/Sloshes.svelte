@@ -102,21 +102,27 @@
                     </div>
                     <div>
                         <table class="table-auto block w-full px-8 pb-2">
-                            <thead class="block" style="width: 32rem;">
+                            <thead class="block" style="width: 38rem;">
                                 <tr class="font-semibold flex w-full">
-                                    <th class="text-left pb-2 w-1/3 text-black">Name</th>
-                                    <th class="text-left pb-2 w-1/3 text-black">Date Created</th>
-                                    <th class="text-left pb-2 w-1/3 text-black">Slosh ID</th>
+                                    <th class="text-left pb-2 w-1/4 text-black">Name</th>
+                                    <th class="text-left pb-2 w-1/4 text-black">Date Created</th>
+                                    <th class="text-left pb-2 w-1/4 text-black">Slosh Balances</th>
+                                    <th class="text-left pb-2 w-1/4 text-black">Slosh History</th>
                                 </tr>  
                             </thead>
-                            <tbody class="block" style="width: 32rem;">
+                            <tbody class="block font-normal" style="width: 38rem;">
                                 {#each orders as order}
-                                    <tr class={` flex w-full`}>
-                                        <td class={`w-1/3  ${!order.orderLive ? 'text-red-500' : 'text-gray-700'} `}>{hex_to_ascii(order.data).isValid ? hex_to_ascii(order.data).asciiString : ""}</td>
-                                        <td class={`w-1/3  text-gray-700`}>{dayjs.unix(order.timestamp).toISOString().slice(0,10)}</td>
-                                        <td class={`py-1 w-1/3 ${!order.orderLive ? 'text-red-500' : 'text-gray-700'}  underline hover:text-blue-500`}>
-                                            <a href="/#/slosh/{order.id}">
-                                                {order.id.substring(0,16)}...
+                                    <tr class={`${!order.orderLive ? 'text-red-500' : 'text-gray-700'} flex w-full`}>
+                                        <td class={`w-1/4`}>{hex_to_ascii(order.data).isValid ? hex_to_ascii(order.data).asciiString : ""}</td>
+                                        <td class={`w-1/4 `}>{dayjs.unix(order.timestamp).toISOString().slice(0,10)}</td>
+                                        <td class={`py-1 w-1/4 underline hover:text-blue-500`}>
+                                            <a href="/#/slosh/{order.id}" class="underline">
+                                                Slosh Balance
+                                            </a>
+                                        </td>
+                                        <td class={`py-1 w-1/4   underline hover:text-blue-500`}>
+                                            <a href="/#/slosh-history/{order.id}" class="underline">
+                                                Slosh History
                                             </a>
                                         </td>
                                     </tr>
@@ -127,7 +133,7 @@
                     <div class="px-10">
                         <div class="w-full flex px-2 justify-center">
                             {#if $signer}
-                                <button class="w-full rounded-full text-base py-3 px-28 text-black" style="background-color: #FDA742;  box-shadow: inset 0px 2px 6px 0px #ffffff;" disabled={!$signer} on:click={addSlosh}>Add a Slosh</button>
+                                <button class="w-full rounded-full text-base py-3 px-28 text-black font-medium" style="background-color: #FDA742;  box-shadow: inset 0px 2px 6px 0px #ffffff;" disabled={!$signer} on:click={addSlosh}>Add a Slosh</button>
                             {:else}  
                                 <span class="">Please connect your wallet</span>
                             {/if}
@@ -136,7 +142,7 @@
                     <div class="border-b pt-4 border-gray-300" />
                     <div class="px-6 ">
                         <div class="flex pt-1 justify-center text-center text-black"><span>
-                            Sloshes are the things that make the tokens <br />
+                            Sloshes are the smart contracts that make the tokens <br />
                             move between each other.
                         </span></div>
                     </div>
