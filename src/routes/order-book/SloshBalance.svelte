@@ -235,9 +235,13 @@
     const handleRowClick = async (i, token) =>{
             
         let row = document.getElementById(token?.tokenVault?.token?.id)
+        if(oldRow){
+            oldRow.getElementsByTagName('td')[0].style.textDecorationLine = "underline"
+        }
         if(row){
             row.style.backgroundColor = "#ECECEC"
             row.style.borderRadius = "0 30px 30px 0"
+            row.getElementsByTagName('td')[0].style.textDecorationLine = "none"
             if(oldRow && oldRow != row){
                 oldRow.style.backgroundColor = "white"
                 oldRow.style.borderRadius = "0 0 0 0"
@@ -306,7 +310,7 @@
                                                 }}
                                             use:onload
                                            >
-                                                <td class="w-4/6 text-gray-700">{token?.tokenVault?.token?.name}</td>
+                                                <td class="w-4/6 text-gray-700 underline" id="firstTd{i}">{token?.tokenVault?.token?.name}</td>
                                                 <td class="w-2/6 text-gray-700">
                                                     {ethers.utils.formatUnits(token?.tokenVault?.balance , token?.tokenVault?.token?.decimals)}
                                                 </td>
