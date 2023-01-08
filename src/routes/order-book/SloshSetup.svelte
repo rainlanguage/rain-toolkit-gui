@@ -66,9 +66,6 @@
             tokenInput.push({"token" : token.tokenAddress, "vaultId" : randomNumber, decimals : token.decimals})
             tokenOutput.push({"token" : token.tokenAddress, "vaultId" : randomNumber, decimals : token.decimals})
         })
-
-        console.log("tokenIn", tokenInput);
-        console.log("tokenOutput", tokenOutput);
         
 
         let aliceAskOrder = sloshName != "" ? ethers.utils.toUtf8Bytes(sloshName) : []
@@ -96,7 +93,6 @@
             txStatus = TxStatus.Complete;
             // push(`/sloshes`)
         }catch(error){  
-            console.log("error", error);
             
             Sentry.captureException(error);
             if (error.code === Logger.errors.TRANSACTION_REPLACED) {

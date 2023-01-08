@@ -27,8 +27,11 @@
   export let disabled = false;
   export let errorMsg = "";
   export let bgColor = "bg-gray-200";
-  export let wid = false;
+  export let wid = '';
   export let padLeft = "";
+  export let alignAll = "";
+  export let lblTxtClr = "text-gray-500";
+
 
   let error: string;
   let timer, validating;
@@ -87,9 +90,9 @@
   };
 </script>
 
-<div use:autoAnimate class="flex w-full flex-col gap-y-2">
+<div use:autoAnimate class="flex w-full flex-col gap-y-2 {alignAll}">
   {#if $$slots.label}
-    <div class=" text-gray-500 text-sm font-medium">
+    <div class="{lblTxtClr}  text-sm font-medium">
       <slot name="label" />
     </div>
   {/if}
@@ -98,7 +101,7 @@
       <slot name="description" />
     </span>
   {/if}
-  <div class="flex flex-row items-center justify-end gap-x-2 self-stretch {wid ? 'pl-7' : ''}">
+  <div class="flex flex-row items-center justify-end gap-x-2 self-stretch {wid}">
     {#if type == "number"}
       <input
         type={_type}

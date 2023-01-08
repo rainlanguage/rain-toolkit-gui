@@ -8,8 +8,6 @@
     const dispatch = createEventDispatcher();
 
     export let tokenLs
-    console.log("tokensLs", tokenLs);
-    
 
     let checkedTokens = []
     
@@ -31,7 +29,6 @@
                 tokens.push(tokenLs[i])
             }
         } 
-        console.log("tokens", tokens);
         
         dispatch('tokensList', tokens)
         visible = false

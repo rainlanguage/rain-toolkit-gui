@@ -18,6 +18,7 @@
   import { selectedNetwork } from "$src/stores";
   import NotFound from "$routes/order-book/NotFound.svelte";
     import Privacy from "$routes/order-book/Privacy.svelte";
+    import SloshHistory from "$routes/order-book/SloshHistory.svelte";
    
   let routes = {};
 
@@ -26,7 +27,8 @@
     "/": Orderbook,
     "/sloshes" : Sloshes,
     "/addslosh": AddSlosh,
-    "/slosh/*": SloshBalance,
+    "/slosh/*": SloshBalance, 
+    "/slosh-history/*": SloshHistory, 
     "/slosh-comic": SloshComic,
     "/privacy" : Privacy,
     
