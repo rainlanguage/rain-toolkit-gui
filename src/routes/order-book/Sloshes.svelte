@@ -42,7 +42,9 @@
     });    
 
     $: if ($sloshes.data) {  
-        let orders_ = $sloshes.data.orders   
+        let orders_ = $sloshes.data.orders    
+
+        console.log("orders_ : " , orders_ )
 
         const filterOrder = async () => {    
            

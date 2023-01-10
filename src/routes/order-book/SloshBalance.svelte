@@ -38,7 +38,8 @@
     let temp, firstToken
     let ownerAddress, toggle = false
     let threshold, tokenD, isWithdrawable
-    let allowance, depositVal, withdrawVal
+    let allowance, depositVal, withdrawVal 
+    let depositsAndWithdrawals = []
 
     let takeOrders_  = []
 
@@ -74,6 +75,27 @@
                                 symbol
                             } 
                             balance
+                        } 
+                        vault{
+                          deposits(orderBy: timestamp, orderDirection :desc){
+                            sender
+                            token {
+                              name 
+                              decimals
+                            }
+                            amount
+                            timestamp
+                          }  
+                          withdraws(orderBy: timestamp, orderDirection :desc){
+                            sender
+                            token{
+                              name 
+                              decimals
+                            }
+                            amount
+                            timestamp
+                          }
+                    
                         }
                     } 
                     validOutputs{
@@ -128,7 +150,38 @@
             token.userBal = await tokenContract.balanceOf($signerAddress?.toLowerCase())
             
         })
-        firstToken = order.validInputs[0]
+        firstToken = order.validInputs[0]  
+
+        let vault = order.validInputs[0].vault
+        console.log(vault) 
+        vault.deposits.map(e => {
+            let obj = e 
+            obj['type'] = 'Deposit' 
+            depositsAndWithdrawals.push(obj)
+            return e
+        }) 
+        vault.withdraws.map(e => {
+            let obj = e 
+            obj['type'] = 'Withdrawal'
+            depositsAndWithdrawals.push(obj)
+            return e
+        })
+        
+        // console.log("Ordert : " , order.validInputs)
+
+        depositsAndWithdrawals = depositsAndWithdrawals.sort((a, b) => {
+            if (a.timestamp < b.timestamp) {
+                return 1;
+            }
+            if (a.timestamp > b.timestamp) {
+                return -1;
+            }
+            return 0;
+        }); 
+
+        console.log("depositsAndWithdrawals : " , depositsAndWithdrawals) 
+
+
         
     }
 
@@ -392,20 +445,20 @@
                                 </tr>  
                             </thead>
                             <tbody class="block items-center py-1 history text-black">
-                                <tr class="font-normal flex py-1 w-full">
+                                <!-- <tr class="font-normal flex py-1 w-full">
                                     <td class="text-center w-1/4 text-sm">Withdrawal</td>
                                     <td class="text-center w-1/4 text-sm">USDC</td>
                                     <td class="text-center w-1/4 text-sm">2345</td>
                                     <td class="text-center w-1/4 text-sm">2022 - 12- 09</td>
-                                </tr>
-                                <!-- {#each orders as order} -->
+                                </tr> -->
+                                {#each depositsAndWithdrawals as tx}
                                     <tr class="font-normal flex py-1 w-full">
-                                        <td class="text-center w-1/4 text-sm">Deposit</td>
-                                        <td class="text-center w-1/4 text-sm">Magical Internet Money</td>
-                                        <td class="text-center w-1/4 text-sm">12,345</td>
-                                        <td class="text-center w-1/4 text-sm">2022 - 12- 09</td>
+                                        <td class="text-center w-1/4 text-sm">{tx.type}</td>
+                                        <td class="text-center w-1/4 text-sm">{tx.token.name}</td>
+                                        <td class="text-center w-1/4 text-sm">{ethers.utils.formatUnits(tx?.amount , tx.token?.decimals)}</td>
+                                        <td class="text-center w-1/4 text-sm">{dayjs.unix(tx.timestamp).toISOString().slice(0,10)}</td>
                                     </tr>
-                                <!-- {/each} -->
+                                {/each}
                             </tbody>
                         </table>
                     </div>
