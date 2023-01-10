@@ -17,10 +17,13 @@
 
     
     
-    onMount(async () => {
+    onMount(async () => { 
+        console.log("token : " , token?.tokenVault?.token.id)
+
         let tokenC = new ethers.Contract(token?.tokenVault?.token.id, erc20ABI, $signer)
         tokenContract = tokenC
-        calcAllowance = checkAllowance(tokenC)
+        calcAllowance = await checkAllowance(tokenC) 
+        console.log("calcAllowance : " , calcAllowance)
     })
 
     const checkAllowance =async (tokenC) => {

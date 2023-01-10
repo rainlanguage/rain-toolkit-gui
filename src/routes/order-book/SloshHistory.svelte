@@ -18,6 +18,8 @@
     import { push } from "svelte-spa-router"; 
     import erc20ABI from "./erc20ABI.json" 
     import TokenList from "./TokenList.svelte";
+    import dayjs from "dayjs";
+
 
     enum TxStatus {
         None,
@@ -96,6 +98,7 @@
             query ($id: Bytes!) { 
                 takeOrderEntities(where: {order_: {id :$id }}) {
                     id
+                    timestamp
                     input
                     output
                     order {
@@ -258,7 +261,7 @@
                                 </span>
                             </div>
                             <div class="flex justify-end">
-                                <button class="my-2 rounded-full text-base px-5 text-black" style="background-color: #FDA742;  box-shadow: inset 0px 2px 6px 0px #ffffff;" on:click={handleClick}>Slosh History</button>
+                                <button class="my-2 rounded-full text-base px-5 text-black" style="background-color: #FDA742;  box-shadow: inset 0px 2px 6px 0px #ffffff;" on:click={() =>{history.back()}}>Slosh Balances</button>
                             </div>
                         </div>
                         <div class="grid grid-cols-2 mb-10">
@@ -280,19 +283,21 @@
                                     <th class="text-center w-1/4 text-sm">Date/time of transaction</th>
                                 </tr>  
                             </thead>
-                            <tbody class="block items-center py-1 history text-black">
-                                <tr class="font-normal flex py-1 w-full">
-                                    <td class="text-center w-1/4 text-sm">Withdrawral</td>
-                                    <td class="text-center w-1/4 text-sm">USDC</td>
-                                    <td class="text-center w-1/4 text-sm">2345</td>
-                                    <td class="text-center w-1/4 text-sm">2022 - 12- 09</td>
+                            <tbody class="block items-center py-1 history text-black"> 
+                                {#each takeOrders_ as takeOrder_}
+                                <tr class="font-normal flex py-1 w-full"> 
+                                    
+                                    <td class="text-center w-1/4 text-sm">{takeOrder_.id.substring(0,12)}...</td>
+                                    <td class="text-center w-1/4 text-sm">
+                                        {takeOrder_.outputToken.name}  {takeOrder_.output}
+                                    </td>
+                                    <td class="text-center w-1/4 text-sm">
+                                        {takeOrder_.inputToken.name}  {takeOrder_.input}
+                                    </td>
+                                    <td class="text-center w-1/4 text-sm">{dayjs.unix(takeOrder_.timestamp).toISOString().slice(0,10)}</td>
                                 </tr>
-                                <tr class="font-normal flex py-1 w-full">
-                                    <td class="text-center w-1/4 text-sm">Deposit</td>
-                                    <td class="text-center w-1/4 text-sm">Magical Internet Money</td>
-                                    <td class="text-center w-1/4 text-sm">12,345</td>
-                                    <td class="text-center w-1/4 text-sm">2022 - 12- 09</td>
-                                </tr>
+                                {/each} 
+                               
                                 <!-- {#each orders as order}
                                     <tr class={` flex w-full`}>
                                         <td class={`w-1/3  ${!order.orderLive ? 'text-red-500' : 'text-gray-700'} `}>{hex_to_ascii(order.data).isValid ? hex_to_ascii(order.data).asciiString : ""}</td>

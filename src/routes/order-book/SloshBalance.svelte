@@ -167,8 +167,6 @@
             return e
         })
         
-        // console.log("Ordert : " , order.validInputs)
-
         depositsAndWithdrawals = depositsAndWithdrawals.sort((a, b) => {
             if (a.timestamp < b.timestamp) {
                 return 1;
