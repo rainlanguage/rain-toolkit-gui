@@ -194,7 +194,7 @@
                                 </span>
                             </div>
                             <div class="flex justify-end">
-                                <button class="my-2 rounded-full text-base px-5 text-black" style="background-color: #FDA742;  box-shadow: inset 0px 2px 6px 0px #ffffff;" on:click={() =>{history.back()}}>Slosh Balances</button>
+                                <button class="my-2 rounded-full text-base px-5 text-black" style="background-color: #FDA742;  box-shadow: inset 0px 2px 6px 0px #ffffff;" on:click={()=>{push(`/slosh/${sloshId}`)}}>Slosh Balances</button>
                             </div>
                         </div>
                         <div class="grid grid-cols-2 mb-10">
