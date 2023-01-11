@@ -35,7 +35,7 @@
     let orderBookContract
 
     $: if($signer){
-        orderBookContract = new ethers.Contract('0x1d4e06f86d0d07059a4fc76069c1d8660558947e',orderABI , $signer )   
+        orderBookContract = new ethers.Contract('0x835c5e5f493b69a424bcf037b3fecab145f4e637',orderABI , $signer )   
     }
 
     let txStatus = TxStatus.None, errorMsg;
@@ -154,74 +154,7 @@
             ownerAddress = $signerAddress?.toLowerCase()
         }
 
-    const handleClick = async () =>{  
-        try {
-            let order_ = $getOrder.data.order 
-
-            let tx  = await $provider.getTransactionReceipt(order_.transactionHash)  
-            let byteData = tx.logs.filter(e => {return e.topics[0] == '0x7e4a3d1b8b320d979824450641b0d97507684bf55eafb4503032f4042f8fbf8d' })  
-
-            let data = await ethers.utils.defaultAbiCoder.decode([
-                "address","tuple(address,address,uint256,uint256,tuple(address,uint8,uint256)[],tuple(address,uint8,uint256)[],bytes)","uint256"] ,
-                    byteData[0].data)   
-
-            let IO = data[1][4].map(e => { 
-                let vaultId = e[2].toString() 
-                return{
-                    token : e[0] ,
-                    decimals : e[1] ,
-                    vaultId : vaultId ,
-                }
-            })
-
-            let deleteOrderConfig  = { 
-                owner : order_.owner , 
-                interpreter:  order_.interpreter,
-                dispatch:order_.dispatch ,
-                handleIODispatch:order_.handleIODispatch ,
-                validInputs: IO,
-                validOutputs: IO ,
-                data : order_.data
-            }  
-
-            const txAskRemoveOrder = await orderBookContract.removeOrder(deleteOrderConfig);  
-            txStatus = TxStatus.AwaitingConfirmation;
-
-            let receipt = await txAskRemoveOrder.wait()   
-
-            txStatus = TxStatus.None;
-            push(`/sloshes`)
-            
-        } catch (error) {   
-            
-             Sentry.captureException(error);
-            if (error.code === Logger.errors.TRANSACTION_REPLACED) {
-                if (error.cancelled) {
-                    errorMsg = "Transaction Cancelled";
-                    txStatus = TxStatus.Error;
-                    return;
-                } else {
-                    await error.replacement.wait();
-                }
-            } else if(error.code === -32603){
-                errorMsg = 'Transaction Underpriced , please try again'
-                txStatus = TxStatus.Error;
-                return;
-            }else if(error.code == Logger.errors.ACTION_REJECTED){
-                errorMsg = 'Transaction Rejected'
-                txStatus = TxStatus.Error;
-                return;
-            }else { 
-                errorMsg = error.error?.data?.message  ||
-                error.error?.message ||
-                error.data?.message ||
-                error?.message || 
-                error?.code 
-                txStatus = TxStatus.Error;
-                return;
-            }
-        }      
-    }
+    
     
     const refresh = async () => {
         temp = sloshId;

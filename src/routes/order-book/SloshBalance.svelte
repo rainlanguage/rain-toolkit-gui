@@ -44,7 +44,7 @@
     let takeOrders_  = []
 
     $: if($signer){
-        orderBookContract = new ethers.Contract('0x1d4e06f86d0d07059a4fc76069c1d8660558947e',orderABI , $signer )   
+        orderBookContract = new ethers.Contract('0x835c5e5f493b69a424bcf037b3fecab145f4e637',orderABI , $signer )   
     }
 
     $: getOrder = queryStore({
@@ -185,7 +185,7 @@
 
     $: if ($getOrder.data != undefined && $signerAddress ) {  
         let order_ = $getOrder.data.order     
-
+        console.log("order_ : " ,order_ )
         let ratio = new FloatBigNum(order_.stateConfig.constants[1]) 
         let ONE = new FloatBigNum("1000000000000000000")   
         let HUNDRED = new FloatBigNum("100")   

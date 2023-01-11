@@ -32,7 +32,7 @@
     let checkedTokens = []
 
     $: if($signer){
-        orderBookContract = new ethers.Contract('0x1d4e06f86d0d07059a4fc76069c1d8660558947e',orderABI , $signer )
+        orderBookContract = new ethers.Contract('0x835c5e5f493b69a424bcf037b3fecab145f4e637',orderABI , $signer )
     }
     
     const handleClick = async () => {
@@ -53,7 +53,7 @@
         let askPrice = ethers.utils.parseEther(x.toString()) 
         const askConstants = [max_uint256, askPrice ]; 
 
-        const vAskOutputMax = op( Opcode.READ_MEMORY,memoryOperand(MemoryType.Constant, 0)); 
+        const vAskOutputMax = op(Opcode.READ_MEMORY,memoryOperand(MemoryType.Constant, 0)); 
         const vAskPrice = op(Opcode.READ_MEMORY, memoryOperand(MemoryType.Constant, 1));
 
         const askSource = concat([ vAskOutputMax,vAskPrice]);  
@@ -72,16 +72,18 @@
         let aliceAskOrder = sloshName != "" ? ethers.utils.toUtf8Bytes(sloshName) : []
 
         let askOrderConfig = { 
-            expressionDeployer: '0x5C13ee05006364965093e827521118Ed269091a9',
-            interpreter: '0x856b7C73322Dd5F74163C0b9e7586197a1E4496F',
+            expressionDeployer : "0x6020e49D2d9809c8fd73c89ed214543b3DCb174F" ,
+            interpreter : "0x2720D67d5F15505F56d8632AeeB6A9aFF31Eed52" ,
             validInputs: tokenInput,
             validOutputs: tokenOutput,
             interpreterStateConfig: {
-                sources: [askSource , [] ],
+                sources: [askSource , []],
                 constants: askConstants,  
             }, 
             data : aliceAskOrder
-        } 
+        }  
+
+        console.log("askOrderConfig : " , askOrderConfig )
         
             let txAskOrderLive = await orderBookContract.addOrder(askOrderConfig );
             txHash = txAskOrderLive
