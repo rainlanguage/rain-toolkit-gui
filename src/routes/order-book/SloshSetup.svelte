@@ -32,7 +32,7 @@
     let checkedTokens = []
 
     $: if($signer){
-        orderBookContract = new ethers.Contract('0x835c5e5f493b69a424bcf037b3fecab145f4e637',orderABI , $signer )
+        orderBookContract = new ethers.Contract('0x757cc6205f8f1d92879d1e119481f265938660bf',orderABI , $signer )
     }
     
     const handleClick = async () => {
@@ -72,8 +72,8 @@
         let aliceAskOrder = sloshName != "" ? ethers.utils.toUtf8Bytes(sloshName) : []
 
         let askOrderConfig = { 
-            expressionDeployer : "0x6020e49D2d9809c8fd73c89ed214543b3DCb174F" ,
-            interpreter : "0x2720D67d5F15505F56d8632AeeB6A9aFF31Eed52" ,
+            expressionDeployer : "0x2676D242308D1E5bA37A9433B9Cd5105BcfEa6cB" ,
+            interpreter : "0x9EbC179Ccbf0C68475dDDf22F00F02E65a285D24" ,
             validInputs: tokenInput,
             validOutputs: tokenOutput,
             interpreterStateConfig: {

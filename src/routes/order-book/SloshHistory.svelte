@@ -35,7 +35,7 @@
     let orderBookContract
 
     $: if($signer){
-        orderBookContract = new ethers.Contract('0x835c5e5f493b69a424bcf037b3fecab145f4e637',orderABI , $signer )   
+        orderBookContract = new ethers.Contract('0x757cc6205f8f1d92879d1e119481f265938660bf',orderABI , $signer )   
     }
 
     let txStatus = TxStatus.None, errorMsg;

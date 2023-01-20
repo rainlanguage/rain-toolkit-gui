@@ -44,7 +44,7 @@
     let takeOrders_  = []
 
     $: if($signer){
-        orderBookContract = new ethers.Contract('0x835c5e5f493b69a424bcf037b3fecab145f4e637',orderABI , $signer )   
+        orderBookContract = new ethers.Contract('0x757cc6205f8f1d92879d1e119481f265938660bf',orderABI , $signer )   
     }
 
     $: getOrder = queryStore({
@@ -211,13 +211,15 @@
             let order_ = $getOrder.data.order 
 
             let tx  = await $provider.getTransactionReceipt(order_.transactionHash)  
-            let byteData = tx.logs.filter(e => {return e.topics[0] == '0x7e4a3d1b8b320d979824450641b0d97507684bf55eafb4503032f4042f8fbf8d' })  
+            let byteData = tx.logs.filter(e => {return e.topics[0] == '0xf2d122ec0221a265ba577c8d1cbc391d998c133e1214815df3c68e66d8ee3858' })  
 
             let data = await ethers.utils.defaultAbiCoder.decode([
-                "address","tuple(address,address,uint256,uint256,tuple(address,uint8,uint256)[],tuple(address,uint8,uint256)[],bytes)","uint256"] ,
-                    byteData[0].data)   
+                "address","address","tuple(address,address,uint256,uint256,tuple(address,uint8,uint256)[],tuple(address,uint8,uint256)[],bytes)","uint256"] ,
+                    byteData[0].data)    
 
-            let IO = data[1][4].map(e => { 
+            console.log("data : " ,data)
+
+            let IO = data[2][4].map(e => { 
                 let vaultId = e[2].toString() 
                 return{
                     token : e[0] ,
@@ -245,7 +247,7 @@
             push(`/sloshes`)
             
         } catch (error) {   
-            
+            console.log("error : " , error)
              Sentry.captureException(error);
             if (error.code === Logger.errors.TRANSACTION_REPLACED) {
                 if (error.cancelled) {
