@@ -66,7 +66,7 @@
         class="popover"
         on:click|stopPropagation
         >
-        <div class="blocker" on:click|stopPropagation={() => visible = false} />
+        <div class="blocker" on:click|stopPropagation={handleClick} />
         <div class="wrapper rounded-2xl">
             <div class="grid ht gap-y-2.5  pb-3" id="myDropdown">
                 <input type="text" class="w-full rounded-md bg-gray-200 p-1 font-light text-black border-gray-500 depth" placeholder="Search token" id="myInput" on:keyup={filterFunction} />

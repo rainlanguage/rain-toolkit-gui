@@ -104,25 +104,29 @@
                     </div>
                     <div>
                         <table class="table-auto block w-full px-8 pb-2">
-                            <thead class="block" style="width: 38rem;">
+                            <thead class="block py-1">
                                 <tr class="font-semibold flex w-full">
-                                    <th class="text-left pb-2 w-1/4 text-black">Name</th>
-                                    <th class="text-left pb-2 w-1/4 text-black">Date Created</th>
-                                    <th class="text-left pb-2 w-1/4 text-black">Slosh Balances</th>
-                                    <th class="text-left pb-2 w-1/4 text-black">Slosh History</th>
+                                    <th class="text-left pb-2 text-black" style="width: 6rem;">Name</th>
+                                    <th class="text-left pb-2 text-black" style="width: 8rem;">Date Created</th>
+                                    <th class="text-left pb-2 text-black" style="width: 9rem;">Slosh Balances</th>
+                                    <th class="text-left pb-2 text-black" style="width: 7rem;">Slosh History</th>
                                 </tr>  
                             </thead>
-                            <tbody class="block font-normal" style="width: 38rem;">
+                            <tbody class="block py-1 font-normal text-black">
                                 {#each orders as order}
-                                    <tr class={`${!order.orderLive ? 'text-red-500' : 'text-gray-700'} flex w-full`}>
-                                        <td class={`w-1/4`}>{hex_to_ascii(order.data).isValid ? hex_to_ascii(order.data).asciiString : ""}</td>
-                                        <td class={`w-1/4 `}>{dayjs.unix(order.timestamp).toISOString().slice(0,10)}</td>
-                                        <td class={`py-1 w-1/4 underline hover:text-blue-500`}>
+                                    <tr class={`flex py-1 w-full ${!order.orderLive ? 'text-red-500' : 'text-grat-700'}`}>
+                                        <td class="text-left text-sm break-words self-center pr-2" style="width: 6rem;">
+                                            {hex_to_ascii(order.data).isValid ? hex_to_ascii(order.data).asciiString : ""}
+                                        </td>
+                                        <td class="text-left text-sm self-center pr-2" style="width: 8rem;">
+                                            {dayjs.unix(order.timestamp).toISOString().slice(0,10)}
+                                        </td>
+                                        <td class="text-left text-sm underline hover:text-blue-500 self-center pr-2" style="width: 9rem;">
                                             <a href="/#/slosh/{order.id}" class="underline">
                                                 Slosh Balance
                                             </a>
                                         </td>
-                                        <td class={`py-1 w-1/4   underline hover:text-blue-500`}>
+                                        <td class="text-left text-sm underline hover:text-blue-500 self-center pr-2" style="width: 7rem;">
                                             <a href="/#/slosh-history/{order.id}" class="underline">
                                                 Slosh History
                                             </a>

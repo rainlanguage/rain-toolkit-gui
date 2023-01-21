@@ -239,11 +239,11 @@
             }  
 
             const txAskRemoveOrder = await orderBookContract.removeOrder(deleteOrderConfig);  
-            // txStatus = TxStatus.AwaitingConfirmation;
+            txStatus = TxStatus.AwaitingConfirmation;
 
             let receipt = await txAskRemoveOrder.wait()   
 
-            // txStatus = TxStatus.None;
+            txStatus = TxStatus.None;
             push(`/sloshes`)
             
         } catch (error) {   
@@ -319,7 +319,7 @@
 <div class="flex flex-col items-center justify-center">  
     <Section>
         <div class="py-4">
-            <!-- {#if txStatus == TxStatus.None} -->
+            {#if txStatus == TxStatus.None}
                 {#if $getOrder.fetching}
                 <lottie-player src="https://lottie.host/5f90529b-22d1-4337-8c44-46e3ba7c0c68/pgMhlFIAcQ.json" background="transparent" speed="1" style="width: 300px; height: 300px;" loop autoplay></lottie-player>
                 {:else if $getOrder.error}
@@ -336,7 +336,7 @@
                                     href={`${$selectedNetwork.blockExplorer}/tx/${sloshId}`}>{sloshId.substring(0,15)}...</a>
                                 </span>
                                 <div class="flex flex-col justify-center items-center pb-2">
-                                    <span class="font-semibold text-black ">{hex_to_ascii(order.data).isValid && hex_to_ascii(order.data).asciiString ? "{" + hex_to_ascii(order.data).asciiString + "}" : ''}Slosh Balances</span>
+                                    <span class="font-semibold text-black ">{hex_to_ascii(order.data).isValid && hex_to_ascii(order.data).asciiString ? hex_to_ascii(order.data).asciiString + "-" : ''}Slosh Balances</span>
                                     <span class="font-normal text-gray-700 ">{"(" + sloshId.substring(0,15) + '.....' + sloshId.substring(sloshId.length - 5, sloshId.length) + ")"}</span>
                                 </div>
                                 <div class="flex justify-end">
@@ -374,62 +374,6 @@
                             <div />
                             {#key toggle}
                                 <TokenTransaction toggleToken={toggleT} token={tokenD} orderBookContract={orderBookContract} />
-                                <!-- <div class="flex justify-center items-center py-10 " style="background-color: #949494;">
-                                    <div class="grid grid-cols-2 gap-x-28">
-                                        <div>
-                                            <div class="w-full text-base flex justify-center items-center text-white font-medium pb-5">Deposit {"{Coin}"}</div>
-                                            <Input
-                                                type="text"
-                                                wid="px-10"
-                                                alignAll='items-center'
-                                                lblTxtClr="text-white"
-                                                bind:value={depositVal}
-                                                
-                                                debounce
-                                                validator={required}
-                                            >
-                                                <span slot="label">Enter the number of units to deposit:</span>
-                                            </Input>
-                                            <div class="flex justify-center underline text-white py-2 font-light" style="font-size: 14px;" >{"MAX X.XXXXX(Choose Token)"}</div>
-                                            <div class="py-4 flex justify-center text-sm font-medium">
-                                                Confirm your Deposit
-                                            </div>
-                                            <span class='flex justify-center pt-1'>
-                                                <button 
-                                                    class="rounded-full text-base py-2 px-14 text-black" 
-                                                    style="background-color: #FDA742; box-shadow: inset 0px 2px 6px 0px #ffffff;"
-                                                    on:click={Deposit}>Deposit
-                                                </button>
-                                            </span>
-                                        </div>
-                                        <div>
-                                            <div class="w-full text-base flex justify-center items-center text-white font-medium pb-5">Withdraw {"{Coin}"}</div>
-                                            <Input
-                                                type="text"
-                                                wid="px-10"
-                                                alignAll='items-center'
-                                                lblTxtClr="text-white"
-                                                bind:value={withdrawVal}
-                                                debounce
-                                                validator={required}
-                                            >
-                                                <span slot="label">Enter the number of units to withdraw:</span>
-                                            </Input>
-                                            <div class="flex justify-center underline text-white py-2 font-light" style="font-size: 14px;" >{"MAX X.XXXXX(Choose Token)"}</div>
-                                            <div class="py-4 flex justify-center text-sm font-medium">
-                                                Confirm your withdraw
-                                            </div>
-                                            <span class='flex justify-center'>
-                                                <button 
-                                                    class="rounded-full text-base py-2 px-14 text-black" 
-                                                    style="background-color: #FDA742;  box-shadow: inset 0px 2px 6px 0px #ffffff;"
-                                                    on:click={withdraw}>
-                                                    Withdrwal
-                                                </button>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div> -->
                             {/key }
 
                         <div class="py-6">
@@ -469,15 +413,14 @@
                         {/if}
                     </span>
                 {/if}
-            <!-- {/if} -->
-
-            <!-- {#if txStatus == TxStatus.AwaitingConfirmation}
+            {/if}
+            {#if txStatus == TxStatus.AwaitingConfirmation}
                 <div class="flex flex-col items-center gap-y-5 p-6">
                     <lottie-player src="https://lottie.host/5f90529b-22d1-4337-8c44-46e3ba7c0c68/pgMhlFIAcQ.json" background="transparent" speed="1" style="width: 300px; height: 200px;" loop autoplay></lottie-player>
-                    <span class="text-lg text-black">Transaction confirming...</span>
+                    <span class="text-lg text-black">Deactivating Slosh...</span>
                 </div>
             {/if}
-            {#if txStatus == TxStatus.Error}
+            <!-- {#if txStatus == TxStatus.Error}
                 <div class="flex flex-col items-center gap-y-5 p-6">
                     <span class="text-lg text-black">Something went wrong.</span>
                     <span class="text-lg text-red-400">{errorMsg}</span>

@@ -43,7 +43,7 @@
     };
 
     const getTokens = (event) => {
-        checkedTokens = event.detail
+        checkedTokens = event.detail        
     }
 
     const addOrder = async () => { 
@@ -165,7 +165,7 @@
                         </buttom>
                     </div> -->
                     <TokenList on:tokensList={getTokens} tokenLs={tokenAddressess} />
-                    <div class="px-16 ">
+                    <div class="px-16 pt-2">
                         {#if checkedTokens.length != 0 }
                             {#each checkedTokens as token}
                                 <span class="flex items-center gap-x-3 leading-8">

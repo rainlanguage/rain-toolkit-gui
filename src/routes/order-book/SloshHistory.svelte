@@ -187,10 +187,16 @@
                                 <span class="font-semibold text-black ">Slosh History</span>
                                     <!-- {#if !order.orderLive} <span class="text-red-500">(deactivated)</span> {/if} -->
                                 <span class="font-normal text-gray-700 ">
-                                    {hex_to_ascii(order.data).isValid ? 
-                                        hex_to_ascii(order.data).asciiString ? 
-                                            hex_to_ascii(order.data).asciiString + "(" + sloshId.substring(0,15) + '.....' + sloshId.substring(sloshId.length - 5, sloshId.length) + ")" 
-                                            : "(" + sloshId.substring(0,15) + '.....' + sloshId.substring(sloshId.length - 5, sloshId.length) + ")" : ""}
+                                    {#if hex_to_ascii(order.data).isValid}
+                                        {#if hex_to_ascii(order.data).asciiString}
+                                            <span class="font-semibold">
+                                                {hex_to_ascii(order.data).asciiString}
+                                            </span>
+                                            {"(" + sloshId.substring(0,15) + '.....' + sloshId.substring(sloshId.length - 5, sloshId.length) + ")"}
+                                        {:else}
+                                            {"(" + sloshId.substring(0,15) + '.....' + sloshId.substring(sloshId.length - 5, sloshId.length) + ")"}
+                                        {/if}
+                                    {/if}
                                 </span>
                             </div>
                             <div class="flex justify-end">
@@ -198,8 +204,8 @@
                             </div>
                         </div>
                         <div class="grid grid-cols-2 mb-10">
-                            <div class="py-1.5 gap-x-4 rounded-r-full" style="background-color: #949494;">
-                                <div class="w-full text-sm flex justify-center items-center text-white font-medium">Threshold : {threshold} %</div>
+                            <div class="py-2 gap-x-4 rounded-r-full" style="background-color: #949494;">
+                                <div class="w-full text-base flex justify-center items-center text-white font-medium">Threshold : {threshold} %</div>
                             </div>
                             <div />
                         </div>
@@ -207,7 +213,7 @@
                             href={`${$selectedNetwork.blockExplorer}/tx/${sloshId}`}>{sloshId.substring(0,15)}...</a>
                         </div>
                         
-                        <table class="table-auto block w-full px-8 py-2 ">
+                        <table class="table-auto block w-full px-5 py-2 ">
                             <thead class="block items-center py-1 rounded-t-lg" style="background-color: #737395; ">
                                 <tr class="font-semibold flex w-full text-white">
                                     <th class="text-center w-1/4 text-sm">History</th>
