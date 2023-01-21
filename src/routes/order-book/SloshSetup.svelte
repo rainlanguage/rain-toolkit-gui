@@ -197,13 +197,13 @@
           </div>
         {/if}
         {#if txStatus == TxStatus.Complete}
-        <div class="flex flex-col items-center justify-center w-96 h-80">
-            <span class="text-lg text-black font-medium pt-5 pb-2">Transaction Successful!</span>
-            <img src={img['true_circle']} alt="Success" />
-            <span class="text-base font-normal text-black pt-3">The slosh has been created.</span>
-            <span class="text-base font-normal text-black">You can now <a href="/#/slosh/{sloshId}" class="underline">deposit tokens.</a> </span>
-            <span class="text-base font-medium text-black underline pt-5"><a href={`${$selectedNetwork.blockExplorer}/tx/${txHash?.hash}`} target="_blank">Verify Transaction <IconLibrary icon="link" width={26}/></a></span>
-        </div>
+            <div class="flex flex-col items-center justify-center w-96 h-80">
+                <span class="text-lg text-black font-medium pt-5 pb-2">Transaction Successful!</span>
+                <img src={img['true_circle']} alt="Success" />
+                <span class="text-base font-normal text-black pt-3">The slosh has been created.</span>
+                <span class="text-base font-normal text-black">You can now <a href="/#/slosh/{sloshId}" class="underline">deposit tokens.</a> </span>
+                <span class="text-base font-medium text-black underline pt-5"><a href={`${$selectedNetwork.blockExplorer}/tx/${txHash?.hash}`} target="_blank">Verify Transaction <IconLibrary icon="link" width={26}/></a></span>
+            </div>
         {/if}
         {#if txStatus == TxStatus.Error}
             <div class="flex flex-col items-center justify-center w-96 h-80">

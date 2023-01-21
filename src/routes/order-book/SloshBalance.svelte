@@ -215,10 +215,9 @@
 
             let data = await ethers.utils.defaultAbiCoder.decode([
                 "address","address","tuple(address,address,uint256,uint256,tuple(address,uint8,uint256)[],tuple(address,uint8,uint256)[],bytes)","uint256"] ,
-                    byteData[0].data)    
+                    byteData[0].data)   
 
             console.log("data : " ,data)
-
             let IO = data[2][4].map(e => { 
                 let vaultId = e[2].toString() 
                 return{
