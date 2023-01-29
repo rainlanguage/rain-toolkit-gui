@@ -228,19 +228,24 @@
                                 </tr>  
                             </thead>
                             <tbody class="block items-center py-1 history text-black"> 
-                                {#each takeOrders_ as takeOrder_}
-                                <tr class="font-normal flex py-1 w-full"> 
-                                    
-                                    <td class="text-center w-1/4 text-sm">{takeOrder_.id.substring(0,12)}...</td>
-                                    <td class="text-center w-1/4 text-sm">
-                                        {takeOrder_.outputToken.name}  {takeOrder_.output}
-                                    </td>
-                                    <td class="text-center w-1/4 text-sm">
-                                        {takeOrder_.inputToken.name}  {takeOrder_.input}
-                                    </td>
-                                    <td class="text-center w-1/4 text-sm">{dayjs.unix(takeOrder_.timestamp).toISOString().slice(0,10)}</td>
-                                </tr>
-                                {/each} 
+                                {#if takeOrders_.length == 0}
+                                    <tr class="font-normal flex py-1 w-full justify-center">
+                                        Any tokens that you have deposited will automatically slosh once the threshold is met and show here
+                                    </tr>
+                                {:else}    
+                                    {#each takeOrders_ as takeOrder_}
+                                        <tr class="font-normal flex py-1 w-full"> 
+                                            <td class="text-center w-1/4 text-sm">{takeOrder_.id.substring(0,12)}...</td>
+                                            <td class="text-center w-1/4 text-sm">
+                                                {takeOrder_.outputToken.name}  {takeOrder_.output}
+                                            </td>
+                                            <td class="text-center w-1/4 text-sm">
+                                                {takeOrder_.inputToken.name}  {takeOrder_.input}
+                                            </td>
+                                            <td class="text-center w-1/4 text-sm">{dayjs.unix(takeOrder_.timestamp).toISOString().slice(0,10)}</td>
+                                        </tr>
+                                    {/each} 
+                                {/if}
                             </tbody>
                         </table>
                     </div>

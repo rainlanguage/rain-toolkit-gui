@@ -122,7 +122,7 @@
   
     .wrapper {
       position: absolute;
-      min-width: 200px;
+      min-width: 455px;
       padding: 20px;
       min-height: 100px;
       width: fit-content;

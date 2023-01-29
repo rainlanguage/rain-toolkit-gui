@@ -388,20 +388,20 @@
                                 </tr>  
                             </thead>
                             <tbody class="block items-center py-1 history text-black">
-                                <!-- <tr class="font-normal flex py-1 w-full">
-                                    <td class="text-center w-1/4 text-sm">Withdrawal</td>
-                                    <td class="text-center w-1/4 text-sm">USDC</td>
-                                    <td class="text-center w-1/4 text-sm">2345</td>
-                                    <td class="text-center w-1/4 text-sm">2022 - 12- 09</td>
-                                </tr> -->
-                                {#each depositsAndWithdrawals as tx}
-                                    <tr class="font-normal flex py-1 w-full">
-                                        <td class="text-center w-1/4 text-sm">{tx.type}</td>
-                                        <td class="text-center w-1/4 text-sm">{tx.token.name}</td>
-                                        <td class="text-center w-1/4 text-sm">{ethers.utils.formatUnits(tx?.amount , tx.token?.decimals)}</td>
-                                        <td class="text-center w-1/4 text-sm">{dayjs.unix(tx.timestamp).toISOString().slice(0,10)}</td>
-                                    </tr>
-                                {/each}
+                                {#if depositsAndWithdrawals.length == 0}
+                                <tr class="font-normal flex py-1 w-full justify-center">
+                                    Deposit some tokens to see the Deposit/ Withdrawal History show here
+                                </tr>
+                                {:else}
+                                    {#each depositsAndWithdrawals as tx}
+                                        <tr class="font-normal flex py-1 w-full">
+                                            <td class="text-center w-1/4 text-sm">{tx.type}</td>
+                                            <td class="text-center w-1/4 text-sm">{tx.token.name}</td>
+                                            <td class="text-center w-1/4 text-sm">{ethers.utils.formatUnits(tx?.amount , tx.token?.decimals)}</td>
+                                            <td class="text-center w-1/4 text-sm">{dayjs.unix(tx.timestamp).toISOString().slice(0,10)}</td>
+                                        </tr>
+                                    {/each}
+                                {/if}
                             </tbody>
                         </table>
                     </div>

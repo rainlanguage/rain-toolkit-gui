@@ -90,13 +90,15 @@
             txStatus = TxStatus.AwaitingConfirmation;
             
             let receipt = await txAskOrderLive.wait()
-
-            sloshId = receipt.events.filter(e => e.event == 'AddOrder')[0].args[2].toHexString()
+            console.log("receipt.events", receipt.events.filter(e => e.event == 'AddOrder'));
+            
+            sloshId = receipt.events.filter(e => e.event == 'AddOrder')[0].args[3].toHexString()
             
             setTimeout(5000)
             txStatus = TxStatus.Complete;
             // push(`/sloshes`)
         }catch(error){  
+            console.log("error setup", error);
             
             Sentry.captureException(error);
             if (error.code === Logger.errors.TRANSACTION_REPLACED) {
@@ -201,8 +203,8 @@
                 <span class="text-lg text-black font-medium pt-5 pb-2">Transaction Successful!</span>
                 <img src={img['true_circle']} alt="Success" />
                 <span class="text-base font-normal text-black pt-3">The slosh has been created.</span>
-                <span class="text-base font-normal text-black">You can now <a href="/#/slosh/{sloshId}" class="underline">deposit tokens.</a> </span>
-                <span class="text-base font-medium text-black underline pt-5"><a href={`${$selectedNetwork.blockExplorer}/tx/${txHash?.hash}`} target="_blank">Verify Transaction <IconLibrary icon="link" width={26}/></a></span>
+                <span class="text-base cursor-pointer font-normal text-black">You can now <a href="/#/slosh/{sloshId}" class="underline">deposit tokens.</a> </span>
+                <span class="text-base cursor-pointer font-medium text-black underline pt-5"><a href={`${$selectedNetwork.blockExplorer}/tx/${txHash?.hash}`} target="_blank">Verify Transaction <IconLibrary icon="link" width={26}/></a></span>
             </div>
         {/if}
         {#if txStatus == TxStatus.Error}
@@ -210,8 +212,8 @@
                 <span class="text-lg text-black font-medium pt-5 pb-2">Transaction Unsuccessful</span>
                 <img src={img['false_circle']} alt="Error" />
                 <span class="text-base font-normal text-black pt-3">The slosh hasn't been created.</span>
-                <span class="text-base font-normal text-black"><a on:click={handleTry} class="underline">Try again here</a> </span>
-                <span class="text-base font-medium text-black underline pt-5"><a href={`${$selectedNetwork.blockExplorer}/tx/${txHash?.hash}`} target="_blank">Verify Transaction <IconLibrary icon="link" width={26}/></a></span>
+                <span class="text-base cursor-pointer font-normal text-black"><a on:click={handleTry} class="underline">Try again here</a> </span>
+                <span class="text-base cursor-pointer font-medium text-black underline pt-5"><a href={`${$selectedNetwork.blockExplorer}/tx/${txHash?.hash}`} target="_blank">Verify Transaction <IconLibrary icon="link" width={26}/></a></span>
             </div>
         {/if}
     </Section>
